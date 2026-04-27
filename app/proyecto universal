@@ -1,0 +1,122 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+
+type Entry = {
+  id: number;
+  created_at: string;
+  phrase: string;
+};
+
+export default function Home() {
+  const [phrase, setPhrase] = useState("");
+  const [message, setMessage] = useState("");
+  const [entries, setEntries] = useState<Entry[]>([]);
+
+  useEffect(() => {
+    async function loadEntries() {
+      const { data, error } = await supabase
+        .from("entries")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!error && data) {
+        setEntries(data);
+      }
+    }
+
+    loadEntries();
+  }, []);
+
+  async function handleSave() {
+    if (!phrase.trim()) {
+      setMessage("Escribe una frase antes de continuar.");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("entries")
+      .insert({ phrase: phrase.trim() })
+      .select();
+
+    if (error) {
+      console.error(error);
+      setMessage("Hubo un problema al guardar la frase.");
+      return;
+    }
+
+    setMessage("Tu frase se ha guardado correctamente.");
+    setPhrase("");
+
+    if (data && data.length > 0) {
+      setEntries((prev) => [data[0], ...prev]);
+    }
+  }
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-zinc-50 via-white to-zinc-100 text-zinc-900 px-6 py-12 md:px-8 md:py-20">
+      <div className="mx-auto max-w-4xl">
+        <header className="text-center">
+          <p className="text-xs uppercase tracking-[0.35em] text-zinc-400">
+            Archivo vivo
+          </p>
+
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-6xl">
+            Poema Universal
+          </h1>
+
+          <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-zinc-600 md:text-lg">
+            Una frase humana al día. Una memoria viva del mundo.
+          </p>
+
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-zinc-500 md:text-base">
+            Cada persona deja una huella mínima. Juntas forman un poema de la
+            humanidad.
+          </p>
+        </header>
+
+        <section className="mx-auto mt-14 max-w-3xl rounded-[2rem] border border-zinc-200/80 bg-white/90 p-6 shadow-[0_10px_40px_rgba(0,0,0,0.04)] backdrop-blur md:p-8">
+          <label className="block text-sm font-medium text-zinc-700">
+            Escribe tu frase de hoy
+          </label>
+
+          <textarea
+            value={phrase}
+            onChange={(e) => setPhrase(e.target.value)}
+            placeholder="Hoy he pensado que..."
+            className="mt-4 min-h-[180px] w-full rounded-2xl border border-zinc-200 bg-zinc-50/70 p-5 text-base leading-7 text-zinc-900 outline-none transition focus:border-zinc-400 focus:bg-white"
+          />
+
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <button
+              onClick={handleSave}
+              className="inline-flex items-center justify-center rounded-2xl bg-zinc-900 px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Añadir a la memoria humana
+            </button>
+
+            <p className="text-xs text-zinc-400">
+              Una frase sencilla también puede sostener un día.
+            </p>
+          </div>
+
+          {message && (
+            <div className="mt-5 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-700">
+              {message}
+            </div>
+          )}
+        </section>
+
+        <section className="mx-auto mt-20 max-w-3xl">
+          <div className="mb-8 text-center">
+            <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">
+              Poema vivo
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
+              Frases guardadas
+            </h2>
+          </div>
+
+          <div className="space-y-8">
+       
