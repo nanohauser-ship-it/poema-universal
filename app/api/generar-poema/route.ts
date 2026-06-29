@@ -2,9 +2,9 @@ import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const openaiKey = process.env.OPENAI_API_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const openaiKey = process.env.OPENAI_API_KEY!;
 
 export async function POST(request: Request) {
   try {
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       "Todavía no existe una memoria anterior. Esta es la primera voz del Poema Universal.";
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.1-mini",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -67,10 +67,10 @@ export async function POST(request: Request) {
 Continúa esta memoria humana.
 
 Memoria anterior:
-"${memoriaAnterior}"
+${memoriaAnterior}
 
 Nueva frase humana:
-"${nuevaFrase}"
+${nuevaFrase}
 
 Reglas:
 - No expliques nada.
@@ -79,50 +79,54 @@ Reglas:
 - Conserva una parte del espíritu de la memoria anterior.
 - Integra la nueva frase de forma natural.
 - Debe sentirse como continuidad, no como un poema completamente nuevo.
-- Tono íntimo, humano, sobrio y claro.
-- Extensión breve: entre 6 y 12 versos.
           `,
         },
       ],
+      temperature: 0.8,
     });
 
-    const poema = completion.choices[0]?.message?.content || "";
-    const hoy = new Date().toISOString().split("T")[0];
+    const poemaGenerado =
+      completion.choices[0]?.message?.content?.trim() || "";
 
-    const { error: guardarFraseError } = await supabase.from("frases").insert({
-      contenido: nuevaFrase.trim(),
-    });
-
-    if (guardarFraseError) {
+    if (!poemaGenerado) {
       return NextResponse.json(
-        { error: guardarFraseError.message },
+        { error: "OpenAI no devolvió contenido" },
         { status: 500 }
       );
     }
 
-    const { error: guardarPoemaError } = await supabase.from("poemas").upsert(
-      [
-        {
-          contenido: poema,
-          fecha: hoy,
-          frases: [{ contenido: nuevaFrase.trim() }],
-        },
-      ],
-      { onConflict: "fecha" }
-    );
+const { error: insertError } = await supabase
+  .from("poemas")
+  .insert({
+    contenido: poemaGenerado,
+    frases: [
+      {
+        contenido: poemaGenerado,
+      },
+    ],
+    fecha: new Date().toISOString().split("T")[0],
+  });
 
-    if (guardarPoemaError) {
+    if (insertError) {
       return NextResponse.json(
-        { error: guardarPoemaError.message },
+        { error: insertError.message },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ poema });
+    return NextResponse.json({
+      poema: poemaGenerado,
+    });
   } catch (error) {
-    console.error("ERROR:", error);
+    console.error("ERROR GENERAR POEMA:", error);
+
     return NextResponse.json(
-      { error: "Error generando poema encadenado" },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Error desconocido al generar poema",
+      },
       { status: 500 }
     );
   }
