@@ -1,0 +1,110 @@
+"use client";
+
+type Voz = {
+  nombre: string;
+  pais: string;
+  confirmado: boolean;
+};
+
+const voces: Voz[] = [
+  {
+    nombre: "José Naveiro",
+    pais: "España",
+    confirmado: true,
+  },
+  {
+    nombre: "Poeta confirmado",
+    pais: "Chile",
+    confirmado: true,
+  },
+  {
+    nombre: "Poeta confirmado",
+    pais: "México",
+    confirmado: true,
+  },
+  {
+    nombre: "Poeta confirmado",
+    pais: "México",
+    confirmado: true,
+  },
+
+  ...Array.from({ length: 56 }, () => ({
+    nombre: "Reservado",
+    pais: "Esperando una voz",
+    confirmado: false,
+  })),
+];
+
+export default function VoicesWall() {
+  return (
+    <section className="mx-auto mt-40 max-w-7xl">
+      <p className="text-center text-xs uppercase tracking-[0.6em] text-stone-400">
+        Las voces
+      </p>
+
+      <h2 className="mt-8 text-center font-serif text-5xl leading-tight sm:text-6xl">
+        Sesenta poetas.
+        <br />
+        Una única obra.
+      </h2>
+
+      <p className="mx-auto mt-8 max-w-3xl text-center text-lg leading-9 text-stone-600">
+        Cada lugar representa una voz invitada a formar parte de la edición
+        fundacional del Poema Universal 2026.
+      </p>
+
+      <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {voces.map((voz, index) => (
+          <article
+            key={`${voz.nombre}-${index}`}
+            className={`group relative min-h-[250px] overflow-hidden rounded-[34px] border p-7 transition duration-300 hover:-translate-y-1 ${
+              voz.confirmado
+                ? "border-stone-200 bg-white/80 shadow-[0_20px_55px_rgba(70,48,29,0.09)]"
+                : "border-dashed border-stone-300 bg-[#faf6ef]/70"
+            }`}
+          >
+            {voz.confirmado && (
+              <div className="absolute inset-0 bg-gradient-to-br from-white/35 via-transparent to-[#d8b980]/10" />
+            )}
+
+            <div className="relative z-10 flex h-full flex-col">
+              <div className="flex items-center justify-between">
+                <div
+                  className={`h-3 w-3 rounded-full ${
+                    voz.confirmado ? "bg-emerald-500" : "bg-stone-300"
+                  }`}
+                />
+
+                <p className="text-[10px] uppercase tracking-[0.35em] text-stone-400">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+              </div>
+
+              <div className="mt-10">
+                <p className="text-[10px] uppercase tracking-[0.32em] text-stone-400">
+                  {voz.confirmado ? "Voz confirmada" : "Lugar reservado"}
+                </p>
+
+                <h3 className="mt-4 font-serif text-3xl leading-tight text-stone-900">
+                  {voz.nombre}
+                </h3>
+
+                <p className="mt-4 text-sm leading-7 text-stone-600">
+                  {voz.pais}
+                </p>
+              </div>
+
+              <div className="mt-auto border-t border-stone-200/80 pt-5">
+                <p className="text-[10px] uppercase tracking-[0.32em] text-stone-400">
+                  {voz.confirmado
+                    ? "Edición fundacional 2026"
+                    : "Esperando una nueva voz"}
+                </p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}

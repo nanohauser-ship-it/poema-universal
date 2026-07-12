@@ -1,0 +1,431 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import Hero from "./components/Hero";
+import Manifesto from "./components/Manifesto";
+import VoicesWall from "./components/VoicesWall";
+import WorldGlobeLive from "./components/WorldGlobeLive";
+import Timeline from "./components/Timeline";
+import AnnualArchive from "./components/AnnualArchive";
+import InstitutionalFooter from "./components/InstitutionalFooter";
+
+const PRESENTATION_DATE = new Date(
+  "2027-01-01T00:00:00"
+).getTime();
+
+type CountdownTime = {
+  dias: number;
+  horas: number;
+  minutos: number;
+  segundos: number;
+};
+
+function calculateCountdown(): CountdownTime {
+  const difference = PRESENTATION_DATE - Date.now();
+
+  if (difference <= 0) {
+    return {
+      dias: 0,
+      horas: 0,
+      minutos: 0,
+      segundos: 0,
+    };
+  }
+
+  return {
+    dias: Math.floor(
+      difference / (1000 * 60 * 60 * 24)
+    ),
+    horas: Math.floor(
+      (difference / (1000 * 60 * 60)) % 24
+    ),
+    minutos: Math.floor(
+      (difference / (1000 * 60)) % 60
+    ),
+    segundos: Math.floor(
+      (difference / 1000) % 60
+    ),
+  };
+}
+
+const navigationLinks = [
+  {
+    label: "Manifiesto",
+    href: "#manifiesto",
+  },
+  {
+    label: "Voces",
+    href: "#voces",
+  },
+  {
+    label: "Mundo",
+    href: "#mundo",
+  },
+  {
+    label: "Cronología",
+    href: "#cronologia",
+  },
+  {
+    label: "Archivo",
+    href: "#archivo-anual",
+  },
+];
+
+export default function PoemaUniversalPage() {
+  const [time, setTime] = useState<CountdownTime>({
+    dias: 0,
+    horas: 0,
+    minutos: 0,
+    segundos: 0,
+  });
+
+  useEffect(() => {
+    setTime(calculateCountdown());
+
+    const interval = window.setInterval(() => {
+      setTime(calculateCountdown());
+    }, 1000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const countdownItems = [
+    {
+      value: time.dias,
+      label: "Días",
+    },
+    {
+      value: time.horas,
+      label: "Horas",
+    },
+    {
+      value: time.minutos,
+      label: "Minutos",
+    },
+    {
+      value: time.segundos,
+      label: "Segundos",
+    },
+  ];
+
+  const occupiedVoices = 4;
+  const totalVoices = 60;
+  const availableVoices = totalVoices - occupiedVoices;
+  const progress = (occupiedVoices / totalVoices) * 100;
+
+  return (
+    <main
+      id="top"
+      className="min-h-screen overflow-hidden text-stone-950"
+      style={{
+        backgroundColor: "#f4eee5",
+      }}
+    >
+      {/* NAVEGACIÓN */}
+
+      <header
+        className="sticky top-0 z-50 border-b border-stone-900/[0.07] backdrop-blur-xl"
+        style={{
+          backgroundColor: "rgba(244,238,229,0.92)",
+        }}
+      >
+        <div className="mx-auto flex min-h-[76px] max-w-[1500px] items-center justify-between gap-7 px-5 sm:px-8 lg:px-12">
+          <Link
+            href="/poema-universal"
+            className="shrink-0 font-serif text-xl tracking-[-0.025em] text-stone-950 transition hover:opacity-60"
+          >
+            Poema Universal
+          </Link>
+
+          <nav
+            aria-label="Navegación de Poema Universal"
+            className="hidden items-center gap-7 lg:flex"
+          >
+            {navigationLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-[9px] uppercase tracking-[0.28em] text-stone-500 transition hover:text-stone-950"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <span className="hidden text-[9px] uppercase tracking-[0.27em] text-stone-400 sm:block">
+              Edición fundacional
+            </span>
+
+            <Link
+              href="/"
+              className="rounded-full border border-stone-900/15 px-5 py-2.5 text-[9px] uppercase tracking-[0.26em] text-stone-600 transition hover:bg-stone-950 hover:text-white"
+            >
+              Inicio
+            </Link>
+          </div>
+        </div>
+
+        <nav
+          aria-label="Navegación móvil"
+          className="flex gap-6 overflow-x-auto border-t border-stone-900/[0.05] px-5 py-3 lg:hidden"
+        >
+          {navigationLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="shrink-0 text-[8px] uppercase tracking-[0.25em] text-stone-500"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </header>
+
+      {/* APERTURA CLARA */}
+
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, #f8f3ec 0%, #f4eee5 55%, #eee3d6 100%)",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-[-350px] h-[950px] w-[1150px] -translate-x-1/2 rounded-full blur-[150px]"
+          style={{
+            backgroundColor: "rgba(255,255,255,0.88)",
+          }}
+        />
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[-280px] top-[360px] h-[650px] w-[650px] rounded-full blur-[140px]"
+          style={{
+            backgroundColor: "rgba(197,157,91,0.14)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-[1500px] px-5 pb-24 pt-10 sm:px-8 lg:px-12">
+          <Hero />
+
+          {/* EDICIÓN FUNDACIONAL */}
+
+          <section
+            id="edicion-fundacional"
+            className="relative mt-16 overflow-hidden border-y border-stone-900/10 py-24 sm:mt-24 sm:py-32"
+          >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.55)",
+              }}
+            />
+
+            <div className="relative grid gap-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.48em] text-[#96743d]">
+                  Edición fundacional · 2026
+                </p>
+
+                <h2 className="mt-8 max-w-3xl font-serif text-5xl leading-[0.98] tracking-[-0.05em] text-[#191512] sm:text-7xl lg:text-[88px]">
+                  Un solo libro.
+                  <span className="block italic text-[#776e65]">
+                    Sesenta voces.
+                  </span>
+                </h2>
+
+                <p className="mt-9 max-w-xl text-base leading-8 text-stone-600 sm:text-lg sm:leading-9">
+                  Poetas de distintos territorios construirán
+                  durante 2026 una única obra literaria. El libro
+                  permanecerá cerrado hasta su presentación pública.
+                </p>
+
+                <div className="mt-11 grid gap-7 border-t border-stone-900/10 pt-8 sm:grid-cols-2">
+                  <div>
+                    <span className="block text-[9px] uppercase tracking-[0.28em] text-stone-400">
+                      Presentación oficial
+                    </span>
+
+                    <span className="mt-3 block font-serif text-xl text-[#191512]">
+                      1 de enero de 2027
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="block text-[9px] uppercase tracking-[0.28em] text-stone-400">
+                      Fundador y poeta
+                    </span>
+
+                    <span className="mt-3 block font-serif text-xl text-[#191512]">
+                      José Naveiro
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="mb-7 text-[9px] uppercase tracking-[0.36em] text-stone-500">
+                  Tiempo restante hasta la apertura
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {countdownItems.map((item) => (
+                    <div
+                      key={item.label}
+                      className="relative min-h-[155px] border border-stone-900/10 px-5 py-8 sm:min-h-[180px] sm:px-6 sm:py-10"
+                      style={{
+                        backgroundColor:
+                          "rgba(255,255,255,0.72)",
+                        boxShadow:
+                          "0 18px 55px rgba(66,48,31,0.06)",
+                      }}
+                    >
+                      <span
+                        className="block font-serif text-4xl tracking-[-0.04em] sm:text-5xl lg:text-6xl"
+                        style={{
+                          color: "#171310",
+                        }}
+                      >
+                        {String(item.value).padStart(2, "0")}
+                      </span>
+
+                      <span className="absolute bottom-7 left-5 text-[8px] uppercase tracking-[0.3em] text-stone-500 sm:left-6">
+                        {item.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div
+                  className="mt-5 border border-stone-900/10 p-7 sm:p-9"
+                  style={{
+                    backgroundColor:
+                      "rgba(255,255,255,0.45)",
+                  }}
+                >
+                  <div className="flex flex-wrap items-end justify-between gap-8">
+                    <div>
+                      <p className="text-[9px] uppercase tracking-[0.3em] text-stone-500">
+                        Participación actual
+                      </p>
+
+                      <p
+                        className="mt-3 font-serif text-5xl tracking-[-0.05em]"
+                        style={{
+                          color: "#171310",
+                        }}
+                      >
+                        {occupiedVoices}
+                        <span className="ml-2 text-2xl text-stone-400">
+                          / {totalVoices}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="text-left sm:text-right">
+                      <p className="text-[9px] uppercase tracking-[0.3em] text-stone-500">
+                        Territorios presentes
+                      </p>
+
+                      <p className="mt-3 font-serif text-xl text-stone-700">
+                        Chile · México
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-9 h-[3px] overflow-hidden bg-stone-900/10">
+                    <div
+                      className="h-full transition-all duration-1000"
+                      style={{
+                        width: `${progress}%`,
+                        backgroundColor: "#191512",
+                      }}
+                    />
+                  </div>
+
+                  <div className="mt-5 flex flex-col justify-between gap-3 text-[8px] uppercase tracking-[0.24em] text-stone-500 sm:flex-row">
+                    <span>
+                      {occupiedVoices} voces en incorporación
+                    </span>
+
+                    <span>
+                      {availableVoices} plazas disponibles
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div
+          className="h-36"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(238,227,214,1) 0%, rgba(29,36,45,1) 100%)",
+          }}
+        />
+      </section>
+
+      {/* UNIVERSO NOCTURNO */}
+
+      <section
+        className="relative pb-32 text-white"
+        style={{
+          background:
+            "linear-gradient(180deg, #1d242d 0%, #131922 26%, #0d1219 58%, #090d12 100%)",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[900px]"
+          style={{
+            background:
+              "radial-gradient(circle at top, rgba(205,164,89,0.14), transparent 58%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-[1500px] px-5 pt-5 sm:px-8 lg:px-12">
+          <Manifesto />
+          <VoicesWall />
+        </div>
+
+        <WorldGlobeLive />
+
+        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <Timeline />
+        </div>
+      </section>
+
+      {/* REGRESO A LA LUZ */}
+
+      <section
+        className="relative"
+        style={{
+          backgroundColor: "#f4eee5",
+        }}
+      >
+        <div
+          className="h-36"
+          style={{
+            background:
+              "linear-gradient(180deg, #090d12 0%, #f4eee5 100%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+          <AnnualArchive />
+        </div>
+      </section>
+
+      <InstitutionalFooter />
+    </main>
+  );
+}
