@@ -388,7 +388,7 @@ export default function PoemaUniversalPage() {
 
         <div
           id="voces"
-          className="mx-auto max-w-[1380px] px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+          className="mx-auto max-w-[1380px] px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44"
         >
           <div className="grid gap-14 lg:grid-cols-[1fr_0.8fr] lg:gap-24">
             <div>
@@ -412,7 +412,7 @@ export default function PoemaUniversalPage() {
                   className="block italic"
                   style={{
                     color:
-                      "rgba(240,232,220,0.58)",
+                      "rgba(240,232,220,0.48)",
                   }}
                 >
                   Un mismo lugar.
@@ -425,7 +425,7 @@ export default function PoemaUniversalPage() {
                 className="font-serif text-2xl italic leading-[1.55] sm:text-3xl"
                 style={{
                   color:
-                    "rgba(240,232,220,0.78)",
+                    "rgba(240,232,220,0.66)",
                 }}
               >
                 Las identidades aparecerán cuando su
@@ -442,7 +442,7 @@ export default function PoemaUniversalPage() {
                     className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
                     style={{
                       color:
-                        "rgba(240,232,220,0.5)",
+                        "rgba(240,232,220,0.34)",
                     }}
                   >
                     En incorporación
@@ -458,7 +458,7 @@ export default function PoemaUniversalPage() {
                     className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
                     style={{
                       color:
-                        "rgba(240,232,220,0.5)",
+                        "rgba(240,232,220,0.34)",
                     }}
                   >
                     Disponibles
@@ -470,7 +470,7 @@ export default function PoemaUniversalPage() {
 
           {/* RETÍCULA */}
 
-          <ol className="mt-20 grid grid-cols-2 border-l border-t border-white/[0.14] sm:grid-cols-3 lg:grid-cols-6">
+          <ol className="mt-20 grid grid-cols-2 border-l border-t border-white/10 sm:grid-cols-3 lg:grid-cols-6">
             {voiceSlots.map((slot) => {
               const isIncorporation =
                 slot.status === "incorporation";
@@ -478,7 +478,7 @@ export default function PoemaUniversalPage() {
               return (
                 <li
                   key={slot.position}
-                  className="flex min-h-[112px] flex-col justify-between border-b border-r border-white/[0.14] p-5 sm:min-h-[124px] sm:p-6"
+                  className="flex min-h-[128px] flex-col justify-between border-b border-r border-white/10 p-5 sm:min-h-[142px] sm:p-6"
                   style={{
                     background: isIncorporation
                       ? "linear-gradient(145deg, rgba(199,164,103,0.14), rgba(199,164,103,0.02))"
@@ -491,7 +491,7 @@ export default function PoemaUniversalPage() {
                       style={{
                         color: isIncorporation
                           ? "#c7a467"
-                          : "rgba(240,232,220,0.42)",
+                          : "rgba(240,232,220,0.27)",
                       }}
                     >
                       {String(
@@ -526,7 +526,7 @@ export default function PoemaUniversalPage() {
                     style={{
                       color: isIncorporation
                         ? "rgba(240,232,220,0.84)"
-                        : "rgba(240,232,220,0.5)",
+                        : "rgba(240,232,220,0.34)",
                     }}
                   >
                     {isIncorporation
@@ -542,7 +542,7 @@ export default function PoemaUniversalPage() {
         {/* 04 · EL MUNDO */}
 
         <div className="border-t border-white/10">
-          <div className="mx-auto max-w-[1380px] px-5 pt-20 text-center sm:px-8 sm:pt-24 lg:px-12">
+          <div className="mx-auto max-w-[1380px] px-5 pt-28 text-center sm:px-8 sm:pt-36 lg:px-12">
             <p
               className="text-[9px] uppercase tracking-[0.46em]"
               style={{
@@ -563,7 +563,7 @@ export default function PoemaUniversalPage() {
                 className="block italic"
                 style={{
                   color:
-                    "rgba(240,232,220,0.58)",
+                    "rgba(240,232,220,0.48)",
                 }}
               >
                 a escribir junto.
@@ -574,7 +574,7 @@ export default function PoemaUniversalPage() {
               className="mx-auto mt-9 max-w-2xl text-sm leading-7 sm:text-base sm:leading-8"
               style={{
                 color:
-                  "rgba(240,232,220,0.58)",
+                  "rgba(240,232,220,0.4)",
               }}
             >
               Cada territorio iluminado representa una

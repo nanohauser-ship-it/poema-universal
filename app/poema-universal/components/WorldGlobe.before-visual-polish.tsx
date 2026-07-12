@@ -542,13 +542,13 @@ export default function WorldGlobe({
   return (
     <div
       id="mundo"
-      className="relative mx-auto max-w-[1380px] px-5 pb-20 pt-10 sm:px-8 sm:pb-24 sm:pt-12 lg:px-12"
+      className="relative mx-auto max-w-[1500px] px-5 pb-28 pt-14 sm:px-8 sm:pb-36 sm:pt-20 lg:px-12"
     >
-      <div className="relative overflow-hidden border border-white/[0.14] bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="relative overflow-hidden border border-white/10 bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_330px]">
             <div
               ref={containerRef}
-              className="relative min-h-[600px] overflow-hidden lg:min-h-[650px]"
+              className="relative min-h-[520px] overflow-hidden"
             >
               {isLoadingCountries && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#020609]/70 backdrop-blur-sm">
@@ -669,11 +669,11 @@ export default function WorldGlobe({
               )}
 
               <div className="pointer-events-none absolute bottom-5 left-5 z-10 border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-md">
-                <p className="text-[8px] uppercase tracking-[0.3em] text-white/58">
+                <p className="text-[8px] uppercase tracking-[0.3em] text-white/42">
                   Arrastra para girar
                 </p>
 
-                <p className="mt-1 text-[8px] uppercase tracking-[0.3em] text-white/58">
+                <p className="mt-1 text-[8px] uppercase tracking-[0.3em] text-white/42">
                   Usa la rueda para acercarte
                 </p>
               </div>
@@ -686,7 +686,7 @@ export default function WorldGlobe({
                     Atlas de participantes
                   </p>
 
-                  <p className="mt-3 text-xs leading-6 text-white/52">
+                  <p className="mt-3 text-xs leading-6 text-white/35">
                     Selecciona un territorio
                     iluminado.
                   </p>
@@ -777,7 +777,7 @@ export default function WorldGlobe({
                           }
                           className="group flex w-full items-center justify-between border-b border-white/[0.08] py-4 text-left"
                         >
-                          <span className="font-serif text-xl text-white/88 transition group-hover:text-white">
+                          <span className="font-serif text-xl text-white/72 transition group-hover:text-white">
                             {country.name}
                           </span>
 
@@ -788,7 +788,7 @@ export default function WorldGlobe({
                   </div>
 
                   <div className="mt-auto border-t border-white/10 pt-7">
-                    <p className="text-xs leading-6 text-white/46">
+                    <p className="text-xs leading-6 text-white/32">
                       El mapa crecerá con cada
                       nueva incorporación hasta
                       reunir las sesenta voces de
