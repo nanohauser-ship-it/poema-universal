@@ -540,11 +540,83 @@ export default function WorldGlobe({
   );
 
   return (
-    <div
+    <section
       id="mundo"
-      className="relative mx-auto max-w-[1500px] px-5 pb-28 pt-14 sm:px-8 sm:pb-36 sm:pt-20 lg:px-12"
+      className="relative isolate overflow-hidden border-y border-white/10 bg-[#03070a] py-24 text-white sm:py-32"
     >
-      <div className="relative overflow-hidden border border-white/10 bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#b58b45]/[0.07] blur-[150px]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.035),transparent_58%)]"
+      />
+
+      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+        <header className="mx-auto mb-16 max-w-4xl text-center">
+          <p className="mb-7 text-[10px] font-medium uppercase tracking-[0.45em] text-[#d7b66f] sm:text-xs">
+            Cartografía de una voz común
+          </p>
+
+          <h2 className="font-serif text-4xl font-normal tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl">
+            El mundo comienza
+            <span className="block italic text-white/62">
+              a escribir junto
+            </span>
+          </h2>
+
+          <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-white/48 sm:text-base sm:leading-8">
+            Cada territorio iluminado representa una
+            presencia que ya ha comenzado a formar parte
+            de la edición fundacional de Poema Universal.
+          </p>
+        </header>
+
+        <div className="mb-8 grid gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-3">
+          <div className="bg-[#050a0e] px-6 py-6 text-center">
+            <span className="block font-serif text-3xl text-white">
+              {occupiedTotal}
+            </span>
+
+            <span className="mt-2 block text-[9px] uppercase tracking-[0.32em] text-white/38">
+              Voces en incorporación
+            </span>
+          </div>
+
+          <div className="bg-[#050a0e] px-6 py-6 text-center">
+            <span className="block font-serif text-3xl text-white">
+              {participatingCountries.length}
+            </span>
+
+            <span className="mt-2 block text-[9px] uppercase tracking-[0.32em] text-white/38">
+              Países participantes
+            </span>
+          </div>
+
+          <div className="bg-[#050a0e] px-6 py-6 text-center">
+            <span className="block font-serif text-3xl text-[#d7b66f]">
+              {reservedTotal}
+            </span>
+
+            <span className="mt-2 block text-[9px] uppercase tracking-[0.32em] text-white/38">
+              Plazas disponibles
+            </span>
+          </div>
+        </div>
+
+        <div className="mb-8 flex flex-col items-center justify-between gap-3 border-x border-white/10 px-5 py-4 text-center sm:flex-row sm:text-left">
+          <p className="text-[9px] uppercase tracking-[0.32em] text-white/30">
+            Edición fundacional 2026
+          </p>
+
+          <p className="font-serif text-sm italic text-white/48">
+            Un libro universal de {totalSlots} voces
+          </p>
+        </div>
+
+        <div className="relative overflow-hidden border border-white/10 bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
           <div className="grid lg:grid-cols-[minmax(0,1fr)_330px]">
             <div
               ref={containerRef}
@@ -801,6 +873,11 @@ export default function WorldGlobe({
           </div>
         </div>
 
-    </div>
+        <p className="mx-auto mt-8 max-w-2xl text-center text-[9px] uppercase leading-6 tracking-[0.3em] text-white/25">
+          Cada luz señala una presencia. Cada
+          presencia modifica el poema.
+        </p>
+      </div>
+    </section>
   );
 }
