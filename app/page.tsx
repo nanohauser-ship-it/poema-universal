@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PoemaUniversalThreshold from "./components/PoemaUniversalThreshold";
+import HomeSupportGateway from "./components/HomeSupportGateway";
 export default function HomePage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#f6efe7] px-5 py-8 text-stone-950">
@@ -181,6 +182,8 @@ export default function HomePage() {
             no debe quedar a la intemperie.
           </p>
         </section>
+
+        <HomeSupportGateway />
 
         <section className="mt-24 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Link
