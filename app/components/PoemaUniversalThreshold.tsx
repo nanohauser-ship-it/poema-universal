@@ -161,10 +161,17 @@ export default function PoemaUniversalThreshold() {
 
           <div className="mt-11 flex flex-wrap items-center gap-5">
             <Link
-              href="/poema-universal"
-              className="inline-flex items-center justify-center rounded-full border border-[#c7a467] bg-[#c7a467] px-7 py-4 text-[9px] font-semibold uppercase tracking-[0.28em] text-[#080b0e] transition hover:-translate-y-0.5 hover:bg-[#d4b579]"
+              href="/poema-universal#entrada"
+              className="group inline-flex items-center justify-center rounded-full border border-[#c7a467] bg-[#c7a467] px-7 py-4 text-[9px] font-semibold uppercase tracking-[0.28em] text-[#080b0e] transition hover:-translate-y-0.5 hover:bg-[#d4b579]"
             >
-              Entrar en la sala universal
+              <span>Entrar en la sala universal</span>
+
+              <span
+                aria-hidden="true"
+                className="ml-4 inline-block text-sm transition-transform duration-300 group-hover:translate-x-1"
+              >
+                →
+              </span>
             </Link>
 
             <span className="text-[8px] uppercase tracking-[0.28em] text-white/35">
@@ -254,6 +261,47 @@ export default function PoemaUniversalThreshold() {
           <p className="mt-7 text-right font-serif text-sm italic text-white/36">
             El mundo todavía está escribiendo.
           </p>
+        </div>
+      </div>
+
+      <div className="relative border-t border-white/[0.1] px-6 py-7 sm:px-10 lg:px-16">
+        <div className="flex items-center justify-center gap-5">
+          <span
+            aria-hidden="true"
+            className="h-px flex-1"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, rgba(199,164,103,0.42))",
+            }}
+          />
+
+          <span
+            className="text-center text-[7px] uppercase tracking-[0.38em]"
+            style={{
+              color: "rgba(240,232,220,0.42)",
+            }}
+          >
+            De la casa a la sala
+          </span>
+
+          <span
+            aria-hidden="true"
+            className="h-2 w-2 rounded-full"
+            style={{
+              backgroundColor: "#c7a467",
+              boxShadow:
+                "0 0 18px rgba(199,164,103,0.55)",
+            }}
+          />
+
+          <span
+            aria-hidden="true"
+            className="h-px flex-1"
+            style={{
+              background:
+                "linear-gradient(to left, transparent, rgba(199,164,103,0.42))",
+            }}
+          />
         </div>
       </div>
     </section>

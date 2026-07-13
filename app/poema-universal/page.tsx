@@ -296,6 +296,70 @@ export default function PoemaUniversalPage() {
         </div>
       </header>
 
+      {/* PASO DESDE LA HOME */}
+
+      <section
+        id="entrada"
+        aria-label="Entrada a la sala universal"
+        className="scroll-mt-[70px] border-b"
+        style={{
+          borderColor: "rgba(23,20,17,0.12)",
+          backgroundColor: "#f0e8dc",
+        }}
+      >
+        <div className="mx-auto grid min-h-[92px] max-w-[1380px] items-center gap-5 px-5 py-5 sm:px-8 md:grid-cols-[1fr_auto_1fr] lg:px-12">
+          <Link
+            href="/"
+            className="justify-self-start text-[8px] uppercase tracking-[0.3em] text-stone-500 transition hover:text-stone-950"
+          >
+            ← Volver a la casa
+          </Link>
+
+          <div className="flex items-center justify-center gap-4">
+            <span
+              aria-hidden="true"
+              className="hidden h-px w-16 sm:block"
+              style={{
+                background:
+                  "linear-gradient(to right, transparent, rgba(199,164,103,0.66))",
+              }}
+            />
+
+            <span
+              aria-hidden="true"
+              className="h-2 w-2 rounded-full"
+              style={{
+                backgroundColor: "#c7a467",
+                boxShadow:
+                  "0 0 18px rgba(199,164,103,0.42)",
+              }}
+            />
+
+            <p
+              className="font-serif text-base italic sm:text-lg"
+              style={{
+                color: "rgba(23,20,17,0.64)",
+              }}
+            >
+              Has cruzado el umbral.
+            </p>
+
+            <span
+              aria-hidden="true"
+              className="hidden h-px w-16 sm:block"
+              style={{
+                background:
+                  "linear-gradient(to left, transparent, rgba(199,164,103,0.66))",
+              }}
+            />
+          </div>
+
+          <p className="justify-self-start text-[8px] uppercase tracking-[0.3em] text-stone-400 md:justify-self-end">
+            Edición fundacional · 2026
+          </p>
+        </div>
+      </section>
+
       {/* 01 · UMBRAL */}
 
       <section className="relative">
@@ -564,13 +628,65 @@ export default function PoemaUniversalPage() {
 
           {/* RETÍCULA */}
 
-          <ol className="mt-20 grid grid-cols-2 border-l border-t border-white/[0.16] sm:grid-cols-3 lg:grid-cols-6">
+          <div className="mt-20 flex flex-col gap-8 border-y border-white/[0.12] py-9 sm:flex-row sm:items-end sm:justify-between">
+            <p
+              className="max-w-2xl font-serif text-2xl leading-[1.12] tracking-[-0.025em] sm:text-3xl"
+              style={{ color: "#f0e8dc" }}
+            >
+              Aquí nadie entra por su nombre.
+              <span
+                className="block italic"
+                style={{
+                  color: "rgba(240,232,220,0.54)",
+                }}
+              >
+                Entra por su voz.
+              </span>
+            </p>
+
+            <p
+              className="text-[8px] uppercase tracking-[0.34em]"
+              style={{
+                color: "rgba(240,232,220,0.46)",
+              }}
+            >
+              60 voces · una misma dignidad
+            </p>
+          </div>
+
+          <ol className="mt-10 grid grid-cols-2 border-l border-t border-white/[0.16] sm:grid-cols-3 lg:grid-cols-6">
             {voiceSlots.map((slot) => {
               const isIncorporation =
                 slot.status === "incorporation";
 
               const poetProfile =
                 poetProfiles[slot.position] ?? null;
+
+              const isPublicVoice =
+                Boolean(poetProfile);
+
+              const voiceLabel = poetProfile
+                ? poetProfile.name
+                : isIncorporation
+                  ? "Voz en incorporación"
+                  : "Voz por llegar";
+
+              const territoryLabel = poetProfile
+                ? [
+                    poetProfile.country,
+                    poetProfile.city,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")
+                : isIncorporation
+                  ? "Identidad protegida"
+                  : "Plaza abierta";
+
+              const footerLabel = poetProfile
+                ? "Abrir ficha →"
+                : isIncorporation
+                  ? "Edición fundacional 2026"
+                  : "Poema Universal 2026";
 
               return (
                 <li
@@ -597,11 +713,13 @@ export default function PoemaUniversalPage() {
                       setSelectedPoet(poetProfile);
                     }
                   }}
-                  className="flex min-h-[112px] flex-col justify-between border-b border-r border-white/[0.16] p-5 sm:min-h-[124px] sm:p-6"
+                  className="group flex min-h-[126px] flex-col justify-between border-b border-r border-white/[0.16] p-5 transition-[background-color,transform] duration-300 sm:min-h-[138px] sm:p-6"
                   style={{
-                    background: isIncorporation
-                      ? "linear-gradient(145deg, rgba(199,164,103,0.14), rgba(199,164,103,0.02))"
-                      : "transparent",
+                    background: isPublicVoice
+                      ? "linear-gradient(145deg, rgba(199,164,103,0.16), rgba(199,164,103,0.025))"
+                      : isIncorporation
+                        ? "linear-gradient(145deg, rgba(199,164,103,0.07), rgba(199,164,103,0.01))"
+                        : "transparent",
                     cursor: poetProfile
                       ? "pointer"
                       : "default",
@@ -611,9 +729,11 @@ export default function PoemaUniversalPage() {
                     <span
                       className="font-serif text-lg italic"
                       style={{
-                        color: isIncorporation
-                          ? "#c7a467"
-                          : "rgba(240,232,220,0.52)",
+                        color:
+                          isPublicVoice ||
+                          isIncorporation
+                            ? "#c7a467"
+                            : "rgba(240,232,220,0.42)",
                       }}
                     >
                       {String(
@@ -622,48 +742,71 @@ export default function PoemaUniversalPage() {
                     </span>
 
                     <span
+                      aria-hidden="true"
                       className={
-                        isIncorporation
+                        isPublicVoice
                           ? "h-2 w-2 rounded-full"
                           : "h-2 w-2 rounded-full border"
                       }
                       style={
-                        isIncorporation
+                        isPublicVoice
                           ? {
                               backgroundColor:
                                 "#c7a467",
                               boxShadow:
                                 "0 0 16px rgba(199,164,103,0.46)",
                             }
-                          : {
-                              borderColor:
-                                "rgba(240,232,220,0.2)",
-                            }
+                          : isIncorporation
+                            ? {
+                                borderColor:
+                                  "#c7a467",
+                                backgroundColor:
+                                  "rgba(199,164,103,0.12)",
+                              }
+                            : {
+                                borderColor:
+                                  "rgba(240,232,220,0.18)",
+                              }
                       }
                     />
                   </div>
 
-                  <p
-                    className="font-serif text-base"
+                  <div className="mt-7">
+                    <p
+                      className="font-serif text-[15px] leading-5 sm:text-base"
+                      style={{
+                        color: isPublicVoice
+                          ? "#f0e8dc"
+                          : isIncorporation
+                            ? "rgba(240,232,220,0.76)"
+                            : "rgba(240,232,220,0.48)",
+                      }}
+                    >
+                      {voiceLabel}
+                    </p>
+
+                    <p
+                      className="mt-2 text-[7px] uppercase leading-4 tracking-[0.23em]"
+                      style={{
+                        color: isPublicVoice
+                          ? "#c7a467"
+                          : "rgba(240,232,220,0.34)",
+                      }}
+                    >
+                      {territoryLabel}
+                    </p>
+                  </div>
+
+                  <span
+                    className="mt-5 text-[7px] uppercase tracking-[0.22em]"
                     style={{
-                      color: isIncorporation
-                        ? "rgba(240,232,220,0.84)"
-                        : "rgba(240,232,220,0.58)",
+                      color: poetProfile
+                        ? "rgba(199,164,103,0.92)"
+                        : "rgba(240,232,220,0.26)",
                     }}
                   >
-                    {isIncorporation
-                      ? "En incorporación"
-                      : "Disponible"}
-                  </p>
-
-                  {poetProfile && (
-                    <span
-                      className="mt-3 text-[7px] uppercase tracking-[0.24em]"
-                      style={{ color: "#c7a467" }}
-                    >
-                      Abrir ficha →
-                    </span>
-                  )}
+                    {footerLabel}
+                  </span>
                 </li>
               );
             })}
