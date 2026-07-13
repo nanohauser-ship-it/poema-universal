@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import WorldGlobeLive from "./components/WorldGlobeLive";
+import SupportersSection from "./components/SupportersSection";
 import PoetProfilePanel, {
   type PoetProfile,
 } from "./components/PoetProfilePanel";
@@ -928,6 +929,7 @@ export default function PoemaUniversalPage() {
           </div>
         </footer>
       </section>
+      <SupportersSection />
     </main>
   );
 }
