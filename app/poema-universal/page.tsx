@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import WorldGlobeLive from "./components/WorldGlobeLive";
+import PoetProfilePanel, {
+  type PoetProfile,
+} from "./components/PoetProfilePanel";
 
 const PRESENTATION_DATE = new Date(
   "2027-01-01T00:00:00+01:00"
@@ -34,6 +37,27 @@ const voiceSlots: VoiceSlot[] = Array.from(
         : "available",
   })
 );
+
+
+
+
+type PublicPoetApi = {
+  id: string;
+  position: number;
+  name: string;
+  country: string;
+  countryCode: string | null;
+  city: string | null;
+  shortBio: string;
+  portraitUrl: string | null;
+  status: "confirmed" | "published";
+  profileSlug: string | null;
+};
+
+type PublicPoetsResponse = {
+  editionYear: number;
+  poets: PublicPoetApi[];
+};
 
 const manifestoPrinciples = [
   {
@@ -103,6 +127,12 @@ function calculateCountdown(): CountdownTime {
 }
 
 export default function PoemaUniversalPage() {
+  const [selectedPoet, setSelectedPoet] =
+    useState<PoetProfile | null>(null);
+
+  const [poetProfiles, setPoetProfiles] =
+    useState<Record<number, PoetProfile>>({});
+
   const [time, setTime] =
     useState<CountdownTime>({
       dias: 0,
@@ -120,6 +150,70 @@ export default function PoemaUniversalPage() {
 
     return () => {
       window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPublicPoets() {
+      try {
+        const response = await fetch(
+          "/api/poema-universal/poets",
+          {
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Error ${response.status} al cargar los perfiles.`
+          );
+        }
+
+        const data =
+          (await response.json()) as PublicPoetsResponse;
+
+        if (cancelled) {
+          return;
+        }
+
+        const profilesByPosition: Record<
+          number,
+          PoetProfile
+        > = {};
+
+        for (const poet of data.poets) {
+          profilesByPosition[poet.position] = {
+            position: poet.position,
+            name: poet.name,
+            country: poet.country,
+            ...(poet.city
+              ? {
+                  city: poet.city,
+                }
+              : {}),
+            shortBio: poet.shortBio,
+            status:
+              poet.status === "published"
+                ? "published"
+                : "confirmed",
+          };
+        }
+
+        setPoetProfiles(profilesByPosition);
+      } catch (error) {
+        console.error(
+          "No se pudieron cargar los perfiles públicos:",
+          error
+        );
+      }
+    }
+
+    loadPublicPoets();
+
+    return () => {
+      cancelled = true;
     };
   }, []);
 
@@ -388,7 +482,7 @@ export default function PoemaUniversalPage() {
 
         <div
           id="voces"
-          className="mx-auto max-w-[1380px] px-5 py-24 sm:px-8 sm:py-28 lg:px-12 lg:py-32"
+          className="mx-auto max-w-[1380px] px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28"
         >
           <div className="grid gap-14 lg:grid-cols-[1fr_0.8fr] lg:gap-24">
             <div>
@@ -442,7 +536,7 @@ export default function PoemaUniversalPage() {
                     className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
                     style={{
                       color:
-                        "rgba(240,232,220,0.5)",
+                        "rgba(240,232,220,0.58)",
                     }}
                   >
                     En incorporación
@@ -458,7 +552,7 @@ export default function PoemaUniversalPage() {
                     className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
                     style={{
                       color:
-                        "rgba(240,232,220,0.5)",
+                        "rgba(240,232,220,0.58)",
                     }}
                   >
                     Disponibles
@@ -470,19 +564,47 @@ export default function PoemaUniversalPage() {
 
           {/* RETÍCULA */}
 
-          <ol className="mt-20 grid grid-cols-2 border-l border-t border-white/[0.14] sm:grid-cols-3 lg:grid-cols-6">
+          <ol className="mt-20 grid grid-cols-2 border-l border-t border-white/[0.16] sm:grid-cols-3 lg:grid-cols-6">
             {voiceSlots.map((slot) => {
               const isIncorporation =
                 slot.status === "incorporation";
 
+              const poetProfile =
+                poetProfiles[slot.position] ?? null;
+
               return (
                 <li
                   key={slot.position}
-                  className="flex min-h-[112px] flex-col justify-between border-b border-r border-white/[0.14] p-5 sm:min-h-[124px] sm:p-6"
+                  role={poetProfile ? "button" : undefined}
+                  tabIndex={poetProfile ? 0 : -1}
+                  aria-label={
+                    poetProfile
+                      ? `Abrir ficha de ${poetProfile.name}`
+                      : undefined
+                  }
+                  onClick={() => {
+                    if (poetProfile) {
+                      setSelectedPoet(poetProfile);
+                    }
+                  }}
+                  onKeyDown={(event) => {
+                    if (
+                      poetProfile &&
+                      (event.key === "Enter" ||
+                        event.key === " ")
+                    ) {
+                      event.preventDefault();
+                      setSelectedPoet(poetProfile);
+                    }
+                  }}
+                  className="flex min-h-[112px] flex-col justify-between border-b border-r border-white/[0.16] p-5 sm:min-h-[124px] sm:p-6"
                   style={{
                     background: isIncorporation
                       ? "linear-gradient(145deg, rgba(199,164,103,0.14), rgba(199,164,103,0.02))"
                       : "transparent",
+                    cursor: poetProfile
+                      ? "pointer"
+                      : "default",
                   }}
                 >
                   <div className="flex items-start justify-between">
@@ -491,7 +613,7 @@ export default function PoemaUniversalPage() {
                       style={{
                         color: isIncorporation
                           ? "#c7a467"
-                          : "rgba(240,232,220,0.42)",
+                          : "rgba(240,232,220,0.52)",
                       }}
                     >
                       {String(
@@ -526,23 +648,37 @@ export default function PoemaUniversalPage() {
                     style={{
                       color: isIncorporation
                         ? "rgba(240,232,220,0.84)"
-                        : "rgba(240,232,220,0.5)",
+                        : "rgba(240,232,220,0.58)",
                     }}
                   >
                     {isIncorporation
                       ? "En incorporación"
                       : "Disponible"}
                   </p>
+
+                  {poetProfile && (
+                    <span
+                      className="mt-3 text-[7px] uppercase tracking-[0.24em]"
+                      style={{ color: "#c7a467" }}
+                    >
+                      Abrir ficha →
+                    </span>
+                  )}
                 </li>
               );
             })}
           </ol>
+
+          <PoetProfilePanel
+            poet={selectedPoet}
+            onClose={() => setSelectedPoet(null)}
+          />
         </div>
 
         {/* 04 · EL MUNDO */}
 
         <div className="border-t border-white/10">
-          <div className="mx-auto max-w-[1380px] px-5 pt-20 text-center sm:px-8 sm:pt-24 lg:px-12">
+          <div className="mx-auto max-w-[1380px] px-5 pt-16 text-center sm:px-8 sm:pt-20 lg:px-12">
             <p
               className="text-[9px] uppercase tracking-[0.46em]"
               style={{
