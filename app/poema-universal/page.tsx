@@ -301,16 +301,25 @@ export default function PoemaUniversalPage() {
       <section
         id="entrada"
         aria-label="Entrada a la sala universal"
-        className="scroll-mt-[70px] border-b"
+        className="relative scroll-mt-[70px] overflow-hidden"
         style={{
-          borderColor: "rgba(23,20,17,0.12)",
-          backgroundColor: "#f0e8dc",
+          background:
+            "linear-gradient(180deg, #f0e8dc 0%, #f3ece2 58%, #f0e8dc 100%)",
         }}
       >
-        <div className="mx-auto grid min-h-[92px] max-w-[1380px] items-center gap-5 px-5 py-5 sm:px-8 md:grid-cols-[1fr_auto_1fr] lg:px-12">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-0 h-full w-[720px] -translate-x-1/2"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 42%, rgba(255,255,255,0.72), transparent 54%)",
+          }}
+        />
+
+        <div className="relative mx-auto grid min-h-[116px] max-w-[1380px] items-center gap-6 px-5 pb-12 pt-6 sm:px-8 md:grid-cols-[1fr_auto_1fr] lg:px-12">
           <Link
             href="/"
-            className="justify-self-start text-[8px] uppercase tracking-[0.3em] text-stone-500 transition hover:text-stone-950"
+            className="justify-self-center text-[8px] uppercase tracking-[0.3em] text-stone-500 transition hover:text-stone-950 md:justify-self-start"
           >
             ← Volver a la casa
           </Link>
@@ -318,10 +327,10 @@ export default function PoemaUniversalPage() {
           <div className="flex items-center justify-center gap-4">
             <span
               aria-hidden="true"
-              className="hidden h-px w-16 sm:block"
+              className="hidden h-px w-20 sm:block"
               style={{
                 background:
-                  "linear-gradient(to right, transparent, rgba(199,164,103,0.66))",
+                  "linear-gradient(to right, transparent, rgba(199,164,103,0.62))",
               }}
             />
 
@@ -331,14 +340,14 @@ export default function PoemaUniversalPage() {
               style={{
                 backgroundColor: "#c7a467",
                 boxShadow:
-                  "0 0 18px rgba(199,164,103,0.42)",
+                  "0 0 20px rgba(199,164,103,0.5)",
               }}
             />
 
             <p
               className="font-serif text-base italic sm:text-lg"
               style={{
-                color: "rgba(23,20,17,0.64)",
+                color: "rgba(23,20,17,0.66)",
               }}
             >
               Has cruzado el umbral.
@@ -346,34 +355,52 @@ export default function PoemaUniversalPage() {
 
             <span
               aria-hidden="true"
-              className="hidden h-px w-16 sm:block"
+              className="hidden h-px w-20 sm:block"
               style={{
                 background:
-                  "linear-gradient(to left, transparent, rgba(199,164,103,0.66))",
+                  "linear-gradient(to left, transparent, rgba(199,164,103,0.62))",
               }}
             />
           </div>
 
-          <p className="justify-self-start text-[8px] uppercase tracking-[0.3em] text-stone-400 md:justify-self-end">
-            Edición fundacional · 2026
+          <p className="justify-self-center text-[8px] uppercase tracking-[0.3em] text-stone-400 md:justify-self-end">
+            60 voces · un solo libro
           </p>
         </div>
+
+        <span
+          aria-hidden="true"
+          className="absolute bottom-0 left-1/2 h-12 w-px -translate-x-1/2"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(199,164,103,0.72), rgba(199,164,103,0.08))",
+          }}
+        />
       </section>
 
       {/* 01 · UMBRAL */}
 
-      <section className="relative">
+      <section className="relative -mt-px overflow-hidden">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-[-420px] h-[900px] w-[1100px] -translate-x-1/2 rounded-full blur-[170px]"
+          className="pointer-events-none absolute left-1/2 top-[-360px] h-[900px] w-[1100px] -translate-x-1/2 rounded-full blur-[170px]"
           style={{
-            backgroundColor:
-              "rgba(255,255,255,0.75)",
+            background:
+              "radial-gradient(circle, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.42) 46%, transparent 72%)",
+          }}
+        />
+
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-0 h-24 w-px -translate-x-1/2"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(199,164,103,0.42), transparent)",
           }}
         />
 
         <div className="relative mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-between border-b border-stone-900/15 py-6">
+          <div className="flex items-center justify-between pt-12">
             <p className="text-[8px] uppercase tracking-[0.4em] text-stone-500">
               Institución literaria internacional
             </p>
@@ -383,7 +410,7 @@ export default function PoemaUniversalPage() {
             </p>
           </div>
 
-          <div className="flex min-h-[650px] flex-col items-center justify-center py-20 text-center sm:min-h-[720px]">
+          <div className="flex min-h-[620px] flex-col items-center justify-center pb-24 pt-16 text-center sm:min-h-[690px] sm:pb-28 sm:pt-20">
             <p
               className="text-[9px] uppercase tracking-[0.52em]"
               style={{
