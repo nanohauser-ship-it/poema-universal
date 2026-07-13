@@ -6,131 +6,24 @@ import AccionesArtista from "./AccionesArtista";
 export type AtlasArtista = {
   id: string;
   nombre: string;
-  categoria: string;
-  obra: string | null;
+  disciplina: string;
   territorio: string | null;
-  descripcion: string;
-  foto_url: string | null;
+  periodo: string | null;
+  obra: string | null;
+  obras_esenciales: string[];
+  etiquetas: string[];
+  portada_url: string | null;
+  dedicatoria: string | null;
   destacado: boolean;
-  instagram_url: string | null;
-  web_url: string | null;
-  created_at: string;
   corazones: number;
   velas: number;
-  relacion_obras: string[];
-  tipo_relacion: string | null;
-  legado: string | null;
-  obras_esenciales: string[];
 };
 
-const disciplineOptions = [
-  "Todos",
-  "Literatura",
-  "Cine",
-  "Música",
-  "Artes visuales",
-  "Fotografía humana",
-  "Pensamiento",
-  "Cocina",
-  "Danza",
-  "Otros",
-];
-
-const novelOptions = [
-  "Todas las obras",
-  "No dejes que desaparezcamos",
-  "La Jerarquía del Hambre",
-  "Memorias de Bielka",
-  "Tríptico completo",
-];
-
-function normalize(value: string) {
+function normalizar(value: string) {
   return value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
-}
-
-function getDiscipline(category: string) {
-  const value = normalize(category);
-
-  if (
-    value.includes("literatura") ||
-    value.includes("poesia") ||
-    value.includes("escrit")
-  ) {
-    return "Literatura";
-  }
-
-  if (value.includes("cine")) {
-    return "Cine";
-  }
-
-  if (value.includes("musica") || value.includes("sonido")) {
-    return "Música";
-  }
-
-  if (
-    value.includes("fotografia") ||
-    value.includes("archivo humano") ||
-    value.includes("documental")
-  ) {
-    return "Fotografía humana";
-  }
-
-  if (
-    value.includes("pintura") ||
-    value.includes("arte") ||
-    value.includes("escultura")
-  ) {
-    return "Artes visuales";
-  }
-
-  if (
-    value.includes("pensamiento") ||
-    value.includes("filosofia")
-  ) {
-    return "Pensamiento";
-  }
-
-  if (value.includes("cocina")) {
-    return "Cocina";
-  }
-
-  if (
-    value.includes("danza") ||
-    value.includes("cuerpo")
-  ) {
-    return "Danza";
-  }
-
-  return "Otros";
-}
-
-function relationDisplay(value: string | null) {
-  if (!value) {
-    return "Archivo de influencia";
-  }
-
-  const normalized = normalize(value);
-
-  if (normalized.includes("documentada")) {
-    return "Influencia documentada";
-  }
-
-  if (normalized.includes("declarada")) {
-    return "Influencia declarada";
-  }
-
-  if (normalized.includes("curatorial")) {
-    return "Resonancia curatorial";
-  }
-
-  if (normalized.includes("critica")) {
-    return "Referencia crítica";
-  }
-
-  return value;
 }
 
 export default function AtlasInfluencias({
@@ -138,50 +31,50 @@ export default function AtlasInfluencias({
 }: {
   artistas: AtlasArtista[];
 }) {
-  const [query, setQuery] = useState("");
-  const [discipline, setDiscipline] = useState("Todos");
-  const [novel, setNovel] = useState("Todas las obras");
+  const [busqueda, setBusqueda] = useState("");
+  const [disciplina, setDisciplina] = useState("Todos");
 
-  const filteredArtists = useMemo(() => {
-    const normalizedQuery = normalize(query.trim());
+  const disciplinas = useMemo(() => {
+    const valores = Array.from(
+      new Set(
+        artistas
+          .map((artista) => artista.disciplina)
+          .filter(Boolean)
+      )
+    ).sort((a, b) => a.localeCompare(b, "es"));
+
+    return ["Todos", ...valores];
+  }, [artistas]);
+
+  const artistasFiltrados = useMemo(() => {
+    const consulta = normalizar(busqueda.trim());
 
     return artistas
       .filter((artista) => {
-        if (discipline === "Todos") {
+        if (disciplina === "Todos") {
           return true;
         }
 
-        return getDiscipline(artista.categoria) === discipline;
+        return artista.disciplina === disciplina;
       })
       .filter((artista) => {
-        if (novel === "Todas las obras") {
+        if (!consulta) {
           return true;
         }
 
-        return artista.relacion_obras.some(
-          (obra) => normalize(obra) === normalize(novel)
-        );
-      })
-      .filter((artista) => {
-        if (!normalizedQuery) {
-          return true;
-        }
-
-        const searchable = [
+        const contenido = [
           artista.nombre,
-          artista.categoria,
+          artista.disciplina,
           artista.territorio || "",
-          artista.descripcion,
-          artista.legado || "",
+          artista.periodo || "",
           artista.obra || "",
-          artista.tipo_relacion || "",
           ...artista.obras_esenciales,
-          ...artista.relacion_obras,
+          ...artista.etiquetas,
         ]
-          .map(normalize)
+          .map(normalizar)
           .join(" ");
 
-        return searchable.includes(normalizedQuery);
+        return contenido.includes(consulta);
       })
       .sort((a, b) => {
         if (a.destacado !== b.destacado) {
@@ -190,27 +83,7 @@ export default function AtlasInfluencias({
 
         return a.nombre.localeCompare(b.nombre, "es");
       });
-  }, [artistas, discipline, novel, query]);
-
-  const disciplinesRepresented = useMemo(
-    () =>
-      new Set(
-        artistas.map((artista) =>
-          getDiscipline(artista.categoria)
-        )
-      ).size,
-    [artistas]
-  );
-
-  const territoriesRepresented = useMemo(
-    () =>
-      new Set(
-        artistas
-          .map((artista) => artista.territorio)
-          .filter(Boolean)
-      ).size,
-    [artistas]
-  );
+  }, [artistas, busqueda, disciplina]);
 
   return (
     <section
@@ -218,335 +91,238 @@ export default function AtlasInfluencias({
       aria-labelledby="atlas-title"
       className="border-t border-stone-900/15"
     >
-      <div className="mx-auto max-w-[1380px] px-5 py-24 sm:px-8 sm:py-32 lg:px-12 lg:py-40">
-        <div className="grid gap-12 border-b border-stone-900/15 pb-14 lg:grid-cols-[1fr_auto] lg:items-end">
+      <div className="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
+        <div className="flex flex-col gap-8 border-b border-stone-900/15 pb-10 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-[9px] uppercase tracking-[0.46em] text-[#9a743e]">
-              Archivo vivo
+            <p className="text-[8px] uppercase tracking-[0.42em] text-[#98703b]">
+              Herramienta de exploración
             </p>
 
             <h2
               id="atlas-title"
-              className="mt-8 max-w-5xl font-serif text-5xl leading-[0.98] tracking-[-0.05em] sm:text-7xl lg:text-[88px]"
+              className="mt-6 font-serif text-5xl leading-none tracking-[-0.05em] sm:text-7xl"
             >
-              Atlas de
-              <span className="block italic text-stone-500">
-                Influencias.
-              </span>
+              Lista de artistas.
             </h2>
 
-            <p className="mt-9 max-w-3xl text-sm leading-8 text-stone-600 sm:text-base">
-              Una genealogía navegable de escritores,
-              cineastas, músicos, fotógrafos, artistas y
-              pensadores que atraviesan las tres obras y el
-              universo de Poema Universal.
+            <p className="mt-6 max-w-2xl text-sm leading-8 text-stone-600">
+              Una biblioteca visual para descubrir nombres,
+              disciplinas, obras y caminos capaces de influir
+              en otros creadores.
             </p>
           </div>
 
-          <div className="grid grid-cols-3 border-l border-t border-stone-900/15">
-            <div className="min-w-[105px] border-b border-r border-stone-900/15 p-5">
-              <strong className="font-serif text-3xl font-normal">
-                {artistas.length}
-              </strong>
+          <div className="flex items-end gap-3">
+            <strong className="font-serif text-5xl font-normal">
+              {artistasFiltrados.length}
+            </strong>
 
-              <span className="mt-2 block text-[7px] uppercase tracking-[0.24em] text-stone-400">
-                Presencias
-              </span>
-            </div>
-
-            <div className="min-w-[105px] border-b border-r border-stone-900/15 p-5">
-              <strong className="font-serif text-3xl font-normal">
-                {disciplinesRepresented}
-              </strong>
-
-              <span className="mt-2 block text-[7px] uppercase tracking-[0.24em] text-stone-400">
-                Disciplinas
-              </span>
-            </div>
-
-            <div className="min-w-[105px] border-b border-r border-stone-900/15 p-5">
-              <strong className="font-serif text-3xl font-normal">
-                {territoriesRepresented}
-              </strong>
-
-              <span className="mt-2 block text-[7px] uppercase tracking-[0.24em] text-stone-400">
-                Territorios
-              </span>
-            </div>
+            <span className="pb-1 text-[8px] uppercase tracking-[0.28em] text-stone-400">
+              artistas
+            </span>
           </div>
         </div>
 
         {/* BUSCADOR */}
 
-        <div className="mt-12 border border-stone-900/15 bg-white/42 p-5 sm:p-7">
-          <label
-            htmlFor="atlas-search"
-            className="text-[8px] uppercase tracking-[0.34em] text-stone-500"
-          >
-            Buscar en el Atlas
-          </label>
-
-          <div className="mt-5 flex items-center border-b border-stone-900/25">
-            <input
-              id="atlas-search"
-              type="search"
-              value={query}
-              onChange={(event) =>
-                setQuery(event.target.value)
-              }
-              placeholder="Nombre, país, disciplina, obra o idea..."
-              className="w-full bg-transparent py-4 font-serif text-xl text-stone-900 outline-none placeholder:text-stone-400 sm:text-2xl"
-            />
-
-            <span
-              aria-hidden="true"
-              className="ml-4 text-xl text-[#9a743e]"
+        <div className="mt-10 grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <label
+              htmlFor="buscar-artista"
+              className="text-[8px] uppercase tracking-[0.34em] text-stone-400"
             >
-              ⌕
-            </span>
+              Buscar
+            </label>
+
+            <input
+              id="buscar-artista"
+              type="search"
+              value={busqueda}
+              onChange={(event) =>
+                setBusqueda(event.target.value)
+              }
+              placeholder="Nombre, país, disciplina, obra o concepto..."
+              className="mt-3 w-full border-b border-stone-900/25 bg-transparent py-4 font-serif text-xl outline-none placeholder:text-stone-400 sm:text-2xl"
+            />
           </div>
-        </div>
 
-        {/* FILTROS DE DISCIPLINA */}
-
-        <div className="mt-8">
-          <p className="text-[8px] uppercase tracking-[0.34em] text-stone-400">
-            Disciplina
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {disciplineOptions.map((option) => {
-              const active = discipline === option;
-
-              return (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => setDiscipline(option)}
-                  className="border px-4 py-2.5 text-[7px] uppercase tracking-[0.22em] transition"
-                  style={{
-                    borderColor: active
-                      ? "#171411"
-                      : "rgba(23,20,17,0.16)",
-                    backgroundColor: active
-                      ? "#171411"
-                      : "transparent",
-                    color: active
-                      ? "#f0e8dc"
-                      : "rgba(23,20,17,0.62)",
-                  }}
-                >
-                  {option}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* FILTROS DE OBRA */}
-
-        <div className="mt-7">
-          <p className="text-[8px] uppercase tracking-[0.34em] text-stone-400">
-            Relación con las obras
-          </p>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {novelOptions.map((option) => {
-              const active = novel === option;
-
-              return (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => setNovel(option)}
-                  className="border px-4 py-2.5 text-[7px] uppercase tracking-[0.22em] transition"
-                  style={{
-                    borderColor: active
-                      ? "#9a743e"
-                      : "rgba(23,20,17,0.16)",
-                    backgroundColor: active
-                      ? "rgba(154,116,62,0.1)"
-                      : "transparent",
-                    color: active
-                      ? "#795827"
-                      : "rgba(23,20,17,0.58)",
-                  }}
-                >
-                  {option}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* RESULTADOS */}
-
-        <div className="mt-14 flex items-center justify-between border-b border-stone-900/15 pb-5">
-          <p className="text-[8px] uppercase tracking-[0.32em] text-stone-500">
-            {filteredArtists.length} resultados
-          </p>
-
-          {(query ||
-            discipline !== "Todos" ||
-            novel !== "Todas las obras") && (
+          {(busqueda || disciplina !== "Todos") && (
             <button
               type="button"
               onClick={() => {
-                setQuery("");
-                setDiscipline("Todos");
-                setNovel("Todas las obras");
+                setBusqueda("");
+                setDisciplina("Todos");
               }}
-              className="text-[8px] uppercase tracking-[0.28em] text-[#8b6737] transition hover:text-stone-950"
+              className="w-fit border-b border-stone-900/20 pb-2 text-[8px] uppercase tracking-[0.28em] text-stone-500 transition hover:border-stone-950 hover:text-stone-950"
             >
               Limpiar filtros
             </button>
           )}
         </div>
 
-        {filteredArtists.length === 0 ? (
-          <div className="border-b border-stone-900/15 py-24 text-center">
-            <p className="font-serif text-3xl text-stone-500">
-              Ninguna presencia coincide con esta búsqueda.
-            </p>
+        {/* DISCIPLINAS */}
 
-            <p className="mt-5 text-sm text-stone-400">
-              El Atlas continuará creciendo.
+        <div className="mt-8 flex flex-wrap gap-2">
+          {disciplinas.map((opcion) => {
+            const activa = disciplina === opcion;
+
+            return (
+              <button
+                key={opcion}
+                type="button"
+                onClick={() => setDisciplina(opcion)}
+                className={`border px-4 py-2.5 text-[7px] uppercase tracking-[0.22em] transition ${
+                  activa
+                    ? "border-stone-950 bg-stone-950 text-[#f0e8dc]"
+                    : "border-stone-900/15 text-stone-500 hover:border-stone-900/40 hover:text-stone-950"
+                }`}
+              >
+                {opcion}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* RETÍCULA */}
+
+        {artistasFiltrados.length === 0 ? (
+          <div className="mt-14 border-y border-stone-900/15 py-24 text-center">
+            <p className="font-serif text-3xl text-stone-500">
+              No hay artistas que coincidan con la búsqueda.
             </p>
           </div>
         ) : (
-          <ol className="grid border-l border-t border-stone-900/15 md:grid-cols-2 xl:grid-cols-3">
-            {filteredArtists.map((artista, index) => (
+          <ol className="mt-14 grid border-l border-t border-stone-900/15 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {artistasFiltrados.map((artista, index) => (
               <li
                 key={artista.id}
-                className="group flex flex-col border-b border-r border-stone-900/15 bg-[#f8f2e9]/46"
+                className="group flex flex-col border-b border-r border-stone-900/15 bg-[#f5eee4]"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-stone-200">
-                  {artista.foto_url ? (
+                {/* PORTADA */}
+
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#0b0e12]">
+                  {artista.portada_url ? (
                     <img
-                      src={artista.foto_url}
-                      alt={artista.nombre}
-                      className="h-full w-full object-cover grayscale-[18%] transition duration-700 group-hover:scale-[1.025] group-hover:grayscale-0"
+                      src={artista.portada_url}
+                      alt={`Portada de ${artista.nombre}`}
+                      className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]"
                     />
                   ) : (
                     <div
-                      className="flex h-full w-full items-center justify-center"
+                      className="flex h-full flex-col justify-between p-7 text-[#f0e8dc]"
                       style={{
                         background:
-                          "linear-gradient(145deg, #d8cec1, #9f9487)",
+                          "radial-gradient(circle at 75% 20%, rgba(199,164,103,0.25), transparent 30%), linear-gradient(145deg, #0a0d11, #20242a)",
                       }}
                     >
-                      <span className="font-serif text-6xl italic text-white/65">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
+                      <div className="flex items-start justify-between">
+                        <span className="text-[7px] uppercase tracking-[0.3em] text-white/45">
+                          Atlas de Influencias
+                        </span>
+
+                        <span className="font-serif text-sm text-[#c7a467]">
+                          {String(index + 1).padStart(3, "0")}
+                        </span>
+                      </div>
+
+                      <div>
+                        <span
+                          aria-hidden="true"
+                          className="mb-8 block h-12 w-px bg-[#c7a467]/70"
+                        />
+
+                        <p className="text-[8px] uppercase tracking-[0.32em] text-[#c7a467]">
+                          {artista.disciplina}
+                        </p>
+
+                        <h3 className="mt-5 font-serif text-4xl leading-[0.96] tracking-[-0.04em]">
+                          {artista.nombre}
+                        </h3>
+                      </div>
+
+                      <p className="text-[7px] uppercase tracking-[0.28em] text-white/35">
+                        Poema Universal
+                      </p>
                     </div>
                   )}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-
-                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
-                    <div className="mb-4 flex flex-wrap gap-2">
-                      <span className="border border-white/28 bg-black/18 px-3 py-1 text-[7px] uppercase tracking-[0.24em] text-white/80 backdrop-blur">
-                        {getDiscipline(artista.categoria)}
-                      </span>
-
-                      {artista.territorio && (
-                        <span className="border border-white/28 bg-black/18 px-3 py-1 text-[7px] uppercase tracking-[0.24em] text-white/72 backdrop-blur">
-                          {artista.territorio}
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="font-serif text-4xl leading-none tracking-[-0.04em] text-white">
-                      {artista.nombre}
-                    </h3>
-                  </div>
+                  {artista.destacado && (
+                    <span className="absolute right-4 top-4 border border-white/30 bg-black/25 px-3 py-1.5 text-[7px] uppercase tracking-[0.22em] text-white backdrop-blur">
+                      Fundamental
+                    </span>
+                  )}
                 </div>
 
-                <div className="flex flex-1 flex-col p-6 sm:p-8">
-                  <div className="flex items-start justify-between gap-6">
-                    <p className="text-[7px] uppercase tracking-[0.25em] text-[#9a743e]">
-                      {relationDisplay(
-                        artista.tipo_relacion
-                      )}
-                    </p>
+                {/* INFORMACIÓN */}
 
-                    {artista.destacado && (
-                      <span className="text-[7px] uppercase tracking-[0.24em] text-stone-400">
-                        Núcleo
-                      </span>
-                    )}
-                  </div>
-
-                  {artista.obra && (
-                    <div className="mt-7 border-l border-[#9a743e]/35 pl-4">
-                      <p className="text-[7px] uppercase tracking-[0.25em] text-stone-400">
-                        Obra esencial
-                      </p>
-
-                      <p className="mt-2 font-serif text-lg italic leading-7 text-stone-700">
-                        {artista.obra}
-                      </p>
-                    </div>
-                  )}
-
-                  <p className="mt-7 text-sm leading-7 text-stone-600">
-                    {artista.legado ||
-                      artista.descripcion ||
-                      "Su relación con este universo será documentada próximamente."}
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="text-[7px] uppercase tracking-[0.27em] text-[#98703b]">
+                    {artista.disciplina}
                   </p>
 
-                  {artista.relacion_obras.length > 0 ? (
-                    <div className="mt-7 flex flex-wrap gap-2">
-                      {artista.relacion_obras.map((obra) => (
-                        <span
-                          key={obra}
-                          className="border border-stone-900/15 px-3 py-2 text-[7px] uppercase tracking-[0.2em] text-stone-500"
-                        >
-                          {obra}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="mt-7 text-[7px] uppercase tracking-[0.23em] text-stone-400">
-                      Relación con las obras por documentar
+                  <h3 className="mt-4 font-serif text-3xl leading-none tracking-[-0.035em]">
+                    {artista.nombre}
+                  </h3>
+
+                  {(artista.territorio || artista.periodo) && (
+                    <p className="mt-4 text-xs italic leading-6 text-stone-500">
+                      {[artista.territorio, artista.periodo]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </p>
                   )}
 
-                  <div className="mt-8 flex flex-wrap gap-3">
-                    {artista.instagram_url && (
-                      <a
-                        href={artista.instagram_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="border border-stone-900/15 px-4 py-2 text-[7px] uppercase tracking-[0.22em] text-stone-500 transition hover:border-stone-950 hover:text-stone-950"
-                      >
-                        Instagram
-                      </a>
-                    )}
+                  {(artista.obra ||
+                    artista.obras_esenciales.length > 0) && (
+                    <div className="mt-7 border-t border-stone-900/12 pt-5">
+                      <p className="text-[7px] uppercase tracking-[0.24em] text-stone-400">
+                        Obras esenciales
+                      </p>
 
-                    {artista.web_url && (
-                      <a
-                        href={artista.web_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="border border-stone-900/15 px-4 py-2 text-[7px] uppercase tracking-[0.22em] text-stone-500 transition hover:border-stone-950 hover:text-stone-950"
-                      >
-                        Archivo externo
-                      </a>
-                    )}
-                  </div>
+                      <ul className="mt-3 space-y-2 font-serif text-base italic leading-6 text-stone-650">
+                        {[
+                          artista.obra,
+                          ...artista.obras_esenciales,
+                        ]
+                          .filter(
+                            (obra, posicion, lista) =>
+                              Boolean(obra) &&
+                              lista.indexOf(obra) === posicion
+                          )
+                          .slice(0, 4)
+                          .map((obra) => (
+                            <li key={obra}>— {obra}</li>
+                          ))}
+                      </ul>
+                    </div>
+                  )}
 
-                  {/* SANTUARIO INDIVIDUAL */}
+                  {artista.etiquetas.length > 0 && (
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {artista.etiquetas
+                        .slice(0, 6)
+                        .map((etiqueta) => (
+                          <span
+                            key={etiqueta}
+                            className="border border-stone-900/12 px-3 py-2 text-[7px] uppercase tracking-[0.18em] text-stone-500"
+                          >
+                            {etiqueta}
+                          </span>
+                        ))}
+                    </div>
+                  )}
 
-                  <div className="mt-auto pt-9">
-                    <div className="border-t border-stone-900/15 pt-6">
-                      <p className="text-[7px] uppercase tracking-[0.28em] text-[#9a743e]">
+                  {/* SANTUARIO */}
+
+                  <div className="mt-auto pt-8">
+                    <div className="border-t border-stone-900/15 pt-5">
+                      <p className="text-[7px] uppercase tracking-[0.25em] text-[#98703b]">
                         Dedicatoria
                       </p>
 
-                      <p className="mt-3 font-serif text-base italic leading-7 text-stone-500">
-                        Para quien ayudó a mirar el mundo de
-                        otra manera.
+                      <p className="mt-3 font-serif text-sm italic leading-6 text-stone-500">
+                        {artista.dedicatoria ||
+                          "Para quien abrió un camino y permitió que otros pudieran atravesarlo."}
                       </p>
                     </div>
 
