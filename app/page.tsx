@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PoemaUniversalThreshold from "./components/PoemaUniversalThreshold";
 export default function HomePage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#f6efe7] px-5 py-8 text-stone-950">
@@ -73,6 +74,13 @@ export default function HomePage() {
 
             <Link href="/obra" className="transition hover:text-black">
               Obra
+            </Link>
+
+            <Link
+              href="/poema-universal"
+              className="transition hover:text-black"
+            >
+              Edición 2026
             </Link>
 
             <Link href="/artistas" className="transition hover:text-black">
@@ -157,6 +165,8 @@ export default function HomePage() {
             </Link>
           </div>
         </header>
+
+        <PoemaUniversalThreshold />
 
         <section className="mx-auto mt-28 max-w-4xl border-y border-stone-300/70 py-16 text-center">
           <p className="font-serif text-3xl leading-[1.45] text-stone-800 sm:text-5xl">
