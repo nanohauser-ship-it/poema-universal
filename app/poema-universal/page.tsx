@@ -8,7 +8,12 @@ import SupportersSection from "./components/SupportersSection";
 import PoetProfilePanel, {
   type PoetProfile,
 } from "./components/PoetProfilePanel";
+import PoetPresence from "./components/PoetPresence";
+import AvatarRelicStudio from "./components/AvatarRelicStudio";
 
+import WorldEntrance from "./components/WorldEntrance";
+import MatrizEntrance from "./components/MatrizEntrance";
+import BorgesEntrance from "./components/BorgesEntrance";
 const PRESENTATION_DATE = new Date(
   "2027-01-01T00:00:00+01:00"
 ).getTime();
@@ -95,6 +100,10 @@ const navigationLinks = [
   {
     label: "El mundo",
     href: "#mundo",
+  },
+  {
+    label: "Convocatoria",
+    href: "/poema-universal/convocatoria",
   },
 ];
 
@@ -715,128 +724,31 @@ export default function PoemaUniversalPage() {
                 : isIncorporation
                   ? "Edición fundacional 2026"
                   : "Poema Universal 2026";
-
               return (
-                <li
+                <PoetPresence
                   key={slot.position}
-                  role={poetProfile ? "button" : undefined}
-                  tabIndex={poetProfile ? 0 : -1}
-                  aria-label={
+                  position={slot.position}
+                  state={
+                    isPublicVoice
+                      ? "public"
+                      : isIncorporation
+                        ? "incorporation"
+                        : "open"
+                  }
+                  name={voiceLabel}
+                  territory={territoryLabel}
+                  footer={footerLabel}
+                  onOpen={
                     poetProfile
-                      ? `Abrir ficha de ${poetProfile.name}`
+                      ? () =>
+                          setSelectedPoet(
+                            poetProfile
+                          )
                       : undefined
                   }
-                  onClick={() => {
-                    if (poetProfile) {
-                      setSelectedPoet(poetProfile);
-                    }
-                  }}
-                  onKeyDown={(event) => {
-                    if (
-                      poetProfile &&
-                      (event.key === "Enter" ||
-                        event.key === " ")
-                    ) {
-                      event.preventDefault();
-                      setSelectedPoet(poetProfile);
-                    }
-                  }}
-                  className="group flex min-h-[126px] flex-col justify-between border-b border-r border-white/[0.16] p-5 transition-[background-color,transform] duration-300 sm:min-h-[138px] sm:p-6"
-                  style={{
-                    background: isPublicVoice
-                      ? "linear-gradient(145deg, rgba(199,164,103,0.16), rgba(199,164,103,0.025))"
-                      : isIncorporation
-                        ? "linear-gradient(145deg, rgba(199,164,103,0.07), rgba(199,164,103,0.01))"
-                        : "transparent",
-                    cursor: poetProfile
-                      ? "pointer"
-                      : "default",
-                  }}
-                >
-                  <div className="flex items-start justify-between">
-                    <span
-                      className="font-serif text-lg italic"
-                      style={{
-                        color:
-                          isPublicVoice ||
-                          isIncorporation
-                            ? "#c7a467"
-                            : "rgba(240,232,220,0.42)",
-                      }}
-                    >
-                      {String(
-                        slot.position
-                      ).padStart(2, "0")}
-                    </span>
-
-                    <span
-                      aria-hidden="true"
-                      className={
-                        isPublicVoice
-                          ? "h-2 w-2 rounded-full"
-                          : "h-2 w-2 rounded-full border"
-                      }
-                      style={
-                        isPublicVoice
-                          ? {
-                              backgroundColor:
-                                "#c7a467",
-                              boxShadow:
-                                "0 0 16px rgba(199,164,103,0.46)",
-                            }
-                          : isIncorporation
-                            ? {
-                                borderColor:
-                                  "#c7a467",
-                                backgroundColor:
-                                  "rgba(199,164,103,0.12)",
-                              }
-                            : {
-                                borderColor:
-                                  "rgba(240,232,220,0.18)",
-                              }
-                      }
-                    />
-                  </div>
-
-                  <div className="mt-7">
-                    <p
-                      className="font-serif text-[15px] leading-5 sm:text-base"
-                      style={{
-                        color: isPublicVoice
-                          ? "#f0e8dc"
-                          : isIncorporation
-                            ? "rgba(240,232,220,0.76)"
-                            : "rgba(240,232,220,0.48)",
-                      }}
-                    >
-                      {voiceLabel}
-                    </p>
-
-                    <p
-                      className="mt-2 text-[7px] uppercase leading-4 tracking-[0.23em]"
-                      style={{
-                        color: isPublicVoice
-                          ? "#c7a467"
-                          : "rgba(240,232,220,0.34)",
-                      }}
-                    >
-                      {territoryLabel}
-                    </p>
-                  </div>
-
-                  <span
-                    className="mt-5 text-[7px] uppercase tracking-[0.22em]"
-                    style={{
-                      color: poetProfile
-                        ? "rgba(199,164,103,0.92)"
-                        : "rgba(240,232,220,0.26)",
-                    }}
-                  >
-                    {footerLabel}
-                  </span>
-                </li>
+                />
               );
+
             })}
           </ol>
 
@@ -844,6 +756,8 @@ export default function PoemaUniversalPage() {
             poet={selectedPoet}
             onClose={() => setSelectedPoet(null)}
           />
+
+          <AvatarRelicStudio />
         </div>
 
         {/* 04 · EL MUNDO */}
@@ -930,6 +844,11 @@ export default function PoemaUniversalPage() {
         </footer>
       </section>
       <SupportersSection />
-    </main>
+          <WorldEntrance />
+
+          <MatrizEntrance />
+
+      <BorgesEntrance />
+</main>
   );
 }

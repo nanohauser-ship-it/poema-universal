@@ -542,13 +542,13 @@ export default function WorldGlobe({
   return (
     <div
       id="mundo"
-      className="relative mx-auto max-w-[1380px] px-5 pb-20 pt-10 sm:px-8 sm:pb-24 sm:pt-12 lg:px-12"
+      className="relative mx-auto max-w-[1460px] px-5 pb-16 pt-8 sm:px-8 sm:pb-20 sm:pt-10 lg:px-12"
     >
       <div className="relative overflow-hidden border border-white/[0.14] bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_300px]">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_290px]">
             <div
               ref={containerRef}
-              className="relative min-h-[600px] overflow-hidden lg:min-h-[650px]"
+              className="relative min-h-[640px] overflow-hidden lg:min-h-[710px]"
             >
               {isLoadingCountries && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#020609]/70 backdrop-blur-sm">

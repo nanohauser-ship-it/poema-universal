@@ -1,166 +1,257 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import type { ChangeEvent } from "react";
+
+type MensajeGuardado = {
+  id: number;
+  mensaje: string;
+  foto: string | null;
+  created_at: string;
+};
 
 export default function RinconcitoPage() {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [mensaje, setMensaje] = useState("");
+  const [foto, setFoto] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [guardando, setGuardando] = useState(false);
+  const [mensajes, setMensajes] = useState<MensajeGuardado[]>([]);
 
-  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  useEffect(() => {
+    cargarMensajes();
+  }, []);
 
-    const imageUrl = URL.createObjectURL(file);
-    setImagePreview(imageUrl);
+  async function cargarMensajes() {
+    const response = await fetch("/api/rinconcito");
+    const data = await response.json();
+
+    if (Array.isArray(data)) {
+      setMensajes(data);
+    }
+  }
+
+  function subirFoto(e: ChangeEvent<HTMLInputElement>) {
+    const archivo = e.target.files?.[0];
+    if (!archivo) return;
+
+    setFoto(archivo);
+    setPreview(URL.createObjectURL(archivo));
+  }
+
+  function quitarFoto() {
+    setFoto(null);
+    setPreview(null);
+  }
+
+  async function guardar() {
+    if (!mensaje.trim()) {
+      alert("Escribe algo antes de dejarlo en el Rinconcito.");
+      return;
+    }
+
+    try {
+      setGuardando(true);
+
+      const formData = new FormData();
+      formData.append("mensaje", mensaje);
+
+      if (foto) {
+        formData.append("foto", foto);
+      }
+
+      const response = await fetch("/api/rinconcito", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || "No se pudo guardar.");
+        return;
+      }
+
+      setMensaje("");
+      setFoto(null);
+      setPreview(null);
+
+      await cargarMensajes();
+
+      alert("🕯️ Tu palabra ha quedado en el Rinconcito.");
+    } catch (error) {
+      console.error(error);
+      alert("Ha ocurrido un error.");
+    } finally {
+      setGuardando(false);
+    }
   }
 
   return (
-    <main className="min-h-screen bg-[#f5efe7] text-[#211b16] px-6 py-10">
-      <nav className="mx-auto mb-10 flex max-w-6xl items-center justify-between">
-        <a href="/" className="text-xl font-bold tracking-[0.25em]">
-          POEMA UNIVERSAL
-        </a>
+    <main className="relative min-h-screen overflow-hidden bg-[#c99a63] px-5 py-8 text-[#2f2118]">
+      {/* FONDO DE DIBUJOS */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center opacity-100 contrast-[1.18] saturate-[1.12]"
+        style={{
+          backgroundImage: "url('/dibujos.png')",
+        }}
+      />
 
-        <div className="hidden gap-10 text-sm md:flex">
-          <a href="/">Poema del día</a>
-          <a href="/cartas">Cartas</a>
-          <a href="/rinconcito" className="border-b border-[#211b16] pb-1">
-            El Rinconcito
-          </a>
-          <a href="/archivo">Archivo</a>
-        </div>
+      {/* VELO CÁLIDO */}
+      <div className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(82,47,22,0.34),rgba(224,169,96,0.34),rgba(58,32,16,0.38))]" />
 
-        <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#d8c7b4]">
-          ♡
-        </div>
-      </nav>
+      {/* LUZ CENTRAL */}
+      <div className="pointer-events-none fixed inset-0 z-[2] bg-[radial-gradient(circle_at_center,rgba(255,226,178,0.42),rgba(190,125,58,0.18)_55%,rgba(45,25,12,0.36)_100%)]" />
 
-      <section className="mx-auto max-w-6xl overflow-hidden rounded-[36px] border border-[#e2d4c4] bg-[#fffaf3] shadow-sm">
-        <div className="px-8 py-14 text-center md:px-16">
-          <p className="text-xs uppercase tracking-[0.45em] text-[#9a8065]">
-            El Rinconcito
-          </p>
+      <div className="relative z-10 mx-auto max-w-5xl">
+        <nav className="mb-8 flex items-center justify-between rounded-full border border-[#f7dcae]/50 bg-[#2f2118]/55 px-5 py-3 text-[#ffe8c6] shadow-[0_18px_50px_rgba(47,33,24,0.28)] backdrop-blur-md">
+          <Link href="/" className="font-serif text-lg">
+            Poema Universal
+          </Link>
 
-          <h1 className="mx-auto mt-6 max-w-3xl font-serif text-5xl leading-tight md:text-7xl">
-            Háblale al niño que fuiste
-          </h1>
+          <div className="flex gap-5 text-sm text-[#f7dcae]/85">
+            <Link href="/" className="hover:text-white">
+              Inicio
+            </Link>
 
-          <p className="mx-auto mt-6 max-w-xl text-xl leading-8 text-[#7a6b5c]">
-            Dile algo que necesitaba escuchar. Algo que hoy sí puedes darle.
-          </p>
+            <Link href="/cartas" className="hover:text-white">
+              Cartas
+            </Link>
 
-          <div className="mt-8 flex items-center justify-center gap-6 text-[#b29a80]">
-            <span className="h-px w-20 bg-[#d9c8b6]" />
-            <span className="text-2xl">♡</span>
-            <span className="h-px w-20 bg-[#d9c8b6]" />
+            <Link href="/rinconcito" className="text-white">
+              El Rinconcito
+            </Link>
+
+            <Link href="/noches-en-paz" className="hover:text-white">
+              Noches en Paz
+            </Link>
           </div>
-        </div>
+        </nav>
 
-        <div className="grid gap-12 px-8 pb-14 md:grid-cols-2 md:px-16">
-          <section>
-            <h2 className="font-serif text-2xl">
-              1. Sube una foto de tu infancia
-            </h2>
-
-            <label className="mt-6 flex h-56 cursor-pointer flex-col items-center justify-center rounded-[24px] border border-dashed border-[#d3bfa9] bg-[#fff7ed] text-center transition hover:bg-[#f8efe4]">
-              <span className="text-5xl text-[#9a8065]">☼</span>
-              <span className="mt-4 text-xl font-medium">Añadir foto</span>
-              <span className="mt-2 text-[#8f7c69]">
-                o arrastra y suelta aquí
-              </span>
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
-            </label>
-
-            <p className="mt-5 text-center text-sm text-[#8f7c69]">
-              🔒 Esta imagen es privada. Solo tú la verás.
+        <section className="overflow-hidden rounded-[46px] border border-[#f7dcae]/70 bg-[#f3d8ad]/90 p-8 shadow-[0_32px_90px_rgba(47,33,24,0.32)] backdrop-blur-xl">
+          <header className="mx-auto max-w-3xl text-center">
+            <p className="mx-auto mb-5 inline-flex rounded-full border border-[#b9854d]/35 bg-[#fff1d4]/70 px-4 py-1.5 text-[11px] uppercase tracking-[0.34em] text-[#7b512b]">
+              Poema Universal
             </p>
 
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Foto de infancia"
-                className="mt-8 h-80 w-full rounded-[18px] object-cover grayscale shadow-sm"
-              />
-            )}
-          </section>
+            <h1 className="font-serif text-6xl leading-tight text-[#2f2118]">
+              El Rinconcito
+            </h1>
 
-          <section>
-            <h2 className="font-serif text-2xl">
-              2. Escríbele una carta a tu niño interior
-            </h2>
-
-            <p className="mt-3 text-[#8f7c69]">
-              Dile lo que necesitaba escuchar.
+            <p className="mx-auto mt-4 max-w-2xl leading-7 text-[#6f4b2d]">
+              Un lugar pequeño para dejar una palabra hermosa. Puedes escribirle
+              a tu niño interior y, si quieres, anexar una foto de infancia.
             </p>
+          </header>
 
-            <textarea
-              className="mt-6 h-96 w-full rounded-[24px] border border-[#dfd1c0] bg-[#fffaf3] p-7 text-xl leading-9 text-[#2b2b2b] outline-none placeholder:text-[#a99480]"
-              placeholder={`Querido niño,\n\nHoy quiero decirte...`}
-            />
+          <section className="mx-auto mt-10 grid max-w-4xl gap-8 lg:grid-cols-[280px_1fr]">
+            {/* FOTO DE NIÑO */}
+            <aside className="rounded-[36px] border border-[#d7aa72]/55 bg-[#fff1d4]/70 p-6 shadow-[0_22px_60px_rgba(88,52,24,0.18)]">
+              <h2 className="text-center font-serif text-3xl text-[#2f2118]">
+                Tu foto de niño
+              </h2>
 
-            <button className="mx-auto mt-8 flex rounded-full bg-[#211b16] px-10 py-4 text-lg font-medium text-white shadow-sm transition hover:scale-[1.02]">
-              🪶 Guardar en mi rincón
-            </button>
-
-            <p className="mx-auto mt-6 max-w-sm text-center text-[#8f7c69]">
-              Este mensaje no busca arreglar el pasado. Busca acompañarlo.
-            </p>
-          </section>
-        </div>
-
-        <section className="border-t border-[#e2d4c4] px-8 py-10 md:px-16">
-          <div className="flex items-end justify-between">
-            <div>
-              <h2 className="font-serif text-3xl">Mensajes guardados</h2>
-              <p className="mt-1 text-[#8f7c69]">
-                Tus cartas a tu niño interior.
+              <p className="mt-3 text-center text-sm leading-6 text-[#7b512b]">
+                Opcional. Una imagen para acompañar la palabra que vas a dejar.
               </p>
+
+              <label className="mt-6 block cursor-pointer">
+                <div className="aspect-[4/5] overflow-hidden rounded-[30px] border-4 border-[#b9854d]/55 bg-[#e5bd82] shadow-[0_16px_36px_rgba(88,52,24,0.24)]">
+                  {preview ? (
+                    <img
+                      src={preview}
+                      alt="Foto de infancia"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center p-6 text-center font-serif text-xl text-[#7b512b]">
+                      Anexar fotografía
+                    </div>
+                  )}
+                </div>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={subirFoto}
+                  className="hidden"
+                />
+              </label>
+
+              {preview && (
+                <button
+                  onClick={quitarFoto}
+                  className="mt-4 w-full rounded-full border border-[#b9854d]/50 bg-[#fff8ea]/70 px-4 py-2 text-sm text-[#7b512b] transition hover:bg-[#fff8ea]"
+                >
+                  Quitar foto
+                </button>
+              )}
+            </aside>
+
+            {/* PALABRA */}
+            <section className="rounded-[36px] border border-[#d7aa72]/55 bg-[#fff1d4]/72 p-8 shadow-[0_22px_60px_rgba(88,52,24,0.18)]">
+              <h2 className="text-center font-serif text-4xl text-[#2f2118]">
+                Déjale una palabra hermosa
+              </h2>
+
+              <p className="mx-auto mt-4 max-w-xl text-center leading-7 text-[#7b512b]">
+                Escribe algo para esa parte de ti que necesitaba ser cuidada.
+                Puede ser una frase pequeña. Puede ser una despedida. Puede ser
+                una forma de volver a ti.
+              </p>
+
+              <textarea
+                value={mensaje}
+                onChange={(e) => setMensaje(e.target.value)}
+                placeholder="Querido niño, hoy quiero decirte algo que quizá necesitabas escuchar..."
+                className="mt-8 h-72 w-full resize-none rounded-[30px] border border-[#b9854d]/45 bg-[#fff8ea]/90 p-7 text-lg leading-8 text-[#2f2118] shadow-inner outline-none placeholder:text-[#9b7450] focus:border-[#7b512b]"
+              />
+
+              <div className="mt-8 text-center">
+                <button
+                  onClick={guardar}
+                  disabled={guardando}
+                  className="rounded-full bg-[#2f2118] px-10 py-4 text-sm font-semibold uppercase tracking-[0.22em] text-[#ffe8c6] shadow-[0_18px_40px_rgba(47,33,24,0.32)] transition hover:-translate-y-0.5 hover:bg-[#49311f] disabled:opacity-60"
+                >
+                  {guardando ? "Guardando..." : "🕯️ Dejar en el Rinconcito"}
+                </button>
+
+                <p className="mt-5 text-sm leading-7 text-[#7b512b]">
+                  Este gesto no tiene que explicarlo todo. Solo tiene que ser
+                  verdadero.
+                </p>
+              </div>
+            </section>
+          </section>
+
+          <section className="mx-auto mt-10 max-w-4xl rounded-[34px] border border-[#d7aa72]/55 bg-[#fff1d4]/64 p-6 shadow-[0_18px_48px_rgba(88,52,24,0.14)]">
+            <h3 className="font-serif text-3xl text-[#2f2118]">
+              Mensajes guardados
+            </h3>
+
+            <div className="mt-6 space-y-4">
+              {mensajes.length === 0 ? (
+                <p className="text-[#7b512b]">Todavía no hay mensajes.</p>
+              ) : (
+                mensajes.map((item) => (
+                  <article
+                    key={item.id}
+                    className="rounded-[26px] border border-[#d5aa76]/60 bg-[#fff8ea]/78 p-5 shadow-sm"
+                  >
+                    <p className="whitespace-pre-wrap leading-7 text-[#2f2118]">
+                      {item.mensaje}
+                    </p>
+
+                    <p className="mt-3 text-xs uppercase tracking-[0.2em] text-[#9a6a3c]">
+                      {new Date(item.created_at).toLocaleDateString("es-ES")}
+                    </p>
+                  </article>
+                ))
+              )}
             </div>
-
-            <a href="#" className="text-[#8f7c69]">
-              Ver todas →
-            </a>
-          </div>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            <MensajeCard
-              fecha="19 junio 2026"
-              texto="Hola pequeño José, qué valiente fuiste siempre, aunque no lo supieras..."
-            />
-            <MensajeCard
-              fecha="12 mayo 2026"
-              texto="Gracias por aguantar tanto. Hoy entiendo muchas cosas que antes dolían..."
-            />
-            <MensajeCard
-              fecha="3 abril 2026"
-              texto="No tenías que ser perfecto para que te quisieran. Eras suficiente..."
-            />
-          </div>
+          </section>
         </section>
-      </section>
-
-      <footer className="mx-auto mt-10 flex max-w-6xl items-center justify-between text-sm text-[#8f7c69]">
-        <span>© Poema Universal</span>
-        <p className="text-center font-serif text-lg">
-          “No se trata de volver al pasado, sino de tomar su mano y decirle: no estás solo.”
-        </p>
-        <span>Hecho con alma.</span>
-      </footer>
+      </div>
     </main>
-  );
-}
-
-function MensajeCard({ fecha, texto }: { fecha: string; texto: string }) {
-  return (
-    <article className="rounded-[20px] border border-[#e2d4c4] bg-[#fff7ed] p-6 shadow-sm">
-      <p className="text-sm text-[#9a8065]">{fecha}</p>
-      <p className="mt-4 leading-7">{texto}</p>
-      <p className="mt-6 text-right text-[#9a8065]">🔒</p>
-    </article>
   );
 }

@@ -1,0 +1,609 @@
+import OpenAI from "openai";
+import {
+  NextResponse,
+} from "next/server";
+
+import type {
+  ArchetypeKey,
+  BorgesInput,
+  SymbolicReading,
+} from "../../../../poema-universal/ojos-de-borges/symbolic-contract";
+
+import {
+  SYMBOLIC_SYSTEM_PROMPT,
+  buildSymbolicPrompt,
+} from "../../../../poema-universal/ojos-de-borges/symbolic-prompt";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const archetypeKeys: ArchetypeKey[] = [
+  "shadow",
+  "persona",
+  "child",
+  "mother",
+  "hero",
+  "wise-elder",
+  "anima-animus",
+  "trickster",
+  "self",
+];
+
+const symbolFamilies = [
+  "cosmos",
+  "element",
+  "plant",
+  "animal",
+  "body",
+  "house",
+  "object",
+  "journey",
+  "rite",
+  "spirit",
+] as const;
+
+const relations = [
+  "attraction",
+  "opposition",
+  "reflection",
+  "return",
+  "transformation",
+  "concealment",
+] as const;
+
+const archetypeSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    key: {
+      type: "string",
+      enum: archetypeKeys,
+    },
+    name: {
+      type: "string",
+    },
+    intensity: {
+      type: "number",
+      minimum: 0,
+      maximum: 100,
+    },
+    evidence: {
+      type: "array",
+      minItems: 1,
+      maxItems: 4,
+      items: {
+        type: "string",
+      },
+    },
+    function: {
+      type: "string",
+    },
+    shadow: {
+      type: "string",
+    },
+  },
+  required: [
+    "key",
+    "name",
+    "intensity",
+    "evidence",
+    "function",
+    "shadow",
+  ],
+} as const;
+
+const nodeSchema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    id: {
+      type: "string",
+    },
+    label: {
+      type: "string",
+    },
+    family: {
+      type: "string",
+      enum: symbolFamilies,
+    },
+    evidence: {
+      type: "string",
+    },
+    literalFunction: {
+      type: "string",
+    },
+    symbolicFunction: {
+      type: "string",
+    },
+    shadowFunction: {
+      type: "string",
+    },
+    transformation: {
+      type: "string",
+    },
+    intensity: {
+      type: "number",
+      minimum: 20,
+      maximum: 100,
+    },
+    x: {
+      type: "number",
+      minimum: 8,
+      maximum: 92,
+    },
+    y: {
+      type: "number",
+      minimum: 8,
+      maximum: 92,
+    },
+  },
+  required: [
+    "id",
+    "label",
+    "family",
+    "evidence",
+    "literalFunction",
+    "symbolicFunction",
+    "shadowFunction",
+    "transformation",
+    "intensity",
+    "x",
+    "y",
+  ],
+} as const;
+
+const schema = {
+  type: "object",
+  additionalProperties: false,
+  properties: {
+    poemTitle: {
+      type: "string",
+    },
+    entryVerse: {
+      type: "string",
+    },
+    invisibleCore: {
+      type: "string",
+    },
+    labyrinth: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        secretForm: {
+          type: "string",
+        },
+        hiddenCenter: {
+          type: "string",
+        },
+        bifurcation: {
+          type: "string",
+        },
+        falseExit: {
+          type: "string",
+        },
+        returnMovement: {
+          type: "string",
+        },
+      },
+      required: [
+        "secretForm",
+        "hiddenCenter",
+        "bifurcation",
+        "falseExit",
+        "returnMovement",
+      ],
+    },
+    mirror: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        visibleVoice: {
+          type: "string",
+        },
+        reflectedIdentity: {
+          type: "string",
+        },
+        doubleFigure: {
+          type: "string",
+        },
+        activeAbsence: {
+          type: "string",
+        },
+        inversion: {
+          type: "string",
+        },
+        reciprocalGaze: {
+          type: "string",
+        },
+      },
+      required: [
+        "visibleVoice",
+        "reflectedIdentity",
+        "doubleFigure",
+        "activeAbsence",
+        "inversion",
+        "reciprocalGaze",
+      ],
+    },
+    dominantArchetype:
+      archetypeSchema,
+    compensatoryArchetype:
+      archetypeSchema,
+    secondaryArchetypes: {
+      type: "array",
+      minItems: 1,
+      maxItems: 4,
+      items: archetypeSchema,
+    },
+    rulingSymbol: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        name: {
+          type: "string",
+        },
+        description: {
+          type: "string",
+        },
+      },
+      required: [
+        "name",
+        "description",
+      ],
+    },
+    absentSymbol: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        name: {
+          type: "string",
+        },
+        evidenceOfAbsence: {
+          type: "string",
+        },
+        function: {
+          type: "string",
+        },
+      },
+      required: [
+        "name",
+        "evidenceOfAbsence",
+        "function",
+      ],
+    },
+    blindSpot: {
+      type: "string",
+    },
+    centralParadox: {
+      type: "string",
+    },
+    projection: {
+      type: "string",
+    },
+    secretLaw: {
+      type: "string",
+    },
+    symbols: {
+      type: "array",
+      minItems: 6,
+      maxItems: 10,
+      items: nodeSchema,
+    },
+    edges: {
+      type: "array",
+      minItems: 6,
+      maxItems: 14,
+      items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          source: {
+            type: "string",
+          },
+          target: {
+            type: "string",
+          },
+          relation: {
+            type: "string",
+            enum: relations,
+          },
+          explanation: {
+            type: "string",
+          },
+          strength: {
+            type: "number",
+            minimum: 20,
+            maximum: 100,
+          },
+        },
+        required: [
+          "source",
+          "target",
+          "relation",
+          "explanation",
+          "strength",
+        ],
+      },
+    },
+    soulMovement: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        initialState: {
+          type: "string",
+        },
+        rupture: {
+          type: "string",
+        },
+        descent: {
+          type: "string",
+        },
+        encounter: {
+          type: "string",
+        },
+        possibleIntegration: {
+          type: "string",
+        },
+        unresolvedRisk: {
+          type: "string",
+        },
+        individuationGesture: {
+          type: "string",
+        },
+      },
+      required: [
+        "initialState",
+        "rupture",
+        "descent",
+        "encounter",
+        "possibleIntegration",
+        "unresolvedRisk",
+        "individuationGesture",
+      ],
+    },
+    revisionPaths: {
+      type: "array",
+      minItems: 3,
+      maxItems: 3,
+      items: {
+        type: "string",
+      },
+    },
+    archetypalScene: {
+      type: "string",
+    },
+    relic: {
+      type: "string",
+    },
+    oracle: {
+      type: "string",
+    },
+    finalRitual: {
+      type: "string",
+    },
+  },
+  required: [
+    "poemTitle",
+    "entryVerse",
+    "invisibleCore",
+    "labyrinth",
+    "mirror",
+    "dominantArchetype",
+    "compensatoryArchetype",
+    "secondaryArchetypes",
+    "rulingSymbol",
+    "absentSymbol",
+    "blindSpot",
+    "centralParadox",
+    "projection",
+    "secretLaw",
+    "symbols",
+    "edges",
+    "soulMovement",
+    "revisionPaths",
+    "archetypalScene",
+    "relic",
+    "oracle",
+    "finalRitual",
+  ],
+} as const;
+
+function noStoreHeaders() {
+  return {
+    "Cache-Control":
+      "no-store, no-cache, must-revalidate",
+    "Pragma": "no-cache",
+  };
+}
+
+function normalize(
+  value: unknown
+): BorgesInput | null {
+  if (
+    !value ||
+    typeof value !== "object"
+  ) {
+    return null;
+  }
+
+  const body =
+    value as Record<
+      string,
+      unknown
+    >;
+
+  const input: BorgesInput = {
+    title:
+      typeof body.title === "string"
+        ? body.title.slice(0, 180)
+        : "",
+    author:
+      typeof body.author === "string"
+        ? body.author.slice(0, 180)
+        : "",
+    language:
+      typeof body.language === "string"
+        ? body.language.slice(0, 80)
+        : "Español",
+    poem:
+      typeof body.poem === "string"
+        ? body.poem.slice(0, 8000)
+        : "",
+    translation:
+      typeof body.translation ===
+        "string"
+        ? body.translation.slice(
+            0,
+            8000
+          )
+        : "",
+    notes:
+      typeof body.notes === "string"
+        ? body.notes.slice(0, 1800)
+        : "",
+  };
+
+  return (
+    input.poem.trim().length >= 40
+      ? input
+      : null
+  );
+}
+
+function errorMessage(
+  error: unknown
+) {
+  if (
+    error &&
+    typeof error === "object" &&
+    "message" in error &&
+    typeof error.message ===
+      "string"
+  ) {
+    return error.message;
+  }
+
+  return (
+    "No fue posible completar la lectura."
+  );
+}
+
+export async function POST(
+  request: Request
+) {
+  try {
+    if (
+      !process.env.OPENAI_API_KEY
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "OPENAI_API_KEY no está configurada.",
+        },
+        {
+          status: 500,
+          headers:
+            noStoreHeaders(),
+        }
+      );
+    }
+
+    const input =
+      normalize(
+        await request.json()
+      );
+
+    if (!input) {
+      return NextResponse.json(
+        {
+          error:
+            "El poema debe contener al menos 40 caracteres.",
+        },
+        {
+          status: 400,
+          headers:
+            noStoreHeaders(),
+        }
+      );
+    }
+
+    const openai =
+      new OpenAI({
+        apiKey:
+          process.env
+            .OPENAI_API_KEY,
+      });
+
+    const response =
+      await openai.responses.create({
+        model:
+          process.env
+            .BORGES_TEXT_MODEL ??
+          process.env
+            .MATRIX_TEXT_MODEL ??
+          "gpt-5-mini",
+        store: false,
+        max_output_tokens: 8500,
+        input: [
+          {
+            role: "system",
+            content:
+              SYMBOLIC_SYSTEM_PROMPT,
+          },
+          {
+            role: "user",
+            content:
+              buildSymbolicPrompt(
+                input
+              ),
+          },
+        ],
+        text: {
+          format: {
+            type: "json_schema",
+            name:
+              "poetic_soul_matrix",
+            strict: true,
+            schema,
+          },
+        },
+      });
+
+    if (
+      !response.output_text
+    ) {
+      throw new Error(
+        "La lectura llegó vacía."
+      );
+    }
+
+    const reading =
+      JSON.parse(
+        response.output_text
+      ) as SymbolicReading;
+
+    return NextResponse.json(
+      {
+        reading,
+      },
+      {
+        headers:
+          noStoreHeaders(),
+      }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          `La cámara no pudo abrirse: ${errorMessage(
+            error
+          )}`,
+      },
+      {
+        status: 502,
+        headers:
+          noStoreHeaders(),
+      }
+    );
+  }
+}

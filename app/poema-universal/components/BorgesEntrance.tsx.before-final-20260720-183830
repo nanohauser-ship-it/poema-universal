@@ -1,0 +1,45 @@
+import Link from "next/link";
+import styles from "./BorgesEntrance.module.css";
+
+export default function BorgesEntrance() {
+  return (
+    <section className={styles.section}>
+      <div className={styles.orbit} />
+      <div className={styles.eyeLeft} />
+      <div className={styles.eyeRight} />
+
+      <div className={styles.content}>
+        <p>Herramienta pública · Ingeniería simbólica</p>
+
+        <h2>Los ojos de Borges</h2>
+
+        <blockquote>
+          Una obra también posee sombra, memoria y destino.
+        </blockquote>
+
+        <span>
+          El laberinto revela cómo está construida.
+          El espejo descubre qué identidad intenta devolver.
+          Los arquetipos reconocen el drama profundo que la atraviesa.
+        </span>
+
+        <Link href="/poema-universal/ojos-de-borges">
+          Atravesar la obra
+        </Link>
+      </div>
+
+      <div className={styles.axis}>
+        <i />
+        <strong>✦</strong>
+        <i />
+      </div>
+
+      <div className={styles.footer}>
+        <span>Símbolo rector</span>
+        <span>Sombra</span>
+        <span>Individuación</span>
+        <span>Oráculo</span>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,528 @@
+"use client";
+
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+type EditorialIdentityPanelProps = {
+  avatarId: number;
+  relicId: number;
+};
+
+type PoetPreset = {
+  id: string;
+  name: string;
+  poemTitle: string;
+  territory: string;
+};
+
+type SavedIdentity = {
+  poetId: string;
+  name: string;
+  poemTitle: string;
+  territory: string;
+  avatarId: number;
+  relicId: number;
+  savedAt: string;
+};
+
+const STORAGE_KEY =
+  "poema-universal.editorial-identities.v1";
+
+const FOUNDATIONAL_POETS: PoetPreset[] = [
+  {
+    id: "jose-naveiro",
+    name: "José Naveiro",
+    poemTitle: "El huerto",
+    territory: "Galicia · España",
+  },
+  {
+    id: "asataka",
+    name: "ASATAKA",
+    poemTitle: "La luz regresa descalza",
+    territory: "Japón · 日本",
+  },
+];
+
+function formatNumber(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+function readSavedIdentities(): SavedIdentity[] {
+  try {
+    const raw =
+      window.localStorage.getItem(
+        STORAGE_KEY
+      );
+
+    if (!raw) {
+      return [];
+    }
+
+    const parsed = JSON.parse(raw);
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+export default function EditorialIdentityPanel({
+  avatarId,
+  relicId,
+}: EditorialIdentityPanelProps) {
+  const [selectedPoetId, setSelectedPoetId] =
+    useState(FOUNDATIONAL_POETS[0].id);
+
+  const [name, setName] = useState(
+    FOUNDATIONAL_POETS[0].name
+  );
+
+  const [poemTitle, setPoemTitle] =
+    useState(
+      FOUNDATIONAL_POETS[0].poemTitle
+    );
+
+  const [territory, setTerritory] =
+    useState(
+      FOUNDATIONAL_POETS[0].territory
+    );
+
+  const [confirmed, setConfirmed] =
+    useState(false);
+
+  const [savedIdentities, setSavedIdentities] =
+    useState<SavedIdentity[]>([]);
+
+  const [message, setMessage] =
+    useState("");
+
+  const [messageType, setMessageType] =
+    useState<
+      "idle" | "success" | "error"
+    >("idle");
+
+  useEffect(() => {
+    setSavedIdentities(
+      readSavedIdentities()
+    );
+  }, []);
+
+  const selectedPreset = useMemo(
+    () =>
+      FOUNDATIONAL_POETS.find(
+        (poet) =>
+          poet.id === selectedPoetId
+      ) ?? FOUNDATIONAL_POETS[0],
+    [selectedPoetId]
+  );
+
+  useEffect(() => {
+    const saved =
+      savedIdentities.find(
+        (identity) =>
+          identity.poetId ===
+          selectedPoetId
+      );
+
+    if (saved) {
+      setName(saved.name);
+      setPoemTitle(saved.poemTitle);
+      setTerritory(saved.territory);
+      return;
+    }
+
+    setName(selectedPreset.name);
+    setPoemTitle(
+      selectedPreset.poemTitle
+    );
+    setTerritory(
+      selectedPreset.territory
+    );
+  }, [
+    savedIdentities,
+    selectedPoetId,
+    selectedPreset,
+  ]);
+
+  const currentSavedIdentity =
+    savedIdentities.find(
+      (identity) =>
+        identity.poetId ===
+        selectedPoetId
+    );
+
+  function saveIdentity() {
+    setMessage("");
+    setMessageType("idle");
+
+    if (!name.trim()) {
+      setMessage(
+        "Escribe el nombre del poeta."
+      );
+      setMessageType("error");
+      return;
+    }
+
+    if (!poemTitle.trim()) {
+      setMessage(
+        "Escribe el título del poema."
+      );
+      setMessageType("error");
+      return;
+    }
+
+    if (!confirmed) {
+      setMessage(
+        "Marca la casilla para confirmar la elección."
+      );
+      setMessageType("error");
+      return;
+    }
+
+    const conflict =
+      savedIdentities.find(
+        (identity) =>
+          identity.poetId !==
+            selectedPoetId &&
+          (
+            identity.avatarId ===
+              avatarId ||
+            identity.relicId ===
+              relicId
+          )
+      );
+
+    if (conflict) {
+      const usedPiece =
+        conflict.avatarId === avatarId
+          ? `el avatar A${formatNumber(
+              avatarId
+            )}`
+          : `la reliquia T${formatNumber(
+              relicId
+            )}`;
+
+      setMessage(
+        `${usedPiece} ya pertenece a ${conflict.name}.`
+      );
+
+      setMessageType("error");
+      return;
+    }
+
+    const identity: SavedIdentity = {
+      poetId: selectedPoetId,
+      name: name.trim(),
+      poemTitle: poemTitle.trim(),
+      territory: territory.trim(),
+      avatarId,
+      relicId,
+      savedAt:
+        new Date().toISOString(),
+    };
+
+    const nextIdentities = [
+      ...savedIdentities.filter(
+        (item) =>
+          item.poetId !==
+          selectedPoetId
+      ),
+      identity,
+    ];
+
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(nextIdentities)
+    );
+
+    setSavedIdentities(
+      nextIdentities
+    );
+
+    setConfirmed(false);
+
+    setMessage(
+      `${identity.name} ha recibido el avatar A${formatNumber(
+        avatarId
+      )} y la reliquia T${formatNumber(
+        relicId
+      )}.`
+    );
+
+    setMessageType("success");
+
+    window.dispatchEvent(
+      new CustomEvent(
+        "poema-universal:identity-saved",
+        {
+          detail: identity,
+        }
+      )
+    );
+  }
+
+  function releaseIdentity() {
+    const nextIdentities =
+      savedIdentities.filter(
+        (identity) =>
+          identity.poetId !==
+          selectedPoetId
+      );
+
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(nextIdentities)
+    );
+
+    setSavedIdentities(
+      nextIdentities
+    );
+
+    setConfirmed(false);
+
+    setMessage(
+      "La identidad ha sido liberada. El avatar y la reliquia vuelven a estar disponibles."
+    );
+
+    setMessageType("success");
+  }
+
+  return (
+    <section className="mx-auto mb-14 w-[min(1180px,calc(100%-32px))] border border-[#c7a467]/20 bg-[#17130f]/95 px-6 py-7 text-[#f2eadf] shadow-[0_30px_90px_rgba(0,0,0,0.28)] sm:px-9 sm:py-9">
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+        <div className="max-w-xl">
+          <p className="text-[8px] uppercase tracking-[0.42em] text-[#c7a467]/80">
+            Identidad editorial
+          </p>
+
+          <h2 className="mt-4 font-serif text-3xl leading-tight sm:text-4xl">
+            Entregar un cuerpo
+            <span className="block italic text-white/38">
+              y un tesoro a cada voz.
+            </span>
+          </h2>
+
+          <p className="mt-5 max-w-lg text-sm leading-7 text-white/42">
+            Selecciona primero un avatar y una
+            reliquia en el estudio. Después elige
+            el poeta, confirma la unión y guarda
+            su identidad.
+          </p>
+        </div>
+
+        <div className="grid min-w-[260px] grid-cols-2 gap-px border border-white/10 bg-white/10">
+          <div className="bg-[#17130f] px-5 py-5">
+            <p className="text-[7px] uppercase tracking-[0.28em] text-white/28">
+              Avatar elegido
+            </p>
+
+            <p className="mt-3 font-serif text-3xl text-[#e3c78e]">
+              A{formatNumber(avatarId)}
+            </p>
+          </div>
+
+          <div className="bg-[#17130f] px-5 py-5">
+            <p className="text-[7px] uppercase tracking-[0.28em] text-white/28">
+              Tesoro elegido
+            </p>
+
+            <p className="mt-3 font-serif text-3xl text-[#e3c78e]">
+              T{formatNumber(relicId)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-9 grid gap-6 border-t border-white/10 pt-8 md:grid-cols-2">
+        <label className="block">
+          <span className="text-[8px] uppercase tracking-[0.3em] text-white/34">
+            Voz fundacional
+          </span>
+
+          <select
+            value={selectedPoetId}
+            onChange={(event) => {
+              setSelectedPoetId(
+                event.target.value
+              );
+              setConfirmed(false);
+              setMessage("");
+              setMessageType("idle");
+            }}
+            className="mt-3 w-full border border-white/12 bg-[#211a13] px-4 py-4 font-serif text-lg text-white/82 outline-none focus:border-[#c7a467]/55"
+          >
+            {FOUNDATIONAL_POETS.map(
+              (poet) => (
+                <option
+                  key={poet.id}
+                  value={poet.id}
+                >
+                  {poet.name}
+                </option>
+              )
+            )}
+          </select>
+        </label>
+
+        <label className="block">
+          <span className="text-[8px] uppercase tracking-[0.3em] text-white/34">
+            Nombre o seudónimo
+          </span>
+
+          <input
+            value={name}
+            onChange={(event) =>
+              setName(event.target.value)
+            }
+            className="mt-3 w-full border border-white/12 bg-[#211a13] px-4 py-4 font-serif text-lg text-white/82 outline-none focus:border-[#c7a467]/55"
+          />
+        </label>
+
+        <label className="block">
+          <span className="text-[8px] uppercase tracking-[0.3em] text-white/34">
+            Poema
+          </span>
+
+          <input
+            value={poemTitle}
+            onChange={(event) =>
+              setPoemTitle(
+                event.target.value
+              )
+            }
+            className="mt-3 w-full border border-white/12 bg-[#211a13] px-4 py-4 font-serif text-lg text-white/82 outline-none focus:border-[#c7a467]/55"
+          />
+        </label>
+
+        <label className="block">
+          <span className="text-[8px] uppercase tracking-[0.3em] text-white/34">
+            País o territorio
+          </span>
+
+          <input
+            value={territory}
+            onChange={(event) =>
+              setTerritory(
+                event.target.value
+              )
+            }
+            className="mt-3 w-full border border-white/12 bg-[#211a13] px-4 py-4 font-serif text-lg text-white/82 outline-none focus:border-[#c7a467]/55"
+          />
+        </label>
+      </div>
+
+      <label className="mt-8 flex cursor-pointer items-start gap-4 border-t border-white/10 pt-7">
+        <input
+          type="checkbox"
+          checked={confirmed}
+          onChange={(event) =>
+            setConfirmed(
+              event.target.checked
+            )
+          }
+          className="mt-1 h-4 w-4 accent-[#c7a467]"
+        />
+
+        <span className="text-sm leading-6 text-white/54">
+          Confirmo que el avatar
+          <strong className="mx-1 text-[#e3c78e]">
+            A{formatNumber(avatarId)}
+          </strong>
+          y la reliquia
+          <strong className="mx-1 text-[#e3c78e]">
+            T{formatNumber(relicId)}
+          </strong>
+          pertenecen a esta voz.
+        </span>
+      </label>
+
+      <div className="mt-7 flex flex-col gap-5 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          aria-live="polite"
+          className={`min-h-6 max-w-2xl text-sm leading-6 ${
+            messageType === "success"
+              ? "text-[#b6d5a9]"
+              : messageType === "error"
+                ? "text-[#e6a49b]"
+                : "text-white/28"
+          }`}
+        >
+          {message ||
+            (
+              currentSavedIdentity
+                ? `${currentSavedIdentity.name} tiene guardados A${formatNumber(
+                    currentSavedIdentity.avatarId
+                  )} y T${formatNumber(
+                    currentSavedIdentity.relicId
+                  )}.`
+                : "Esta voz todavía no tiene una identidad guardada."
+            )}
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row">
+          {currentSavedIdentity && (
+            <button
+              type="button"
+              onClick={releaseIdentity}
+              className="border border-white/12 px-6 py-4 text-[8px] uppercase tracking-[0.3em] text-white/42 transition hover:border-white/28 hover:text-white/72"
+            >
+              Liberar identidad
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={saveIdentity}
+            className="border border-[#c7a467]/42 bg-[#c7a467]/[0.07] px-7 py-4 text-[8px] uppercase tracking-[0.32em] text-[#e3c78e] transition hover:border-[#c7a467]/75 hover:bg-[#c7a467]/[0.13]"
+          >
+            Guardar identidad
+          </button>
+        </div>
+      </div>
+
+      {savedIdentities.length > 0 && (
+        <div className="mt-9 border-t border-white/10 pt-7">
+          <p className="text-[8px] uppercase tracking-[0.34em] text-white/30">
+            Identidades guardadas
+          </p>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-2">
+            {savedIdentities.map(
+              (identity) => (
+                <article
+                  key={identity.poetId}
+                  className="flex items-center justify-between gap-5 border border-white/10 bg-white/[0.025] px-5 py-4"
+                >
+                  <div>
+                    <p className="font-serif text-lg text-white/78">
+                      {identity.name}
+                    </p>
+
+                    <p className="mt-1 text-[8px] uppercase tracking-[0.24em] text-white/28">
+                      {identity.poemTitle}
+                    </p>
+                  </div>
+
+                  <p className="shrink-0 font-serif text-lg text-[#e3c78e]/80">
+                    A{formatNumber(
+                      identity.avatarId
+                    )}
+                    {" · "}
+                    T{formatNumber(
+                      identity.relicId
+                    )}
+                  </p>
+                </article>
+              )
+            )}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

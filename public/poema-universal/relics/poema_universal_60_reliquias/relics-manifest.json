@@ -1,0 +1,422 @@
+[
+  {
+    "id": 1,
+    "code": "T01",
+    "name": "Fragmento de carta",
+    "file": "relic-01.webp",
+    "webPath": "/poema-universal/relics/relic-01.webp"
+  },
+  {
+    "id": 2,
+    "code": "T02",
+    "name": "Llave antigua",
+    "file": "relic-02.webp",
+    "webPath": "/poema-universal/relics/relic-02.webp"
+  },
+  {
+    "id": 3,
+    "code": "T03",
+    "name": "Grulla de papel",
+    "file": "relic-03.webp",
+    "webPath": "/poema-universal/relics/relic-03.webp"
+  },
+  {
+    "id": 4,
+    "code": "T04",
+    "name": "Pluma",
+    "file": "relic-04.webp",
+    "webPath": "/poema-universal/relics/relic-04.webp"
+  },
+  {
+    "id": 5,
+    "code": "T05",
+    "name": "Flor seca",
+    "file": "relic-05.webp",
+    "webPath": "/poema-universal/relics/relic-05.webp"
+  },
+  {
+    "id": 6,
+    "code": "T06",
+    "name": "Concha espiral",
+    "file": "relic-06.webp",
+    "webPath": "/poema-universal/relics/relic-06.webp"
+  },
+  {
+    "id": 7,
+    "code": "T07",
+    "name": "Cinta roja",
+    "file": "relic-07.webp",
+    "webPath": "/poema-universal/relics/relic-07.webp"
+  },
+  {
+    "id": 8,
+    "code": "T08",
+    "name": "Frasco de tinta",
+    "file": "relic-08.webp",
+    "webPath": "/poema-universal/relics/relic-08.webp"
+  },
+  {
+    "id": 9,
+    "code": "T09",
+    "name": "Sello de cera",
+    "file": "relic-09.webp",
+    "webPath": "/poema-universal/relics/relic-09.webp"
+  },
+  {
+    "id": 10,
+    "code": "T10",
+    "name": "Pulsera de cuentas",
+    "file": "relic-10.webp",
+    "webPath": "/poema-universal/relics/relic-10.webp"
+  },
+  {
+    "id": 11,
+    "code": "T11",
+    "name": "Hoja prensada",
+    "file": "relic-11.webp",
+    "webPath": "/poema-universal/relics/relic-11.webp"
+  },
+  {
+    "id": 12,
+    "code": "T12",
+    "name": "Carrete de hilo",
+    "file": "relic-12.webp",
+    "webPath": "/poema-universal/relics/relic-12.webp"
+  },
+  {
+    "id": 13,
+    "code": "T13",
+    "name": "Medallón con cabello",
+    "file": "relic-13.webp",
+    "webPath": "/poema-universal/relics/relic-13.webp"
+  },
+  {
+    "id": 14,
+    "code": "T14",
+    "name": "Flauta pequeña",
+    "file": "relic-14.webp",
+    "webPath": "/poema-universal/relics/relic-14.webp"
+  },
+  {
+    "id": 15,
+    "code": "T15",
+    "name": "Amuleto tallado",
+    "file": "relic-15.webp",
+    "webPath": "/poema-universal/relics/relic-15.webp"
+  },
+  {
+    "id": 16,
+    "code": "T16",
+    "name": "Rosario de madera",
+    "file": "relic-16.webp",
+    "webPath": "/poema-universal/relics/relic-16.webp"
+  },
+  {
+    "id": 17,
+    "code": "T17",
+    "name": "Campana",
+    "file": "relic-17.webp",
+    "webPath": "/poema-universal/relics/relic-17.webp"
+  },
+  {
+    "id": 18,
+    "code": "T18",
+    "name": "Lápiz de carbón",
+    "file": "relic-18.webp",
+    "webPath": "/poema-universal/relics/relic-18.webp"
+  },
+  {
+    "id": 19,
+    "code": "T19",
+    "name": "Libro diminuto",
+    "file": "relic-19.webp",
+    "webPath": "/poema-universal/relics/relic-19.webp"
+  },
+  {
+    "id": 20,
+    "code": "T20",
+    "name": "Fragmento de mapa",
+    "file": "relic-20.webp",
+    "webPath": "/poema-universal/relics/relic-20.webp"
+  },
+  {
+    "id": 21,
+    "code": "T21",
+    "name": "Fósil",
+    "file": "relic-21.webp",
+    "webPath": "/poema-universal/relics/relic-21.webp"
+  },
+  {
+    "id": 22,
+    "code": "T22",
+    "name": "Bolsa bordada",
+    "file": "relic-22.webp",
+    "webPath": "/poema-universal/relics/relic-22.webp"
+  },
+  {
+    "id": 23,
+    "code": "T23",
+    "name": "Moneda perforada",
+    "file": "relic-23.webp",
+    "webPath": "/poema-universal/relics/relic-23.webp"
+  },
+  {
+    "id": 24,
+    "code": "T24",
+    "name": "Porcelana azul",
+    "file": "relic-24.webp",
+    "webPath": "/poema-universal/relics/relic-24.webp"
+  },
+  {
+    "id": 25,
+    "code": "T25",
+    "name": "Retal bordado",
+    "file": "relic-25.webp",
+    "webPath": "/poema-universal/relics/relic-25.webp"
+  },
+  {
+    "id": 26,
+    "code": "T26",
+    "name": "Obsidiana",
+    "file": "relic-26.webp",
+    "webPath": "/poema-universal/relics/relic-26.webp"
+  },
+  {
+    "id": 27,
+    "code": "T27",
+    "name": "Canica de vidrio",
+    "file": "relic-27.webp",
+    "webPath": "/poema-universal/relics/relic-27.webp"
+  },
+  {
+    "id": 28,
+    "code": "T28",
+    "name": "Vela consumida",
+    "file": "relic-28.webp",
+    "webPath": "/poema-universal/relics/relic-28.webp"
+  },
+  {
+    "id": 29,
+    "code": "T29",
+    "name": "Silbato de cerámica",
+    "file": "relic-29.webp",
+    "webPath": "/poema-universal/relics/relic-29.webp"
+  },
+  {
+    "id": 30,
+    "code": "T30",
+    "name": "Nudo de cuerda",
+    "file": "relic-30.webp",
+    "webPath": "/poema-universal/relics/relic-30.webp"
+  },
+  {
+    "id": 31,
+    "code": "T31",
+    "name": "Marco vacío",
+    "file": "relic-31.webp",
+    "webPath": "/poema-universal/relics/relic-31.webp"
+  },
+  {
+    "id": 32,
+    "code": "T32",
+    "name": "Colgante de hoja",
+    "file": "relic-32.webp",
+    "webPath": "/poema-universal/relics/relic-32.webp"
+  },
+  {
+    "id": 33,
+    "code": "T33",
+    "name": "Coral blanco",
+    "file": "relic-33.webp",
+    "webPath": "/poema-universal/relics/relic-33.webp"
+  },
+  {
+    "id": 34,
+    "code": "T34",
+    "name": "Reloj de arena",
+    "file": "relic-34.webp",
+    "webPath": "/poema-universal/relics/relic-34.webp"
+  },
+  {
+    "id": 35,
+    "code": "T35",
+    "name": "Semilla antigua",
+    "file": "relic-35.webp",
+    "webPath": "/poema-universal/relics/relic-35.webp"
+  },
+  {
+    "id": 36,
+    "code": "T36",
+    "name": "Fotografía rota",
+    "file": "relic-36.webp",
+    "webPath": "/poema-universal/relics/relic-36.webp"
+  },
+  {
+    "id": 37,
+    "code": "T37",
+    "name": "Talismán de tela",
+    "file": "relic-37.webp",
+    "webPath": "/poema-universal/relics/relic-37.webp"
+  },
+  {
+    "id": 38,
+    "code": "T38",
+    "name": "Caballo de madera",
+    "file": "relic-38.webp",
+    "webPath": "/poema-universal/relics/relic-38.webp"
+  },
+  {
+    "id": 39,
+    "code": "T39",
+    "name": "Figura de bronce",
+    "file": "relic-39.webp",
+    "webPath": "/poema-universal/relics/relic-39.webp"
+  },
+  {
+    "id": 40,
+    "code": "T40",
+    "name": "Linterna",
+    "file": "relic-40.webp",
+    "webPath": "/poema-universal/relics/relic-40.webp"
+  },
+  {
+    "id": 41,
+    "code": "T41",
+    "name": "Imperdible",
+    "file": "relic-41.webp",
+    "webPath": "/poema-universal/relics/relic-41.webp"
+  },
+  {
+    "id": 42,
+    "code": "T42",
+    "name": "Cuarzo",
+    "file": "relic-42.webp",
+    "webPath": "/poema-universal/relics/relic-42.webp"
+  },
+  {
+    "id": 43,
+    "code": "T43",
+    "name": "Sello postal",
+    "file": "relic-43.webp",
+    "webPath": "/poema-universal/relics/relic-43.webp"
+  },
+  {
+    "id": 44,
+    "code": "T44",
+    "name": "Chapa antigua",
+    "file": "relic-44.webp",
+    "webPath": "/poema-universal/relics/relic-44.webp"
+  },
+  {
+    "id": 45,
+    "code": "T45",
+    "name": "Madera erosionada",
+    "file": "relic-45.webp",
+    "webPath": "/poema-universal/relics/relic-45.webp"
+  },
+  {
+    "id": 46,
+    "code": "T46",
+    "name": "Medalla",
+    "file": "relic-46.webp",
+    "webPath": "/poema-universal/relics/relic-46.webp"
+  },
+  {
+    "id": 47,
+    "code": "T47",
+    "name": "Partitura rota",
+    "file": "relic-47.webp",
+    "webPath": "/poema-universal/relics/relic-47.webp"
+  },
+  {
+    "id": 48,
+    "code": "T48",
+    "name": "Bolsa de semillas",
+    "file": "relic-48.webp",
+    "webPath": "/poema-universal/relics/relic-48.webp"
+  },
+  {
+    "id": 49,
+    "code": "T49",
+    "name": "Dedal",
+    "file": "relic-49.webp",
+    "webPath": "/poema-universal/relics/relic-49.webp"
+  },
+  {
+    "id": 50,
+    "code": "T50",
+    "name": "Trébol de cuatro hojas",
+    "file": "relic-50.webp",
+    "webPath": "/poema-universal/relics/relic-50.webp"
+  },
+  {
+    "id": 51,
+    "code": "T51",
+    "name": "Frasco de polvo",
+    "file": "relic-51.webp",
+    "webPath": "/poema-universal/relics/relic-51.webp"
+  },
+  {
+    "id": 52,
+    "code": "T52",
+    "name": "Hueso tallado",
+    "file": "relic-52.webp",
+    "webPath": "/poema-universal/relics/relic-52.webp"
+  },
+  {
+    "id": 53,
+    "code": "T53",
+    "name": "Nudo tejido",
+    "file": "relic-53.webp",
+    "webPath": "/poema-universal/relics/relic-53.webp"
+  },
+  {
+    "id": 54,
+    "code": "T54",
+    "name": "Amuleto grabado",
+    "file": "relic-54.webp",
+    "webPath": "/poema-universal/relics/relic-54.webp"
+  },
+  {
+    "id": 55,
+    "code": "T55",
+    "name": "Flor de loto seca",
+    "file": "relic-55.webp",
+    "webPath": "/poema-universal/relics/relic-55.webp"
+  },
+  {
+    "id": 56,
+    "code": "T56",
+    "name": "Escarabajo turquesa",
+    "file": "relic-56.webp",
+    "webPath": "/poema-universal/relics/relic-56.webp"
+  },
+  {
+    "id": 57,
+    "code": "T57",
+    "name": "Manuscrito",
+    "file": "relic-57.webp",
+    "webPath": "/poema-universal/relics/relic-57.webp"
+  },
+  {
+    "id": 58,
+    "code": "T58",
+    "name": "Piedra volcánica",
+    "file": "relic-58.webp",
+    "webPath": "/poema-universal/relics/relic-58.webp"
+  },
+  {
+    "id": 59,
+    "code": "T59",
+    "name": "Hilo rojo en frasco",
+    "file": "relic-59.webp",
+    "webPath": "/poema-universal/relics/relic-59.webp"
+  },
+  {
+    "id": 60,
+    "code": "T60",
+    "name": "Brújula",
+    "file": "relic-60.webp",
+    "webPath": "/poema-universal/relics/relic-60.webp"
+  }
+]
