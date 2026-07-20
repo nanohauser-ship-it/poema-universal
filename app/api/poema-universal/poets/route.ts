@@ -1,9 +1,13 @@
-import { NextResponse } from "next/server";
+import {
+  NextRequest,
+  NextResponse,
+} from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
 const EDITION_YEAR = 2026;
+const TOTAL_PRESENCES = 60;
 
 type PoetRow = {
   id: string;
@@ -12,15 +16,23 @@ type PoetRow = {
   city: string | null;
   profile_slug: string | null;
   display_order: number;
-  short_bio: string;
+  short_bio: string | null;
   portrait_url: string | null;
   status: "confirmed" | "published";
+  avatar_variant: number | null;
+  relic_variant: number | null;
 };
 
 type CountryRow = {
   id: string;
   name: string;
   iso2: string;
+};
+
+type AssignmentBody = {
+  position?: unknown;
+  avatarVariant?: unknown;
+  relicVariant?: unknown;
 };
 
 function createServerSupabaseClient() {
@@ -32,13 +44,13 @@ function createServerSupabaseClient() {
 
   if (!supabaseUrl) {
     throw new Error(
-      "Falta NEXT_PUBLIC_SUPABASE_URL en .env.local."
+      "Falta NEXT_PUBLIC_SUPABASE_URL."
     );
   }
 
   if (!serviceRoleKey) {
     throw new Error(
-      "Falta SUPABASE_SERVICE_ROLE_KEY en .env.local."
+      "Falta SUPABASE_SERVICE_ROLE_KEY."
     );
   }
 
@@ -55,9 +67,49 @@ function createServerSupabaseClient() {
   );
 }
 
+function normalizeVariant(
+  value: unknown
+): number | null {
+  if (value === null) {
+    return null;
+  }
+
+  const parsed = Number(value);
+
+  if (
+    !Number.isInteger(parsed) ||
+    parsed < 1 ||
+    parsed > TOTAL_PRESENCES
+  ) {
+    throw new Error(
+      "El avatar y la reliquia deben estar entre 1 y 60."
+    );
+  }
+
+  return parsed;
+}
+
+function assertAdministrator(
+  request: NextRequest
+) {
+  const expectedSecret =
+    process.env.ADMIN_SECRET;
+
+  const receivedSecret =
+    request.headers.get("x-admin-secret");
+
+  if (
+    !expectedSecret ||
+    receivedSecret !== expectedSecret
+  ) {
+    throw new Error("UNAUTHORIZED");
+  }
+}
+
 export async function GET() {
   try {
-    const supabase = createServerSupabaseClient();
+    const supabase =
+      createServerSupabaseClient();
 
     const [poetsResult, countriesResult] =
       await Promise.all([
@@ -73,7 +125,9 @@ export async function GET() {
               display_order,
               short_bio,
               portrait_url,
-              status
+              status,
+              avatar_variant,
+              relic_variant
             `
           )
           .eq("edition_year", EDITION_YEAR)
@@ -82,7 +136,6 @@ export async function GET() {
             "confirmed",
             "published",
           ])
-          .not("short_bio", "is", null)
           .order("display_order", {
             ascending: true,
           }),
@@ -94,13 +147,13 @@ export async function GET() {
 
     if (poetsResult.error) {
       throw new Error(
-        `Error al consultar los perfiles: ${poetsResult.error.message}`
+        poetsResult.error.message
       );
     }
 
     if (countriesResult.error) {
       throw new Error(
-        `Error al consultar los países: ${countriesResult.error.message}`
+        countriesResult.error.message
       );
     }
 
@@ -117,26 +170,33 @@ export async function GET() {
       ])
     );
 
-    const publicProfiles = poets.map((poet) => {
-      const country = poet.country_id
-        ? countryById.get(poet.country_id)
-        : undefined;
+    const publicProfiles = poets.map(
+      (poet) => {
+        const country = poet.country_id
+          ? countryById.get(poet.country_id)
+          : undefined;
 
-      return {
-        id: poet.id,
-        position: poet.display_order,
-        name: poet.full_name,
-        country:
-          country?.name ??
-          "Territorio por confirmar",
-        countryCode: country?.iso2 ?? null,
-        city: poet.city,
-        shortBio: poet.short_bio,
-        portraitUrl: poet.portrait_url,
-        status: poet.status,
-        profileSlug: poet.profile_slug,
-      };
-    });
+        return {
+          id: poet.id,
+          position: poet.display_order,
+          name: poet.full_name,
+          country:
+            country?.name ??
+            "Territorio por confirmar",
+          countryCode:
+            country?.iso2 ?? null,
+          city: poet.city,
+          shortBio: poet.short_bio,
+          portraitUrl: poet.portrait_url,
+          status: poet.status,
+          profileSlug: poet.profile_slug,
+          avatarVariant:
+            poet.avatar_variant,
+          relicVariant:
+            poet.relic_variant,
+        };
+      }
+    );
 
     return NextResponse.json(
       {
@@ -153,14 +213,116 @@ export async function GET() {
     );
   } catch (error) {
     console.error(
-      "Error en la API de perfiles de Poema Universal:",
+      "Error en la API de perfiles:",
       error
     );
 
     const message =
       error instanceof Error
         ? error.message
-        : "Se produjo un error desconocido.";
+        : "Error desconocido.";
+
+    return NextResponse.json(
+      { error: message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(
+  request: NextRequest
+) {
+  try {
+    assertAdministrator(request);
+
+    const body =
+      (await request.json()) as AssignmentBody;
+
+    const position = Number(body.position);
+
+    if (
+      !Number.isInteger(position) ||
+      position < 1 ||
+      position > TOTAL_PRESENCES
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "La posición debe estar entre 1 y 60.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const avatarVariant =
+      normalizeVariant(body.avatarVariant);
+
+    const relicVariant =
+      normalizeVariant(body.relicVariant);
+
+    const supabase =
+      createServerSupabaseClient();
+
+    const { data, error } = await supabase
+      .from("poema_universal_poets")
+      .update({
+        avatar_variant: avatarVariant,
+        relic_variant: relicVariant,
+      })
+      .eq("edition_year", EDITION_YEAR)
+      .eq("display_order", position)
+      .select(
+        `
+          id,
+          display_order,
+          avatar_variant,
+          relic_variant
+        `
+      )
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!data) {
+      return NextResponse.json(
+        {
+          error:
+            "No existe un poeta asignado a esa posición.",
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      ok: true,
+      assignment: {
+        position: data.display_order,
+        avatarVariant:
+          data.avatar_variant,
+        relicVariant:
+          data.relic_variant,
+      },
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "UNAUTHORIZED"
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Autorización administrativa incorrecta.",
+        },
+        { status: 401 }
+      );
+    }
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Error desconocido.";
 
     return NextResponse.json(
       { error: message },

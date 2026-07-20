@@ -97,6 +97,59 @@ function readDesign(
   }
 }
 
+async function readRemoteDesign(
+  position: number
+): Promise<PresenceDesign | null> {
+  const response = await fetch(
+    "/api/poema-universal/poets",
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = await response.json();
+
+  const poet = (payload.poets ?? []).find(
+    (item: {
+      position?: unknown;
+    }) =>
+      Number(item.position) === position
+  );
+
+  if (!poet) {
+    return null;
+  }
+
+  const fallback =
+    defaultDesign(position);
+
+  const avatarVariant =
+    Number(poet.avatarVariant);
+
+  const relicVariant =
+    Number(poet.relicVariant);
+
+  return {
+    avatarVariant:
+      Number.isInteger(avatarVariant) &&
+      avatarVariant >= 1 &&
+      avatarVariant <= 60
+        ? avatarVariant
+        : fallback.avatarVariant,
+
+    relicVariant:
+      Number.isInteger(relicVariant) &&
+      relicVariant >= 1 &&
+      relicVariant <= 60
+        ? relicVariant
+        : fallback.relicVariant,
+  };
+}
+
 function readEditorialIdentities():
   EditorialIdentity[] {
   try {
@@ -186,6 +239,19 @@ export default function PoetPresence({
   useEffect(() => {
     function synchronize() {
       setDesign(readDesign(position));
+
+      void readRemoteDesign(position)
+        .then((remoteDesign) => {
+          if (remoteDesign) {
+            setDesign(remoteDesign);
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "No se pudo cargar la presencia:",
+            error
+          );
+        });
     }
 
     synchronize();

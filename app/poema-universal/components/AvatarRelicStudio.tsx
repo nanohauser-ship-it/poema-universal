@@ -24,6 +24,9 @@ type DesignMap = Record<
 const STORAGE_KEY =
   "poema-universal-presence-designs";
 
+const ADMIN_SESSION_KEY =
+  "poema-universal-curator-secret";
+
 const TOTAL_PRESENCES = 60;
 
 function formatNumber(value: number) {
@@ -72,6 +75,129 @@ function normalizeDesign(
       fallback.relicVariant
     ),
   };
+}
+
+async function readRemoteDesigns():
+  Promise<DesignMap> {
+  const response = await fetch(
+    "/api/poema-universal/poets",
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "No se pudieron cargar las asignaciones."
+    );
+  }
+
+  const payload = await response.json();
+
+  const remoteDesigns: DesignMap = {};
+
+  for (const poet of payload.poets ?? []) {
+    const position = Number(poet.position);
+
+    if (
+      !Number.isInteger(position) ||
+      position < 1 ||
+      position > TOTAL_PRESENCES
+    ) {
+      continue;
+    }
+
+    remoteDesigns[String(position)] =
+      normalizeDesign(position, {
+        avatarVariant:
+          poet.avatarVariant ??
+          position,
+        relicVariant:
+          poet.relicVariant ??
+          position,
+      });
+  }
+
+  return remoteDesigns;
+}
+
+function getAdministratorSecret() {
+  const stored =
+    window.sessionStorage.getItem(
+      ADMIN_SESSION_KEY
+    );
+
+  if (stored) {
+    return stored;
+  }
+
+  const entered = window.prompt(
+    "Introduce tu clave privada de administración."
+  );
+
+  const normalized = entered?.trim();
+
+  if (!normalized) {
+    return null;
+  }
+
+  window.sessionStorage.setItem(
+    ADMIN_SESSION_KEY,
+    normalized
+  );
+
+  return normalized;
+}
+
+async function persistRemoteDesign(
+  position: number,
+  design: {
+    avatarVariant: number | null;
+    relicVariant: number | null;
+  }
+) {
+  const secret =
+    getAdministratorSecret();
+
+  if (!secret) {
+    throw new Error(
+      "No se introdujo la clave administrativa."
+    );
+  }
+
+  const response = await fetch(
+    "/api/poema-universal/poets",
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type":
+          "application/json",
+        "x-admin-secret": secret,
+      },
+      body: JSON.stringify({
+        position,
+        avatarVariant:
+          design.avatarVariant,
+        relicVariant:
+          design.relicVariant,
+      }),
+    }
+  );
+
+  const payload = await response.json();
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      window.sessionStorage.removeItem(
+        ADMIN_SESSION_KEY
+      );
+    }
+
+    throw new Error(
+      payload.error ??
+        "No se pudo guardar la asignación."
+    );
+  }
 }
 
 function readDesigns(): DesignMap {
@@ -136,7 +262,24 @@ export default function AvatarRelicStudio() {
         search.get("curator") === "1"
     );
 
-    setDesigns(readDesigns());
+    const localDesigns =
+      readDesigns();
+
+    setDesigns(localDesigns);
+
+    void readRemoteDesigns()
+      .then((remoteDesigns) => {
+        setDesigns({
+          ...localDesigns,
+          ...remoteDesigns,
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "No se pudieron cargar las presencias:",
+          error
+        );
+      });
   }, []);
 
   const positions = useMemo(
@@ -180,11 +323,24 @@ export default function AvatarRelicStudio() {
       JSON.stringify(nextDesigns)
     );
 
-    window.dispatchEvent(
-      new CustomEvent(
-        "poema-presence-update"
-      )
-    );
+    void persistRemoteDesign(
+      position,
+      nextDesign
+    )
+      .then(() => {
+        window.dispatchEvent(
+          new CustomEvent(
+            "poema-presence-update"
+          )
+        );
+      })
+      .catch((error) => {
+        window.alert(
+          error instanceof Error
+            ? error.message
+            : "No se pudo guardar."
+        );
+      });
   }
 
   function selectAvatar(
@@ -219,11 +375,27 @@ export default function AvatarRelicStudio() {
       JSON.stringify(nextDesigns)
     );
 
-    window.dispatchEvent(
-      new CustomEvent(
-        "poema-presence-update"
-      )
-    );
+    void persistRemoteDesign(
+      position,
+      {
+        avatarVariant: null,
+        relicVariant: null,
+      }
+    )
+      .then(() => {
+        window.dispatchEvent(
+          new CustomEvent(
+            "poema-presence-update"
+          )
+        );
+      })
+      .catch((error) => {
+        window.alert(
+          error instanceof Error
+            ? error.message
+            : "No se pudo reiniciar."
+        );
+      });
   }
 
   if (!enabled) {
