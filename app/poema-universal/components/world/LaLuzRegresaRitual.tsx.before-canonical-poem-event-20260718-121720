@@ -1,0 +1,456 @@
+"use client";
+
+import { Html } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import * as THREE from "three";
+
+const ACTIVE_IDS = new Set([
+  "asataka-02",
+  "asataka",
+  "poema-02",
+  "poem-02",
+]);
+
+type BookChangeDetail = {
+  id?: string;
+  poemId?: string;
+  title?: string;
+  poetName?: string;
+  index?: number;
+};
+
+function resolvePoemId(detail: BookChangeDetail | null | undefined) {
+  if (!detail) {
+    return "";
+  }
+
+  return String(
+    detail.id ?? detail.poemId ?? ""
+  ).toLowerCase();
+}
+
+export default function LaLuzRegresaRitual() {
+  const rootRef = useRef<THREE.Group | null>(null);
+  const poetRef = useRef<THREE.Group | null>(null);
+  const coverRef = useRef<THREE.Mesh | null>(null);
+  const petalsRef = useRef<THREE.Group | null>(null);
+  const footRef = useRef<THREE.Group | null>(null);
+
+  const [active, setActive] = useState(false);
+
+  const petalOffsets = useMemo(
+    () => [
+      [-0.38, 0.09, -0.2],
+      [-0.08, 0.1, 0.02],
+      [0.16, 0.09, -0.08],
+      [0.36, 0.1, 0.15],
+      [0.08, 0.11, 0.27],
+      [-0.22, 0.09, 0.22],
+    ],
+    []
+  );
+
+  useEffect(() => {
+    function handleBookEvent(event: Event) {
+      const custom =
+        event as CustomEvent<BookChangeDetail>;
+
+      const id = resolvePoemId(custom.detail);
+
+      setActive(ACTIVE_IDS.has(id));
+    }
+
+    window.addEventListener(
+      "poema-book-change",
+      handleBookEvent as EventListener
+    );
+
+    window.addEventListener(
+      "poema-universal-poem-change",
+      handleBookEvent as EventListener
+    );
+
+    return () => {
+      window.removeEventListener(
+        "poema-book-change",
+        handleBookEvent as EventListener
+      );
+
+      window.removeEventListener(
+        "poema-universal-poem-change",
+        handleBookEvent as EventListener
+      );
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const synchronizeActivePoem:
+      EventListener = (event) => {
+        const detail =
+          (
+            event as CustomEvent<
+              BookChangeDetail & {
+                open?: boolean;
+              }
+            >
+          ).detail ?? {};
+
+        const id =
+          resolvePoemId(detail);
+
+        const title =
+          String(
+            detail.title ?? ""
+          ).toLowerCase();
+
+        const poetName =
+          String(
+            detail.poetName ?? ""
+          ).toLowerCase();
+
+        const shouldBeActive =
+          detail.open !== false &&
+          (
+            ACTIVE_IDS.has(id) ||
+            title.includes(
+              "la luz regresa descalza"
+            ) ||
+            poetName.includes(
+              "asataka"
+            )
+          );
+
+        setActive(shouldBeActive);
+      };
+
+    window.addEventListener(
+      "poema-universal:active-poem",
+      synchronizeActivePoem
+    );
+
+    return () => {
+      window.removeEventListener(
+        "poema-universal:active-poem",
+        synchronizeActivePoem
+      );
+    };
+  }, []);
+
+  useFrame(({ clock }) => {
+    if (!active) {
+      return;
+    }
+
+    const t = clock.getElapsedTime();
+
+    if (poetRef.current) {
+      poetRef.current.position.y =
+        1.55 + Math.sin(t * 1.2) * 0.18;
+
+      poetRef.current.rotation.z =
+        Math.sin(t * 0.8) * 0.08;
+
+      poetRef.current.rotation.x =
+        Math.cos(t * 0.55) * 0.04;
+    }
+
+    if (coverRef.current) {
+      coverRef.current.rotation.x =
+        -0.12 + Math.sin(t * 1.5) * 0.035;
+
+      coverRef.current.position.y =
+        0.17 + Math.sin(t * 1.2) * 0.015;
+    }
+
+    if (petalsRef.current) {
+      petalsRef.current.rotation.y += 0.003;
+      petalsRef.current.position.y =
+        0.02 + Math.sin(t * 1.4) * 0.02;
+    }
+
+    if (footRef.current) {
+      footRef.current.position.x =
+        -2.1 + ((t * 0.55) % 1.0) * 3.7;
+    }
+
+    if (rootRef.current) {
+      rootRef.current.position.y =
+        0.02 + Math.sin(t * 0.45) * 0.015;
+    }
+  });
+
+  if (!active) {
+    return null;
+  }
+
+  return (
+    <group
+      ref={rootRef}
+      position={[-5.8, 0.02, -0.8]}
+    >
+      {/* vías rígidas */}
+      <mesh
+        castShadow
+        receiveShadow
+        position={[0, 0.03, -0.34]}
+      >
+        <boxGeometry args={[5.4, 0.05, 0.1]} />
+        <meshStandardMaterial
+          color="#71685e"
+          roughness={0.92}
+        />
+      </mesh>
+
+      <mesh
+        castShadow
+        receiveShadow
+        position={[0, 0.03, 0.34]}
+      >
+        <boxGeometry args={[5.4, 0.05, 0.1]} />
+        <meshStandardMaterial
+          color="#71685e"
+          roughness={0.92}
+        />
+      </mesh>
+
+      {Array.from({ length: 10 }).map(
+        (_, index) => (
+          <mesh
+            key={index}
+            castShadow
+            receiveShadow
+            position={[
+              -2.2 + index * 0.5,
+              0.01,
+              0,
+            ]}
+          >
+            <boxGeometry
+              args={[0.22, 0.03, 0.86]}
+            />
+            <meshStandardMaterial
+              color="#58422d"
+              roughness={1}
+            />
+          </mesh>
+        )
+      )}
+
+      {/* resplandor interior */}
+      <pointLight
+        position={[0.1, 1.1, 0]}
+        intensity={3.8}
+        distance={5}
+        color="#e3b770"
+      />
+
+      <mesh position={[0.05, 0.08, 0]}>
+        <sphereGeometry args={[0.12, 18, 18]} />
+        <meshStandardMaterial
+          color="#f4c77a"
+          emissive="#d99235"
+          emissiveIntensity={2.6}
+        />
+      </mesh>
+
+      {/* poeta flotando */}
+      <group
+        ref={poetRef}
+        position={[0.1, 1.55, 0]}
+      >
+        <mesh castShadow position={[0, 0.56, 0]}>
+          <sphereGeometry args={[0.16, 20, 20]} />
+          <meshStandardMaterial
+            color="#d6b290"
+            roughness={0.9}
+          />
+        </mesh>
+
+        <mesh castShadow position={[0, 0.14, 0]}>
+          <cylinderGeometry
+            args={[0.16, 0.33, 0.88, 18]}
+          />
+          <meshStandardMaterial
+            color="#4e5965"
+            roughness={0.95}
+          />
+        </mesh>
+
+        <mesh
+          castShadow
+          position={[0, -0.1, 0]}
+          rotation={[0.2, 0, 0]}
+        >
+          <torusGeometry
+            args={[0.18, 0.03, 10, 30]}
+          />
+          <meshStandardMaterial
+            color="#ead4a0"
+            emissive="#c69645"
+            emissiveIntensity={0.7}
+          />
+        </mesh>
+      </group>
+
+      {/* libro / portadilla */}
+      <group
+        position={[2.1, 0.08, -1.08]}
+        rotation={[0.04, -0.22, 0.06]}
+      >
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[1.55, 0.12, 1.12]} />
+          <meshStandardMaterial
+            color="#3b2a1d"
+            roughness={0.95}
+          />
+        </mesh>
+
+        <mesh
+          ref={coverRef}
+          castShadow
+          position={[0.03, 0.17, 0]}
+        >
+          <boxGeometry args={[1.5, 0.04, 1.06]} />
+          <meshStandardMaterial
+            color="#c8b28a"
+            roughness={0.82}
+          />
+        </mesh>
+
+        <group ref={petalsRef}>
+          {petalOffsets.map(
+            (offset, index) => (
+              <mesh
+                key={index}
+                position={
+                  offset as [
+                    number,
+                    number,
+                    number
+                  ]
+                }
+                rotation={[
+                  Math.PI / 2,
+                  index * 0.35,
+                  index * 0.2,
+                ]}
+              >
+                <sphereGeometry
+                  args={[0.06, 14, 14]}
+                />
+                <meshStandardMaterial
+                  color="#f2d6b0"
+                  emissive="#f0b95d"
+                  emissiveIntensity={1.15}
+                />
+              </mesh>
+            )
+          )}
+        </group>
+      </group>
+
+      {/* huellas / pies descalzos que regresan */}
+      <group
+        ref={footRef}
+        position={[-2.1, 0.04, 1.18]}
+      >
+        <mesh rotation={[-Math.PI / 2, 0, 0.15]}>
+          <circleGeometry args={[0.1, 24]} />
+          <meshStandardMaterial
+            color="#f2c77c"
+            emissive="#c98a34"
+            emissiveIntensity={1.2}
+            transparent
+            opacity={0.78}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.24, 0, -0.04]}
+          rotation={[-Math.PI / 2, 0, -0.1]}
+        >
+          <circleGeometry args={[0.085, 24]} />
+          <meshStandardMaterial
+            color="#f2c77c"
+            emissive="#c98a34"
+            emissiveIntensity={1.1}
+            transparent
+            opacity={0.7}
+          />
+        </mesh>
+      </group>
+      {/* cartela de ASATAKA */}
+      <Html
+        fullscreen
+        style={{
+          pointerEvents: "none",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            bottom: "62px",
+            transform:
+              "translateX(-50%)",
+            width:
+              "min(360px, calc(100vw - 72px))",
+            border:
+              "1px solid rgba(199,164,103,.25)",
+            background:
+              "rgba(7,6,5,.9)",
+            padding:
+              "14px 17px 16px",
+            color: "#f0e8dc",
+            boxShadow:
+              "0 20px 58px rgba(0,0,0,.42)",
+            backdropFilter:
+              "blur(10px)",
+            textAlign: "center",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontSize: "8px",
+              lineHeight: 1.5,
+              letterSpacing: ".3em",
+              textTransform:
+                "uppercase",
+              color:
+                "rgba(199,164,103,.82)",
+            }}
+          >
+            Segundo ritual · La luz regresa descalza
+          </p>
+
+          <p
+            style={{
+              margin:
+                "9px 0 0",
+              fontFamily:
+                'Georgia, "Times New Roman", serif',
+              fontSize: "16px",
+              fontStyle: "italic",
+              lineHeight: 1.5,
+              color:
+                "rgba(240,232,220,.88)",
+            }}
+          >
+            La portadilla vibra,
+            los pétalos aparecen sobre
+            el lomo y una luz descalza
+            regresa desde la luz.
+          </p>
+        </div>
+      </Html>
+    </group>
+  );
+}

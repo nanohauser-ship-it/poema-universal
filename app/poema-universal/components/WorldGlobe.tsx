@@ -540,87 +540,15 @@ export default function WorldGlobe({
   );
 
   return (
-    <section
+    <div
       id="mundo"
-      className="relative isolate overflow-hidden border-y border-white/10 bg-[#03070a] py-24 text-white sm:py-32"
+      className="relative mx-auto max-w-[1460px] px-5 pb-16 pt-8 sm:px-8 sm:pb-20 sm:pt-10 lg:px-12"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#b58b45]/[0.07] blur-[150px]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.035),transparent_58%)]"
-      />
-
-      <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-        <header className="mx-auto mb-16 max-w-4xl text-center">
-          <p className="mb-7 text-[10px] font-medium uppercase tracking-[0.45em] text-[#d7b66f] sm:text-xs">
-            Cartografía de una voz común
-          </p>
-
-          <h2 className="font-serif text-4xl font-normal tracking-[-0.035em] text-white sm:text-6xl lg:text-7xl">
-            El mundo comienza
-            <span className="block italic text-white/62">
-              a escribir junto
-            </span>
-          </h2>
-
-          <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-white/48 sm:text-base sm:leading-8">
-            Cada territorio iluminado representa una
-            presencia que ya ha comenzado a formar parte
-            de la edición fundacional de Poema Universal.
-          </p>
-        </header>
-
-        <div className="mb-8 grid gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-3">
-          <div className="bg-[#050a0e] px-6 py-6 text-center">
-            <span className="block font-serif text-3xl text-white">
-              {occupiedTotal}
-            </span>
-
-            <span className="mt-2 block text-[9px] uppercase tracking-[0.32em] text-white/38">
-              Voces en incorporación
-            </span>
-          </div>
-
-          <div className="bg-[#050a0e] px-6 py-6 text-center">
-            <span className="block font-serif text-3xl text-white">
-              {participatingCountries.length}
-            </span>
-
-            <span className="mt-2 block text-[9px] uppercase tracking-[0.32em] text-white/38">
-              Países participantes
-            </span>
-          </div>
-
-          <div className="bg-[#050a0e] px-6 py-6 text-center">
-            <span className="block font-serif text-3xl text-[#d7b66f]">
-              {reservedTotal}
-            </span>
-
-            <span className="mt-2 block text-[9px] uppercase tracking-[0.32em] text-white/38">
-              Plazas disponibles
-            </span>
-          </div>
-        </div>
-
-        <div className="mb-8 flex flex-col items-center justify-between gap-3 border-x border-white/10 px-5 py-4 text-center sm:flex-row sm:text-left">
-          <p className="text-[9px] uppercase tracking-[0.32em] text-white/30">
-            Edición fundacional 2026
-          </p>
-
-          <p className="font-serif text-sm italic text-white/48">
-            Un libro universal de {totalSlots} voces
-          </p>
-        </div>
-
-        <div className="relative overflow-hidden border border-white/10 bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_330px]">
+      <div className="relative overflow-hidden border border-white/[0.14] bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_290px]">
             <div
               ref={containerRef}
-              className="relative min-h-[520px] overflow-hidden"
+              className="relative min-h-[640px] overflow-hidden lg:min-h-[710px]"
             >
               {isLoadingCountries && (
                 <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#020609]/70 backdrop-blur-sm">
@@ -741,11 +669,11 @@ export default function WorldGlobe({
               )}
 
               <div className="pointer-events-none absolute bottom-5 left-5 z-10 border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-md">
-                <p className="text-[8px] uppercase tracking-[0.3em] text-white/42">
+                <p className="text-[8px] uppercase tracking-[0.3em] text-white/58">
                   Arrastra para girar
                 </p>
 
-                <p className="mt-1 text-[8px] uppercase tracking-[0.3em] text-white/42">
+                <p className="mt-1 text-[8px] uppercase tracking-[0.3em] text-white/58">
                   Usa la rueda para acercarte
                 </p>
               </div>
@@ -758,7 +686,7 @@ export default function WorldGlobe({
                     Atlas de participantes
                   </p>
 
-                  <p className="mt-3 text-xs leading-6 text-white/35">
+                  <p className="mt-3 text-xs leading-6 text-white/52">
                     Selecciona un territorio
                     iluminado.
                   </p>
@@ -849,7 +777,7 @@ export default function WorldGlobe({
                           }
                           className="group flex w-full items-center justify-between border-b border-white/[0.08] py-4 text-left"
                         >
-                          <span className="font-serif text-xl text-white/72 transition group-hover:text-white">
+                          <span className="font-serif text-xl text-white/88 transition group-hover:text-white">
                             {country.name}
                           </span>
 
@@ -860,7 +788,7 @@ export default function WorldGlobe({
                   </div>
 
                   <div className="mt-auto border-t border-white/10 pt-7">
-                    <p className="text-xs leading-6 text-white/32">
+                    <p className="text-xs leading-6 text-white/46">
                       El mapa crecerá con cada
                       nueva incorporación hasta
                       reunir las sesenta voces de
@@ -873,11 +801,6 @@ export default function WorldGlobe({
           </div>
         </div>
 
-        <p className="mx-auto mt-8 max-w-2xl text-center text-[9px] uppercase leading-6 tracking-[0.3em] text-white/25">
-          Cada luz señala una presencia. Cada
-          presencia modifica el poema.
-        </p>
-      </div>
-    </section>
+    </div>
   );
 }

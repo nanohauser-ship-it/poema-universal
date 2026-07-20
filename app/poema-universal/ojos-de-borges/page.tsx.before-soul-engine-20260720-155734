@@ -1,0 +1,1188 @@
+"use client";
+
+import Link from "next/link";
+
+import {
+  useMemo,
+  useState,
+  type FormEvent,
+} from "react";
+
+import styles from "./OjosDeBorges.module.css";
+
+type ReadingStatus =
+  | "idle"
+  | "reading"
+  | "complete";
+
+type FormState = {
+  title: string;
+  author: string;
+  poem: string;
+};
+
+type LabyrinthEye = {
+  secretForm: string;
+  hiddenCenter: string;
+  bifurcation: string;
+  returnPath: string;
+  thresholdLine: string;
+};
+
+type MirrorEye = {
+  visibleIdentity: string;
+  reflectedIdentity: string;
+  double: string;
+  activeAbsence: string;
+  inversion: string;
+};
+
+type BorgesReading = {
+  labyrinth: LabyrinthEye;
+  mirror: MirrorEye;
+  blindSpot: string;
+  centralParadox: string;
+  finalSentence: string;
+  symbols: string[];
+};
+
+const INITIAL_FORM: FormState = {
+  title: "",
+  author: "",
+  poem: "",
+};
+
+const READING_PHASES = [
+  "Siguiendo los senderos",
+  "Buscando el centro oculto",
+  "Abriendo el espejo",
+  "Reconociendo el doble",
+  "Revelando la paradoja",
+];
+
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    );
+}
+
+function containsAny(
+  poem: string,
+  words: string[]
+) {
+  const normalized =
+    normalize(poem);
+
+  return words.some((word) =>
+    normalized.includes(
+      normalize(word)
+    )
+  );
+}
+
+function getLines(poem: string) {
+  return poem
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function chooseThresholdLine(
+  poem: string
+) {
+  const lines = getLines(poem);
+
+  if (lines.length === 0) {
+    return (
+      "El poema todavía no ha revelado " +
+      "su verso-umbral."
+    );
+  }
+
+  const thresholdWords = [
+    "puerta",
+    "entra",
+    "abre",
+    "vuelve",
+    "regresa",
+    "nombre",
+    "noche",
+    "luz",
+    "sombra",
+    "casa",
+    "tierra",
+    "agua",
+    "sueño",
+  ];
+
+  const weighted =
+    [...lines].sort(
+      (left, right) => {
+        function score(line: string) {
+          const normalized =
+            normalize(line);
+
+          const symbolic =
+            thresholdWords.reduce(
+              (total, word) =>
+                total +
+                (
+                  normalized.includes(
+                    normalize(word)
+                  )
+                    ? 5
+                    : 0
+                ),
+              0
+            );
+
+          return (
+            symbolic +
+            Math.min(
+              line.length / 18,
+              6
+            )
+          );
+        }
+
+        return (
+          score(right) -
+          score(left)
+        );
+      }
+    );
+
+  return weighted[0];
+}
+
+function inferSymbols(
+  poem: string
+) {
+  const candidates = [
+    {
+      label: "Laberinto",
+      words: [
+        "camino",
+        "pasillo",
+        "vía",
+        "sendero",
+        "perder",
+        "volver",
+      ],
+    },
+    {
+      label: "Espejo",
+      words: [
+        "rostro",
+        "reflejo",
+        "mirar",
+        "otro",
+        "doble",
+      ],
+    },
+    {
+      label: "Umbral",
+      words: [
+        "puerta",
+        "abrir",
+        "cerrar",
+        "entrada",
+        "salida",
+      ],
+    },
+    {
+      label: "Noche",
+      words: [
+        "noche",
+        "sombra",
+        "oscuridad",
+        "sueño",
+      ],
+    },
+    {
+      label: "Memoria",
+      words: [
+        "recuerdo",
+        "memoria",
+        "olvido",
+        "nombre",
+        "ayer",
+      ],
+    },
+    {
+      label: "Tierra",
+      words: [
+        "tierra",
+        "raíz",
+        "árbol",
+        "polvo",
+        "hueso",
+      ],
+    },
+    {
+      label: "Agua",
+      words: [
+        "agua",
+        "mar",
+        "río",
+        "lluvia",
+        "orilla",
+      ],
+    },
+    {
+      label: "Luz",
+      words: [
+        "luz",
+        "brillo",
+        "sol",
+        "claridad",
+        "blanco",
+      ],
+    },
+  ];
+
+  const found =
+    candidates
+      .filter((candidate) =>
+        containsAny(
+          poem,
+          candidate.words
+        )
+      )
+      .map(
+        (candidate) =>
+          candidate.label
+      )
+      .slice(0, 5);
+
+  return found.length > 0
+    ? found
+    : [
+        "Silencio",
+        "Umbral",
+        "Ausencia",
+      ];
+}
+
+function buildReading(
+  form: FormState
+): BorgesReading {
+  const poem = form.poem;
+  const thresholdLine =
+    chooseThresholdLine(poem);
+
+  const hasReturn =
+    containsAny(poem, [
+      "volver",
+      "regresa",
+      "retorno",
+      "otra vez",
+      "de nuevo",
+    ]);
+
+  const hasDouble =
+    containsAny(poem, [
+      "otro",
+      "doble",
+      "reflejo",
+      "espejo",
+      "rostro",
+      "sombra",
+    ]);
+
+  const hasMemory =
+    containsAny(poem, [
+      "memoria",
+      "recuerdo",
+      "olvido",
+      "nombre",
+      "pasado",
+    ]);
+
+  const hasLoss =
+    containsAny(poem, [
+      "ausencia",
+      "muerte",
+      "perdido",
+      "vacío",
+      "nada",
+      "desaparece",
+    ]);
+
+  const hasHome =
+    containsAny(poem, [
+      "casa",
+      "habitación",
+      "puerta",
+      "ventana",
+      "hogar",
+    ]);
+
+  const labyrinth: LabyrinthEye = {
+    secretForm:
+      hasReturn
+        ? (
+            "El poema parece avanzar, " +
+            "pero su forma profunda es " +
+            "circular: aquello que parte " +
+            "termina regresando transformado."
+          )
+        : (
+            "El poema avanza por una " +
+            "secuencia de estancias. Cada " +
+            "imagen abre la siguiente sin " +
+            "entregar todavía una salida."
+          ),
+
+    hiddenCenter:
+      hasMemory
+        ? (
+            "El centro parece encontrarse " +
+            "en la tensión entre recordar " +
+            "y aceptar que lo recordado ya " +
+            "no puede permanecer intacto."
+          )
+        : (
+            "El centro no parece ser una " +
+            "imagen concreta, sino la fuerza " +
+            "que obliga a las imágenes a " +
+            "acercarse entre sí."
+          ),
+
+    bifurcation:
+      hasHome
+        ? (
+            "El espacio puede leerse como " +
+            "lugar real o como arquitectura " +
+            "interior. Ambas rutas permanecen " +
+            "abiertas."
+          )
+        : (
+            "El poema se bifurca entre lo que " +
+            "nombra y aquello que deja fuera " +
+            "del campo visible."
+          ),
+
+    returnPath:
+      hasReturn
+        ? (
+            "El retorno es explícito: volver " +
+            "no deshace el camino, sino que " +
+            "cambia el significado del origen."
+          )
+        : (
+            "La lectura regresa al comienzo " +
+            "porque el final deja una pregunta " +
+            "que modifica la primera imagen."
+          ),
+
+    thresholdLine,
+  };
+
+  const mirror: MirrorEye = {
+    visibleIdentity:
+      (
+        "La voz visible se presenta como " +
+        "alguien que observa, recuerda o " +
+        "atraviesa la experiencia."
+      ),
+
+    reflectedIdentity:
+      hasDouble
+        ? (
+            "El reflejo sugiere que la figura " +
+            "observada también podría ser una " +
+            "versión desplazada de quien habla."
+          )
+        : (
+            "El poema parece proyectar una " +
+            "segunda identidad en aquello que " +
+            "mira, aunque nunca la nombre como " +
+            "un doble."
+          ),
+
+    double:
+      hasLoss
+        ? (
+            "El doble podría ser la persona que " +
+            "el hablante era antes de la pérdida: " +
+            "una identidad que permanece dentro " +
+            "del poema como ausencia activa."
+          )
+        : (
+            "El doble aparece en la distancia " +
+            "entre quien vive la experiencia y " +
+            "quien ahora consigue narrarla."
+          ),
+
+    activeAbsence:
+      hasLoss
+        ? (
+            "Lo ausente no ocupa un vacío pasivo. " +
+            "Organiza la mirada, determina el " +
+            "recorrido y condiciona lo que puede " +
+            "ser dicho."
+          )
+        : (
+            "Aquello que no aparece de forma " +
+            "directa sostiene una parte decisiva " +
+            "de la tensión del poema."
+          ),
+
+    inversion:
+      (
+        "El poema parece mirar hacia un objeto, " +
+        "pero termina revelando que ese objeto " +
+        "también está construyendo la identidad " +
+        "de quien lo contempla."
+      ),
+  };
+
+  const blindSpot =
+    hasLoss
+      ? (
+          "El poema transforma la pérdida en " +
+          "imagen, pero podría estar evitando " +
+          "mirar de frente qué parte de la voz " +
+          "también desapareció con aquello que " +
+          "fue perdido."
+        )
+      : (
+          "El punto ciego podría encontrarse en " +
+          "la experiencia que el poema rodea " +
+          "mediante símbolos, sin permitir que " +
+          "llegue a convertirse en afirmación."
+        );
+
+  const centralParadox =
+    hasMemory
+      ? (
+          "Para conservar lo recordado, el poema " +
+          "debe aceptar que la memoria lo transforma " +
+          "y que ya no puede devolverlo intacto."
+        )
+      : hasDouble
+        ? (
+            "La voz intenta descubrir al otro, " +
+            "pero cada revelación acerca del otro " +
+            "termina describiendo a quien mira."
+          )
+        : (
+            "El poema busca una salida, pero su " +
+            "verdadera revelación nace precisamente " +
+            "de permanecer dentro del laberinto."
+          );
+
+  return {
+    labyrinth,
+    mirror,
+    blindSpot,
+    centralParadox,
+
+    finalSentence:
+      (
+        "Un ojo encuentra el camino. " +
+        "El otro descubre quién lo está " +
+        "recorriendo."
+      ),
+
+    symbols:
+      inferSymbols(poem),
+  };
+}
+
+export default function OjosDeBorgesPage() {
+  const [form, setForm] =
+    useState<FormState>(
+      INITIAL_FORM
+    );
+
+  const [status, setStatus] =
+    useState<ReadingStatus>(
+      "idle"
+    );
+
+  const [phase, setPhase] =
+    useState(0);
+
+  const [reading, setReading] =
+    useState<BorgesReading | null>(
+      null
+    );
+
+  const canRead = useMemo(
+    () =>
+      form.poem.trim().length >= 40 &&
+      status !== "reading",
+    [
+      form.poem,
+      status,
+    ]
+  );
+
+  function updateField<
+    Key extends keyof FormState
+  >(
+    key: Key,
+    value: FormState[Key]
+  ) {
+    setForm((current) => ({
+      ...current,
+      [key]: value,
+    }));
+  }
+
+  function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+
+    if (!canRead) {
+      return;
+    }
+
+    setStatus("reading");
+    setReading(null);
+    setPhase(0);
+
+    let currentPhase = 0;
+
+    const interval =
+      window.setInterval(() => {
+        currentPhase += 1;
+
+        setPhase(
+          Math.min(
+            currentPhase,
+            READING_PHASES.length - 1
+          )
+        );
+      }, 430);
+
+    window.setTimeout(() => {
+      window.clearInterval(
+        interval
+      );
+
+      setReading(
+        buildReading(form)
+      );
+
+      setStatus("complete");
+
+      window.requestAnimationFrame(
+        () => {
+          document
+            .getElementById(
+              "camara-borges"
+            )
+            ?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+        }
+      );
+    }, 2250);
+  }
+
+  function deleteSession() {
+    setForm(INITIAL_FORM);
+    setStatus("idle");
+    setPhase(0);
+    setReading(null);
+  }
+
+  return (
+    <main className={styles.page}>
+      <div className={styles.texture} />
+
+      <header className={styles.topbar}>
+        <Link
+          href="/poema-universal"
+          className={styles.brand}
+        >
+          <span>✦</span>
+          POEMA UNIVERSAL
+        </Link>
+
+        <nav>
+          <Link
+            href="/poema-universal"
+          >
+            Fundación
+          </Link>
+
+          <Link
+            href="/poema-universal/matriz-poetica"
+          >
+            Matriz Poética
+          </Link>
+
+          <strong>
+            Los ojos de Borges
+          </strong>
+        </nav>
+      </header>
+
+      <section className={styles.hero}>
+        <p className={styles.eyebrow}>
+          Cámara de lectura simbólica
+        </p>
+
+        <h1>Los ojos de Borges</h1>
+
+        <p className={styles.promise}>
+          Un ojo encuentra el camino.
+          El otro descubre quién lo está
+          recorriendo.
+        </p>
+
+        <p className={styles.intro}>
+          Introduce un poema y contempla
+          su forma secreta, su doble, su
+          punto ciego y la paradoja que
+          permanece escondida entre sus
+          imágenes.
+        </p>
+      </section>
+
+      <div className={styles.layout}>
+        <aside className={styles.sidebar}>
+          <form
+            className={styles.form}
+            onSubmit={handleSubmit}
+          >
+            <div className={styles.heading}>
+              <span>◇</span>
+
+              <div>
+                <h2>Entregar poema</h2>
+
+                <p>
+                  El texto no se guarda
+                  en este prototipo
+                </p>
+              </div>
+            </div>
+
+            <label>
+              <span>Título</span>
+
+              <input
+                value={form.title}
+                maxLength={180}
+                placeholder="Poema sin título"
+                onChange={(event) =>
+                  updateField(
+                    "title",
+                    event.target.value
+                  )
+                }
+              />
+            </label>
+
+            <label>
+              <span>
+                Autor o seudónimo
+              </span>
+
+              <input
+                value={form.author}
+                maxLength={180}
+                placeholder="Autor no indicado"
+                onChange={(event) =>
+                  updateField(
+                    "author",
+                    event.target.value
+                  )
+                }
+              />
+            </label>
+
+            <label>
+              <span>Poema</span>
+
+              <textarea
+                value={form.poem}
+                maxLength={6000}
+                placeholder="Escribe o pega aquí el poema…"
+                onChange={(event) =>
+                  updateField(
+                    "poem",
+                    event.target.value
+                  )
+                }
+              />
+
+              <small>
+                {form.poem.length}
+                {" / 6000"}
+              </small>
+            </label>
+
+            <button
+              type="submit"
+              disabled={!canRead}
+            >
+              <span>◉</span>
+
+              {status === "reading"
+                ? "Abriendo los ojos"
+                : "Mirar el poema"}
+            </button>
+          </form>
+
+          <section
+            className={styles.principle}
+          >
+            <p>
+              Principio de lectura
+            </p>
+
+            <blockquote>
+              Todo poema esconde otro
+              poema que lo está soñando.
+            </blockquote>
+
+            <span>
+              La herramienta no dicta un
+              significado definitivo.
+              Propone una lectura posible
+              de su arquitectura y de su
+              reflejo.
+            </span>
+          </section>
+        </aside>
+
+        <section
+          id="camara-borges"
+          className={styles.chamber}
+        >
+          {status === "idle" && (
+            <div className={styles.waiting}>
+              <div className={styles.eyePair}>
+                <div
+                  className={
+                    styles.waitingLabyrinth
+                  }
+                >
+                  <span />
+                  <span />
+                  <span />
+                </div>
+
+                <div className={styles.aperture}>
+                  <i />
+                </div>
+
+                <div
+                  className={
+                    styles.waitingMirror
+                  }
+                >
+                  <span />
+                </div>
+              </div>
+
+              <p>
+                Cámara en espera
+              </p>
+
+              <h2>
+                El laberinto y el espejo
+                todavía permanecen
+                cerrados
+              </h2>
+
+              <span>
+                Cuando entregues un
+                poema, ambos ojos lo
+                contemplarán desde
+                direcciones opuestas.
+              </span>
+            </div>
+          )}
+
+          {status === "reading" && (
+            <div
+              className={styles.reading}
+              aria-live="polite"
+            >
+              <div className={styles.readingEyes}>
+                <div />
+                <span>✦</span>
+                <div />
+              </div>
+
+              <p>
+                Lectura en curso
+              </p>
+
+              <h2>
+                {READING_PHASES[phase]}
+              </h2>
+
+              <div className={styles.progress}>
+                {READING_PHASES.map(
+                  (item, index) => (
+                    <span
+                      key={item}
+                      className={
+                        index <= phase
+                          ? styles.active
+                          : ""
+                      }
+                    />
+                  )
+                )}
+              </div>
+            </div>
+          )}
+
+          {status === "complete" &&
+            reading && (
+              <div className={styles.results}>
+                <section
+                  className={styles.resultHeader}
+                >
+                  <p>
+                    Lectura bifocal
+                  </p>
+
+                  <h2>
+                    {form.title.trim() ||
+                      "Poema sin título"}
+                  </h2>
+
+                  <span>
+                    {form.author.trim() ||
+                      "Autor no indicado"}
+                  </span>
+
+                  <blockquote>
+                    “
+                    {
+                      reading.labyrinth
+                        .thresholdLine
+                    }
+                    ”
+                  </blockquote>
+                </section>
+
+                <section
+                  className={styles.twoEyes}
+                >
+                  <article
+                    className={styles.labyrinthEye}
+                  >
+                    <div
+                      className={
+                        styles.eyeTitle
+                      }
+                    >
+                      <span>01</span>
+
+                      <div>
+                        <p>
+                          Ojo del laberinto
+                        </p>
+
+                        <h3>
+                          La forma secreta
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div
+                      className={
+                        styles.labyrinthSeal
+                      }
+                      aria-hidden="true"
+                    >
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+
+                    <dl>
+                      <div>
+                        <dt>
+                          Forma secreta
+                        </dt>
+
+                        <dd>
+                          {
+                            reading
+                              .labyrinth
+                              .secretForm
+                          }
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt>
+                          Centro oculto
+                        </dt>
+
+                        <dd>
+                          {
+                            reading
+                              .labyrinth
+                              .hiddenCenter
+                          }
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt>
+                          Bifurcación
+                        </dt>
+
+                        <dd>
+                          {
+                            reading
+                              .labyrinth
+                              .bifurcation
+                          }
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt>Retorno</dt>
+
+                        <dd>
+                          {
+                            reading
+                              .labyrinth
+                              .returnPath
+                          }
+                        </dd>
+                      </div>
+                    </dl>
+                  </article>
+
+                  <div
+                    className={
+                      styles.intersection
+                    }
+                  >
+                    <p>Intersección</p>
+
+                    <div>
+                      <span />
+                    </div>
+
+                    <small>
+                      Aquí se encuentran
+                      la forma del poema y
+                      la identidad de
+                      quien lo recorre.
+                    </small>
+                  </div>
+
+                  <article
+                    className={styles.mirrorEye}
+                  >
+                    <div
+                      className={
+                        styles.eyeTitle
+                      }
+                    >
+                      <span>02</span>
+
+                      <div>
+                        <p>
+                          Ojo del espejo
+                        </p>
+
+                        <h3>
+                          La identidad
+                          reflejada
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div
+                      className={
+                        styles.mirrorSeal
+                      }
+                      aria-hidden="true"
+                    >
+                      <i />
+                      <i />
+                    </div>
+
+                    <dl>
+                      <div>
+                        <dt>
+                          Identidad visible
+                        </dt>
+
+                        <dd>
+                          {
+                            reading.mirror
+                              .visibleIdentity
+                          }
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt>
+                          Identidad reflejada
+                        </dt>
+
+                        <dd>
+                          {
+                            reading.mirror
+                              .reflectedIdentity
+                          }
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt>El doble</dt>
+
+                        <dd>
+                          {
+                            reading.mirror
+                              .double
+                          }
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt>
+                          Ausencia activa
+                        </dt>
+
+                        <dd>
+                          {
+                            reading.mirror
+                              .activeAbsence
+                          }
+                        </dd>
+                      </div>
+                    </dl>
+                  </article>
+                </section>
+
+                <section
+                  className={
+                    styles.symbolConstellation
+                  }
+                >
+                  <p>
+                    Constelación simbólica
+                  </p>
+
+                  <div>
+                    {reading.symbols.map(
+                      (symbol) => (
+                        <span key={symbol}>
+                          {symbol}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </section>
+
+                <section
+                  className={
+                    styles.revelations
+                  }
+                >
+                  <article>
+                    <p>Punto ciego</p>
+
+                    <div
+                      className={
+                        styles.blindMark
+                      }
+                    >
+                      ◉
+                    </div>
+
+                    <span>
+                      {reading.blindSpot}
+                    </span>
+                  </article>
+
+                  <article>
+                    <p>
+                      Paradoja central
+                    </p>
+
+                    <div
+                      className={
+                        styles.paradoxMark
+                      }
+                    >
+                      ✧
+                    </div>
+
+                    <span>
+                      {
+                        reading.centralParadox
+                      }
+                    </span>
+                  </article>
+                </section>
+
+                <section
+                  className={
+                    styles.finalSentence
+                  }
+                >
+                  <p>
+                    Los ojos de Borges
+                  </p>
+
+                  <blockquote>
+                    {
+                      reading.finalSentence
+                    }
+                  </blockquote>
+                </section>
+
+                <section
+                  className={styles.actions}
+                >
+                  <div>
+                    <strong>
+                      Esta lectura solo
+                      vive durante la
+                      sesión
+                    </strong>
+
+                    <p>
+                      El poema no se
+                      guarda ni se
+                      incorpora a Poema
+                      Universal.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={deleteSession}
+                  >
+                    Cerrar los ojos
+                  </button>
+                </section>
+              </div>
+            )}
+        </section>
+      </div>
+
+      <footer className={styles.footer}>
+        Un mismo poema · Dos ojos ·
+        Infinitas lecturas
+      </footer>
+    </main>
+  );
+}
