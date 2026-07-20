@@ -1,0 +1,177 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1600 900"
+  preserveAspectRatio="xMidYMid slice"
+>
+
+  <defs>
+    <filter id="grain">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency=".012"
+        numOctaves="4"
+        seed="18"
+        result="noise"
+      />
+      <feColorMatrix
+        in="noise"
+        type="matrix"
+        values="
+          1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          0 0 0 .16 0
+        "
+      />
+      <feBlend in="SourceGraphic" mode="soft-light"/>
+    </filter>
+
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="13"/>
+    </filter>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <pattern
+      id="stars"
+      width="130"
+      height="110"
+      patternUnits="userSpaceOnUse"
+    >
+      <circle cx="18" cy="22" r="1.2" fill="#e8c36f" opacity=".6"/>
+      <circle cx="76" cy="14" r=".8" fill="#fff0bf" opacity=".55"/>
+      <circle cx="112" cy="58" r="1" fill="#c99949" opacity=".7"/>
+      <circle cx="42" cy="87" r=".7" fill="#f6dfa4" opacity=".45"/>
+    </pattern>
+  </defs>
+
+
+  <defs>
+    <linearGradient id="riverNight" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071932"/>
+      <stop offset=".48" stop-color="#0b2940"/>
+      <stop offset="1" stop-color="#073845"/>
+    </linearGradient>
+
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2=".2">
+      <stop offset="0" stop-color="#15344f"/>
+      <stop offset=".32" stop-color="#12627a"/>
+      <stop offset=".62" stop-color="#1b8e91"/>
+      <stop offset="1" stop-color="#0c4960"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#riverNight)"/>
+  <rect width="1600" height="900" fill="url(#stars)" opacity=".48"/>
+
+  <g opacity=".18" filter="url(#soft)">
+    <ellipse cx="390" cy="240" rx="350" ry="190" fill="#40417b"/>
+    <ellipse cx="1160" cy="650" rx="440" ry="240" fill="#17717a"/>
+    <ellipse cx="920" cy="340" rx="260" ry="180" fill="#a1693e"/>
+  </g>
+
+  <path
+    d="M-150 570
+       C140 395 315 690 570 540
+       C805 402 995 654 1220 485
+       C1390 357 1515 370 1750 235
+       L1750 690
+       C1430 825 1175 700 930 805
+       C650 925 360 680 -150 835Z"
+    fill="url(#water)"
+    opacity=".68"
+    filter="url(#grain)"
+  />
+
+  <path
+    d="M-100 640
+       C180 480 350 740 590 600
+       C830 460 1020 720 1250 545
+       C1400 430 1535 440 1700 345"
+    fill="none"
+    stroke="#a8d5ce"
+    stroke-width="17"
+    opacity=".13"
+  />
+
+  <g
+    transform="translate(420 455)"
+    opacity=".48"
+    filter="url(#grain)"
+  >
+    <path
+      d="M0 80 Q95 -10 195 80 Q100 124 0 80Z"
+      fill="#83613e"
+    />
+    <path d="M92 20 V80" stroke="#e0c686" stroke-width="5"/>
+    <path d="M95 22 L160 63 L95 63Z" fill="#d9d6bd" opacity=".82"/>
+  </g>
+
+  <g
+    transform="translate(1010 500)"
+    opacity=".42"
+    filter="url(#grain)"
+  >
+    <path
+      d="M0 55 Q85 -15 175 55 Q88 96 0 55Z"
+      fill="#75603d"
+    />
+    <path d="M80 0 V55" stroke="#e4c98a" stroke-width="5"/>
+    <path d="M83 2 L145 43 L83 43Z" fill="#d7d8c3" opacity=".78"/>
+  </g>
+
+  <g
+    transform="translate(1260 155)"
+    opacity=".36"
+    filter="url(#grain)"
+  >
+    <ellipse cx="50" cy="40" rx="28" ry="37" fill="#b8c0be"/>
+    <path
+      d="M15 74 C0 140 12 215 80 252
+         C107 184 100 112 72 70Z"
+      fill="#3d6f78"
+    />
+  </g>
+
+  <g
+    transform="translate(210 620)"
+    opacity=".36"
+    filter="url(#grain)"
+  >
+    <ellipse cx="78" cy="40" rx="28" ry="37" fill="#bcb8b1"/>
+    <path
+      d="M38 75 C18 145 27 225 106 265
+         C137 191 128 116 100 70Z"
+      fill="#743f58"
+    />
+    <path
+      d="M67 150 L150 166 L137 220 L55 205Z"
+      fill="#e0c78c"
+    />
+  </g>
+
+  <g
+    fill="#dfc276"
+    opacity=".55"
+  >
+    <circle cx="245" cy="220" r="4"/>
+    <circle cx="580" cy="165" r="3"/>
+    <circle cx="890" cy="245" r="4"/>
+    <circle cx="1180" cy="175" r="3"/>
+    <circle cx="1430" cy="295" r="4"/>
+  </g>
+
+  <rect
+    width="1600"
+    height="900"
+    fill="#e9dfc3"
+    opacity=".10"
+    filter="url(#grain)"
+  />
+</svg>

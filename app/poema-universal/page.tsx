@@ -14,6 +14,7 @@ import AvatarRelicStudio from "./components/AvatarRelicStudio";
 import WorldEntrance from "./components/WorldEntrance";
 import MatrizEntrance from "./components/MatrizEntrance";
 import BorgesEntrance from "./components/BorgesEntrance";
+import AtlasInteriorEntrance from "./components/AtlasInteriorEntrance";
 const PRESENTATION_DATE = new Date(
   "2027-01-01T00:00:00+01:00"
 ).getTime();
@@ -849,6 +850,8 @@ export default function PoemaUniversalPage() {
           <MatrizEntrance />
 
       <BorgesEntrance />
+
+      <AtlasInteriorEntrance />
 </main>
   );
 }
