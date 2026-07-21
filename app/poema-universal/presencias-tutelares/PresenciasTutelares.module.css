@@ -1,0 +1,1850 @@
+.page {
+  min-height: 100vh;
+  color: #f3ecdc;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(174, 145, 91, 0.18),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #08090d,
+      #11131b 54%,
+      #090a0e
+    );
+}
+
+.threshold,
+.selection,
+.sanctuary {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.threshold {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  color: #bba471;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.threshold h1,
+.selection h1,
+.sanctuary h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-weight: 400;
+}
+
+.threshold h1 {
+  font-size: clamp(
+    3rem,
+    8vw,
+    7.6rem
+  );
+  letter-spacing: -0.05em;
+}
+
+.subtitle {
+  margin: 20px 0 50px;
+  color: #cfc4ae;
+  font-size: 1.15rem;
+}
+
+.threshold blockquote {
+  max-width: 570px;
+  margin: 0 0 46px;
+  color: #eee5d3;
+  font-family: Georgia, serif;
+  font-size: clamp(
+    1.3rem,
+    2.4vw,
+    2rem
+  );
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.primaryButton,
+.backButton,
+.actions button {
+  border: 1px solid
+    rgba(226, 205, 160, 0.4);
+  color: #f4ead5;
+  background:
+    rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+
+.primaryButton {
+  padding: 16px 26px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.primaryButton:hover {
+  background:
+    rgba(226, 205, 160, 0.12);
+}
+
+.privacy {
+  margin-top: 22px;
+  color: #81796b;
+  font-size: 0.76rem;
+}
+
+.selection {
+  padding: 70px 0 100px;
+}
+
+.backButton {
+  margin-bottom: 58px;
+  padding: 10px 15px;
+  border-radius: 999px;
+}
+
+.selection > h1 {
+  margin-bottom: 40px;
+  font-size: clamp(
+    2.5rem,
+    5vw,
+    5rem
+  );
+}
+
+.presenceGrid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.presenceCard {
+  min-height: 520px;
+  padding: 30px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
+  color: inherit;
+  text-align: left;
+  background:
+    rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.presenceCard:hover,
+.selectedCard {
+  transform: translateY(-5px);
+  border-color:
+    rgba(218, 191, 135, 0.56);
+  background:
+    rgba(218, 191, 135, 0.06);
+}
+
+.sculpture {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 30px;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle,
+      rgba(213, 188, 137, 0.28),
+      transparent 58%
+    );
+}
+
+.sculpture span,
+.guardianFigure span {
+  width: 94px;
+  height: 180px;
+  border-radius:
+    50% 50% 38% 38%;
+  background:
+    linear-gradient(
+      145deg,
+      #dfd4bf,
+      #716b63 60%,
+      #25262b
+    );
+  box-shadow:
+    0 40px 80px
+    rgba(0, 0, 0, 0.55);
+}
+
+.presenceCard small {
+  color: #9f9279;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.presenceCard h2 {
+  margin: 10px 0 18px;
+  font-family: Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.presenceCard p {
+  color: #bdb3a3;
+  line-height: 1.65;
+}
+
+.symbols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.symbols span {
+  padding: 6px 9px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
+  color: #968b78;
+  font-size: 0.7rem;
+}
+
+.modeSection {
+  margin: 80px 0 36px;
+}
+
+.modeSection h2 {
+  margin-bottom: 24px;
+  font-family: Georgia, serif;
+  font-weight: 400;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.modeCard {
+  padding: 22px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
+  color: inherit;
+  text-align: left;
+  background:
+    rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+}
+
+.selectedMode {
+  border-color:
+    rgba(218, 191, 135, 0.62);
+  background:
+    rgba(218, 191, 135, 0.08);
+}
+
+.modeCard strong,
+.modeCard span {
+  display: block;
+}
+
+.modeCard span {
+  margin-top: 10px;
+  color: #999083;
+  line-height: 1.5;
+}
+
+.sanctuary {
+  padding: 55px 0 90px;
+}
+
+.sanctuaryHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 36px;
+}
+
+.sanctuaryHeader h1 {
+  font-size: clamp(
+    2rem,
+    4vw,
+    4.5rem
+  );
+}
+
+.sanctuaryHeader p {
+  color: #a99d88;
+}
+
+.writingLayout {
+  display: grid;
+  grid-template-columns:
+    minmax(300px, 0.7fr)
+    minmax(460px, 1.3fr);
+  min-height: 720px;
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
+  background:
+    rgba(5, 6, 9, 0.55);
+  backdrop-filter: blur(20px);
+}
+
+.guardianStage {
+  position: relative;
+  display: flex;
+  min-height: 720px;
+  padding: 46px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  border-right: 1px solid
+    rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.guardianHalo {
+  position: absolute;
+  width: 370px;
+  height: 370px;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(220, 192, 133, 0.22),
+      transparent 65%
+    );
+  filter: blur(10px);
+  animation:
+    breathe 6s ease-in-out
+    infinite;
+}
+
+.guardianFigure {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 260px;
+  height: 410px;
+  place-items: center;
+}
+
+.guardianFigure span {
+  width: 155px;
+  height: 310px;
+}
+
+.openingPhrase {
+  position: relative;
+  z-index: 1;
+  max-width: 320px;
+  font-family: Georgia, serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.aura {
+  position: relative;
+  z-index: 1;
+  margin-top: 22px;
+  color: #8f8575;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.editor {
+  padding: 46px;
+  background:
+    rgba(245, 238, 224, 0.96);
+  color: #26231f;
+}
+
+.editor label,
+.editor label span {
+  display: block;
+}
+
+.editor label span {
+  margin-bottom: 10px;
+  color: #847a69;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.editor input,
+.editor textarea {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: #211f1c;
+  background: transparent;
+  font-family: Georgia, serif;
+}
+
+.editor input {
+  margin-bottom: 34px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid
+    rgba(35, 31, 25, 0.16);
+  font-size: 2rem;
+}
+
+.editor textarea {
+  min-height: 470px;
+  resize: vertical;
+  font-size: 1.2rem;
+  line-height: 1.85;
+}
+
+.editorFooter {
+  display: flex;
+  min-height: 24px;
+  justify-content: space-between;
+  gap: 20px;
+  color: #8a8174;
+  font-size: 0.76rem;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.actions button {
+  padding: 11px 15px;
+  border-color:
+    rgba(48, 42, 34, 0.2);
+  color: #40392f;
+  background:
+    rgba(48, 42, 34, 0.04);
+}
+
+.actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.world_borges {
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(116, 91, 48, 0.22),
+      transparent 38%
+    ),
+    linear-gradient(
+      145deg,
+      #07090e,
+      #101522
+    );
+}
+
+.world_pizarnik {
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(103, 75, 135, 0.24),
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      #09070d,
+      #17101e
+    );
+}
+
+.world_camus {
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(197, 160, 89, 0.28),
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      #0e0b07,
+      #201a10
+    );
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@media (max-width: 900px) {
+  .presenceGrid,
+  .modeGrid,
+  .writingLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .guardianStage {
+    min-height: 540px;
+    border-right: 0;
+    border-bottom: 1px solid
+      rgba(255, 255, 255, 0.08);
+  }
+
+  .sanctuaryHeader {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 620px) {
+  .threshold,
+  .selection,
+  .sanctuary {
+    width:
+      min(100% - 28px, 1180px);
+  }
+
+  .selection,
+  .sanctuary {
+    padding-top: 32px;
+  }
+
+  .presenceCard,
+  .editor,
+  .guardianStage {
+    padding: 26px;
+  }
+
+  .editor input {
+    font-size: 1.5rem;
+  }
+}
+
+.guardianCanvas {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 430px);
+  height: 460px;
+  margin: -20px auto 0;
+  overflow: hidden;
+  border-radius: 50% 50% 24% 24%;
+  mask-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 12%,
+      black 84%,
+      transparent 100%
+    );
+}
+
+.guardianCanvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: default;
+}
+
+@media (max-width: 900px) {
+  .guardianCanvas {
+    height: 410px;
+  }
+}
+
+@media (max-width: 620px) {
+  .guardianCanvas {
+    width: 100%;
+    height: 360px;
+  }
+}
+
+
+/* =========================================================
+   PRESENCIAS TUTELARES — CÁMARA MONUMENTAL V2
+   ========================================================= */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: #f2ead9;
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(176, 137, 72, 0.16),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 12% 48%,
+      rgba(76, 63, 112, 0.09),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 88% 60%,
+      rgba(128, 91, 48, 0.07),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #060606 0%,
+      #030304 52%,
+      #050506 100%
+    );
+  isolation: isolate;
+}
+
+.page::before {
+  position: fixed;
+  z-index: -2;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0.4;
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px
+    );
+  background-size:
+    88px 88px;
+  mask-image:
+    radial-gradient(
+      circle at center,
+      black,
+      transparent 78%
+    );
+}
+
+.page::after {
+  position: fixed;
+  z-index: -1;
+  width: 52vw;
+  height: 52vw;
+  min-width: 620px;
+  min-height: 620px;
+  top: -34vw;
+  left: 50%;
+  content: "";
+  pointer-events: none;
+  border: 1px solid
+    rgba(212, 180, 116, 0.08);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    0 0 0 70px
+      rgba(212, 180, 116, 0.018),
+    0 0 0 145px
+      rgba(212, 180, 116, 0.012),
+    0 0 180px
+      rgba(169, 122, 51, 0.09);
+}
+
+.threshold,
+.selection,
+.sanctuary {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- UMBRAL ---------- */
+
+.threshold {
+  min-height: 100svh;
+  padding:
+    clamp(90px, 12vh, 150px)
+    0
+    clamp(70px, 10vh, 120px);
+}
+
+.threshold::before {
+  width: min(520px, 70vw);
+  height: 1px;
+  margin-bottom: 38px;
+  content: "";
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(210, 176, 108, 0.58),
+      transparent
+    );
+}
+
+.threshold::after {
+  position: absolute;
+  width: min(720px, 80vw);
+  height: min(720px, 80vw);
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  content: "";
+  border: 1px solid
+    rgba(215, 183, 119, 0.055);
+  border-radius: 50%;
+  transform:
+    translate(-50%, -53%);
+  box-shadow:
+    inset 0 0 120px
+      rgba(197, 150, 70, 0.025),
+    0 0 160px
+      rgba(126, 89, 42, 0.04);
+}
+
+.eyebrow {
+  color: #c5a867;
+  font-size: 0.67rem;
+  letter-spacing: 0.42em;
+  text-shadow:
+    0 0 24px
+    rgba(197, 168, 103, 0.28);
+}
+
+.threshold h1 {
+  max-width: 1100px;
+  font-size:
+    clamp(4rem, 9.2vw, 9rem);
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+  text-wrap: balance;
+  text-shadow:
+    0 18px 70px
+    rgba(0, 0, 0, 0.85);
+}
+
+.subtitle {
+  position: relative;
+  margin:
+    34px 0
+    68px;
+  color: #b8a98e;
+  font-size:
+    clamp(0.92rem, 1.3vw, 1.15rem);
+  letter-spacing: 0.04em;
+}
+
+.subtitle::after {
+  display: block;
+  width: 46px;
+  height: 1px;
+  margin: 28px auto 0;
+  content: "";
+  background:
+    rgba(205, 170, 102, 0.48);
+}
+
+.threshold blockquote {
+  position: relative;
+  max-width: 700px;
+  margin-bottom: 56px;
+  padding:
+    0
+    clamp(20px, 5vw, 70px);
+  color: #eee3cd;
+  font-size:
+    clamp(1.45rem, 2.7vw, 2.45rem);
+  line-height: 1.42;
+  text-shadow:
+    0 12px 44px
+    rgba(0, 0, 0, 0.8);
+}
+
+.threshold blockquote::before,
+.threshold blockquote::after {
+  position: absolute;
+  top: 50%;
+  width: 42px;
+  height: 1px;
+  content: "";
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(199, 166, 101, 0.44)
+    );
+}
+
+.threshold blockquote::before {
+  left: -12px;
+}
+
+.threshold blockquote::after {
+  right: -12px;
+  transform: rotate(180deg);
+}
+
+.primaryButton {
+  position: relative;
+  min-width: 210px;
+  padding: 18px 34px;
+  overflow: hidden;
+  border-color:
+    rgba(219, 187, 122, 0.5);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(218, 182, 112, 0.1),
+      rgba(255, 255, 255, 0.018)
+    );
+  box-shadow:
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.09),
+    0 20px 65px
+      rgba(0, 0, 0, 0.42);
+  transition:
+    transform 350ms ease,
+    border-color 350ms ease,
+    background 350ms ease,
+    box-shadow 350ms ease;
+}
+
+.primaryButton::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(
+      110deg,
+      transparent 28%,
+      rgba(255, 235, 190, 0.18) 48%,
+      transparent 68%
+    );
+  transform: translateX(-140%);
+  transition:
+    transform 800ms ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px);
+  border-color:
+    rgba(238, 210, 150, 0.82);
+  background:
+    rgba(213, 177, 107, 0.13);
+  box-shadow:
+    0 24px 80px
+      rgba(150, 101, 35, 0.16);
+}
+
+.primaryButton:hover::before {
+  transform: translateX(140%);
+}
+
+.privacy {
+  margin-top: 28px;
+  color: #70685b;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- SELECCIÓN ---------- */
+
+.selection {
+  padding:
+    52px 0
+    140px;
+}
+
+.selection::before {
+  position: absolute;
+  width: min(900px, 90vw);
+  height: 520px;
+  top: 170px;
+  left: 50%;
+  z-index: -1;
+  content: "";
+  transform: translateX(-50%);
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(166, 121, 55, 0.09),
+      transparent 68%
+    );
+  filter: blur(14px);
+}
+
+.backButton {
+  border-color:
+    rgba(212, 184, 129, 0.26);
+  color: #cfc0a1;
+  background:
+    rgba(255, 255, 255, 0.018);
+  transition:
+    border-color 250ms ease,
+    color 250ms ease,
+    background 250ms ease;
+}
+
+.backButton:hover {
+  color: #fff3d9;
+  border-color:
+    rgba(223, 190, 124, 0.55);
+  background:
+    rgba(215, 180, 111, 0.07);
+}
+
+.selection > h1 {
+  max-width: 900px;
+  margin:
+    0 0
+    70px;
+  font-size:
+    clamp(3.3rem, 6.8vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.presenceGrid {
+  gap: 26px;
+  perspective: 1200px;
+}
+
+.presenceCard {
+  position: relative;
+  min-height: 590px;
+  padding: 18px 18px 34px;
+  overflow: hidden;
+  border-color:
+    rgba(228, 210, 174, 0.11);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0.01)
+    );
+  box-shadow:
+    0 30px 90px
+      rgba(0, 0, 0, 0.22);
+  transition:
+    transform 500ms
+      cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 400ms ease,
+    background 400ms ease,
+    box-shadow 400ms ease;
+}
+
+.presenceCard::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(225, 196, 135, 0.12),
+      transparent 36%,
+      transparent 64%,
+      rgba(128, 105, 170, 0.06)
+    );
+  transition:
+    opacity 400ms ease;
+}
+
+.presenceCard::after {
+  position: absolute;
+  width: 120px;
+  height: 1px;
+  right: 22px;
+  bottom: 22px;
+  content: "";
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(209, 177, 113, 0.34)
+    );
+}
+
+.presenceCard:hover,
+.selectedCard {
+  transform:
+    translateY(-10px)
+    rotateX(1.2deg);
+  border-color:
+    rgba(218, 190, 132, 0.62);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(205, 168, 100, 0.09),
+      rgba(255, 255, 255, 0.018)
+    );
+  box-shadow:
+    0 44px 110px
+      rgba(0, 0, 0, 0.5),
+    0 0 70px
+      rgba(166, 120, 49, 0.07);
+}
+
+.presenceCard:hover::before,
+.selectedCard::before {
+  opacity: 1;
+}
+
+.presenceCard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sculpture {
+  height: 300px;
+  margin-bottom: 34px;
+  border:
+    1px solid
+    rgba(235, 218, 181, 0.07);
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(209, 180, 121, 0.24),
+      rgba(69, 56, 42, 0.08) 42%,
+      transparent 72%
+    );
+}
+
+.sculpture::before {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  content: "";
+  border:
+    1px solid
+    rgba(224, 198, 145, 0.12);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 34px
+      rgba(224, 198, 145, 0.018),
+    0 0 70px
+      rgba(210, 172, 98, 0.1);
+}
+
+.sculpture::after {
+  position: absolute;
+  width: 70%;
+  height: 1px;
+  bottom: 24px;
+  content: "";
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(215, 184, 121, 0.38),
+      transparent
+    );
+}
+
+.sculpture span {
+  position: relative;
+  z-index: 1;
+  transform:
+    translateY(6px);
+  transition:
+    transform 500ms ease,
+    filter 500ms ease;
+}
+
+.presenceCard:hover
+.sculpture span,
+.selectedCard
+.sculpture span {
+  transform:
+    translateY(-2px)
+    scale(1.045);
+  filter:
+    brightness(1.1);
+}
+
+.presenceCard small {
+  display: block;
+  padding:
+    0 12px;
+  color: #ae9870;
+  font-size: 0.67rem;
+  letter-spacing: 0.18em;
+}
+
+.presenceCard h2 {
+  padding:
+    0 12px;
+  margin:
+    13px 0
+    20px;
+  font-size:
+    clamp(1.7rem, 2.2vw, 2.25rem);
+  line-height: 1.1;
+}
+
+.presenceCard p {
+  padding:
+    0 12px;
+  color: #b9ad99;
+  font-size: 0.94rem;
+}
+
+.symbols {
+  padding:
+    0 12px;
+  margin-top: 28px;
+}
+
+.symbols span {
+  border-color:
+    rgba(218, 195, 151, 0.13);
+  color: #988970;
+  background:
+    rgba(255, 255, 255, 0.014);
+}
+
+/* ---------- MODOS ---------- */
+
+.modeSection {
+  position: relative;
+  margin:
+    110px 0
+    46px;
+  padding-top: 54px;
+  border-top:
+    1px solid
+    rgba(218, 190, 135, 0.12);
+}
+
+.modeSection::before {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  top: -5px;
+  left: 50%;
+  content: "";
+  border:
+    1px solid
+    rgba(218, 190, 135, 0.5);
+  transform:
+    translateX(-50%)
+    rotate(45deg);
+  background: #080808;
+}
+
+.modeSection h2 {
+  margin-bottom: 34px;
+  font-size:
+    clamp(1.6rem, 2.4vw, 2.4rem);
+}
+
+.modeGrid {
+  gap: 18px;
+}
+
+.modeCard {
+  position: relative;
+  min-height: 150px;
+  padding: 30px;
+  overflow: hidden;
+  border-color:
+    rgba(229, 211, 176, 0.1);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.025),
+      rgba(255, 255, 255, 0.008)
+    );
+  transition:
+    transform 300ms ease,
+    border-color 300ms ease,
+    background 300ms ease;
+}
+
+.modeCard::before {
+  display: block;
+  width: 22px;
+  height: 1px;
+  margin-bottom: 22px;
+  content: "";
+  background:
+    rgba(214, 180, 112, 0.58);
+}
+
+.modeCard:hover {
+  transform: translateY(-4px);
+  border-color:
+    rgba(215, 184, 122, 0.4);
+}
+
+.selectedMode {
+  border-color:
+    rgba(224, 193, 130, 0.68);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(205, 164, 84, 0.13),
+      rgba(255, 255, 255, 0.018)
+    );
+  box-shadow:
+    inset 0 0 50px
+      rgba(180, 129, 45, 0.045);
+}
+
+.modeCard strong {
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.modeCard span {
+  color: #a89d8b;
+  font-size: 0.91rem;
+}
+
+/* ---------- SANTUARIO ---------- */
+
+.sanctuary {
+  width:
+    min(1320px, calc(100% - 48px));
+}
+
+.sanctuaryHeader {
+  padding:
+    0 8px;
+  margin-bottom: 46px;
+}
+
+.sanctuaryHeader > div {
+  max-width: 850px;
+}
+
+.sanctuaryHeader h1 {
+  font-size:
+    clamp(3rem, 5.5vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.writingLayout {
+  min-height: 760px;
+  border-color:
+    rgba(228, 210, 174, 0.14);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(8, 9, 13, 0.92),
+      rgba(3, 3, 5, 0.83)
+    );
+  box-shadow:
+    0 44px 140px
+      rgba(0, 0, 0, 0.56),
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.035);
+}
+
+.guardianStage {
+  min-height: 760px;
+  background:
+    radial-gradient(
+      ellipse at 50% 42%,
+      rgba(135, 103, 62, 0.09),
+      transparent 52%
+    );
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 980px) {
+  .presenceGrid,
+  .modeGrid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .presenceCard {
+    min-height: auto;
+  }
+
+  .writingLayout {
+    grid-template-columns:
+      1fr;
+  }
+
+  .guardianStage {
+    min-height: 620px;
+    border-right: 0;
+    border-bottom:
+      1px solid
+      rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (max-width: 640px) {
+  .threshold,
+  .selection,
+  .sanctuary {
+    width:
+      min(100% - 28px, 1180px);
+  }
+
+  .threshold h1 {
+    font-size:
+      clamp(3.3rem, 17vw, 5.4rem);
+  }
+
+  .threshold blockquote::before,
+  .threshold blockquote::after {
+    display: none;
+  }
+
+  .selection {
+    padding-top: 30px;
+  }
+
+  .selection > h1 {
+    margin-bottom: 46px;
+  }
+
+  .sculpture {
+    height: 260px;
+  }
+
+  .sanctuaryHeader {
+    flex-direction: column;
+  }
+}
+
+
+
+/* =========================================================
+   PRESENCIAS TUTELARES — COMPOSICIÓN MAGISTRAL V4
+   ========================================================= */
+
+/* ---------- UMBRAL EDITORIAL ---------- */
+
+.threshold {
+  grid-template-rows:
+    auto auto auto auto;
+  align-content: center;
+  min-height: 100svh;
+  padding:
+    clamp(72px, 9vh, 118px)
+    0
+    clamp(56px, 8vh, 96px);
+}
+
+.thresholdArchitecture {
+  position: absolute;
+  inset: clamp(28px, 4vw, 66px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.thresholdArchitecture::before,
+.thresholdArchitecture::after {
+  position: absolute;
+  top: 50%;
+  width: 21%;
+  height: 58%;
+  content: "";
+  transform: translateY(-50%);
+  border-top:
+    1px solid
+    rgba(211, 176, 107, 0.09);
+  border-bottom:
+    1px solid
+    rgba(211, 176, 107, 0.09);
+}
+
+.thresholdArchitecture::before {
+  left: 0;
+  border-left:
+    1px solid
+    rgba(211, 176, 107, 0.09);
+  clip-path:
+    polygon(
+      0 0,
+      100% 14%,
+      100% 86%,
+      0 100%
+    );
+}
+
+.thresholdArchitecture::after {
+  right: 0;
+  border-right:
+    1px solid
+    rgba(211, 176, 107, 0.09);
+  clip-path:
+    polygon(
+      0 14%,
+      100% 0,
+      100% 100%,
+      0 86%
+    );
+}
+
+.thresholdArchitecture span {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  border:
+    1px solid
+    rgba(210, 175, 106, 0.07);
+  border-radius: 50%;
+  transform:
+    translate(-50%, -50%);
+}
+
+.thresholdArchitecture span:nth-child(1) {
+  width: min(680px, 65vw);
+  height: min(680px, 65vw);
+}
+
+.thresholdArchitecture span:nth-child(2) {
+  width: min(530px, 51vw);
+  height: min(530px, 51vw);
+}
+
+.thresholdArchitecture span:nth-child(3) {
+  width: min(370px, 37vw);
+  height: min(370px, 37vw);
+  border-style: dashed;
+}
+
+.thresholdMeta {
+  position: absolute;
+  display: flex;
+  top: clamp(30px, 5vh, 64px);
+  left: 0;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  color: #706652;
+  font-size: 0.61rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.thresholdMeta span:not(:last-child)::after {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  margin-left: 24px;
+  vertical-align: middle;
+  content: "";
+  border-radius: 50%;
+  background:
+    rgba(196, 160, 90, 0.55);
+}
+
+.thresholdTitleBlock {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.thresholdTitleBlock::before {
+  position: absolute;
+  width: min(710px, 74vw);
+  height: min(430px, 45vw);
+  top: 48%;
+  left: 50%;
+  z-index: -1;
+  content: "";
+  border-radius: 50%;
+  transform:
+    translate(-50%, -50%);
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(161, 116, 48, 0.095),
+      transparent 66%
+    );
+  filter: blur(8px);
+}
+
+.threshold h1 {
+  display: grid;
+  max-width: none;
+  line-height: 0.78;
+}
+
+.threshold h1 span {
+  display: block;
+}
+
+.threshold h1 span:first-child {
+  transform: translateX(-0.11em);
+}
+
+.threshold h1 span:last-child {
+  transform: translateX(0.11em);
+  color: #e9dcc4;
+}
+
+.thresholdInvocation {
+  display: grid;
+  grid-template-columns:
+    34px minmax(0, 720px) 34px;
+  align-items: center;
+  gap: 22px;
+  margin: 2px 0 48px;
+}
+
+.thresholdInvocation blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+.invocationMark {
+  display: grid;
+  color: rgba(199, 165, 97, 0.58);
+  font-size: 0.82rem;
+  place-items: center;
+}
+
+.invocationMark::before,
+.invocationMark::after {
+  display: block;
+  width: 1px;
+  height: 30px;
+  margin: 10px auto;
+  content: "";
+  background:
+    linear-gradient(
+      transparent,
+      rgba(202, 166, 97, 0.36),
+      transparent
+    );
+}
+
+.thresholdEntrance {
+  display: grid;
+  justify-items: center;
+}
+
+.thresholdCoordinates {
+  position: absolute;
+  display: flex;
+  left: 0;
+  right: 0;
+  bottom: clamp(22px, 4vh, 48px);
+  align-items: center;
+  justify-content: space-between;
+  color: #514b40;
+  font-size: 0.56rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ---------- CABECERA DE CONSTELACIÓN ---------- */
+
+.selectionHeader {
+  margin-bottom: 62px;
+}
+
+.selectionTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 78px;
+}
+
+.selectionTopline .backButton {
+  margin: 0;
+}
+
+.selectionRegistry {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #716754;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.selectionRegistry span:not(:last-child)::after {
+  display: inline-block;
+  width: 2px;
+  height: 2px;
+  margin-left: 18px;
+  vertical-align: middle;
+  content: "";
+  border-radius: 50%;
+  background:
+    rgba(201, 169, 106, 0.55);
+}
+
+.selectionHeading {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.25fr)
+    minmax(280px, 0.55fr);
+  align-items: end;
+  gap: 70px;
+}
+
+.selectionHeading h1 {
+  max-width: 9ch;
+  margin: 0;
+}
+
+.selectionLead {
+  max-width: 430px;
+  margin: 0 0 12px;
+  color: #a89d8a;
+  font-family: Georgia, serif;
+  font-size:
+    clamp(1.05rem, 1.45vw, 1.3rem);
+  line-height: 1.75;
+}
+
+.constellationRule {
+  display: grid;
+  grid-template-columns:
+    1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+  margin-top: 58px;
+  color: rgba(205, 169, 98, 0.6);
+  font-size: 0.68rem;
+}
+
+.constellationRule span:first-child,
+.constellationRule span:last-child {
+  height: 1px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(206, 173, 107, 0.3)
+    );
+}
+
+.constellationRule span:last-child {
+  transform: rotate(180deg);
+}
+
+/* ---------- ALTARES NUMERADOS ---------- */
+
+.presenceCard {
+  counter-increment: tutelary-card;
+}
+
+.presenceGrid {
+  counter-reset: tutelary-card;
+}
+
+.presenceCard::after {
+  width: auto;
+  height: auto;
+  right: 25px;
+  bottom: 22px;
+  content:
+    "0" counter(tutelary-card);
+  color: rgba(198, 164, 96, 0.27);
+  font-family: Georgia, serif;
+  font-size: 2.6rem;
+  line-height: 1;
+  background: none;
+}
+
+.presenceCard:nth-child(1)
+.sculpture {
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(107, 124, 164, 0.2),
+      rgba(35, 43, 64, 0.07) 44%,
+      transparent 72%
+    );
+}
+
+.presenceCard:nth-child(2)
+.sculpture {
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(132, 91, 154, 0.22),
+      rgba(54, 37, 70, 0.08) 44%,
+      transparent 72%
+    );
+}
+
+.presenceCard:nth-child(3)
+.sculpture {
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(205, 153, 72, 0.22),
+      rgba(80, 56, 27, 0.08) 44%,
+      transparent 72%
+    );
+}
+
+/* ---------- DOCK DE ACTIVACIÓN ---------- */
+
+.activationDock {
+  display: flex;
+  min-height: 126px;
+  margin-top: 46px;
+  padding: 24px 28px 24px 34px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  border:
+    1px solid
+    rgba(220, 195, 146, 0.14);
+  border-radius: 26px;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(219, 183, 111, 0.08),
+      rgba(255, 255, 255, 0.014)
+    );
+  box-shadow:
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.035),
+    0 28px 85px
+      rgba(0, 0, 0, 0.25);
+}
+
+.activationDock > div {
+  display: grid;
+  grid-template-columns:
+    auto auto;
+  align-items: baseline;
+  column-gap: 14px;
+  row-gap: 6px;
+}
+
+.activationLabel {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #8d806b;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.activationDock strong {
+  color: #ede1cb;
+  font-family: Georgia, serif;
+  font-size:
+    clamp(1.4rem, 2vw, 2rem);
+  font-weight: 400;
+}
+
+.activationDock > div > span {
+  color: #aa9470;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---------- MOVIMIENTO SUTIL ---------- */
+
+@keyframes tutelaryPulse {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform:
+      translate(-50%, -50%)
+      scale(0.985);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform:
+      translate(-50%, -50%)
+      scale(1.015);
+  }
+}
+
+.thresholdTitleBlock::before {
+  animation:
+    tutelaryPulse 8s ease-in-out
+    infinite;
+}
+
+/* ---------- ADAPTACIÓN ---------- */
+
+@media (max-width: 900px) {
+  .thresholdMeta,
+  .thresholdCoordinates,
+  .selectionRegistry {
+    display: none;
+  }
+
+  .selectionTopline {
+    margin-bottom: 54px;
+  }
+
+  .selectionHeading {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .selectionLead {
+    max-width: 620px;
+  }
+
+  .activationDock {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .activationDock
+  .primaryButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .thresholdInvocation {
+    grid-template-columns: 1fr;
+  }
+
+  .invocationMark {
+    display: none;
+  }
+
+  .threshold h1 span:first-child,
+  .threshold h1 span:last-child {
+    transform: none;
+  }
+
+  .selectionHeader {
+    margin-bottom: 42px;
+  }
+
+  .activationDock {
+    padding: 24px;
+  }
+
+  .activationDock > div {
+    grid-template-columns: 1fr;
+  }
+}
