@@ -196,13 +196,11 @@ function buildSpherePoints(total: number): Point3D[] {
 function VoiceSphere({
   voices,
   selectedId,
-  playingId,
   onSelect,
   energyRef,
 }: {
   voices: Voice[];
   selectedId: string | null;
-  playingId: string | null;
   onSelect: (id: string) => void;
   energyRef: React.MutableRefObject<number>;
 }) {
@@ -431,63 +429,17 @@ function VoiceSphere({
         const px = cx + point.x * sphereRadius * perspective;
         const py = cy + point.y * sphereRadius * perspective;
         const isSelected = voice.id === selectedId;
-        const isPlaying = voice.id === playingId;
+        const glow = 5.5 + ((Math.sin(time * 0.003 + index) + 1) / 2) * 4 + energy * 9;
+        const opacity = 0.32 + ((point.z + 1) / 2) * 0.68;
 
-        const vocalPulse =
-          isPlaying
-            ? 0.72 + energy * 2.8 +
-              Math.max(0, Math.sin(time * 0.0065)) * 0.38
-            : 0;
-
-        const glow =
-          5.5 +
-          ((Math.sin(time * 0.003 + index) + 1) / 2) * 4 +
-          energy * 9 +
-          vocalPulse * 18;
-
-        const opacity =
-          0.32 +
-          ((point.z + 1) / 2) * 0.68;
-
-        context.shadowColor = isPlaying
-          ? "rgba(255,248,220,1)"
-          : isSelected
-            ? "rgba(255,245,208,.98)"
-            : "rgba(224,174,90,.88)";
-
-        context.shadowBlur =
-          glow + energy * 18;
-
-        context.fillStyle = isPlaying
-          ? "#fff9e8"
-          : isSelected
-            ? "#fff6dc"
-            : `rgba(239,193,110,${opacity})`;
-
+        context.shadowColor = isSelected ? "rgba(255,245,208,.98)" : "rgba(224,174,90,.88)";
+        context.shadowBlur = glow + energy * 18;
+        context.fillStyle = isSelected ? "#fff6dc" : `rgba(239,193,110,${opacity})`;
         context.beginPath();
-
-        context.arc(
-          px,
-          py,
-          isPlaying
-            ? 5.8 + energy * 5.5
-            : isSelected
-              ? 5.2
-              : 3.2,
-          0,
-          Math.PI * 2,
-        );
-
+        context.arc(px, py, isSelected ? 5.2 : 3.2, 0, Math.PI * 2);
         context.fill();
         context.shadowBlur = 0;
-
-        projectedVoices.push({
-          id: voice.id,
-          x: px,
-          y: py,
-          radius: isPlaying ? 20 : isSelected ? 14 : 11,
-          depth: point.z,
-        });
+        projectedVoices.push({ id: voice.id, x: px, y: py, radius: isSelected ? 14 : 11, depth: point.z });
       });
       projectedVoicesRef.current = projectedVoices.sort((a, b) => b.depth - a.depth);
 
@@ -518,103 +470,18 @@ function VoiceSphere({
         context.restore();
       }
 
-      const activeVoice =
-        projectedVoices.find((voice) => voice.id === playingId) ??
-        projectedVoices.find((voice) => voice.id === selectedId);
-
-      if (activeVoice) {
-        const isSpeaking =
-          playingId === activeVoice.id;
-
+      const selectedVoice = projectedVoices.find((voice) => voice.id === selectedId);
+      if (selectedVoice) {
         context.save();
         context.globalCompositeOperation = "screen";
-
-        const echoCount =
-          isSpeaking ? 5 : 3;
-
-        for (let echo = 0; echo < echoCount; echo += 1) {
-          const phase =
-            (time * (isSpeaking ? 0.0007 : 0.00045) +
-              echo / echoCount) %
-            1;
-
-          const radius =
-            10 +
-            phase *
-              (
-                isSpeaking
-                  ? 48 + energy * 78
-                  : 34 + energy * 42
-              );
-
+        for (let echo = 0; echo < 3; echo += 1) {
+          const phase = (time * 0.00045 + echo / 3) % 1;
           context.beginPath();
-
-          context.arc(
-            activeVoice.x,
-            activeVoice.y,
-            radius,
-            0,
-            Math.PI * 2,
-          );
-
-          context.strokeStyle =
-            `rgba(255,224,163,${
-              (1 - phase) *
-              (
-                isSpeaking
-                  ? 0.34 + energy * 0.58
-                  : 0.18 + energy * 0.24
-              )
-            })`;
-
-          context.lineWidth =
-            isSpeaking
-              ? 0.9 + energy * 1.8
-              : 0.7;
-
+          context.arc(selectedVoice.x, selectedVoice.y, 10 + phase * (34 + energy * 42), 0, Math.PI * 2);
+          context.strokeStyle = `rgba(255,224,163,${(1 - phase) * (0.26 + energy * 0.38)})`;
+          context.lineWidth = 0.7;
           context.stroke();
         }
-
-        if (isSpeaking) {
-          const nucleus =
-            context.createRadialGradient(
-              activeVoice.x,
-              activeVoice.y,
-              0,
-              activeVoice.x,
-              activeVoice.y,
-              32 + energy * 55,
-            );
-
-          nucleus.addColorStop(
-            0,
-            `rgba(255,252,235,${0.65 + energy * 0.3})`,
-          );
-
-          nucleus.addColorStop(
-            0.18,
-            `rgba(255,215,132,${0.30 + energy * 0.32})`,
-          );
-
-          nucleus.addColorStop(
-            1,
-            "rgba(226,145,35,0)",
-          );
-
-          context.fillStyle = nucleus;
-          context.beginPath();
-
-          context.arc(
-            activeVoice.x,
-            activeVoice.y,
-            32 + energy * 55,
-            0,
-            Math.PI * 2,
-          );
-
-          context.fill();
-        }
-
         context.restore();
       }
 
@@ -638,7 +505,7 @@ function VoiceSphere({
       cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, [energyRef, onSelect, playingId, points, selectedId, voices]);
+  }, [energyRef, onSelect, points, selectedId, voices]);
 
   const onPointerDown = (event: ReactPointerEvent<HTMLCanvasElement>) => {
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -1136,13 +1003,7 @@ export default function CoroExperience() {
       </section>
 
       <div className="sphere-stage">
-        <VoiceSphere
-          voices={voices}
-          selectedId={selected?.id ?? null}
-          playingId={playingId}
-          onSelect={selectVoice}
-          energyRef={energyRef}
-        />
+        <VoiceSphere voices={voices} selectedId={selected?.id ?? null} onSelect={selectVoice} energyRef={energyRef} />
         <div className="sphere-shadow" aria-hidden="true" />
         <div className="drag-hint" aria-hidden="true"><span>↔</span> ARRASTRA PARA GIRAR</div>
       </div>
