@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "createdAt": "2026-08-10T22:05:21.029Z",
+  "targetDirectory": "/Users/josebalonaveiro/poema-universal",
+  "files": [
+    {
+      "path": "app/poema-universal/gran-avatar/GranAvatarExperience.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/avatarConfig.ts",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/AvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/LiveAvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/OrganismAvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/PoeticOrganism.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/gran-avatar.module.css",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/lib/avatarVoiceSignal.ts",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/types.ts",
+      "existed": true
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/organism-portrait.webp",
+      "existed": true
+    }
+  ]
+}

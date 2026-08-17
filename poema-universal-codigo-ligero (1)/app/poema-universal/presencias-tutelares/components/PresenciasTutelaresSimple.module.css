@@ -1,0 +1,797 @@
+.page {
+  --ink: #292620;
+  --muted: #777064;
+  --light-muted: #9e978b;
+  --paper: #f4efe5;
+  --paper-light: #faf7f0;
+  --line: rgba(64, 56, 46, 0.14);
+
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(255, 255, 255, 0.95),
+      transparent 34rem
+    ),
+    var(--paper);
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: grid;
+  grid-template-columns:
+    1fr auto 1fr;
+  align-items: center;
+  min-height: 4.7rem;
+  padding: 0 3rem;
+  border-bottom: 1px solid var(--line);
+  background:
+    rgba(244, 239, 229, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  color: var(--ink);
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  text-decoration: none;
+}
+
+.navigation {
+  display: flex;
+  gap: 2rem;
+  color: var(--muted);
+  font-size: 0.59rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.private {
+  justify-self: end;
+  margin: 0;
+  color: var(--light-muted);
+  font-size: 0.54rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.shell {
+  width: min(92vw, 88rem);
+  margin: 0 auto;
+  padding: 6rem 0 8rem;
+}
+
+.hero {
+  max-width: 56rem;
+  margin: 0 auto 5rem;
+  text-align: center;
+}
+
+.heroSymbol {
+  display: block;
+  margin-bottom: 1.4rem;
+  color: #96866d;
+}
+
+.eyebrow {
+  margin: 0 0 0.8rem;
+  color: #827765;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size:
+    clamp(3.3rem, 7vw, 6.7rem);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.06em;
+}
+
+.heroText {
+  max-width: 39rem;
+  margin: 1.8rem auto 0;
+  color: var(--muted);
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 1.3rem;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  min-height: 39rem;
+  grid-template-rows:
+    auto auto 1fr auto;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.4rem;
+  padding: 1.4rem;
+  color: var(--ink);
+  background: #f8f4eb;
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    0 1.2rem 3rem
+    rgba(53, 45, 34, 0.06);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.card:hover {
+  transform: translateY(-0.5rem);
+  box-shadow:
+    0 2rem 5rem
+    rgba(53, 45, 34, 0.13);
+}
+
+.selected {
+  border-color:
+    rgba(60, 51, 40, 0.46);
+}
+
+.card_camus {
+  background:
+    linear-gradient(
+      180deg,
+      #fbf6ea,
+      #e7dbc3
+    );
+}
+
+.card_borges {
+  background:
+    linear-gradient(
+      180deg,
+      #f2f1ed,
+      #d3d1cb
+    );
+}
+
+.card_pizarnik {
+  color: #eee6e8;
+  background:
+    linear-gradient(
+      180deg,
+      #59444f,
+      #281d23
+    );
+}
+
+.cardRegistry {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.53rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.56;
+}
+
+.cardHeading {
+  padding: 2.3rem 0 1.4rem;
+  text-align: center;
+}
+
+.cardHeading small {
+  font-size: 0.52rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.58;
+}
+
+.cardHeading h2 {
+  margin: 0.35rem 0 0;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size:
+    clamp(2.7rem, 4vw, 4.2rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+}
+
+.cardSymbol {
+  display: block;
+  margin: 0.8rem 0;
+  font-size: 1.1rem;
+  opacity: 0.64;
+}
+
+.cardHeading p {
+  max-width: 18rem;
+  margin: 0 auto;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  opacity: 0.72;
+}
+
+.artwork {
+  position: relative;
+  min-height: 15rem;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.art_camus {
+  background:
+    linear-gradient(
+      180deg,
+      #d5e0df,
+      #ede3cb 52%,
+      #bda681
+    );
+}
+
+.art_camus .orb {
+  position: absolute;
+  top: 2rem;
+  right: 2.7rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: #fff5cf;
+  box-shadow:
+    0 0 3rem
+    rgba(255, 246, 211, 0.95);
+}
+
+.art_camus .form {
+  position: absolute;
+  right: 0;
+  bottom: 4.3rem;
+  left: 0;
+  height: 4rem;
+  background:
+    rgba(105, 140, 151, 0.42);
+  clip-path:
+    polygon(
+      0 65%,
+      20% 44%,
+      38% 58%,
+      60% 37%,
+      78% 56%,
+      100% 35%,
+      100% 100%,
+      0 100%
+    );
+}
+
+.art_camus .trace {
+  position: absolute;
+  bottom: 1rem;
+  left: 2rem;
+  width: 8rem;
+  height: 4.5rem;
+  border-radius: 55% 45% 28% 22%;
+  background:
+    linear-gradient(
+      145deg,
+      #d3c4a5,
+      #8b7d65
+    );
+}
+
+.art_borges {
+  background:
+    linear-gradient(
+      180deg,
+      #e1e0dc,
+      #a5a39e
+    );
+}
+
+.art_borges .orb {
+  position: absolute;
+  top: 1.4rem;
+  left: 50%;
+  width: 48%;
+  height: 70%;
+  border:
+    0.8rem solid
+    rgba(65, 64, 61, 0.4);
+  border-bottom: 0;
+  border-radius:
+    50% 50% 0 0;
+  transform: translateX(-50%);
+}
+
+.art_borges .form {
+  position: absolute;
+  right: 9%;
+  bottom: -25%;
+  left: 9%;
+  aspect-ratio: 1;
+  border:
+    1px solid
+    rgba(52, 52, 49, 0.52);
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1.8rem
+    rgba(255, 255, 255, 0.12),
+    inset 0 0 0 3.6rem
+    rgba(44, 44, 42, 0.08);
+}
+
+.art_borges .trace {
+  position: absolute;
+  top: 3rem;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background:
+    rgba(52, 52, 49, 0.38);
+}
+
+.art_pizarnik {
+  background:
+    radial-gradient(
+      circle at 77% 22%,
+      rgba(242, 226, 231, 0.14),
+      transparent 5rem
+    ),
+    linear-gradient(
+      180deg,
+      #44313c,
+      #1d1419
+    );
+}
+
+.art_pizarnik .orb {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: #ddd0d2;
+  box-shadow:
+    -1rem 0 0
+    #44313c;
+}
+
+.art_pizarnik .form {
+  position: absolute;
+  bottom: 2rem;
+  left: 42%;
+  width: 1px;
+  height: 7rem;
+  background:
+    rgba(220, 205, 211, 0.7);
+  transform: rotate(6deg);
+}
+
+.art_pizarnik .trace {
+  position: absolute;
+  right: 1.3rem;
+  bottom: 1.2rem;
+  width: 8rem;
+  height: 3.7rem;
+  border-radius: 0.2rem;
+  background:
+    rgba(231, 216, 216, 0.65);
+  transform: rotate(-6deg);
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.2rem;
+  font-size: 0.54rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cardFooter span {
+  opacity: 0.55;
+}
+
+.cardFooter strong {
+  font-weight: 500;
+}
+
+.modes {
+  margin-top: 6rem;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size:
+    clamp(2rem, 4vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+
+.sectionHeading > p {
+  max-width: 20rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.mode {
+  display: grid;
+  gap: 0.65rem;
+  border: 0;
+  border-right: 1px solid var(--line);
+  padding: 1.5rem;
+  color: var(--ink);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mode:last-child {
+  border-right: 0;
+}
+
+.mode strong {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.mode span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.activeMode {
+  background:
+    rgba(255, 255, 255, 0.58);
+  box-shadow:
+    inset 0 -2px 0
+    #746956;
+}
+
+.workspace {
+  scroll-margin-top: 6rem;
+  margin-top: 6rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  background:
+    rgba(255, 253, 248, 0.82);
+  box-shadow:
+    0 2rem 5rem
+    rgba(54, 45, 34, 0.1);
+}
+
+.workspaceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 2.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.workspaceHeader h2 {
+  margin: 0;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.workspaceHeader h2 em {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.enterButton {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid
+    rgba(59, 52, 43, 0.26);
+  border-radius: 999px;
+  padding: 0.85rem 1.1rem;
+  color: var(--ink);
+  background: transparent;
+  font: inherit;
+  font-size: 0.58rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.enterButton:hover {
+  color: #fff;
+  background: var(--ink);
+}
+
+.workspaceLayout {
+  display: grid;
+  grid-template-columns:
+    minmax(17rem, 26rem)
+    minmax(30rem, 1fr);
+}
+
+.presencePanel {
+  border-right: 1px solid var(--line);
+}
+
+.scene {
+  height: 31rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.presencePanel blockquote {
+  margin: 0;
+  padding: 1.8rem;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.65;
+}
+
+.presencePanel > p {
+  margin: 0;
+  padding: 0 1.8rem 1.8rem;
+  color: var(--muted);
+  font-size: 0.67rem;
+  line-height: 1.5;
+}
+
+.editor {
+  display: flex;
+  min-height: 47rem;
+  flex-direction: column;
+}
+
+.editorModes {
+  display: flex;
+  gap: 0.4rem;
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.editorMode,
+.editorModeActive {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.58rem 0.8rem;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.54rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.editorModeActive {
+  border-color: var(--line);
+  color: var(--ink);
+  background:
+    rgba(255, 255, 255, 0.6);
+}
+
+.titleField,
+.writingField {
+  display: grid;
+}
+
+.titleField span,
+.writingField span {
+  padding:
+    1.3rem 2.2rem 0;
+  color: var(--light-muted);
+  font-size: 0.53rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.titleField input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 1rem 2.2rem 1.4rem;
+  color: var(--ink);
+  outline: none;
+  background: transparent;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 2.1rem;
+}
+
+.writingField {
+  flex: 1;
+}
+
+.writingField textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 28rem;
+  resize: vertical;
+  border: 0;
+  padding: 2rem 2.2rem;
+  color: var(--ink);
+  outline: none;
+  background: transparent;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 1.2rem;
+  line-height: 1.9;
+}
+
+.titleField input::placeholder,
+.writingField textarea::placeholder {
+  color: #aaa397;
+  font-style: italic;
+}
+
+.editorFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.1rem 1.8rem;
+  border-top: 1px solid var(--line);
+}
+
+.editorFooter div {
+  display: flex;
+  gap: 1.4rem;
+  color: var(--light-muted);
+  font-size: 0.59rem;
+}
+
+.editorFooter button {
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+@media (max-width: 980px) {
+  .cards,
+  .workspaceLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: 35rem;
+  }
+
+  .presencePanel {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .workspaceLayout {
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    grid-template-columns: 1fr auto;
+    padding: 0 1.2rem;
+  }
+
+  .navigation {
+    display: none;
+  }
+
+  .private {
+    font-size: 0.46rem;
+  }
+
+  .shell {
+    width: min(91vw, 88rem);
+    padding-top: 4rem;
+  }
+
+  .sectionHeading,
+  .workspaceHeader,
+  .editorFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mode {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mode:last-child {
+    border-bottom: 0;
+  }
+
+  .enterButton {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .titleField span,
+  .writingField span,
+  .titleField input,
+  .writingField textarea {
+    padding-right: 1.3rem;
+    padding-left: 1.3rem;
+  }
+
+  .editorModes {
+    overflow-x: auto;
+  }
+
+  .editorFooter div {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+}

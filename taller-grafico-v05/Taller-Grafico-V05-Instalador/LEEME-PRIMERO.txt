@@ -1,0 +1,17 @@
+TALLER GRÁFICO — NO DEJES QUE DESAPAREZCAMOS · V0.5
+
+1. Descomprime ESTE ZIP completo.
+2. Abre la carpeta “Taller-Grafico-V05-Instalador”.
+3. Haz doble clic en “INSTALAR.command”.
+
+Si macOS bloquea el doble clic:
+- abre Terminal,
+- escribe: bash 
+- arrastra INSTALAR.command a la Terminal,
+- pulsa Enter.
+
+El instalador crea:
+~/poema-universal/taller-grafico-v05
+
+No modifica la web principal de Poema Universal.
+Intenta abrir el Taller en localhost:3001; si ese puerto está ocupado, elige el siguiente libre.

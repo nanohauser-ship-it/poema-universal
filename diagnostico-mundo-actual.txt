@@ -1,0 +1,1491 @@
+===== WORLDGLOBE ACTUAL =====
+"use client";
+
+import dynamic from "next/dynamic";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import type { GlobeMethods } from "react-globe.gl";
+
+const Globe = dynamic(() => import("react-globe.gl"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full min-h-[520px] w-full items-center justify-center">
+      <div className="flex flex-col items-center gap-5 text-center">
+        <div className="h-10 w-10 animate-spin rounded-full border border-white/15 border-t-[#d5b46b]" />
+
+        <p className="text-[10px] uppercase tracking-[0.42em] text-white/45">
+          Construyendo el mundo
+        </p>
+      </div>
+    </div>
+  ),
+});
+
+const COUNTRY_DATA_URL =
+  "https://raw.githubusercontent.com/vasturiano/react-globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson";
+
+export type GlobePoet = {
+  id: string;
+  name: string;
+  city?: string;
+  profileUrl?: string;
+};
+
+export type GlobeCountry = {
+  code: string;
+  name: string;
+  poetCount: number | null;
+  members: GlobePoet[];
+  lat: number;
+  lng: number;
+};
+
+type WorldGlobeProps = {
+  participatingCountries?: GlobeCountry[];
+  occupiedTotal?: number;
+  reservedTotal?: number;
+  totalSlots?: number;
+};
+
+type CountryProperties = {
+  ADMIN?: string;
+  ISO_A2?: string;
+  ISO_A3?: string;
+};
+
+type CountryFeature = {
+  type: "Feature";
+  properties: CountryProperties;
+  geometry: {
+    type: string;
+    coordinates: unknown;
+  };
+};
+
+type CountriesGeoJson = {
+  type: "FeatureCollection";
+  features: CountryFeature[];
+};
+
+type GlobeSize = {
+  width: number;
+  height: number;
+};
+
+type OrbitControlsLike = {
+  autoRotate: boolean;
+  autoRotateSpeed: number;
+  enableDamping: boolean;
+  dampingFactor: number;
+  minDistance: number;
+  maxDistance: number;
+};
+
+const INITIAL_PARTICIPATING_COUNTRIES: GlobeCountry[] = [
+  {
+    code: "CL",
+    name: "Chile",
+    poetCount: null,
+    members: [],
+    lat: -33.4489,
+    lng: -70.6693,
+  },
+  {
+    code: "MX",
+    name: "México",
+    poetCount: null,
+    members: [],
+    lat: 19.4326,
+    lng: -99.1332,
+  },
+];
+
+function getCountryCode(country: CountryFeature): string {
+  return country.properties.ISO_A2?.toUpperCase() ?? "";
+}
+
+function getCountryName(country: CountryFeature): string {
+  return country.properties.ADMIN ?? "País";
+}
+
+function getPoetCountText(country: GlobeCountry): string {
+  if (country.poetCount === null) {
+    return "Participación en incorporación";
+  }
+
+  return `${country.poetCount} ${
+    country.poetCount === 1 ? "poeta" : "poetas"
+  }`;
+}
+
+export default function WorldGlobe({
+  participatingCountries = INITIAL_PARTICIPATING_COUNTRIES,
+  occupiedTotal = 4,
+  reservedTotal = 56,
+  totalSlots = 60,
+}: WorldGlobeProps) {
+  const globeRef = useRef<GlobeMethods | undefined>(undefined);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const [countries, setCountries] = useState<CountryFeature[]>([]);
+  const [selectedCountry, setSelectedCountry] =
+    useState<GlobeCountry | null>(null);
+
+  const [hoveredCountryCode, setHoveredCountryCode] =
+    useState<string | null>(null);
+
+  const [isLoadingCountries, setIsLoadingCountries] =
+    useState(true);
+
+  const [loadError, setLoadError] =
+    useState<string | null>(null);
+
+  const [globeSize, setGlobeSize] = useState<GlobeSize>({
+    width: 900,
+    height: 680,
+  });
+
+  const participantByCode = useMemo(() => {
+    return new Map(
+      participatingCountries.map((country) => [
+        country.code.toUpperCase(),
+        country,
+      ])
+    );
+  }, [participatingCountries]);
+
+  const visibleCountries = useMemo(() => {
+    return countries.filter(
+      (country) => getCountryCode(country) !== "AQ"
+    );
+  }, [countries]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadCountries() {
+      try {
+        setIsLoadingCountries(true);
+        setLoadError(null);
+
+        const response = await fetch(COUNTRY_DATA_URL, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `No se pudo cargar el mapa mundial: ${response.status}`
+          );
+        }
+
+        const data =
+          (await response.json()) as CountriesGeoJson;
+
+        if (!Array.isArray(data.features)) {
+          throw new Error(
+            "El archivo geográfico no contiene países."
+          );
+        }
+
+        setCountries(data.features);
+      } catch (error) {
+        if (
+          error instanceof DOMException &&
+          error.name === "AbortError"
+        ) {
+          return;
+        }
+
+        console.error(
+          "Error cargando la geometría mundial:",
+          error
+        );
+
+        setLoadError(
+          "No ha sido posible cargar la geometría de los países."
+        );
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsLoadingCountries(false);
+        }
+      }
+    }
+
+    loadCountries();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return;
+    }
+
+    function updateSize(width: number) {
+      const height =
+        width < 640
+          ? 520
+          : Math.min(
+              760,
+              Math.max(620, width * 0.64)
+            );
+
+      setGlobeSize({
+        width: Math.max(width, 280),
+        height,
+      });
+    }
+
+    updateSize(
+      container.getBoundingClientRect().width
+    );
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+
+      if (!entry) {
+        return;
+      }
+
+      updateSize(entry.contentRect.width);
+    });
+
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const configureGlobe = useCallback(() => {
+    const globe = globeRef.current;
+
+    if (!globe) {
+      return;
+    }
+
+    const controls =
+      globe.controls() as OrbitControlsLike;
+
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.32;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 125;
+    controls.maxDistance = 500;
+
+    globe.pointOfView(
+      {
+        lat: 12,
+        lng: -45,
+        altitude: 2.15,
+      },
+      1800
+    );
+  }, []);
+
+  const focusCountry = useCallback(
+    (country: GlobeCountry) => {
+      setSelectedCountry(country);
+
+      const globe = globeRef.current;
+
+      if (!globe) {
+        return;
+      }
+
+      const controls =
+        globe.controls() as OrbitControlsLike;
+
+      controls.autoRotate = false;
+
+      globe.pointOfView(
+        {
+          lat: country.lat,
+          lng: country.lng,
+          altitude: 1.55,
+        },
+        1200
+      );
+    },
+    []
+  );
+
+  const resumeWorldView = useCallback(() => {
+    setSelectedCountry(null);
+
+    const globe = globeRef.current;
+
+    if (!globe) {
+      return;
+    }
+
+    const controls =
+      globe.controls() as OrbitControlsLike;
+
+    controls.autoRotate = true;
+
+    globe.pointOfView(
+      {
+        lat: 12,
+        lng: -45,
+        altitude: 2.15,
+      },
+      1200
+    );
+  }, []);
+
+  const handlePolygonClick = useCallback(
+    (polygon: object) => {
+      const country = polygon as CountryFeature;
+      const countryCode = getCountryCode(country);
+      const participant =
+        participantByCode.get(countryCode);
+
+      if (!participant) {
+        return;
+      }
+
+      focusCountry(participant);
+    },
+    [focusCountry, participantByCode]
+  );
+
+  const handlePolygonHover = useCallback(
+    (polygon: object | null) => {
+      if (!polygon) {
+        setHoveredCountryCode(null);
+        return;
+      }
+
+      const country = polygon as CountryFeature;
+
+      setHoveredCountryCode(
+        getCountryCode(country)
+      );
+    },
+    []
+  );
+
+  const getPolygonCapColor = useCallback(
+    (polygon: object) => {
+      const country = polygon as CountryFeature;
+      const countryCode = getCountryCode(country);
+
+      const isParticipant =
+        participantByCode.has(countryCode);
+
+      const isSelected =
+        selectedCountry?.code.toUpperCase() ===
+        countryCode;
+
+      const isHovered =
+        hoveredCountryCode === countryCode;
+
+      if (isSelected) {
+        return "rgba(239, 205, 125, 0.98)";
+      }
+
+      if (isParticipant && isHovered) {
+        return "rgba(220, 181, 95, 0.95)";
+      }
+
+      if (isParticipant) {
+        return "rgba(175, 137, 69, 0.82)";
+      }
+
+      if (isHovered) {
+        return "rgba(255, 255, 255, 0.12)";
+      }
+
+      return "rgba(255, 255, 255, 0.035)";
+    },
+    [
+      hoveredCountryCode,
+      participantByCode,
+      selectedCountry,
+    ]
+  );
+
+  const getPolygonSideColor = useCallback(
+    (polygon: object) => {
+      const country = polygon as CountryFeature;
+
+      const isParticipant =
+        participantByCode.has(
+          getCountryCode(country)
+        );
+
+      return isParticipant
+        ? "rgba(125, 91, 39, 0.48)"
+        : "rgba(0, 0, 0, 0.1)";
+    },
+    [participantByCode]
+  );
+
+  const getPolygonStrokeColor = useCallback(
+    (polygon: object) => {
+      const country = polygon as CountryFeature;
+
+      const isParticipant =
+        participantByCode.has(
+          getCountryCode(country)
+        );
+
+      return isParticipant
+        ? "rgba(255, 231, 173, 0.7)"
+        : "rgba(255, 255, 255, 0.09)";
+    },
+    [participantByCode]
+  );
+
+  const getPolygonAltitude = useCallback(
+    (polygon: object) => {
+      const country = polygon as CountryFeature;
+      const countryCode = getCountryCode(country);
+
+      const isParticipant =
+        participantByCode.has(countryCode);
+
+      const isSelected =
+        selectedCountry?.code.toUpperCase() ===
+        countryCode;
+
+      if (isSelected) {
+        return 0.065;
+      }
+
+      if (isParticipant) {
+        return 0.035;
+      }
+
+      return 0.006;
+    },
+    [participantByCode, selectedCountry]
+  );
+
+  const getPolygonLabel = useCallback(
+    (polygon: object) => {
+      const country = polygon as CountryFeature;
+
+      const countryCode =
+        getCountryCode(country);
+
+      const countryName =
+        getCountryName(country);
+
+      const participant =
+        participantByCode.get(countryCode);
+
+      if (!participant) {
+        return `
+          <div style="
+            padding: 10px 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(4,8,11,0.94);
+            color: rgba(255,255,255,0.62);
+            font-family: Georgia, serif;
+            letter-spacing: 0.04em;
+          ">
+            ${countryName}
+          </div>
+        `;
+      }
+
+      return `
+        <div style="
+          min-width: 190px;
+          padding: 14px 16px;
+          border: 1px solid rgba(225,190,112,0.45);
+          background: rgba(4,8,11,0.96);
+          box-shadow: 0 18px 55px rgba(0,0,0,0.45);
+          color: white;
+          font-family: Georgia, serif;
+        ">
+          <div style="
+            margin-bottom: 7px;
+            color: rgba(225,190,112,0.92);
+            font-size: 10px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+          ">
+            País participante
+          </div>
+
+          <div style="
+            margin-bottom: 5px;
+            font-size: 20px;
+          ">
+            ${participant.name}
+          </div>
+
+          <div style="
+            color: rgba(255,255,255,0.58);
+            font-size: 12px;
+          ">
+            ${getPoetCountText(participant)}
+          </div>
+        </div>
+      `;
+    },
+    [participantByCode]
+  );
+
+  return (
+    <div
+      id="mundo"
+      className="relative mx-auto max-w-[1460px] px-5 pb-16 pt-8 sm:px-8 sm:pb-20 sm:pt-10 lg:px-12"
+    >
+      <div className="relative overflow-hidden border border-white/[0.14] bg-[#020609]/80 shadow-[0_50px_140px_rgba(0,0,0,0.55)]">
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_360px] lg:h-[720px]">
+            <div
+              ref={containerRef}
+              className="relative min-h-[640px] overflow-hidden lg:min-h-[710px] h-[560px] lg:h-[720px]"
+            >
+              {/* ATLAS VIVO · EDICIÓN FUNDACIONAL */}
+              <div className="pointer-events-none absolute left-7 top-7 z-10 hidden max-w-[520px] lg:block">
+                <div className="border-l border-[#d7b66f]/45 bg-gradient-to-r from-[#020609]/95 via-[#020609]/82 to-transparent px-8 py-7 backdrop-blur-[2px]">
+                  <p className="text-[9px] uppercase tracking-[0.42em] text-[#d7b66f]">
+                    Atlas vivo · edición fundacional
+                  </p>
+
+                  <h3 className="mt-7 max-w-lg font-serif text-[40px] leading-[1.02] tracking-[-0.04em] text-white">
+                    Aquí el mundo no se mide
+                    <span className="block italic text-white/60">
+                      por fronteras.
+                    </span>
+                  </h3>
+
+                  <p className="mt-5 max-w-md font-serif text-xl italic leading-8 text-white/65">
+                    Se mide por las voces que todavía arden.
+                  </p>
+
+                  <p className="mt-5 max-w-md text-xs leading-6 text-white/40">
+                    Cada luz señala un lugar de aparición.
+                    Ocho presencias reales y cincuenta
+                    identidades literarias forman una misma
+                    constelación.
+                  </p>
+
+                  <div className="mt-7 grid grid-cols-4 gap-px border-y border-white/10 bg-white/10">
+                    <div className="bg-[#03070a]/95 px-3 py-4">
+                      <span className="block font-serif text-2xl text-white">
+                        {occupiedTotal}
+                      </span>
+                      <span className="mt-1 block text-[7px] uppercase leading-4 tracking-[0.22em] text-white/30">
+                        Presencias
+                      </span>
+                    </div>
+
+                    <div className="bg-[#03070a]/95 px-3 py-4">
+                      <span className="block font-serif text-2xl text-white">
+                        {participatingCountries.length}
+                      </span>
+                      <span className="mt-1 block text-[7px] uppercase leading-4 tracking-[0.22em] text-white/30">
+                        Territorios
+                      </span>
+                    </div>
+
+                    <div className="bg-[#03070a]/95 px-3 py-4">
+                      <span className="block font-serif text-2xl text-white">
+                        38
+                      </span>
+                      <span className="mt-1 block text-[7px] uppercase leading-4 tracking-[0.22em] text-white/30">
+                        Lenguas
+                      </span>
+                    </div>
+
+                    <div className="bg-[#03070a]/95 px-3 py-4">
+                      <span className="block font-serif text-2xl text-[#d7b66f]">
+                        {reservedTotal}
+                      </span>
+                      <span className="mt-1 block text-[7px] uppercase leading-4 tracking-[0.22em] text-white/30">
+                        Plazas
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 border-t border-white/10 pt-5">
+                    {selectedCountry ? (
+                      <>
+                        <p className="text-[8px] uppercase tracking-[0.32em] text-white/28">
+                          Territorio convocado
+                        </p>
+
+                        <p className="mt-3 font-serif text-2xl text-white/88">
+                          {selectedCountry.name}
+                        </p>
+
+                        <p className="mt-2 text-[9px] uppercase tracking-[0.28em] text-[#d7b66f]">
+                          {getPoetCountText(selectedCountry)}
+                        </p>
+                      </>
+                    ) : (
+                      <p className="max-w-md font-serif text-base italic leading-7 text-white/48">
+                        Gira el mundo o elige un territorio
+                        del atlas. La cartografía responderá
+                        a cada presencia.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {isLoadingCountries && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#020609]/70 backdrop-blur-sm">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-9 w-9 animate-spin rounded-full border border-white/15 border-t-[#d7b66f]" />
+
+                    <span className="text-[9px] uppercase tracking-[0.38em] text-white/40">
+                      Trazando continentes
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {loadError && (
+                <div className="absolute inset-0 z-30 flex items-center justify-center p-8 text-center">
+                  <div className="max-w-md border border-red-300/20 bg-red-950/10 px-6 py-5">
+                    <p className="text-sm leading-7 text-red-100/70">
+                      {loadError}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {!loadError && (
+                <Globe
+                  ref={globeRef}
+                  width={globeSize.width}
+                  height={globeSize.height}
+                  backgroundColor="rgba(0,0,0,0)"
+                  globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-dark.jpg"
+                  bumpImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png"
+                  showAtmosphere
+                  atmosphereColor="#c9a45e"
+                  atmosphereAltitude={0.16}
+                  showGraticules={false}
+                  polygonsData={visibleCountries}
+                  polygonCapColor={getPolygonCapColor}
+                  polygonSideColor={getPolygonSideColor}
+                  polygonStrokeColor={
+                    getPolygonStrokeColor
+                  }
+                  polygonAltitude={
+                    getPolygonAltitude
+                  }
+                  polygonLabel={getPolygonLabel}
+                  polygonsTransitionDuration={420}
+                  onPolygonClick={
+                    handlePolygonClick
+                  }
+                  onPolygonHover={
+                    handlePolygonHover
+                  }
+                  pointsData={
+                    participatingCountries
+                  }
+                  pointLat="lat"
+                  pointLng="lng"
+                  pointAltitude={0.045}
+                  pointRadius={0.42}
+                  pointResolution={24}
+                  pointColor={() => "#f0ce7d"}
+                  pointLabel={(point: object) => {
+                    const country =
+                      point as GlobeCountry;
+
+                    return `${country.name} · ${getPoetCountText(
+                      country
+                    )}`;
+                  }}
+                  onPointClick={(point: object) => {
+                    focusCountry(
+                      point as GlobeCountry
+                    );
+                  }}
+                  ringsData={
+                    participatingCountries
+                  }
+                  ringLat="lat"
+                  ringLng="lng"
+                  ringColor={() => [
+                    "rgba(239,205,125,0.78)",
+                    "rgba(239,205,125,0)",
+                  ]}
+                  ringMaxRadius={3.5}
+                  ringPropagationSpeed={0.75}
+                  ringRepeatPeriod={1800}
+                  labelsData={
+                    participatingCountries
+                  }
+                  labelLat="lat"
+                  labelLng="lng"
+                  labelAltitude={0.07}
+                  labelText={(label: object) => {
+                    const country =
+                      label as GlobeCountry;
+
+                    if (
+                      country.poetCount === null
+                    ) {
+                      return country.name;
+                    }
+
+                    return `${country.name} · ${country.poetCount}`;
+                  }}
+                  labelColor={() =>
+                    "rgba(255,240,204,0.94)"
+                  }
+                  labelSize={1.05}
+                  labelDotRadius={0.22}
+                  labelResolution={3}
+                  onLabelClick={(label: object) => {
+                    focusCountry(
+                      label as GlobeCountry
+                    );
+                  }}
+                  onGlobeReady={configureGlobe}
+                />
+              )}
+
+              <div className="pointer-events-none absolute bottom-5 left-5 z-10 border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-md">
+                <p className="text-[8px] uppercase tracking-[0.3em] text-white/58">
+                  Arrastra para girar
+                </p>
+
+                <p className="mt-1 text-[8px] uppercase tracking-[0.3em] text-white/58">
+                  Usa la rueda para acercarte
+                </p>
+              </div>
+            </div>
+
+            <aside className="relative flex min-h-[360px] flex-col border-t border-white/10 bg-[#050a0e]/95 p-7 lg:border-l lg:border-t-0 lg:p-9 max-h-[720px] overflow-hidden">
+              <div className="mb-10 flex items-start justify-between gap-5">
+                <div>
+                  <p className="text-[9px] uppercase tracking-[0.36em] text-[#d7b66f]">
+                    Atlas de participantes
+                  </p>
+
+                  <p className="mt-3 text-xs leading-6 text-white/52">
+                    Selecciona un territorio
+                    iluminado.
+                  </p>
+                </div>
+
+                {selectedCountry && (
+                  <button
+                    type="button"
+                    onClick={resumeWorldView}
+                    className="border border-white/10 px-3 py-2 text-[8px] uppercase tracking-[0.25em] text-white/45 transition hover:border-[#d7b66f]/40 hover:text-[#d7b66f]"
+                    aria-label="Cerrar país seleccionado"
+                  >
+                    Cerrar
+                  </button>
+                )}
+              </div>
+
+              {selectedCountry ? (
+                <div className="flex flex-1 flex-col">
+                  <p className="font-serif text-4xl tracking-[-0.03em] text-white">
+                    {selectedCountry.name}
+                  </p>
+
+                  <p className="mt-3 text-[10px] uppercase tracking-[0.3em] text-[#d7b66f]">
+                    {getPoetCountText(
+                      selectedCountry
+                    )}
+                  </p>
+
+                  <div className="my-8 h-px bg-white/10" />
+
+                  <p className="mb-5 text-[9px] uppercase tracking-[0.3em] text-white/34">
+                    Integrantes
+                  </p>
+
+                  {selectedCountry.members.length >
+                  0 ? (
+                    <ul className="space-y-3">
+                      {selectedCountry.members.map(
+                        (member) => (
+                          <li
+                            key={member.id}
+                            className="border-b border-white/[0.08] pb-3"
+                          >
+                            <p className="font-serif text-lg text-white/82">
+                              {member.name}
+                            </p>
+
+                            {member.city && (
+                              <p className="mt-1 text-[9px] uppercase tracking-[0.25em] text-white/30">
+                                {member.city}
+                              </p>
+                            )}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  ) : (
+                    <div className="border border-white/10 bg-white/[0.025] px-5 py-5">
+                      <p className="text-xs leading-6 text-white/38">
+                        Los nombres aparecerán
+                        aquí cuando los perfiles
+                        hayan sido completados y
+                        autorizados para su
+                        publicación.
+                      </p>
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={resumeWorldView}
+                    className="mt-auto pt-10 text-left text-[9px] uppercase tracking-[0.3em] text-white/38 transition hover:text-[#d7b66f]"
+                  >
+                    Volver a la visión mundial →
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-1 flex-col">
+                  <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-2 [scrollbar-color:rgba(215,182,111,0.35)_transparent] [scrollbar-width:thin]">
+                    {participatingCountries.map(
+                      (country) => (
+                        <button
+                          key={country.code}
+                          type="button"
+                          onClick={() =>
+                            focusCountry(country)
+                          }
+                          className="group flex w-full items-center justify-between border-b border-white/[0.08] py-4 text-left"
+                        >
+                          <span className="font-serif text-xl text-white/88 transition group-hover:text-white">
+                            {country.name}
+                          </span>
+
+                          <span className="h-2 w-2 rounded-full bg-[#d7b66f] shadow-[0_0_18px_rgba(215,182,111,0.8)]" />
+                        </button>
+                      )
+                    )}
+                  </div>
+
+                  <div className="mt-auto border-t border-white/10 pt-7">
+                    <p className="text-xs leading-6 text-white/46">
+                      El mapa crecerá con cada
+                      nueva incorporación hasta
+                      reunir las sesenta voces de
+                      la edición fundacional.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </aside>
+          </div>
+        </div>
+
+    </div>
+  );
+}
+===== WORLDGLOBELIVE ACTUAL =====
+"use client";
+
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import WorldGlobe from "./WorldGlobe";
+import type { GlobeCountry } from "./WorldGlobe";
+
+type GlobeApiResponse = {
+  editionYear: number;
+  totalSlots: number;
+  occupiedTotal: number;
+  committedTotal: number;
+  confirmedTotal: number;
+  publishedTotal: number;
+  reservedTotal: number;
+  withdrawnTotal: number;
+  countries: GlobeCountry[];
+};
+
+const TOTAL_VOICES = 60;
+const INTEGRATED_VOICES = 58;
+
+/**
+ * Cartografía de la edición:
+ * 8 presencias reales + 50 identidades literarias.
+ *
+ * Los países repetidos comparten una misma luz y aumentan
+ * su intensidad mediante poetCount.
+ */
+const POEM_COUNTRIES: GlobeCountry[] = [
+  {
+    code: "JP",
+    name: "Japón",
+    poetCount: 2,
+    members: [],
+    lat: 35.0116,
+    lng: 135.7681,
+  },
+  {
+    code: "SN",
+    name: "Senegal",
+    poetCount: 2,
+    members: [],
+    lat: 16.0326,
+    lng: -16.4818,
+  },
+  {
+    code: "ES",
+    name: "España",
+    poetCount: 3,
+    members: [],
+    lat: 42.8782,
+    lng: -8.5448,
+  },
+  {
+    code: "MX",
+    name: "México",
+    poetCount: 2,
+    members: [],
+    lat: 19.0414,
+    lng: -98.2063,
+  },
+  {
+    code: "NO",
+    name: "Noruega",
+    poetCount: 1,
+    members: [],
+    lat: 69.6492,
+    lng: 18.9553,
+  },
+  {
+    code: "IN",
+    name: "India",
+    poetCount: 1,
+    members: [],
+    lat: 22.3072,
+    lng: 73.1812,
+  },
+  {
+    code: "CO",
+    name: "Colombia",
+    poetCount: 2,
+    members: [],
+    lat: 3.4516,
+    lng: -76.532,
+  },
+  {
+    code: "AR",
+    name: "Argentina",
+    poetCount: 1,
+    members: [],
+    lat: -31.4201,
+    lng: -64.1888,
+  },
+  {
+    code: "KR",
+    name: "Corea del Sur",
+    poetCount: 1,
+    members: [],
+    lat: 37.5665,
+    lng: 126.978,
+  },
+  {
+    code: "MA",
+    name: "Marruecos",
+    poetCount: 1,
+    members: [],
+    lat: 34.0181,
+    lng: -5.0078,
+  },
+  {
+    code: "FR",
+    name: "Francia",
+    poetCount: 1,
+    members: [],
+    lat: 45.764,
+    lng: 4.8357,
+  },
+  {
+    code: "BR",
+    name: "Brasil",
+    poetCount: 1,
+    members: [],
+    lat: -8.0476,
+    lng: -34.877,
+  },
+  {
+    code: "LB",
+    name: "Líbano",
+    poetCount: 1,
+    members: [],
+    lat: 33.8938,
+    lng: 35.5018,
+  },
+  {
+    code: "ZA",
+    name: "Sudáfrica",
+    poetCount: 1,
+    members: [],
+    lat: -26.2041,
+    lng: 28.0473,
+  },
+  {
+    code: "PL",
+    name: "Polonia",
+    poetCount: 1,
+    members: [],
+    lat: 51.7592,
+    lng: 19.456,
+  },
+  {
+    code: "PE",
+    name: "Perú",
+    poetCount: 1,
+    members: [],
+    lat: -13.5319,
+    lng: -71.9675,
+  },
+  {
+    code: "IT",
+    name: "Italia",
+    poetCount: 2,
+    members: [],
+    lat: 44.4949,
+    lng: 11.3426,
+  },
+  {
+    code: "TR",
+    name: "Turquía",
+    poetCount: 1,
+    members: [],
+    lat: 38.4237,
+    lng: 27.1428,
+  },
+  {
+    code: "ET",
+    name: "Etiopía",
+    poetCount: 1,
+    members: [],
+    lat: 8.9806,
+    lng: 38.7578,
+  },
+  {
+    code: "PT",
+    name: "Portugal",
+    poetCount: 1,
+    members: [],
+    lat: 41.1579,
+    lng: -8.6291,
+  },
+  {
+    code: "TH",
+    name: "Tailandia",
+    poetCount: 1,
+    members: [],
+    lat: 18.7883,
+    lng: 98.9853,
+  },
+  {
+    code: "CA",
+    name: "Canadá",
+    poetCount: 1,
+    members: [],
+    lat: 46.8139,
+    lng: -71.208,
+  },
+  {
+    code: "DE",
+    name: "Alemania",
+    poetCount: 1,
+    members: [],
+    lat: 51.3397,
+    lng: 12.3731,
+  },
+  {
+    code: "GH",
+    name: "Ghana",
+    poetCount: 1,
+    members: [],
+    lat: 6.6885,
+    lng: -1.6244,
+  },
+  {
+    code: "IE",
+    name: "Irlanda",
+    poetCount: 1,
+    members: [],
+    lat: 53.2707,
+    lng: -9.0568,
+  },
+  {
+    code: "NP",
+    name: "Nepal",
+    poetCount: 1,
+    members: [],
+    lat: 28.2096,
+    lng: 83.9856,
+  },
+  {
+    code: "CL",
+    name: "Chile",
+    poetCount: 1,
+    members: [],
+    lat: -33.0472,
+    lng: -71.6127,
+  },
+  {
+    code: "NZ",
+    name: "Nueva Zelanda",
+    poetCount: 1,
+    members: [],
+    lat: -45.8788,
+    lng: 170.5028,
+  },
+  {
+    code: "PH",
+    name: "Filipinas",
+    poetCount: 1,
+    members: [],
+    lat: 10.3157,
+    lng: 123.8854,
+  },
+  {
+    code: "GR",
+    name: "Grecia",
+    poetCount: 1,
+    members: [],
+    lat: 40.6401,
+    lng: 22.9444,
+  },
+  {
+    code: "CU",
+    name: "Cuba",
+    poetCount: 1,
+    members: [],
+    lat: 23.1136,
+    lng: -82.3666,
+  },
+  {
+    code: "IR",
+    name: "Irán",
+    poetCount: 1,
+    members: [],
+    lat: 29.5918,
+    lng: 52.5837,
+  },
+  {
+    code: "NL",
+    name: "Países Bajos",
+    poetCount: 1,
+    members: [],
+    lat: 51.9244,
+    lng: 4.4777,
+  },
+  {
+    code: "DO",
+    name: "República Dominicana",
+    poetCount: 1,
+    members: [],
+    lat: 18.4861,
+    lng: -69.9312,
+  },
+  {
+    code: "DZ",
+    name: "Argelia",
+    poetCount: 1,
+    members: [],
+    lat: 35.6971,
+    lng: -0.6308,
+  },
+  {
+    code: "FI",
+    name: "Finlandia",
+    poetCount: 1,
+    members: [],
+    lat: 61.4978,
+    lng: 23.761,
+  },
+  {
+    code: "UY",
+    name: "Uruguay",
+    poetCount: 1,
+    members: [],
+    lat: -34.9011,
+    lng: -56.1645,
+  },
+  {
+    code: "US",
+    name: "Estados Unidos",
+    poetCount: 1,
+    members: [],
+    lat: 41.8781,
+    lng: -87.6298,
+  },
+  {
+    code: "CN",
+    name: "China",
+    poetCount: 1,
+    members: [],
+    lat: 22.5431,
+    lng: 114.0579,
+  },
+  {
+    code: "KE",
+    name: "Kenia",
+    poetCount: 1,
+    members: [],
+    lat: -1.2921,
+    lng: 36.8219,
+  },
+  {
+    code: "RU",
+    name: "Rusia",
+    poetCount: 1,
+    members: [],
+    lat: 59.9311,
+    lng: 30.3609,
+  },
+  {
+    code: "AU",
+    name: "Australia",
+    poetCount: 1,
+    members: [],
+    lat: -37.8136,
+    lng: 144.9631,
+  },
+  {
+    code: "EG",
+    name: "Egipto",
+    poetCount: 1,
+    members: [],
+    lat: 31.2001,
+    lng: 29.9187,
+  },
+  {
+    code: "IS",
+    name: "Islandia",
+    poetCount: 1,
+    members: [],
+    lat: 64.1466,
+    lng: -21.9426,
+  },
+  {
+    code: "CR",
+    name: "Costa Rica",
+    poetCount: 1,
+    members: [],
+    lat: 9.8644,
+    lng: -83.9194,
+  },
+  {
+    code: "RO",
+    name: "Rumanía",
+    poetCount: 1,
+    members: [],
+    lat: 45.7983,
+    lng: 24.1256,
+  },
+  {
+    code: "ID",
+    name: "Indonesia",
+    poetCount: 1,
+    members: [],
+    lat: -7.7956,
+    lng: 110.3695,
+  },
+  {
+    code: "PS",
+    name: "Palestina",
+    poetCount: 1,
+    members: [],
+    lat: 31.7054,
+    lng: 35.2024,
+  },
+  {
+    code: "VE",
+    name: "Venezuela",
+    poetCount: 2,
+    members: [],
+    lat: 10.0678,
+    lng: -69.3474,
+  },
+  {
+    code: "MG",
+    name: "Madagascar",
+    poetCount: 1,
+    members: [],
+    lat: -18.8792,
+    lng: 47.5079,
+  },
+];
+
+function normalizeCountryCode(code: string) {
+  return code.trim().toUpperCase();
+}
+
+function mergePoemCountries(
+  apiCountries: GlobeCountry[]
+): GlobeCountry[] {
+  const countriesByCode = new Map<
+    string,
+    GlobeCountry
+  >();
+
+  for (const country of apiCountries) {
+    const code = normalizeCountryCode(
+      country.code
+    );
+
+    countriesByCode.set(code, {
+      ...country,
+      code,
+    });
+  }
+
+  for (const poemCountry of POEM_COUNTRIES) {
+    const code = normalizeCountryCode(
+      poemCountry.code
+    );
+
+    const existing =
+      countriesByCode.get(code);
+
+    if (!existing) {
+      countriesByCode.set(code, {
+        ...poemCountry,
+        code,
+      });
+
+      continue;
+    }
+
+    countriesByCode.set(code, {
+      ...existing,
+      ...poemCountry,
+      code,
+      name:
+        poemCountry.name ||
+        existing.name,
+      lat:
+        poemCountry.lat ??
+        existing.lat,
+      lng:
+        poemCountry.lng ??
+        existing.lng,
+      poetCount: Math.max(
+        poemCountry.poetCount ?? 0,
+        existing.poetCount ?? 0
+      ),
+      members:
+        Array.isArray(existing.members) &&
+        existing.members.length > 0
+          ? existing.members
+          : poemCountry.members,
+    });
+  }
+
+  return Array.from(
+    countriesByCode.values()
+  );
+}
+
+export default function WorldGlobeLive() {
+  const [globeData, setGlobeData] =
+    useState<GlobeApiResponse | null>(null);
+
+  useEffect(() => {
+    const controller =
+      new AbortController();
+
+    async function loadGlobeData() {
+      try {
+        const response = await fetch(
+          "/api/poema-universal/globe",
+          {
+            method: "GET",
+            cache: "no-store",
+            signal: controller.signal,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Error ${response.status} al cargar los datos del globo.`
+          );
+        }
+
+        const result =
+          (await response.json()) as GlobeApiResponse;
+
+        if (
+          !Array.isArray(result.countries)
+        ) {
+          throw new Error(
+            "La API no ha devuelto una lista válida de países."
+          );
+        }
+
+        setGlobeData(result);
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.name === "AbortError"
+        ) {
+          return;
+        }
+
+        console.error(
+          "Error cargando los datos del globo:",
+          error
+        );
+      }
+    }
+
+    loadGlobeData();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  const participatingCountries =
+    useMemo(() => {
+      return mergePoemCountries(
+        globeData?.countries ?? []
+      );
+    }, [globeData]);
+
+  const occupiedTotal = Math.max(
+    globeData?.occupiedTotal ?? 0,
+    INTEGRATED_VOICES
+  );
+
+  const reservedTotal = Math.max(
+    0,
+    TOTAL_VOICES - occupiedTotal
+  );
+
+  return (
+    <WorldGlobe
+      participatingCountries={
+        participatingCountries
+      }
+      occupiedTotal={occupiedTotal}
+      reservedTotal={reservedTotal}
+      totalSlots={TOTAL_VOICES}
+    />
+  );
+}
+

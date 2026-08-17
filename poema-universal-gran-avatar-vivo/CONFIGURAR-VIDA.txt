@@ -1,0 +1,58 @@
+CONFIGURAR LA VIDA DEL GRAN AVATAR
+==================================
+
+La integración ya está dentro de la web. Falta vincularla con una presencia
+creada en LiveAvatar. No pegues ninguna clave en el chat ni en componentes.
+
+1. PRUEBA GRATUITA EN SANDBOX
+
+Crea una cuenta en https://www.liveavatar.com/ y copia tu API key solamente a:
+
+  $HOME/poema-universal/.env.local
+
+Añade estas líneas:
+
+  LIVEAVATAR_API_KEY=tu_clave_privada
+  GRAN_AVATAR_LIVE_SANDBOX=true
+
+El sandbox utiliza el personaje de prueba de LiveAvatar, dura alrededor de un
+minuto y no consume créditos. Sirve para comprobar imagen, audio y conexión.
+
+2. ENTRENAR NUESTRO PERSONAJE
+
+En el panel de LiveAvatar crea un avatar personalizado a partir de:
+
+  material-avatar/gran-avatar/retrato-fuente-liveavatar-1920x1080.png
+
+Es el mismo personaje de la imagen cinematográfica, pero centrado, frontal,
+con boca cerrada y sin manos. LiveAvatar puede pedir revisión o consentimiento
+antes de aprobar una identidad personalizada.
+
+3. ACTIVAR LA IDENTIDAD DEFINITIVA
+
+Cuando LiveAvatar entregue el avatar_id, cambia las líneas de .env.local:
+
+  GRAN_AVATAR_LIVE_SANDBOX=false
+  GRAN_AVATAR_LIVE_AVATAR_ID=el_uuid_de_tu_avatar
+
+Conserva LIVEAVATAR_API_KEY. Reinicia el servidor:
+
+  cd "$HOME/poema-universal"
+  npm run dev
+
+4. FUNCIONAMIENTO
+
+El botón discreto “Despertar la presencia” abre la sesión viva. Mientras está
+conectada, la presencia respira, parpadea y se mueve; al leer o responder, la
+voz generada por Poema Universal se envía como PCM de 24 kHz y mueve los labios.
+“Volver al silencio” cierra la sesión y detiene el consumo.
+
+La API key nunca se envía al navegador. El servidor entrega únicamente un token
+efímero de sesión.
+
+5. COSTE CONTROLADO
+
+La integración usa modo LITE porque Poema Universal ya posee cerebro, voz y
+transcripción. LiveAvatar solo aporta el cuerpo audiovisual. Las sesiones de
+producción consumen créditos mientras están abiertas. Por eso la presencia se
+cierra explícitamente y el silencio cotidiano se cubrirá con películas locales.

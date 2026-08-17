@@ -1,0 +1,1856 @@
+"use client";
+
+import {
+  useMemo,
+  useState,
+  type CSSProperties,
+} from "react";
+
+import AccionesArtista from "./AccionesArtista";
+import FichaCuratorialArtista from "./FichaCuratorialArtista";
+import FichaAtlasInmersiva from "./FichaAtlasInmersiva";
+import { obtenerFichaCuratorial } from "./fichas-curatoriales";
+
+export type AtlasArtista = {
+  id: string;
+  nombre: string;
+  codigo: string | null;
+  disciplina: string;
+  territorio: string | null;
+  periodo: string | null;
+  obra: string | null;
+  obras_esenciales: string[];
+  etiquetas: string[];
+  portada_url: string | null;
+  dedicatoria: string | null;
+  destacado: boolean;
+  corazones: number;
+  velas: number;
+};
+
+/* =========================================================
+   IDENTIDAD VISUAL DE LAS PORTADAS
+========================================================= */
+
+type UniversoVisual = {
+  fondo: string;
+  acento: string;
+  tinta: string;
+  tintaSuave: string;
+  motivo:
+    | "sol"
+    | "laberinto"
+    | "puerta"
+    | "multitud"
+    | "circulo"
+    | "ventana"
+    | "arbol"
+    | "agua"
+    | "papel"
+    | "escalera"
+    | "camino"
+    | "montana"
+    | "niebla"
+    | "doble"
+    | "tormenta"
+    | "rostro"
+    | "angel"
+    | "fuego"
+    | "monstruo"
+    | "figura"
+    | "arana"
+    | "ruina"
+    | "rothko"
+    | "muro"
+    | "flores"
+    | "reloj"
+    | "madre"
+    | "hilos"
+    | "lluvia"
+    | "mascara"
+    | "caballo"
+    | "frontera"
+    | "infancia"
+    | "olivo"
+    | "mesa"
+    | "samurai"
+    | "campana"
+    | "plegaria"
+    | "partitura"
+    | "orquesta"
+    | "sombrero"
+    | "mar"
+    | "piedra"
+    | "luz"
+    | "cielo"
+    | "jardin"
+    | "inmersion"
+    | "tierra"
+    | "fantasma"
+    | "danza";
+};
+
+const UNIVERSOS: Record<string, UniversoVisual> = {
+  "Albert Camus": {
+    fondo:
+      "linear-gradient(145deg, #e9e4da 0%, #aaa49a 42%, #302f2d 100%)",
+    acento: "#171613",
+    tinta: "#151411",
+    tintaSuave: "rgba(21,20,17,.62)",
+    motivo: "sol",
+  },
+  "Jorge Luis Borges": {
+    fondo:
+      "radial-gradient(circle at 50% 45%, #825827 0%, #2e1c0c 33%, #080706 82%)",
+    acento: "#d3a45d",
+    tinta: "#f4e6ca",
+    tintaSuave: "rgba(244,230,202,.62)",
+    motivo: "laberinto",
+  },
+  "Franz Kafka": {
+    fondo:
+      "linear-gradient(155deg, #25251f 0%, #11120f 48%, #050605 100%)",
+    acento: "#b4a47e",
+    tinta: "#ece6d7",
+    tintaSuave: "rgba(236,230,215,.58)",
+    motivo: "puerta",
+  },
+  "José Saramago": {
+    fondo:
+      "linear-gradient(145deg, #d8d5cb 0%, #838379 46%, #262823 100%)",
+    acento: "#f0ede3",
+    tinta: "#f5f2e8",
+    tintaSuave: "rgba(245,242,232,.66)",
+    motivo: "multitud",
+  },
+  "Simone Weil": {
+    fondo:
+      "radial-gradient(circle at 70% 26%, #cbc6b8 0%, #59584f 38%, #161713 100%)",
+    acento: "#d8bd7c",
+    tinta: "#f0eadc",
+    tintaSuave: "rgba(240,234,220,.64)",
+    motivo: "circulo",
+  },
+  "María Zambrano": {
+    fondo:
+      "linear-gradient(150deg, #162431 0%, #43616a 47%, #d6c3a1 100%)",
+    acento: "#e3c897",
+    tinta: "#f4ead8",
+    tintaSuave: "rgba(244,234,216,.64)",
+    motivo: "ventana",
+  },
+  "Samuel Beckett": {
+    fondo:
+      "linear-gradient(150deg, #101313 0%, #303633 48%, #a9a28f 100%)",
+    acento: "#c7b78a",
+    tinta: "#f3eee1",
+    tintaSuave: "rgba(243,238,225,.58)",
+    motivo: "arbol",
+  },
+  "Clarice Lispector": {
+    fondo:
+      "radial-gradient(circle at 40% 30%, #756e66 0%, #25221f 42%, #090908 100%)",
+    acento: "#cdb27f",
+    tinta: "#f0e8dc",
+    tintaSuave: "rgba(240,232,220,.62)",
+    motivo: "agua",
+  },
+  "Fernando Pessoa": {
+    fondo:
+      "linear-gradient(145deg, #15302f 0%, #2b4541 38%, #111817 100%)",
+    acento: "#c7a467",
+    tinta: "#eee6d5",
+    tintaSuave: "rgba(238,230,213,.62)",
+    motivo: "papel",
+  },
+  "Julio Cortázar": {
+    fondo:
+      "linear-gradient(135deg, #071216 0%, #183641 45%, #aa9a78 100%)",
+    acento: "#d8c08d",
+    tinta: "#f2eee4",
+    tintaSuave: "rgba(242,238,228,.62)",
+    motivo: "escalera",
+  },
+  "Olga Tokarczuk": {
+    fondo:
+      "linear-gradient(160deg, #657875 0%, #9a8d72 50%, #38362e 100%)",
+    acento: "#f0dfb5",
+    tinta: "#f7f0df",
+    tintaSuave: "rgba(247,240,223,.65)",
+    motivo: "camino",
+  },
+  "Jon Fosse": {
+    fondo:
+      "linear-gradient(165deg, #071422 0%, #25475b 46%, #aeb9b5 100%)",
+    acento: "#d5c498",
+    tinta: "#f2efe7",
+    tintaSuave: "rgba(242,239,231,.62)",
+    motivo: "montana",
+  },
+  "Han Kang": {
+    fondo:
+      "linear-gradient(150deg, #e9dfcf 0%, #b7a488 44%, #4d493f 100%)",
+    acento: "#7a392f",
+    tinta: "#29231e",
+    tintaSuave: "rgba(41,35,30,.64)",
+    motivo: "niebla",
+  },
+  "Ágota Kristóf": {
+    fondo:
+      "linear-gradient(145deg, #dbd4c5 0%, #887c68 47%, #25221e 100%)",
+    acento: "#2b241d",
+    tinta: "#171512",
+    tintaSuave: "rgba(23,21,18,.62)",
+    motivo: "doble",
+  },
+  "László Krasznahorkai": {
+    fondo:
+      "radial-gradient(circle at 64% 30%, #676358 0%, #262824 42%, #070807 100%)",
+    acento: "#c5a669",
+    tinta: "#ece5d7",
+    tintaSuave: "rgba(236,229,215,.58)",
+    motivo: "tormenta",
+  },
+  "Alejandra Pizarnik": {
+    fondo:
+      "linear-gradient(145deg, #0c0d0d 0%, #242424 48%, #737069 100%)",
+    acento: "#c2a269",
+    tinta: "#f2eadf",
+    tintaSuave: "rgba(242,234,223,.58)",
+    motivo: "rostro",
+  },
+  "Rainer Maria Rilke": {
+    fondo:
+      "linear-gradient(150deg, #cabd9f 0%, #696153 46%, #24211d 100%)",
+    acento: "#f1dfb4",
+    tinta: "#f3ead7",
+    tintaSuave: "rgba(243,234,215,.64)",
+    motivo: "angel",
+  },
+  "Georges Bataille": {
+    fondo:
+      "radial-gradient(circle at 64% 36%, #9a3525 0%, #531910 40%, #130806 100%)",
+    acento: "#dda76d",
+    tinta: "#f6e3d3",
+    tintaSuave: "rgba(246,227,211,.62)",
+    motivo: "fuego",
+  },
+  "Francisco de Goya": {
+    fondo:
+      "linear-gradient(145deg, #5a493a 0%, #211b17 50%, #080706 100%)",
+    acento: "#c79a62",
+    tinta: "#f0e4cf",
+    tintaSuave: "rgba(240,228,207,.6)",
+    motivo: "monstruo",
+  },
+  "Alberto Giacometti": {
+    fondo:
+      "linear-gradient(155deg, #d6c9af 0%, #8b7d66 48%, #352e25 100%)",
+    acento: "#1d1a16",
+    tinta: "#171512",
+    tintaSuave: "rgba(23,21,18,.58)",
+    motivo: "figura",
+  },
+  "Louise Bourgeois": {
+    fondo:
+      "linear-gradient(145deg, #283238 0%, #13181b 50%, #060809 100%)",
+    acento: "#b99063",
+    tinta: "#efe6d9",
+    tintaSuave: "rgba(239,230,217,.6)",
+    motivo: "arana",
+  },
+  "Anselm Kiefer": {
+    fondo:
+      "linear-gradient(145deg, #b0a58f 0%, #5b584d 48%, #252620 100%)",
+    acento: "#d2b477",
+    tinta: "#f1e7d5",
+    tintaSuave: "rgba(241,231,213,.58)",
+    motivo: "ruina",
+  },
+  "Mark Rothko": {
+    fondo:
+      "linear-gradient(180deg, #541916 0%, #9e392d 43%, #4b1614 44%, #4b1614 51%, #b85845 52%, #71231d 100%)",
+    acento: "#f0c99a",
+    tinta: "#f9e7d4",
+    tintaSuave: "rgba(249,231,212,.62)",
+    motivo: "rothko",
+  },
+  "Antoni Tàpies": {
+    fondo:
+      "linear-gradient(145deg, #847462 0%, #53473d 48%, #211e1a 100%)",
+    acento: "#d2aa75",
+    tinta: "#f2e5d3",
+    tintaSuave: "rgba(242,229,211,.6)",
+    motivo: "muro",
+  },
+  "Frida Kahlo": {
+    fondo:
+      "linear-gradient(155deg, #1e3b2e 0%, #773b2e 52%, #140d0b 100%)",
+    acento: "#dd9d61",
+    tinta: "#f5ead7",
+    tintaSuave: "rgba(245,234,215,.66)",
+    motivo: "flores",
+  },
+  "Salvador Dalí": {
+    fondo:
+      "linear-gradient(155deg, #1d4654 0%, #7b714f 48%, #332a20 100%)",
+    acento: "#d8a85f",
+    tinta: "#f3e9d4",
+    tintaSuave: "rgba(243,233,212,.62)",
+    motivo: "reloj",
+  },
+  "Käthe Kollwitz": {
+    fondo:
+      "linear-gradient(150deg, #777169 0%, #393735 48%, #111111 100%)",
+    acento: "#cfb98c",
+    tinta: "#eee6da",
+    tintaSuave: "rgba(238,230,218,.62)",
+    motivo: "madre",
+  },
+  "Chiharu Shiota": {
+    fondo:
+      "linear-gradient(145deg, #e1ddd3 0%, #a05347 52%, #4a1515 100%)",
+    acento: "#761d1d",
+    tinta: "#241b18",
+    tintaSuave: "rgba(36,27,24,.62)",
+    motivo: "hilos",
+  },
+  "Andrei Tarkovski": {
+    fondo:
+      "linear-gradient(155deg, #212e30 0%, #53615d 46%, #171c1b 100%)",
+    acento: "#bc9b66",
+    tinta: "#eee9dc",
+    tintaSuave: "rgba(238,233,220,.6)",
+    motivo: "lluvia",
+  },
+  "Ingmar Bergman": {
+    fondo:
+      "linear-gradient(145deg, #0b0c0d 0%, #26292b 52%, #5b5651 100%)",
+    acento: "#cbb384",
+    tinta: "#f1ece4",
+    tintaSuave: "rgba(241,236,228,.6)",
+    motivo: "mascara",
+  },
+  "Béla Tarr": {
+    fondo:
+      "linear-gradient(165deg, #15191b 0%, #424a4c 50%, #0c0f10 100%)",
+    acento: "#ba9f70",
+    tinta: "#eeebe4",
+    tintaSuave: "rgba(238,235,228,.58)",
+    motivo: "caballo",
+  },
+  "Theo Angelopoulos": {
+    fondo:
+      "linear-gradient(160deg, #9ca3a1 0%, #596c70 48%, #1c292d 100%)",
+    acento: "#d4bf8e",
+    tinta: "#f4efe4",
+    tintaSuave: "rgba(244,239,228,.62)",
+    motivo: "frontera",
+  },
+  "Víctor Erice": {
+    fondo:
+      "linear-gradient(150deg, #93846b 0%, #4d4437 50%, #171410 100%)",
+    acento: "#d5ae6c",
+    tinta: "#f2e5cf",
+    tintaSuave: "rgba(242,229,207,.62)",
+    motivo: "infancia",
+  },
+  "Abbas Kiarostami": {
+    fondo:
+      "linear-gradient(155deg, #6c8172 0%, #b0ad82 48%, #3e4a3f 100%)",
+    acento: "#e6d3a1",
+    tinta: "#f5f0e1",
+    tintaSuave: "rgba(245,240,225,.64)",
+    motivo: "olivo",
+  },
+  "Luis Buñuel": {
+    fondo:
+      "linear-gradient(145deg, #161719 0%, #4c4845 47%, #8e8170 100%)",
+    acento: "#d2a96e",
+    tinta: "#f1e8dc",
+    tintaSuave: "rgba(241,232,220,.6)",
+    motivo: "mesa",
+  },
+  "Akira Kurosawa": {
+    fondo:
+      "linear-gradient(160deg, #263036 0%, #43565f 47%, #131719 100%)",
+    acento: "#c79d62",
+    tinta: "#f1e8d8",
+    tintaSuave: "rgba(241,232,216,.6)",
+    motivo: "samurai",
+  },
+  "Arvo Pärt": {
+    fondo:
+      "linear-gradient(150deg, #e4ded0 0%, #aaa18e 46%, #4e4940 100%)",
+    acento: "#6d5630",
+    tinta: "#1e1b17",
+    tintaSuave: "rgba(30,27,23,.6)",
+    motivo: "campana",
+  },
+  "Henryk Górecki": {
+    fondo:
+      "linear-gradient(145deg, #2c2924 0%, #6b6254 48%, #b8aa91 100%)",
+    acento: "#d5bd8c",
+    tinta: "#f2eadc",
+    tintaSuave: "rgba(242,234,220,.6)",
+    motivo: "plegaria",
+  },
+  "Johann Sebastian Bach": {
+    fondo:
+      "linear-gradient(145deg, #6c5436 0%, #292017 50%, #0c0907 100%)",
+    acento: "#d7ad68",
+    tinta: "#f1e6d0",
+    tintaSuave: "rgba(241,230,208,.6)",
+    motivo: "partitura",
+  },
+  "Gustav Mahler": {
+    fondo:
+      "linear-gradient(160deg, #171a1d 0%, #4e4540 48%, #8c7866 100%)",
+    acento: "#d5b078",
+    tinta: "#f2e7d8",
+    tintaSuave: "rgba(242,231,216,.6)",
+    motivo: "orquesta",
+  },
+  "Leonard Cohen": {
+    fondo:
+      "linear-gradient(145deg, #111313 0%, #313334 50%, #6a625a 100%)",
+    acento: "#c4a16a",
+    tinta: "#f2e8db",
+    tintaSuave: "rgba(242,232,219,.6)",
+    motivo: "sombrero",
+  },
+  "Claude Debussy": {
+    fondo:
+      "linear-gradient(155deg, #1c4c5b 0%, #688a8b 46%, #bda97f 100%)",
+    acento: "#f0d59e",
+    tinta: "#f4eee1",
+    tintaSuave: "rgba(244,238,225,.64)",
+    motivo: "mar",
+  },
+  "Peter Zumthor": {
+    fondo:
+      "linear-gradient(145deg, #262522 0%, #514d43 48%, #918676 100%)",
+    acento: "#cab17e",
+    tinta: "#eee7db",
+    tintaSuave: "rgba(238,231,219,.6)",
+    motivo: "piedra",
+  },
+  "Tadao Ando": {
+    fondo:
+      "linear-gradient(155deg, #17262d 0%, #556f78 48%, #bfc3bc 100%)",
+    acento: "#e4d5ae",
+    tinta: "#f2eee5",
+    tintaSuave: "rgba(242,238,229,.64)",
+    motivo: "luz",
+  },
+  "James Turrell": {
+    fondo:
+      "linear-gradient(145deg, #271534 0%, #a43e8f 48%, #e89cc7 100%)",
+    acento: "#ffe0b3",
+    tinta: "#fff0e6",
+    tintaSuave: "rgba(255,240,230,.7)",
+    motivo: "cielo",
+  },
+  "Isamu Noguchi": {
+    fondo:
+      "linear-gradient(155deg, #b6ae98 0%, #676353 48%, #24231e 100%)",
+    acento: "#eee2bd",
+    tinta: "#f5edde",
+    tintaSuave: "rgba(245,237,222,.62)",
+    motivo: "jardin",
+  },
+  "Bill Viola": {
+    fondo:
+      "linear-gradient(180deg, #081827 0%, #16475c 50%, #061016 100%)",
+    acento: "#d2b475",
+    tinta: "#edf0eb",
+    tintaSuave: "rgba(237,240,235,.62)",
+    motivo: "inmersion",
+  },
+  "Sebastião Salgado": {
+    fondo:
+      "linear-gradient(145deg, #c0b7a3 0%, #666158 48%, #262624 100%)",
+    acento: "#eee2c6",
+    tinta: "#f3ede0",
+    tintaSuave: "rgba(243,237,224,.64)",
+    motivo: "tierra",
+  },
+  "Francesca Woodman": {
+    fondo:
+      "linear-gradient(150deg, #9a9286 0%, #514c45 50%, #191817 100%)",
+    acento: "#d8c49c",
+    tinta: "#f1e9dc",
+    tintaSuave: "rgba(241,233,220,.6)",
+    motivo: "fantasma",
+  },
+  "Pina Bausch": {
+    fondo:
+      "linear-gradient(155deg, #170d0d 0%, #6b211f 48%, #b25f41 100%)",
+    acento: "#e8ba7a",
+    tinta: "#f7e9d9",
+    tintaSuave: "rgba(247,233,217,.64)",
+    motivo: "danza",
+  },
+};
+
+
+
+const INDICE_CANON = new Map<string, number>(
+  [
+    "Albert Camus",
+    "Jorge Luis Borges",
+    "Franz Kafka",
+    "José Saramago",
+    "Simone Weil",
+    "María Zambrano",
+    "Samuel Beckett",
+    "Clarice Lispector",
+    "Fernando Pessoa",
+    "Julio Cortázar",
+    "Olga Tokarczuk",
+    "Jon Fosse",
+    "Han Kang",
+    "Ágota Kristóf",
+    "László Krasznahorkai",
+    "Alejandra Pizarnik",
+    "Rainer Maria Rilke",
+    "Georges Bataille",
+    "Francisco de Goya",
+    "Alberto Giacometti",
+    "Louise Bourgeois",
+    "Anselm Kiefer",
+    "Mark Rothko",
+    "Antoni Tàpies",
+    "Frida Kahlo",
+    "Salvador Dalí",
+    "Käthe Kollwitz",
+    "Chiharu Shiota",
+    "Andrei Tarkovski",
+    "Ingmar Bergman",
+    "Béla Tarr",
+    "Theo Angelopoulos",
+    "Víctor Erice",
+    "Abbas Kiarostami",
+    "Luis Buñuel",
+    "Akira Kurosawa",
+    "Arvo Pärt",
+    "Henryk Górecki",
+    "Johann Sebastian Bach",
+    "Gustav Mahler",
+    "Leonard Cohen",
+    "Claude Debussy",
+    "Peter Zumthor",
+    "Tadao Ando",
+    "James Turrell",
+    "Isamu Noguchi",
+    "Bill Viola",
+    "Sebastião Salgado",
+    "Francesca Woodman",
+    "Pina Bausch",
+  ].map((nombre, index) => [normalizar(nombre), index + 1])
+);
+
+const CONCEPTOS_ARTISTAS: Record<string, string> = {
+  "Albert Camus": "El absurdo",
+  "Jorge Luis Borges": "El laberinto",
+  "Franz Kafka": "La transformación",
+  "José Saramago": "La ceguera",
+  "Simone Weil": "La atención",
+  "María Zambrano": "La razón poética",
+  "Samuel Beckett": "La espera",
+  "Clarice Lispector": "La revelación",
+  "Fernando Pessoa": "Las identidades",
+  "Julio Cortázar": "Los pasadizos",
+  "Olga Tokarczuk": "Los errantes",
+  "Jon Fosse": "La repetición",
+  "Han Kang": "La fragilidad",
+  "Ágota Kristóf": "La infancia",
+  "László Krasznahorkai": "El agotamiento",
+  "Alejandra Pizarnik": "Lo indecible",
+  "Rainer Maria Rilke": "La belleza",
+  "Georges Bataille": "El límite",
+  "Francisco de Goya": "Los monstruos",
+  "Alberto Giacometti": "La persistencia",
+  "Louise Bourgeois": "La memoria del hogar",
+  "Anselm Kiefer": "La ceniza",
+  "Mark Rothko": "El umbral",
+  "Antoni Tàpies": "La materia",
+  "Frida Kahlo": "El cuerpo",
+  "Salvador Dalí": "El sueño",
+  "Käthe Kollwitz": "El duelo",
+  "Chiharu Shiota": "La ausencia",
+  "Andrei Tarkovski": "El tiempo",
+  "Ingmar Bergman": "El rostro",
+  "Béla Tarr": "La espera",
+  "Theo Angelopoulos": "La frontera",
+  "Víctor Erice": "La infancia que mira",
+  "Abbas Kiarostami": "El camino",
+  "Luis Buñuel": "El deseo",
+  "Akira Kurosawa": "La verdad",
+  "Arvo Pärt": "El silencio",
+  "Henryk Górecki": "La consolación",
+  "Johann Sebastian Bach": "La arquitectura",
+  "Gustav Mahler": "El mundo",
+  "Leonard Cohen": "La fractura",
+  "Claude Debussy": "El agua",
+  "Peter Zumthor": "La atmósfera",
+  "Tadao Ando": "La luz",
+  "James Turrell": "La percepción",
+  "Isamu Noguchi": "El paisaje",
+  "Bill Viola": "La inmersión",
+  "Sebastião Salgado": "La humanidad",
+  "Francesca Woodman": "La desaparición",
+  "Pina Bausch": "El cuerpo",
+
+  "Fiódor Dostoyevski": "La culpa",
+  "Friedrich Nietzsche": "El abismo",
+  "Cormac McCarthy": "La llama",
+  "W. G. Sebald": "El archivo",
+  "Paul Celan": "La ceniza",
+  "Primo Levi": "El testimonio",
+  "Virginia Woolf": "La conciencia",
+  "Toni Morrison": "La memoria",
+  "Italo Calvino": "Las ciudades",
+  "Kōbō Abe": "El encierro",
+  "Herta Müller": "El miedo",
+  "Yoko Tawada": "La lengua",
+  "Mahmoud Darwish": "La patria",
+  "Nelly Sachs": "La metamorfosis",
+  "Ursula K. Le Guin": "Otros mundos",
+  "Juan Rulfo": "Los muertos",
+  "Wole Soyinka": "El rito",
+  "Ngũgĩ wa Thiong'o": "La lengua recuperada",
+  "Rabindranath Tagore": "La libertad",
+  "Kenzaburō Ōe": "La responsabilidad",
+  "Aimé Césaire": "El retorno",
+  "Giorgio de Chirico": "La plaza vacía",
+  "Caspar David Friedrich": "Lo sublime",
+  "Edward Hopper": "La soledad urbana",
+  "Odilon Redon": "La visión",
+  "Leonora Carrington": "La alquimia",
+  "Remedios Varo": "La máquina poética",
+  "Christian Boltanski": "Los ausentes",
+  "Doris Salcedo": "La herida",
+  "Joseph Beuys": "La transformación social",
+  "Berlinde De Bruyckere": "La carne",
+  "Robert Bresson": "El gesto",
+  "Carl Theodor Dreyer": "La fe",
+  "Terrence Malick": "La gracia",
+  "David Lynch": "El sueño oscuro",
+  "Pedro Costa": "La dignidad",
+  "Lucrecia Martel": "El sonido",
+  "Apichatpong Weerasethakul": "Las vidas pasadas",
+  "Guillermo del Toro": "El monstruo",
+  "Jóhann Jóhannsson": "La memoria lenta",
+  "Max Richter": "El sueño",
+  "Philip Glass": "La repetición",
+  "György Ligeti": "El cosmos",
+  "Nina Simone": "La resistencia",
+  "Nick Cave": "El duelo",
+  "Meredith Monk": "La voz",
+  "Lina Bo Bardi": "La comunidad",
+  "Carlo Scarpa": "El detalle",
+  "Luis Barragán": "El silencio del color",
+  "Josef Koudelka": "El exilio",
+};
+
+function conceptoDe(artista: AtlasArtista) {
+  return (
+    CONCEPTOS_ARTISTAS[artista.nombre] ||
+    artista.etiquetas.find(
+      (etiqueta) =>
+        !["Atlas Fundacional", "Segundo círculo", "Tríptico"].includes(
+          etiqueta
+        )
+    ) ||
+    "La experiencia humana"
+  );
+}
+
+function colorDisciplina(disciplina: string) {
+  const value = normalizar(disciplina);
+
+  if (
+    value.includes("literatura") ||
+    value.includes("poesia") ||
+    value.includes("filosofia") ||
+    value.includes("ensayo")
+  ) {
+    return "#c7a467";
+  }
+
+  if (
+    value.includes("pintura") ||
+    value.includes("escultura") ||
+    value.includes("instalacion") ||
+    value.includes("performance")
+  ) {
+    return "#a65343";
+  }
+
+  if (value.includes("cine")) {
+    return "#527c89";
+  }
+
+  if (value.includes("musica")) {
+    return "#637b62";
+  }
+
+  if (value.includes("arquitectura")) {
+    return "#aaa18f";
+  }
+
+  if (value.includes("fotografia")) {
+    return "#776a82";
+  }
+
+  return "#c7a467";
+}
+
+const UNIVERSO_GENERICO: UniversoVisual = {
+  fondo:
+    "radial-gradient(circle at 72% 22%, rgba(199,164,103,.28), transparent 30%), linear-gradient(145deg, #0a0d11, #24282e)",
+  acento: "#c7a467",
+  tinta: "#f0e8dc",
+  tintaSuave: "rgba(240,232,220,.58)",
+  motivo: "circulo",
+};
+
+/* =========================================================
+   UTILIDADES
+========================================================= */
+
+function normalizar(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function universoDe(nombre: string) {
+  return UNIVERSOS[nombre] || UNIVERSO_GENERICO;
+}
+
+function frasePortada(artista: AtlasArtista) {
+  if (artista.dedicatoria) {
+    return artista.dedicatoria
+      .replace(/^Por\s+/i, "")
+      .replace(/\.$/, "");
+  }
+
+  if (artista.etiquetas.length > 0) {
+    return artista.etiquetas.slice(0, 3).join(" · ");
+  }
+
+  return "Una presencia fundamental en la conversación humana";
+}
+
+/* =========================================================
+   MOTIVO SIMBÓLICO
+========================================================= */
+
+function Motivo({
+  universo,
+}: {
+  universo: UniversoVisual;
+}) {
+  const color = universo.acento;
+
+  const style = {
+    "--motivo": color,
+  } as CSSProperties;
+
+  return (
+    <div
+      aria-hidden="true"
+      style={style}
+      className={`motivo motivo--${universo.motivo}`}
+    >
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+    </div>
+  );
+}
+
+/* =========================================================
+   PORTADA
+========================================================= */
+
+
+
+const PORTADAS_FORZADAS: Record<string, string> = {
+  "federico garcia lorca":
+    "/artistas/portadas/AU-062-federico-garcia-lorca.webp",
+  "moby":
+    "/artistas/portadas/AU-083-moby.webp",
+};
+
+function clavePortada(nombre: string) {
+  return nombre
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function PortadaArtista({
+  artista,
+}: {
+  artista: AtlasArtista;
+}) {
+  const imagenPortada =
+    PORTADAS_FORZADAS[clavePortada(artista.nombre)] ??
+    artista.portada_url ??
+    null;
+
+  const concepto = conceptoDe(artista);
+  const acento = colorDisciplina(artista.disciplina);
+
+  return (
+    <article className="atlas-cover-v2 overflow-hidden border border-white/[0.11] bg-[#0d0e10]">
+      <div className="flex min-h-48 items-center justify-center bg-[#08090a]">
+        {imagenPortada ? (
+          <img
+            src={imagenPortada}
+            alt={`Carátula dedicada a ${artista.nombre}`}
+            className="block h-auto w-full object-contain object-center"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex min-h-48 w-full items-center justify-center bg-[#121315] px-8 text-center">
+            <p className="font-serif text-xl italic text-white/35">
+              Portada en preparación
+            </p>
+          </div>
+        )}
+
+      </div>
+
+      <div className="relative flex min-h-[245px] flex-col px-5 pb-7 pt-7 sm:px-6">
+        <span
+          aria-hidden="true"
+          className="absolute left-0 top-0 h-[3px] w-full"
+          style={{ background: acento }}
+        />
+
+        <p className="font-serif text-[11px] uppercase tracking-[0.2em] text-white/42">
+          {concepto}
+        </p>
+
+        <h3 className="mt-4 max-w-[13ch] font-serif text-[clamp(1.7rem,2vw,2.35rem)] leading-[0.96] tracking-[-0.035em] text-[#f0e8dc]">
+          {artista.nombre}
+        </h3>
+
+        {(artista.territorio || artista.periodo) && (
+          <p className="mt-auto pt-7 text-[10px] italic leading-5 text-white/35">
+            {[artista.territorio, artista.periodo]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        )}
+      </div>
+    </article>
+  );
+}
+
+
+/* =========================================================
+   COMPONENTE PRINCIPAL
+========================================================= */
+
+
+
+
+export default function AtlasInfluencias({
+  artistas,
+}: {
+  artistas: AtlasArtista[];
+}) {
+  const [busqueda, setBusqueda] = useState("");
+  const [disciplina, setDisciplina] = useState("Todos");
+  const [artistaAbierto, setArtistaAbierto] =
+    useState<string | null>(null);
+  const [artistaSala, setArtistaSala] =
+    useState<AtlasArtista | null>(null);
+
+  const disciplinas = useMemo(() => {
+    const valores = Array.from(
+      new Set(
+        artistas
+          .map((artista) => artista.disciplina)
+          .filter(Boolean)
+      )
+    ).sort((a, b) => a.localeCompare(b, "es"));
+
+    return ["Todos", ...valores];
+  }, [artistas]);
+
+  const artistasFiltrados = useMemo(() => {
+    const consulta = normalizar(busqueda.trim());
+
+    return artistas
+      .filter((artista) => {
+        if (disciplina === "Todos") {
+          return true;
+        }
+
+        return artista.disciplina === disciplina;
+      })
+      .filter((artista) => {
+        if (!consulta) {
+          return true;
+        }
+
+        const contenido = [
+          artista.nombre,
+          artista.disciplina,
+          artista.territorio || "",
+          artista.periodo || "",
+          artista.obra || "",
+          ...artista.obras_esenciales,
+          ...artista.etiquetas,
+        ]
+          .map(normalizar)
+          .join(" ");
+
+        return contenido.includes(consulta);
+      })
+      .sort((a, b) => {
+        const indiceA = a.codigo
+          ? Number(a.codigo.slice(3))
+          : Number.MAX_SAFE_INTEGER;
+
+        const indiceB = b.codigo
+          ? Number(b.codigo.slice(3))
+          : Number.MAX_SAFE_INTEGER;
+
+        if (indiceA !== indiceB) {
+          return indiceA - indiceB;
+        }
+
+        return a.nombre.localeCompare(b.nombre, "es");
+      });
+  }, [artistas, busqueda, disciplina]);
+
+  const fichaSala = artistaSala
+    ? obtenerFichaCuratorial(artistaSala.nombre)
+    : null;
+
+  return (
+    <section
+      id="atlas"
+      aria-labelledby="atlas-title"
+      className="border-t border-black/10 bg-[#0a0b0c] text-[#f0e8dc]"
+    >
+      <style>{`
+        .atlas-cover-v2 {
+          box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.22),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+          transition:
+            transform 700ms cubic-bezier(.2,.75,.2,1),
+            border-color 700ms ease,
+            box-shadow 700ms ease;
+        }
+
+        .group:hover .atlas-cover-v2 {
+          transform: translateY(-5px);
+          border-color: rgba(199, 164, 103, 0.34);
+          box-shadow:
+            0 40px 105px rgba(0, 0, 0, 0.38),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        }
+
+
+        .portada-atlas {
+          box-shadow:
+            inset 0 0 0 1px rgba(255,255,255,.09),
+            0 24px 70px rgba(0,0,0,.24);
+        }
+
+        .motivo {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          pointer-events: none;
+          opacity: .88;
+          transition:
+            transform 1.2s cubic-bezier(.2,.7,.2,1),
+            opacity 1.2s ease;
+        }
+
+        .group:hover .motivo {
+          transform: scale(1.025);
+          opacity: 1;
+        }
+
+        .motivo span {
+          position: absolute;
+          display: block;
+          border-color: var(--motivo);
+        }
+
+        .motivo--sol span:nth-child(1) {
+          width: 44%;
+          aspect-ratio: 1;
+          right: -8%;
+          top: 21%;
+          border-radius: 50%;
+          background: rgba(255,255,255,.3);
+          box-shadow: 0 0 90px rgba(255,255,255,.3);
+        }
+
+        .motivo--laberinto {
+          background:
+            repeating-linear-gradient(
+              90deg,
+              transparent 0 22px,
+              color-mix(in srgb, var(--motivo) 22%, transparent) 22px 23px
+            ),
+            repeating-linear-gradient(
+              0deg,
+              transparent 0 22px,
+              color-mix(in srgb, var(--motivo) 18%, transparent) 22px 23px
+            );
+          clip-path: polygon(28% 16%, 90% 16%, 90% 76%, 45% 76%, 45% 46%, 70% 46%, 70% 32%, 28% 32%);
+        }
+
+        .motivo--puerta span:nth-child(1) {
+          width: 35%;
+          height: 54%;
+          right: 12%;
+          bottom: 0;
+          border: 1px solid var(--motivo);
+          border-bottom: 0;
+          box-shadow: inset 25px 0 50px rgba(0,0,0,.45);
+        }
+
+        .motivo--multitud span {
+          width: 12%;
+          aspect-ratio: .45;
+          bottom: 8%;
+          border-radius: 50% 50% 12% 12%;
+          background: rgba(230,226,214,.21);
+        }
+
+        .motivo--multitud span:nth-child(1) { left: 10%; }
+        .motivo--multitud span:nth-child(2) { left: 26%; height: 35%; }
+        .motivo--multitud span:nth-child(3) { left: 42%; height: 43%; }
+        .motivo--multitud span:nth-child(4) { left: 58%; height: 34%; }
+        .motivo--multitud span:nth-child(5) { left: 74%; height: 39%; }
+
+        .motivo--circulo span:nth-child(1) {
+          width: 56%;
+          aspect-ratio: 1;
+          right: -15%;
+          top: 22%;
+          border: 1px solid var(--motivo);
+          border-radius: 50%;
+        }
+
+        .motivo--ventana span:nth-child(1) {
+          width: 42%;
+          height: 48%;
+          right: 7%;
+          top: 21%;
+          border: 1px solid var(--motivo);
+          background: linear-gradient(150deg, rgba(255,255,255,.35), transparent 60%);
+        }
+
+        .motivo--ventana span:nth-child(2) {
+          width: 1px;
+          height: 48%;
+          right: 28%;
+          top: 21%;
+          background: var(--motivo);
+        }
+
+        .motivo--arbol span:nth-child(1) {
+          width: 2px;
+          height: 47%;
+          left: 68%;
+          bottom: 10%;
+          background: var(--motivo);
+          transform: rotate(4deg);
+        }
+
+        .motivo--arbol span:nth-child(2),
+        .motivo--arbol span:nth-child(3),
+        .motivo--arbol span:nth-child(4) {
+          width: 25%;
+          height: 1px;
+          left: 57%;
+          top: 45%;
+          background: var(--motivo);
+          transform-origin: right;
+        }
+
+        .motivo--arbol span:nth-child(2) { transform: rotate(26deg); }
+        .motivo--arbol span:nth-child(3) { transform: rotate(-23deg); }
+        .motivo--arbol span:nth-child(4) { transform: rotate(52deg); }
+
+        .motivo--agua,
+        .motivo--mar,
+        .motivo--lluvia,
+        .motivo--inmersion {
+          background:
+            repeating-linear-gradient(
+              174deg,
+              transparent 0 21px,
+              color-mix(in srgb, var(--motivo) 18%, transparent) 21px 22px
+            );
+        }
+
+        .motivo--papel span {
+          width: 35%;
+          height: 47%;
+          right: 10%;
+          top: 24%;
+          border: 1px solid var(--motivo);
+          transform: rotate(5deg);
+          background:
+            repeating-linear-gradient(
+              0deg,
+              transparent 0 14px,
+              color-mix(in srgb, var(--motivo) 18%, transparent) 14px 15px
+            );
+        }
+
+        .motivo--escalera span {
+          width: 12%;
+          height: 9%;
+          right: calc(8% + var(--i, 0) * 8%);
+          bottom: calc(18% + var(--i, 0) * 8%);
+          border-top: 1px solid var(--motivo);
+          border-right: 1px solid var(--motivo);
+        }
+
+        .motivo--escalera span:nth-child(1) { --i: 0; }
+        .motivo--escalera span:nth-child(2) { --i: 1; }
+        .motivo--escalera span:nth-child(3) { --i: 2; }
+        .motivo--escalera span:nth-child(4) { --i: 3; }
+        .motivo--escalera span:nth-child(5) { --i: 4; }
+
+        .motivo--camino {
+          background:
+            linear-gradient(
+              74deg,
+              transparent 0 48%,
+              color-mix(in srgb, var(--motivo) 54%, transparent) 49% 51%,
+              transparent 52%
+            );
+          clip-path: polygon(35% 100%, 65% 100%, 55% 25%, 48% 25%);
+        }
+
+        .motivo--montana,
+        .motivo--tormenta,
+        .motivo--frontera,
+        .motivo--tierra {
+          background:
+            linear-gradient(145deg, transparent 48%, rgba(0,0,0,.35) 49% 68%, transparent 69%),
+            linear-gradient(220deg, transparent 53%, color-mix(in srgb, var(--motivo) 35%, transparent) 54% 72%, transparent 73%);
+        }
+
+        .motivo--niebla {
+          background:
+            radial-gradient(ellipse at 70% 42%, rgba(255,255,255,.28), transparent 52%),
+            radial-gradient(ellipse at 42% 67%, rgba(255,255,255,.22), transparent 54%);
+        }
+
+        .motivo--doble span:nth-child(1),
+        .motivo--doble span:nth-child(2) {
+          width: 10%;
+          height: 38%;
+          bottom: 9%;
+          border-radius: 50% 50% 10% 10%;
+          background: color-mix(in srgb, var(--motivo) 35%, transparent);
+        }
+
+        .motivo--doble span:nth-child(1) { right: 28%; }
+        .motivo--doble span:nth-child(2) { right: 12%; }
+
+        .motivo--rostro span:nth-child(1) {
+          width: 37%;
+          height: 52%;
+          right: 8%;
+          top: 24%;
+          border: 1px solid var(--motivo);
+          border-radius: 48% 52% 44% 56%;
+          transform: rotate(-8deg);
+        }
+
+        .motivo--angel span:nth-child(1),
+        .motivo--angel span:nth-child(2) {
+          width: 32%;
+          height: 46%;
+          top: 28%;
+          border: 1px solid var(--motivo);
+          border-radius: 90% 8% 90% 10%;
+        }
+
+        .motivo--angel span:nth-child(1) {
+          right: 32%;
+          transform: rotate(-19deg);
+        }
+
+        .motivo--angel span:nth-child(2) {
+          right: 2%;
+          transform: scaleX(-1) rotate(-19deg);
+        }
+
+        .motivo--fuego span:nth-child(1) {
+          width: 38%;
+          height: 56%;
+          right: 5%;
+          bottom: 0;
+          border-radius: 75% 25% 60% 40%;
+          background:
+            radial-gradient(circle at 50% 70%, var(--motivo), transparent 64%);
+          transform: rotate(12deg);
+        }
+
+        .motivo--monstruo span:nth-child(1) {
+          width: 44%;
+          height: 50%;
+          right: 4%;
+          bottom: 4%;
+          border: 1px solid var(--motivo);
+          border-radius: 52% 48% 38% 62%;
+          box-shadow: inset 0 -60px 70px rgba(0,0,0,.55);
+        }
+
+        .motivo--figura span:nth-child(1) {
+          width: 2px;
+          height: 58%;
+          right: 28%;
+          bottom: 6%;
+          background: var(--motivo);
+          box-shadow:
+            -8px 30px 0 -0.5px var(--motivo),
+            8px 30px 0 -0.5px var(--motivo);
+        }
+
+        .motivo--arana span:nth-child(1) {
+          width: 22%;
+          aspect-ratio: 1;
+          right: 22%;
+          top: 38%;
+          border-radius: 50%;
+          background: color-mix(in srgb, var(--motivo) 38%, transparent);
+        }
+
+        .motivo--arana span:not(:first-child) {
+          width: 42%;
+          height: 1px;
+          right: 7%;
+          top: 49%;
+          background: var(--motivo);
+          transform-origin: center;
+        }
+
+        .motivo--arana span:nth-child(2) { transform: rotate(18deg); }
+        .motivo--arana span:nth-child(3) { transform: rotate(-18deg); }
+        .motivo--arana span:nth-child(4) { transform: rotate(40deg); }
+        .motivo--arana span:nth-child(5) { transform: rotate(-40deg); }
+
+        .motivo--ruina {
+          background:
+            linear-gradient(90deg, transparent 0 62%, rgba(20,18,14,.46) 62% 66%, transparent 66%),
+            linear-gradient(0deg, transparent 0 24%, rgba(20,18,14,.42) 24% 30%, transparent 30%);
+        }
+
+        .motivo--rothko {
+          background:
+            linear-gradient(
+              180deg,
+              transparent 0 17%,
+              rgba(24,8,7,.32) 17% 45%,
+              transparent 45% 52%,
+              rgba(245,160,110,.17) 52% 79%,
+              transparent 79%
+            );
+        }
+
+        .motivo--muro {
+          background:
+            repeating-linear-gradient(
+              8deg,
+              transparent 0 30px,
+              color-mix(in srgb, var(--motivo) 17%, transparent) 30px 31px
+            );
+        }
+
+        .motivo--flores span {
+          width: 14%;
+          aspect-ratio: 1;
+          top: 18%;
+          border-radius: 50%;
+          border: 1px solid var(--motivo);
+          box-shadow:
+            13px 0 0 -2px color-mix(in srgb, var(--motivo) 55%, transparent),
+            -13px 0 0 -2px color-mix(in srgb, var(--motivo) 55%, transparent);
+        }
+
+        .motivo--flores span:nth-child(1) { right: 22%; }
+        .motivo--flores span:nth-child(2) { right: 39%; top: 13%; }
+
+        .motivo--reloj span:nth-child(1) {
+          width: 40%;
+          height: 15%;
+          right: 5%;
+          top: 48%;
+          border-radius: 50%;
+          border: 1px solid var(--motivo);
+          transform: rotate(12deg);
+        }
+
+        .motivo--madre span:nth-child(1) {
+          width: 36%;
+          height: 48%;
+          right: 9%;
+          bottom: 8%;
+          border-radius: 52% 48% 22% 22%;
+          background: color-mix(in srgb, var(--motivo) 23%, transparent);
+        }
+
+        .motivo--hilos {
+          background:
+            repeating-linear-gradient(
+              68deg,
+              transparent 0 14px,
+              color-mix(in srgb, var(--motivo) 46%, transparent) 14px 15px
+            );
+        }
+
+        .motivo--mascara span:nth-child(1),
+        .motivo--mascara span:nth-child(2) {
+          width: 27%;
+          height: 42%;
+          top: 32%;
+          border: 1px solid var(--motivo);
+          border-radius: 48%;
+        }
+
+        .motivo--mascara span:nth-child(1) { right: 29%; }
+        .motivo--mascara span:nth-child(2) { right: 4%; }
+
+        .motivo--caballo span:nth-child(1) {
+          width: 43%;
+          height: 28%;
+          right: 5%;
+          bottom: 13%;
+          border: 1px solid var(--motivo);
+          border-radius: 60% 40% 30% 30%;
+          transform: rotate(-7deg);
+        }
+
+        .motivo--infancia span:nth-child(1) {
+          width: 15%;
+          height: 31%;
+          right: 18%;
+          bottom: 10%;
+          border-radius: 50% 50% 15% 15%;
+          background: color-mix(in srgb, var(--motivo) 30%, transparent);
+        }
+
+        .motivo--olivo span:nth-child(1) {
+          width: 2px;
+          height: 48%;
+          right: 21%;
+          bottom: 8%;
+          background: var(--motivo);
+        }
+
+        .motivo--olivo span:not(:first-child) {
+          width: 18%;
+          height: 1px;
+          right: 21%;
+          top: 48%;
+          background: var(--motivo);
+          transform-origin: right;
+        }
+
+        .motivo--olivo span:nth-child(2) { transform: rotate(30deg); }
+        .motivo--olivo span:nth-child(3) { transform: rotate(-28deg); }
+
+        .motivo--mesa span:nth-child(1) {
+          width: 54%;
+          height: 1px;
+          right: 3%;
+          bottom: 28%;
+          background: var(--motivo);
+          box-shadow:
+            8px 20px 0 -0.5px var(--motivo),
+            -95px 20px 0 -0.5px var(--motivo);
+        }
+
+        .motivo--samurai span:nth-child(1) {
+          width: 33%;
+          height: 55%;
+          right: 9%;
+          bottom: 0;
+          border-radius: 50% 50% 8% 8%;
+          background: color-mix(in srgb, var(--motivo) 21%, transparent);
+        }
+
+        .motivo--campana span:nth-child(1) {
+          width: 26%;
+          height: 25%;
+          right: 17%;
+          top: 38%;
+          border: 1px solid var(--motivo);
+          border-radius: 50% 50% 16% 16%;
+        }
+
+        .motivo--plegaria span:nth-child(1),
+        .motivo--plegaria span:nth-child(2) {
+          width: 13%;
+          height: 35%;
+          top: 38%;
+          border: 1px solid var(--motivo);
+          border-radius: 50% 50% 12% 12%;
+        }
+
+        .motivo--plegaria span:nth-child(1) {
+          right: 25%;
+          transform: rotate(10deg);
+        }
+
+        .motivo--plegaria span:nth-child(2) {
+          right: 12%;
+          transform: rotate(-10deg);
+        }
+
+        .motivo--partitura {
+          background:
+            repeating-linear-gradient(
+              0deg,
+              transparent 0 17px,
+              color-mix(in srgb, var(--motivo) 28%, transparent) 17px 18px
+            );
+          clip-path: inset(27% 5% 20% 47%);
+        }
+
+        .motivo--orquesta span {
+          width: 1px;
+          height: 40%;
+          bottom: 8%;
+          background: var(--motivo);
+          transform-origin: bottom;
+        }
+
+        .motivo--orquesta span:nth-child(1) { right: 12%; transform: rotate(10deg); }
+        .motivo--orquesta span:nth-child(2) { right: 21%; transform: rotate(-8deg); }
+        .motivo--orquesta span:nth-child(3) { right: 30%; transform: rotate(16deg); }
+        .motivo--orquesta span:nth-child(4) { right: 39%; transform: rotate(-13deg); }
+
+        .motivo--sombrero span:nth-child(1) {
+          width: 44%;
+          height: 11%;
+          right: 3%;
+          top: 38%;
+          border-radius: 50%;
+          background: color-mix(in srgb, var(--motivo) 34%, transparent);
+        }
+
+        .motivo--sombrero span:nth-child(2) {
+          width: 27%;
+          height: 18%;
+          right: 12%;
+          top: 25%;
+          border-radius: 50% 50% 8% 8%;
+          border: 1px solid var(--motivo);
+        }
+
+        .motivo--piedra span:nth-child(1) {
+          width: 38%;
+          height: 58%;
+          right: 5%;
+          bottom: 0;
+          clip-path: polygon(18% 0, 88% 9%, 100% 76%, 72% 100%, 4% 88%, 0 25%);
+          background: color-mix(in srgb, var(--motivo) 20%, transparent);
+        }
+
+        .motivo--luz span:nth-child(1) {
+          width: 4px;
+          height: 76%;
+          right: 27%;
+          top: 13%;
+          background: var(--motivo);
+          box-shadow: 0 0 48px 12px color-mix(in srgb, var(--motivo) 38%, transparent);
+        }
+
+        .motivo--cielo span:nth-child(1) {
+          width: 54%;
+          height: 39%;
+          right: -4%;
+          top: 28%;
+          background: color-mix(in srgb, var(--motivo) 22%, transparent);
+          clip-path: polygon(0 12%, 100% 0, 86% 100%, 12% 82%);
+        }
+
+        .motivo--jardin span {
+          width: 21%;
+          aspect-ratio: 1;
+          border: 1px solid var(--motivo);
+          border-radius: 50%;
+          right: 10%;
+          top: 46%;
+        }
+
+        .motivo--jardin span:nth-child(2) {
+          right: 29%;
+          top: 30%;
+          width: 14%;
+        }
+
+        .motivo--fantasma span:nth-child(1) {
+          width: 30%;
+          height: 58%;
+          right: 8%;
+          top: 23%;
+          border-radius: 50% 50% 10% 10%;
+          background: linear-gradient(180deg, rgba(255,255,255,.22), transparent);
+          filter: blur(2px);
+        }
+
+        .motivo--danza span {
+          width: 1px;
+          height: 44%;
+          bottom: 6%;
+          background: var(--motivo);
+          transform-origin: bottom;
+        }
+
+        .motivo--danza span:nth-child(1) { right: 13%; transform: rotate(23deg); }
+        .motivo--danza span:nth-child(2) { right: 24%; transform: rotate(-19deg); }
+        .motivo--danza span:nth-child(3) { right: 35%; transform: rotate(29deg); }
+        .motivo--danza span:nth-child(4) { right: 46%; transform: rotate(-26deg); }
+
+        @media (prefers-reduced-motion: reduce) {
+          .motivo,
+          .portada-atlas img,
+          .portada-atlas span {
+            transition: none !important;
+          }
+        }
+      `}</style>
+
+      <div className="mx-auto max-w-[1680px] px-4 py-20 sm:px-7 sm:py-28 lg:px-10">
+        <div className="grid gap-9 border-b border-white/12 pb-12 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p className="text-[8px] uppercase tracking-[0.46em] text-[#c7a467]">
+              Canon fundacional · edición I
+            </p>
+
+            <h2
+              id="atlas-title"
+              className="mt-7 max-w-5xl font-serif text-5xl leading-[0.88] tracking-[-0.055em] sm:text-7xl lg:text-[106px]"
+            >
+              Atlas Universal
+              <span className="block italic text-white/38">
+                de las influencias humanas.
+              </span>
+            </h2>
+
+            <p className="mt-8 max-w-2xl font-serif text-xl italic leading-8 text-white/54">
+              Cincuenta puertas. Cincuenta maneras de ampliar
+              nuestra comprensión de lo humano.
+            </p>
+          </div>
+
+          <div className="flex items-end gap-3">
+            <strong className="font-serif text-6xl font-normal">
+              {artistasFiltrados.length}
+            </strong>
+
+            <span className="pb-2 text-[8px] uppercase tracking-[0.28em] text-white/34">
+              presencias
+            </span>
+          </div>
+        </div>
+
+        {/* BUSCADOR */}
+
+        <div className="mt-10 grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <label
+              htmlFor="buscar-artista"
+              className="text-[8px] uppercase tracking-[0.34em] text-white/36"
+            >
+              Buscar en el Atlas
+            </label>
+
+            <input
+              id="buscar-artista"
+              type="search"
+              value={busqueda}
+              onChange={(event) =>
+                setBusqueda(event.target.value)
+              }
+              placeholder="Nombre, territorio, disciplina, obra o concepto..."
+              className="mt-3 w-full border-b border-white/18 bg-transparent py-4 font-serif text-xl text-[#f0e8dc] outline-none transition placeholder:text-white/22 focus:border-[#c7a467] sm:text-2xl"
+            />
+          </div>
+
+          {(busqueda || disciplina !== "Todos") && (
+            <button
+              type="button"
+              onClick={() => {
+                setBusqueda("");
+                setDisciplina("Todos");
+              }}
+              className="w-fit border-b border-white/20 pb-2 text-[8px] uppercase tracking-[0.28em] text-white/45 transition hover:border-[#c7a467] hover:text-[#c7a467]"
+            >
+              Limpiar filtros
+            </button>
+          )}
+        </div>
+
+        {/* DISCIPLINAS */}
+
+        <div className="mt-8 flex flex-wrap gap-2">
+          {disciplinas.map((opcion) => {
+            const activa = disciplina === opcion;
+
+            return (
+              <button
+                key={opcion}
+                type="button"
+                onClick={() => setDisciplina(opcion)}
+                className={`border px-4 py-2.5 text-[7px] uppercase tracking-[0.22em] transition ${
+                  activa
+                    ? "border-[#c7a467] bg-[#c7a467] text-[#11100e]"
+                    : "border-white/12 text-white/40 hover:border-white/35 hover:text-white"
+                }`}
+              >
+                {opcion}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* PORTADAS */}
+
+        {artistasFiltrados.length === 0 ? (
+          <div className="mt-14 border-y border-white/12 py-24 text-center">
+            <p className="font-serif text-3xl text-white/42">
+              No hay presencias que coincidan con la búsqueda.
+            </p>
+          </div>
+        ) : (
+          <ol className="mt-14 grid gap-x-8 gap-y-16 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {artistasFiltrados.map((artista) => {
+              const abierto =
+                artistaAbierto === artista.id;
+              const fichaCuratorial =
+                obtenerFichaCuratorial(artista.nombre);
+
+              return (
+                <li
+                  key={artista.id}
+                  className="group min-w-0"
+                >
+                  <button
+                    type="button"
+                    aria-expanded={abierto}
+                    onClick={() =>
+                      setArtistaAbierto((actual) =>
+                        actual === artista.id
+                          ? null
+                          : artista.id
+                      )
+                    }
+                    className="block w-full text-left"
+                  >
+                    <PortadaArtista
+                      artista={artista}
+                    />
+
+                    <div className="flex items-center justify-between border-b border-white/12 px-1 py-5">
+                      <span className="text-[7px] uppercase tracking-[0.28em] text-white/38">
+                        {abierto
+                          ? "Cerrar archivo"
+                          : "Abrir archivo"}
+                      </span>
+
+                      <span
+                        aria-hidden="true"
+                        className={`font-serif text-xl text-[#c7a467] transition-transform duration-500 ${
+                          abierto ? "rotate-45" : ""
+                        }`}
+                      >
+                        +
+                      </span>
+                    </div>
+                  </button>
+
+                  {abierto && (
+                    <div className="border-b border-white/12 px-1 pb-7 pt-3">
+                      {fichaCuratorial && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => setArtistaSala(artista)}
+                            className="mb-7 flex w-full items-center justify-between border border-[#c49755]/30 bg-[#c49755]/[0.045] px-5 py-4 text-left transition hover:border-[#d5b477]/65 hover:bg-[#c49755]/[0.08]"
+                          >
+                            <span>
+                              <span className="block text-[7px] uppercase tracking-[0.3em] text-[#c49755]">
+                                Nueva experiencia
+                              </span>
+                              <span className="mt-2 block font-serif text-xl text-[#e7d7bd]">
+                                Entrar en la sala
+                              </span>
+                            </span>
+                      
+                            <span className="font-serif text-2xl text-[#c49755]">
+                              →
+                            </span>
+                          </button>
+                      
+                          <FichaCuratorialArtista
+                            codigo={artista.codigo}
+                            nombre={artista.nombre}
+                            ficha={fichaCuratorial}
+                          />
+                        </>
+                      )}
+                      {(artista.territorio ||
+                        artista.periodo) && (
+                        <p className="text-xs italic leading-6 text-white/42">
+                          {[
+                            artista.territorio,
+                            artista.periodo,
+                          ]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </p>
+                      )}
+
+                      {(artista.obra ||
+                        artista.obras_esenciales.length >
+                          0) && (
+                        <div className="mt-6">
+                          <p className="text-[7px] uppercase tracking-[0.26em] text-[#c7a467]">
+                            Obras esenciales
+                          </p>
+
+                          <ul className="mt-3 space-y-2 font-serif text-base italic leading-6 text-white/62">
+                            {[
+                              artista.obra,
+                              ...artista.obras_esenciales,
+                            ]
+                              .filter(
+                                (
+                                  obra,
+                                  posicion,
+                                  lista
+                                ) =>
+                                  Boolean(obra) &&
+                                  lista.indexOf(obra) ===
+                                    posicion
+                              )
+                              .slice(0, 4)
+                              .map((obra) => (
+                                <li key={obra}>
+                                  — {obra}
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {artista.etiquetas.length > 0 && (
+                        <div className="mt-6 flex flex-wrap gap-2">
+                          {artista.etiquetas
+                            .filter(
+                              (etiqueta) =>
+                                ![
+                                  "atlas fundacional",
+                                  "tríptico",
+                                ].includes(
+                                  normalizar(etiqueta)
+                                )
+                            )
+                            .slice(0, 5)
+                            .map((etiqueta) => (
+                              <span
+                                key={etiqueta}
+                                className="border border-white/12 px-3 py-2 text-[6px] uppercase tracking-[0.18em] text-white/38"
+                              >
+                                {etiqueta}
+                              </span>
+                            ))}
+                        </div>
+                      )}
+
+                      <div className="mt-7 border-t border-white/12 pt-5">
+                        <p className="text-[7px] uppercase tracking-[0.25em] text-[#c7a467]">
+                          Dedicatoria
+                        </p>
+
+                        <p className="mt-3 font-serif text-sm italic leading-6 text-white/48">
+                          {artista.dedicatoria ||
+                            "Para quien abrió un camino y permitió que otros pudieran atravesarlo."}
+                        </p>
+                      </div>
+
+                      <AccionesArtista
+                        artistaId={artista.id}
+                        corazonesIniciales={
+                          artista.corazones
+                        }
+                        velasIniciales={artista.velas}
+                      />
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        )}
+
+        <div className="mt-20 flex flex-col gap-5 border-t border-white/12 pt-8 sm:flex-row sm:items-end sm:justify-between">
+          <p className="max-w-xl font-serif text-lg italic leading-7 text-white/42">
+            Ninguna obra nace en soledad. Cada portada señala
+            una puerta dentro de la conversación humana.
+          </p>
+
+          <p className="text-[7px] uppercase tracking-[0.32em] text-white/24">
+            Poema Universal · Archivo vivo
+          </p>
+        </div>
+      </div>
+      {artistaSala && fichaSala && (
+        <FichaAtlasInmersiva
+          artista={artistaSala}
+          ficha={fichaSala}
+          portadaUrl={
+            PORTADAS_FORZADAS[
+              clavePortada(artistaSala.nombre)
+            ] ??
+            artistaSala.portada_url ??
+            null
+          }
+          onClose={() => setArtistaSala(null)}
+          onSelectArtista={(nombre) => {
+            const siguiente = artistas.find(
+              (candidato) =>
+                normalizar(candidato.nombre) ===
+                normalizar(nombre)
+            );
+
+            if (siguiente) {
+              setArtistaSala(siguiente);
+            }
+          }}
+        />
+      )}
+
+    </section>
+  );
+}

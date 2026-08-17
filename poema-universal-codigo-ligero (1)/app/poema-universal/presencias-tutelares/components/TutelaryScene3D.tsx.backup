@@ -1,0 +1,1001 @@
+"use client";
+
+import {
+  Canvas,
+  useFrame,
+} from "@react-three/fiber";
+
+import {
+  Float,
+  Sparkles,
+} from "@react-three/drei";
+
+import {
+  useMemo,
+  useRef,
+} from "react";
+
+import type {
+  Group,
+  Mesh,
+} from "three";
+
+type TutelaryScene3DProps = {
+  presenceId: string;
+};
+
+type PresenceWorld = {
+  light: string;
+  secondary: string;
+  stone: string;
+  fog: string;
+};
+
+const WORLDS: Record<
+  string,
+  PresenceWorld
+> = {
+  borges: {
+    light: "#d6b96d",
+    secondary: "#53698f",
+    stone: "#b8aa91",
+    fog: "#080b12",
+  },
+
+  pizarnik: {
+    light: "#b59acb",
+    secondary: "#655078",
+    stone: "#c4b6c8",
+    fog: "#0d0912",
+  },
+
+  camus: {
+    light: "#efc66f",
+    secondary: "#af8250",
+    stone: "#d0b98d",
+    fog: "#151007",
+  },
+};
+
+function BorgesGuardian({
+  world,
+}: {
+  world: PresenceWorld;
+}) {
+  const group =
+    useRef<Group>(null);
+
+  const head =
+    useRef<Group>(null);
+
+  const book =
+    useRef<Group>(null);
+
+  useFrame(({ clock }) => {
+    const time =
+      clock.getElapsedTime();
+
+    if (group.current) {
+      group.current.rotation.y =
+        -0.08 +
+        Math.sin(time * 0.18) * 0.055;
+
+      group.current.position.y =
+        Math.sin(time * 0.38) * 0.025;
+    }
+
+    if (head.current) {
+      head.current.rotation.z =
+        -0.075 +
+        Math.sin(time * 0.21) * 0.014;
+
+      head.current.rotation.x =
+        0.035 +
+        Math.sin(time * 0.16) * 0.012;
+    }
+
+    if (book.current) {
+      book.current.rotation.x =
+        -0.23 +
+        Math.sin(time * 0.25) * 0.012;
+    }
+  });
+
+  return (
+    <group
+      ref={group}
+      position={[0, -1.18, 0]}
+      rotation={[0, -0.08, 0]}
+    >
+      {/* Pedestal */}
+      <mesh
+        position={[0, -1.06, 0]}
+        scale={[1.05, 0.18, 0.76]}
+      >
+        <cylinderGeometry
+          args={[0.76, 0.9, 0.32, 48]}
+        />
+
+        <meshStandardMaterial
+          color="#15161b"
+          roughness={0.92}
+          metalness={0.12}
+        />
+      </mesh>
+
+      {/* Piernas */}
+      <mesh
+        position={[-0.24, -0.5, 0]}
+        scale={[0.34, 1.05, 0.42]}
+      >
+        <capsuleGeometry
+          args={[0.25, 0.72, 12, 24]}
+        />
+
+        <meshStandardMaterial
+          color="#15171d"
+          roughness={0.94}
+        />
+      </mesh>
+
+      <mesh
+        position={[0.24, -0.5, 0]}
+        scale={[0.34, 1.05, 0.42]}
+      >
+        <capsuleGeometry
+          args={[0.25, 0.72, 12, 24]}
+        />
+
+        <meshStandardMaterial
+          color="#15171d"
+          roughness={0.94}
+        />
+      </mesh>
+
+      {/* Zapatos */}
+      <mesh
+        position={[-0.24, -1.04, 0.16]}
+        scale={[0.42, 0.17, 0.68]}
+      >
+        <sphereGeometry
+          args={[0.42, 28, 28]}
+        />
+
+        <meshStandardMaterial
+          color="#090a0d"
+          roughness={0.72}
+        />
+      </mesh>
+
+      <mesh
+        position={[0.24, -1.04, 0.16]}
+        scale={[0.42, 0.17, 0.68]}
+      >
+        <sphereGeometry
+          args={[0.42, 28, 28]}
+        />
+
+        <meshStandardMaterial
+          color="#090a0d"
+          roughness={0.72}
+        />
+      </mesh>
+
+      {/* Torso / chaqueta */}
+      <mesh
+        position={[0, 0.46, 0]}
+        scale={[0.9, 1.42, 0.62]}
+      >
+        <capsuleGeometry
+          args={[0.5, 1.02, 16, 32]}
+        />
+
+        <meshStandardMaterial
+          color="#24262d"
+          roughness={0.9}
+          metalness={0.03}
+        />
+      </mesh>
+
+      {/* Camisa */}
+      <mesh
+        position={[0, 0.94, 0.49]}
+        scale={[0.46, 0.68, 0.09]}
+      >
+        <boxGeometry
+          args={[0.72, 1.05, 0.12]}
+        />
+
+        <meshStandardMaterial
+          color="#d4cec2"
+          roughness={0.88}
+        />
+      </mesh>
+
+      {/* Corbata */}
+      <mesh
+        position={[0, 0.84, 0.57]}
+        rotation={[0, 0, Math.PI / 4]}
+        scale={[0.17, 0.42, 0.05]}
+      >
+        <boxGeometry
+          args={[0.46, 0.46, 0.12]}
+        />
+
+        <meshStandardMaterial
+          color="#4a3a30"
+          roughness={0.86}
+        />
+      </mesh>
+
+      {/* Solapas */}
+      <mesh
+        position={[-0.27, 0.86, 0.5]}
+        rotation={[0, 0.12, -0.35]}
+        scale={[0.2, 0.75, 0.08]}
+      >
+        <boxGeometry
+          args={[0.6, 1.1, 0.12]}
+        />
+
+        <meshStandardMaterial
+          color="#34363e"
+          roughness={0.9}
+        />
+      </mesh>
+
+      <mesh
+        position={[0.27, 0.86, 0.5]}
+        rotation={[0, -0.12, 0.35]}
+        scale={[0.2, 0.75, 0.08]}
+      >
+        <boxGeometry
+          args={[0.6, 1.1, 0.12]}
+        />
+
+        <meshStandardMaterial
+          color="#34363e"
+          roughness={0.9}
+        />
+      </mesh>
+
+      {/* Brazo izquierdo sujetando el libro */}
+      <mesh
+        position={[-0.58, 0.4, 0.14]}
+        rotation={[0.22, 0.05, -0.32]}
+      >
+        <capsuleGeometry
+          args={[0.12, 1.03, 10, 20]}
+        />
+
+        <meshStandardMaterial
+          color="#292b32"
+          roughness={0.92}
+        />
+      </mesh>
+
+      {/* Brazo derecho junto al bastón */}
+      <mesh
+        position={[0.58, 0.35, 0.1]}
+        rotation={[0.08, 0, 0.25]}
+      >
+        <capsuleGeometry
+          args={[0.12, 1.08, 10, 20]}
+        />
+
+        <meshStandardMaterial
+          color="#292b32"
+          roughness={0.92}
+        />
+      </mesh>
+
+      {/* Manos */}
+      <mesh
+        position={[-0.48, -0.02, 0.41]}
+        scale={[0.15, 0.2, 0.12]}
+      >
+        <sphereGeometry
+          args={[1, 28, 28]}
+        />
+
+        <meshStandardMaterial
+          color="#bda98f"
+          roughness={0.86}
+        />
+      </mesh>
+
+      <mesh
+        position={[0.65, -0.08, 0.32]}
+        scale={[0.15, 0.21, 0.12]}
+      >
+        <sphereGeometry
+          args={[1, 28, 28]}
+        />
+
+        <meshStandardMaterial
+          color="#bda98f"
+          roughness={0.86}
+        />
+      </mesh>
+
+      {/* Libro cerrado */}
+      <group
+        ref={book}
+        position={[-0.22, 0.02, 0.52]}
+        rotation={[-0.23, 0.08, -0.08]}
+      >
+        <mesh
+          scale={[0.66, 0.08, 0.48]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#6e5232"
+            roughness={0.84}
+          />
+        </mesh>
+
+        <mesh
+          position={[0, 0.085, 0]}
+          scale={[0.62, 0.035, 0.44]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#c9bda6"
+            roughness={0.94}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.67, 0, 0]}
+          scale={[0.04, 0.12, 0.48]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#a48755"
+            metalness={0.18}
+            roughness={0.68}
+          />
+        </mesh>
+      </group>
+
+      {/* Bastón */}
+      <mesh
+        position={[0.79, -0.18, 0.16]}
+        rotation={[0, 0, -0.035]}
+      >
+        <cylinderGeometry
+          args={[0.032, 0.047, 2.28, 20]}
+        />
+
+        <meshStandardMaterial
+          color="#7d5c35"
+          roughness={0.72}
+          metalness={0.08}
+        />
+      </mesh>
+
+      <mesh
+        position={[0.8, 0.95, 0.15]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <torusGeometry
+          args={[
+            0.145,
+            0.035,
+            16,
+            36,
+            Math.PI,
+          ]}
+        />
+
+        <meshStandardMaterial
+          color="#8b683e"
+          roughness={0.68}
+        />
+      </mesh>
+
+      {/* Cuello */}
+      <mesh
+        position={[0, 1.32, 0]}
+        scale={[0.28, 0.34, 0.27]}
+      >
+        <cylinderGeometry
+          args={[0.5, 0.58, 1, 32]}
+        />
+
+        <meshStandardMaterial
+          color="#bba68c"
+          roughness={0.88}
+        />
+      </mesh>
+
+      {/* Cabeza */}
+      <group
+        ref={head}
+        position={[0, 1.72, 0]}
+        rotation={[0.03, -0.05, -0.075]}
+      >
+        <mesh
+          scale={[0.82, 1.02, 0.86]}
+        >
+          <sphereGeometry
+            args={[0.46, 64, 64]}
+          />
+
+          <meshStandardMaterial
+            color="#c2ae92"
+            roughness={0.9}
+          />
+        </mesh>
+
+        {/* Frente y cabello plateado */}
+        <mesh
+          position={[0, 0.19, -0.03]}
+          scale={[0.88, 0.46, 0.88]}
+        >
+          <sphereGeometry
+            args={[0.46, 48, 48]}
+          />
+
+          <meshStandardMaterial
+            color="#d1cec5"
+            roughness={0.95}
+          />
+        </mesh>
+
+        <mesh
+          position={[-0.34, 0.05, -0.03]}
+          rotation={[0, 0, 0.28]}
+          scale={[0.24, 0.56, 0.24]}
+        >
+          <capsuleGeometry
+            args={[0.18, 0.42, 10, 20]}
+          />
+
+          <meshStandardMaterial
+            color="#d6d2c8"
+            roughness={0.96}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.34, 0.05, -0.03]}
+          rotation={[0, 0, -0.28]}
+          scale={[0.24, 0.56, 0.24]}
+        >
+          <capsuleGeometry
+            args={[0.18, 0.42, 10, 20]}
+          />
+
+          <meshStandardMaterial
+            color="#d6d2c8"
+            roughness={0.96}
+          />
+        </mesh>
+
+        {/* Orejas */}
+        <mesh
+          position={[-0.42, -0.01, 0]}
+          scale={[0.12, 0.2, 0.08]}
+        >
+          <sphereGeometry
+            args={[1, 24, 24]}
+          />
+
+          <meshStandardMaterial
+            color="#b69f83"
+            roughness={0.9}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.42, -0.01, 0]}
+          scale={[0.12, 0.2, 0.08]}
+        >
+          <sphereGeometry
+            args={[1, 24, 24]}
+          />
+
+          <meshStandardMaterial
+            color="#b69f83"
+            roughness={0.9}
+          />
+        </mesh>
+
+        {/* Nariz */}
+        <mesh
+          position={[0, -0.01, 0.43]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={[0.11, 0.23, 0.11]}
+        >
+          <coneGeometry
+            args={[0.5, 1, 24]}
+          />
+
+          <meshStandardMaterial
+            color="#b59e82"
+            roughness={0.92}
+          />
+        </mesh>
+
+        {/* Ojos velados */}
+        <mesh
+          position={[-0.17, 0.08, 0.39]}
+          scale={[0.14, 0.038, 0.027]}
+        >
+          <sphereGeometry
+            args={[1, 32, 32]}
+          />
+
+          <meshStandardMaterial
+            color="#d9d5c8"
+            emissive={world.light}
+            emissiveIntensity={0.13}
+            roughness={0.7}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.17, 0.08, 0.39]}
+          scale={[0.14, 0.038, 0.027]}
+        >
+          <sphereGeometry
+            args={[1, 32, 32]}
+          />
+
+          <meshStandardMaterial
+            color="#d9d5c8"
+            emissive={world.light}
+            emissiveIntensity={0.13}
+            roughness={0.7}
+          />
+        </mesh>
+
+        {/* Cejas */}
+        <mesh
+          position={[-0.17, 0.18, 0.39]}
+          rotation={[0, 0, -0.08]}
+          scale={[0.16, 0.025, 0.02]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#9d998f"
+            roughness={1}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.17, 0.18, 0.39]}
+          rotation={[0, 0, 0.08]}
+          scale={[0.16, 0.025, 0.02]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#9d998f"
+            roughness={1}
+          />
+        </mesh>
+
+        {/* Boca serena */}
+        <mesh
+          position={[0, -0.22, 0.405]}
+          scale={[0.17, 0.024, 0.018]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#745e55"
+            roughness={0.94}
+          />
+        </mesh>
+
+        {/* Arrugas simbólicas */}
+        <mesh
+          position={[-0.23, -0.08, 0.39]}
+          rotation={[0, 0, -0.24]}
+          scale={[0.11, 0.012, 0.012]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#927c67"
+            roughness={1}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.23, -0.08, 0.39]}
+          rotation={[0, 0, 0.24]}
+          scale={[0.11, 0.012, 0.012]}
+        >
+          <boxGeometry
+            args={[1, 1, 1]}
+          />
+
+          <meshStandardMaterial
+            color="#927c67"
+            roughness={1}
+          />
+        </mesh>
+      </group>
+
+      {/* Pequeño laberinto luminoso tras la figura */}
+      <group
+        position={[0, 0.65, -0.82]}
+        rotation={[0, 0, 0.08]}
+      >
+        {[0.6, 0.9, 1.2, 1.5].map(
+          (radius, index) => (
+            <mesh
+              key={radius}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
+              <torusGeometry
+                args={[
+                  radius,
+                  0.012,
+                  8,
+                  64,
+                  Math.PI * (
+                    index % 2 === 0
+                      ? 1.55
+                      : 1.8
+                  ),
+                ]}
+              />
+
+              <meshStandardMaterial
+                color={world.light}
+                emissive={world.light}
+                emissiveIntensity={0.75}
+                transparent
+                opacity={0.3}
+              />
+            </mesh>
+          )
+        )}
+      </group>
+    </group>
+  );
+}
+
+function PizarnikGuardian({
+  world,
+}: {
+  world: PresenceWorld;
+}) {
+  const group =
+    useRef<Group>(null);
+
+  useFrame(({ clock }) => {
+    const time =
+      clock.getElapsedTime();
+
+    if (group.current) {
+      group.current.rotation.y =
+        Math.sin(time * 0.18) * 0.12;
+
+      group.current.position.y =
+        Math.sin(time * 0.35) * 0.05;
+    }
+  });
+
+  return (
+    <group
+      ref={group}
+      position={[0, -1.1, 0]}
+    >
+      <mesh
+        position={[0, 1.7, 0]}
+        scale={[0.9, 1.05, 0.86]}
+      >
+        <sphereGeometry
+          args={[0.4, 48, 48]}
+        />
+
+        <meshStandardMaterial
+          color={world.stone}
+          roughness={0.88}
+        />
+      </mesh>
+
+      <mesh
+        position={[0, 0.38, 0]}
+        scale={[1.08, 1.8, 0.7]}
+      >
+        <coneGeometry
+          args={[0.72, 2.4, 48]}
+        />
+
+        <meshStandardMaterial
+          color="#211a2a"
+          roughness={0.94}
+        />
+      </mesh>
+
+      <mesh
+        position={[0, 0.72, 0.52]}
+      >
+        <sphereGeometry
+          args={[0.08, 24, 24]}
+        />
+
+        <meshStandardMaterial
+          color={world.light}
+          emissive={world.light}
+          emissiveIntensity={2.5}
+        />
+      </mesh>
+
+      <mesh
+        position={[-0.56, 1.78, 0.08]}
+        rotation={[0, 0, -0.35]}
+      >
+        <torusGeometry
+          args={[0.34, 0.07, 18, 48, 3.8]}
+        />
+
+        <meshStandardMaterial
+          color="#17131c"
+          roughness={0.95}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function CamusGuardian({
+  world,
+}: {
+  world: PresenceWorld;
+}) {
+  const group =
+    useRef<Group>(null);
+
+  useFrame(({ clock }) => {
+    const time =
+      clock.getElapsedTime();
+
+    if (group.current) {
+      group.current.rotation.y =
+        Math.sin(time * 0.2) * 0.07;
+
+      group.current.position.y =
+        Math.sin(time * 0.4) * 0.025;
+    }
+  });
+
+  return (
+    <group
+      ref={group}
+      position={[0, -1.15, 0]}
+    >
+      <mesh
+        position={[0, 1.78, 0]}
+      >
+        <sphereGeometry
+          args={[0.42, 48, 48]}
+        />
+
+        <meshStandardMaterial
+          color={world.stone}
+          roughness={0.78}
+        />
+      </mesh>
+
+      <mesh
+        position={[0, 0.58, 0]}
+        scale={[0.95, 1.55, 0.68]}
+      >
+        <capsuleGeometry
+          args={[0.52, 1.3, 16, 32]}
+        />
+
+        <meshStandardMaterial
+          color="#403326"
+          roughness={0.88}
+        />
+      </mesh>
+
+      <mesh
+        position={[0, -0.66, 0.08]}
+        rotation={[0.06, 0, 0]}
+      >
+        <dodecahedronGeometry
+          args={[0.56, 0]}
+        />
+
+        <meshStandardMaterial
+          color="#b99b65"
+          roughness={1}
+        />
+      </mesh>
+
+      <mesh
+        position={[0.7, 1.8, -0.35]}
+      >
+        <sphereGeometry
+          args={[0.24, 32, 32]}
+        />
+
+        <meshStandardMaterial
+          color={world.light}
+          emissive={world.light}
+          emissiveIntensity={3}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function Guardian({
+  presenceId,
+  world,
+}: TutelaryScene3DProps & {
+  world: PresenceWorld;
+}) {
+  if (presenceId === "pizarnik") {
+    return (
+      <PizarnikGuardian
+        world={world}
+      />
+    );
+  }
+
+  if (presenceId === "camus") {
+    return (
+      <CamusGuardian
+        world={world}
+      />
+    );
+  }
+
+  return (
+    <BorgesGuardian
+      world={world}
+    />
+  );
+}
+
+function Scene({
+  presenceId,
+}: TutelaryScene3DProps) {
+  const world =
+    WORLDS[presenceId] ??
+    WORLDS.borges;
+
+  const sparkles = useMemo(
+    () =>
+      presenceId === "pizarnik"
+        ? 42
+        : presenceId === "camus"
+          ? 22
+          : 34,
+    [presenceId]
+  );
+
+  return (
+    <>
+      <color
+        attach="background"
+        args={[world.fog]}
+      />
+
+      <fog
+        attach="fog"
+        args={[world.fog, 4, 10]}
+      />
+
+      <ambientLight
+        intensity={0.62}
+      />
+
+      <directionalLight
+        position={[3, 4, 4]}
+        intensity={2.4}
+        color={world.light}
+      />
+
+      <pointLight
+        position={[-2.5, 1.5, 2]}
+        intensity={2.2}
+        color={world.secondary}
+      />
+
+      <pointLight
+        position={[0, -0.5, 2.8]}
+        intensity={0.75}
+        color={world.light}
+      />
+
+      <Sparkles
+        count={sparkles}
+        scale={[4.5, 5.5, 3]}
+        size={1.8}
+        speed={0.16}
+        color={world.light}
+        opacity={0.56}
+      />
+
+      <Float
+        speed={0.7}
+        rotationIntensity={0.08}
+        floatIntensity={0.12}
+      >
+        <Guardian
+          presenceId={presenceId}
+          world={world}
+        />
+      </Float>
+
+      <mesh
+        position={[0, -2.26, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <circleGeometry
+          args={[1.45, 64]}
+        />
+
+        <meshStandardMaterial
+          color="#131419"
+          roughness={0.96}
+          metalness={0.08}
+        />
+      </mesh>
+    </>
+  );
+}
+
+export default function
+TutelaryScene3D({
+  presenceId,
+}: TutelaryScene3DProps) {
+  return (
+    <div
+      aria-label="Presencia tutelar tridimensional"
+      role="img"
+      style={{
+        width: "100%",
+        height: "100%",
+        minHeight: 430,
+      }}
+    >
+      <Canvas
+        camera={{
+          position: [0, 0.3, 5.8],
+          fov: 38,
+        }}
+        dpr={[1, 1.7]}
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference:
+            "high-performance",
+        }}
+      >
+        <Scene
+          presenceId={presenceId}
+        />
+      </Canvas>
+    </div>
+  );
+}

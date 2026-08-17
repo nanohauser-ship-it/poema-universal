@@ -1,0 +1,9 @@
+EMBRIÓN V6.2.2 · ACCESO AL INTERIOR
+
+Corrige el bloqueo de la Cámara de incubación:
+- antes exigía 12 caracteres aunque la lectura genética aceptaba una palabra;
+- ahora cualquier texto no vacío puede incubar;
+- ALMA, CASA, AGUA, etc. pueden crear directamente un organismo;
+- los avisos de validación se muestran también en la pantalla de nacimiento.
+
+No borra localStorage, Membrana, Vivero ni corpus.

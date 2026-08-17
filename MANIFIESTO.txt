@@ -1,0 +1,24 @@
+mdb-01: Memorias de Bielka — Mara
+mdb-02: Memorias de Bielka — El collar
+mdb-03: Memorias de Bielka — Nadir bajo el arco
+mdb-04: Memorias de Bielka — El arco de Bielka
+mdb-05: Memorias de Bielka — Los africanos emergiendo del mar
+mdb-06: Memorias de Bielka — Los perros que llevan bebés
+mdb-07: Memorias de Bielka — El juguete roto
+mdb-08: Memorias de Bielka — La puerta de piedra
+jdh-01: La Jerarquía del Hambre — Atlas
+jdh-02: La Jerarquía del Hambre — La frutería de Barcelona
+jdh-03: La Jerarquía del Hambre — La vieja estación
+jdh-04: La Jerarquía del Hambre — La Cocina sin Fuego
+jdh-05: La Jerarquía del Hambre — La Farmacia de la Morfina
+jdh-06: La Jerarquía del Hambre — El Mercado de las Voces
+jdh-07: La Jerarquía del Hambre — La Asamblea de los No Amados
+jdh-08: La Jerarquía del Hambre — Las tres puertas
+ndd-01: No dejes que desaparezcamos — El Árbol Blanco
+ndd-02: No dejes que desaparezcamos — Los cuadernos de la herida
+ndd-03: No dejes que desaparezcamos — La carretera del quiebre
+ndd-04: No dejes que desaparezcamos — La habitación de María
+ndd-05: No dejes que desaparezcamos — El árbol después del fuego
+ndd-06: No dejes que desaparezcamos — La hoja salvada
+ndd-07: No dejes que desaparezcamos — La casa y el linaje roto
+ndd-08: No dejes que desaparezcamos — El paquete que vuelve

@@ -1,0 +1,36 @@
+EL GRAN AVATAR · POEMA UNIVERSAL
+================================
+
+Esta instalación crea una sala nueva dentro del proyecto existente.
+No crea otro proyecto, no sustituye la portada y no modifica .env.local.
+
+Incluye:
+- presencia cinematográfica central;
+- entrada de poemas escritos, pegados o mediante TXT/Markdown;
+- biblioteca local privada en IndexedDB;
+- conversación poética mediante la API de servidor existente;
+- lectura con voz y control de pausa, ritmo y progreso;
+- conversación mediante micrófono y transcripción;
+- arquitectura para vídeos reales de reposo, escucha y habla;
+- portal y enlace orgánico dentro de Poema Universal;
+- diseño responsive y accesible;
+- backups automáticos de cualquier archivo sustituido.
+
+Persistencia:
+Los poemas se guardan solamente en el navegador actual. No se ha creado ni
+ejecutado ninguna tabla de Supabase.
+
+Inteligencia y voz:
+Reutiliza OPENAI_API_KEY exclusivamente en rutas de servidor. Nunca se envía
+la clave al navegador. Las llamadas de conversación, voz y transcripción
+pueden tener coste según la cuenta configurada.
+
+Instalación en Terminal:
+
+  cd "$HOME/poema-universal"
+  bash "./poema-universal-gran-avatar-instalador/INSTALAR-GRAN-AVATAR.sh" \
+    "$HOME/poema-universal"
+  npm run dev
+
+Ruta:
+http://localhost:3000/poema-universal/gran-avatar

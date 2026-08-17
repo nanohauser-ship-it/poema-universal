@@ -1,0 +1,784 @@
+.cartography {
+  width: min(1500px, 100%);
+  margin: 100px auto 0;
+  padding: 34px;
+  border:
+    1px solid
+    rgba(204, 165, 93, 0.23);
+  color: #e8dac0;
+  background:
+    radial-gradient(
+      circle at 50% 46%,
+      rgba(186, 121, 39, 0.12),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(18, 14, 10, 0.97),
+      rgba(5, 5, 4, 0.99)
+    );
+  box-shadow:
+    0 55px 170px
+      rgba(0, 0, 0, 0.58),
+    inset 0 0 90px
+      rgba(164, 110, 39, 0.035);
+}
+
+.cartographyHeader {
+  display: grid;
+  grid-template-columns:
+    1fr minmax(280px, 0.7fr);
+  gap: 50px;
+  padding: 8px 10px 34px;
+  align-items: end;
+  border-bottom:
+    1px solid
+    rgba(204, 165, 93, 0.16);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: #a57d40;
+  font-size: 0.65rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.cartographyHeader h2 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size:
+    clamp(2.3rem, 4vw, 5rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.cartographyHeader blockquote {
+  margin: 0;
+  color: #a99a83;
+  font-family: Georgia, serif;
+  font-size: 1.02rem;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.cartographyLayout {
+  display: grid;
+  grid-template-columns:
+    minmax(190px, 0.25fr)
+    minmax(680px, 1fr)
+    minmax(210px, 0.28fr);
+  min-height: 720px;
+}
+
+.leftRail,
+.rightRail {
+  display: grid;
+  padding: 28px 20px;
+  align-content: start;
+  gap: 14px;
+  background:
+    rgba(0, 0, 0, 0.18);
+}
+
+.leftRail {
+  border-right:
+    1px solid
+    rgba(204, 165, 93, 0.12);
+}
+
+.rightRail {
+  border-left:
+    1px solid
+    rgba(204, 165, 93, 0.12);
+}
+
+.leftRail article,
+.rightRail article {
+  padding: 20px;
+  border:
+    1px solid
+    rgba(204, 165, 93, 0.14);
+  background:
+    rgba(255, 244, 218, 0.015);
+}
+
+.leftRail small,
+.rightRail small {
+  color: #a98247;
+  font-size: 0.59rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.leftRail p,
+.rightRail p {
+  margin: 13px 0 0;
+  color: #b9aa93;
+  font-family: Georgia, serif;
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.leftRail strong {
+  display: block;
+  margin-top: 14px;
+  color: #dfc898;
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.mapFrame {
+  position: relative;
+  min-height: 720px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(183, 116, 33, 0.11),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 25% 35%,
+      rgba(101, 78, 43, 0.08),
+      transparent 25%
+    ),
+    #070706;
+}
+
+.mapFrame::before {
+  position: absolute;
+  inset: 18px;
+  content: "";
+  pointer-events: none;
+  border:
+    1px solid
+    rgba(200, 159, 84, 0.1);
+}
+
+.mapOrnament {
+  position: absolute;
+  width: 74%;
+  aspect-ratio: 1;
+  top: 50%;
+  left: 50%;
+  border:
+    1px solid
+    rgba(201, 164, 94, 0.08);
+  border-radius: 50%;
+  transform:
+    translate(-50%, -50%);
+  box-shadow:
+    0 0 0 55px
+      rgba(201, 164, 94, 0.012),
+    0 0 0 112px
+      rgba(201, 164, 94, 0.008);
+}
+
+.mapSvg {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 720px;
+}
+
+.outerOrbit,
+.middleOrbit,
+.innerOrbit {
+  fill: none;
+  stroke:
+    rgba(207, 169, 96, 0.16);
+  stroke-width: 1;
+  stroke-dasharray: 3 8;
+}
+
+.middleOrbit {
+  stroke-dasharray: 1 5;
+}
+
+.innerOrbit {
+  stroke:
+    rgba(223, 181, 100, 0.23);
+  stroke-dasharray: none;
+}
+
+.axisLine {
+  stroke:
+    rgba(202, 159, 81, 0.16);
+  stroke-width: 1;
+}
+
+.zone,
+.zoneRing {
+  fill:
+    rgba(189, 137, 57, 0.018);
+  stroke:
+    rgba(207, 166, 91, 0.12);
+  stroke-width: 1;
+  stroke-dasharray: 4 7;
+}
+
+.zoneRing {
+  fill: none;
+  stroke:
+    rgba(218, 178, 102, 0.2);
+}
+
+.route {
+  fill: none;
+  stroke: #c69a50;
+  stroke-linecap: round;
+}
+
+.coreHalo {
+  opacity: 0.8;
+}
+
+.coreCircle {
+  fill:
+    rgba(22, 15, 8, 0.96);
+  stroke: #ddb66d;
+  stroke-width: 1.8;
+}
+
+.coreCaption {
+  fill: #b68b4c;
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+.coreGlyph {
+  fill: #ffe2a4;
+  font-size: 28px;
+}
+
+.coreLabel {
+  fill: #ead7b2;
+  font-family: Georgia, serif;
+  font-size: 12px;
+}
+
+.nodeGroup {
+  cursor: pointer;
+  outline: none;
+}
+
+.nodeHalo {
+  fill:
+    rgba(11, 9, 6, 0.88);
+  stroke-width: 1.3;
+  transition:
+    r 180ms ease,
+    opacity 180ms ease;
+}
+
+.nodeCore {
+  fill:
+    rgba(30, 21, 12, 0.96);
+  stroke:
+    rgba(244, 216, 158, 0.35);
+  stroke-width: 1;
+}
+
+.nodeSelected {
+  filter:
+    drop-shadow(
+      0 0 12px
+      rgba(237, 185, 91, 0.72)
+    );
+}
+
+.axisMemory {
+  stroke: #c5b582;
+  background: #c5b582;
+}
+
+.axisDesire {
+  stroke: #d79345;
+  background: #d79345;
+}
+
+.axisWound {
+  stroke: #9c7f9d;
+  background: #9c7f9d;
+}
+
+.axisMatter {
+  stroke: #91a17b;
+  background: #91a17b;
+}
+
+.nodeGlyph {
+  fill: #f0d69e;
+  font-size: 17px;
+}
+
+.nodeLabel {
+  fill: #ad9b7e;
+  font-family: Georgia, serif;
+  font-size: 10px;
+}
+
+.cardinalNorth,
+.cardinalEast,
+.cardinalSouth,
+.cardinalWest {
+  position: absolute;
+  z-index: 4;
+  color: #76674f;
+  font-family: Georgia, serif;
+  font-size: 0.67rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+.cardinalNorth {
+  top: 38px;
+  left: 50%;
+  text-align: center;
+  transform:
+    translateX(-50%);
+}
+
+.cardinalEast {
+  top: 50%;
+  right: 34px;
+  text-align: right;
+  transform:
+    translateY(-50%);
+}
+
+.cardinalSouth {
+  bottom: 34px;
+  left: 50%;
+  text-align: center;
+  transform:
+    translateX(-50%);
+}
+
+.cardinalWest {
+  top: 50%;
+  left: 34px;
+  transform:
+    translateY(-50%);
+}
+
+.cardinalNorth span,
+.cardinalEast span,
+.cardinalSouth span,
+.cardinalWest span {
+  display: block;
+  color: #a67b3f;
+  font-size: 0.57rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.activeReading {
+  min-height: 330px;
+}
+
+.activeGlyph {
+  display: grid;
+  width: 68px;
+  height: 68px;
+  margin: 22px auto;
+  place-items: center;
+  border:
+    1px solid
+    rgba(218, 177, 99, 0.32);
+  border-radius: 50%;
+  color: #e0b86d;
+  font-size: 1.8rem;
+  box-shadow:
+    0 0 42px
+      rgba(181, 113, 35, 0.12);
+}
+
+.activeReading h3 {
+  margin: 0;
+  color: #ddc28f;
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.evidence {
+  display: grid;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.evidence q {
+  padding-left: 10px;
+  border-left:
+    1px solid
+    rgba(204, 161, 83, 0.34);
+  color: #978a76;
+  font-family: Georgia, serif;
+  font-size: 0.72rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.intensity {
+  display: block;
+  margin-top: 22px;
+  color: #796c58;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.legend {
+  display: flex;
+  padding: 19px 24px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 23px;
+  border-top:
+    1px solid
+    rgba(204, 165, 93, 0.14);
+  color: #80725d;
+  font-size: 0.61rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legend i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.legend b {
+  color: #b58a49;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+@media (max-width: 1180px) {
+  .cartographyLayout {
+    grid-template-columns:
+      190px minmax(580px, 1fr);
+  }
+
+  .rightRail {
+    grid-column: 1 / -1;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    border-top:
+      1px solid
+      rgba(204, 165, 93, 0.12);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 820px) {
+  .cartography {
+    padding: 18px;
+  }
+
+  .cartographyHeader {
+    grid-template-columns: 1fr;
+  }
+
+  .cartographyLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .leftRail,
+  .rightRail {
+    grid-template-columns: 1fr;
+    border: 0;
+  }
+
+  .mapFrame,
+  .mapSvg {
+    min-height: 590px;
+    height: 590px;
+  }
+}
+
+
+/* =========================================================
+   CARTOGRAFÍA VIVA — SINCRONIZACIÓN Y REVELACIÓN
+   ========================================================= */
+
+.routeIndex {
+  min-height: 180px;
+}
+
+.routeButtons {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.routeButton {
+  display: grid;
+  grid-template-columns:
+    20px 1fr;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 11px;
+  align-items: start;
+  border:
+    1px solid
+    rgba(199, 157, 80, 0.12);
+  color: #8f816c;
+  text-align: left;
+  background:
+    rgba(255, 243, 215, 0.012);
+  cursor: pointer;
+  font-family: Georgia, serif;
+  font-size: 0.68rem;
+  line-height: 1.45;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.routeButton span {
+  color: #b98943;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+}
+
+.routeButton:hover,
+.routeButtonActive {
+  color: #dfc999;
+  border-color:
+    rgba(220, 177, 97, 0.42);
+  background:
+    rgba(190, 128, 45, 0.06);
+}
+
+.routeConnected {
+  opacity: 0.8 !important;
+  stroke: #d5a75b;
+  filter:
+    drop-shadow(
+      0 0 5px
+      rgba(215, 165, 80, 0.28)
+    );
+}
+
+.routeSelected {
+  opacity: 1 !important;
+  stroke: #ffe0a0;
+  filter:
+    drop-shadow(
+      0 0 10px
+      rgba(236, 184, 85, 0.7)
+    );
+}
+
+.routeMuted {
+  opacity: 0.12 !important;
+}
+
+.nodeConnected {
+  opacity: 1;
+}
+
+.nodeMuted {
+  opacity: 0.32;
+}
+
+.activeRouteReading {
+  border-color:
+    rgba(222, 178, 94, 0.29) !important;
+  background:
+    radial-gradient(
+      circle at 50% 30%,
+      rgba(193, 129, 43, 0.075),
+      transparent 64%
+    ) !important;
+}
+
+.routeSymbol {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin: 20px auto 8px;
+  place-items: center;
+  border:
+    1px solid
+    rgba(220, 174, 88, 0.28);
+  border-radius: 50%;
+  color: #d5a657;
+  font-size: 1.45rem;
+  box-shadow:
+    0 0 38px
+    rgba(201, 137, 49, 0.1);
+}
+
+.legend button {
+  display: inline-flex;
+  padding: 7px 10px;
+  border:
+    1px solid transparent;
+  align-items: center;
+  gap: 7px;
+  color: #80725d;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.61rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.legend button:hover,
+.legendAxisActive {
+  color: #d3bc91 !important;
+  border-color:
+    rgba(212, 169, 88, 0.22) !important;
+  background:
+    rgba(190, 128, 45, 0.045) !important;
+}
+
+.zoneReveal {
+  opacity: 0;
+  transform-origin: center;
+  animation:
+    cartographyZoneReveal
+    1.25s ease forwards;
+}
+
+.routeReveal {
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  animation:
+    cartographyRouteReveal
+    1.8s ease forwards;
+}
+
+.coreReveal {
+  opacity: 0;
+  transform-origin:
+    500px 350px;
+  animation:
+    cartographyCoreReveal
+    1.4s
+    cubic-bezier(
+      0.2,
+      0.8,
+      0.25,
+      1
+    )
+    forwards;
+}
+
+.nodeReveal {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation:
+    cartographyNodeReveal
+    0.85s
+    cubic-bezier(
+      0.2,
+      0.9,
+      0.3,
+      1.15
+    )
+    forwards;
+}
+
+@keyframes cartographyZoneReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cartographyRouteReveal {
+  0% {
+    stroke-dashoffset: 900;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes cartographyCoreReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.28);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cartographyNodeReveal {
+  0% {
+    opacity: 0;
+    transform:
+      scale(0.25)
+      rotate(-18deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      scale(1)
+      rotate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoneReveal,
+  .routeReveal,
+  .coreReveal,
+  .nodeReveal {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+
+/* La cartografía textual queda debajo de la capa alquímica,
+   pero continúa siendo interactiva. */
+
+.mapSvg {
+  z-index: 3 !important;
+}
+
+.nodeGroup {
+  pointer-events: auto;
+}
+
+.mapFrame {
+  isolation: isolate;
+}

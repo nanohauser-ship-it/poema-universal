@@ -1,0 +1,24 @@
+
+/* TEMPORAL · acceso visible mientras construimos la consola */
+.privateTrigger {
+  right: 18px !important;
+  bottom: 18px !important;
+
+  width: 42px !important;
+  height: 42px !important;
+
+  display: grid !important;
+  place-items: center !important;
+
+  border: 1px solid rgba(216,179,107,.28) !important;
+  border-radius: 50% !important;
+
+  background: rgba(4,3,2,.92) !important;
+
+  color: rgba(216,179,107,.82) !important;
+
+  box-shadow:
+    0 0 24px rgba(216,179,107,.08) !important;
+
+  font-size: 15px !important;
+}

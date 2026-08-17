@@ -1,0 +1,71 @@
+EL GRAN AVATAR · ORGANISMO PROPIO · V1
+=======================================
+
+Esta integración sustituye el cuerpo genérico de LiveAvatar por una presencia
+propia construida con el retrato de Poema Universal. La conversación, la lectura
+de poemas, OpenAI, la voz y la biblioteca local continúan funcionando igual.
+
+QUÉ HACE
+--------
+
+· Respira con un movimiento corporal muy pequeño.
+· Parpadea a intervalos humanos no regulares.
+· Sigue discretamente la presencia del cursor con la mirada.
+· Cambia de actitud al escuchar, pensar, leer y responder.
+· Abre y modula la boca con la energía real de la voz que se reproduce.
+· Respeta prefers-reduced-motion.
+· Si WebGL no está disponible, conserva el retrato estático sin romper la sala.
+
+No es un talking-head remoto ni un falso rostro generado. Es un organismo 2.5D
+local y editorial: la imagen permanece dentro de Poema Universal y la IA sigue
+ocupándose únicamente de comprender, conversar y crear la voz.
+
+INSTALACIÓN
+-----------
+
+1. Coloca y descomprime esta carpeta dentro de:
+   /Users/josebalonaveiro/poema-universal
+
+2. Detén el servidor si está abierto (Control + C).
+
+3. Ejecuta en Terminal:
+
+   cd "$HOME/poema-universal"
+   bash "poema-universal-gran-avatar-organismo-v1/INSTALAR-GRAN-AVATAR-ORGANISMO.sh" "$HOME/poema-universal"
+   npm run dev -- --webpack -p 3000
+
+4. Abre:
+
+   http://localhost:3000/poema-universal/gran-avatar
+
+La instalación crea primero una copia fechada en:
+
+   backups/gran-avatar-organismo-AAAAMMDDTHHMMSSZ
+
+NO TOCA
+-------
+
+· .env.local
+· API keys
+· Supabase
+· package.json
+· las rutas de conversación, voz o transcripción
+· el archivo local de poemas
+
+RESPALDO LIVEAVATAR
+-------------------
+
+El antiguo cuerpo LiveAvatar no se elimina. Si alguna vez quieres recuperarlo,
+añade temporalmente esta línea a .env.local y reinicia el servidor:
+
+   NEXT_PUBLIC_GRAN_AVATAR_BODY_MODE=live
+
+Si esa línea no existe, Poema Universal utiliza el organismo propio.
+
+LÍMITES HONESTOS
+----------------
+
+El movimiento labial sigue la intensidad del audio, no fonemas individuales.
+Las zonas de ojos y boca están calibradas para el retrato incluido; si se cambia
+por otro encuadre habrá que recalibrarlas. Esto evita depender de cuotas externas
+y mantiene toda la dirección visual bajo control del proyecto.

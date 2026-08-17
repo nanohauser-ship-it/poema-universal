@@ -1,0 +1,12 @@
+POEMA UNIVERSAL · V3 · MIRADA ORBITAL
+
+Añade navegación orbital a La Construcción del Poema sin alterar la escena.
+
+CONTROLES
+- Arrastrar: giro 360º alrededor de la obra
+- Rueda / trackpad: zoom suave
+- Touch: arrastre y gesto de pinza
+- Al soltar, la vista permanece 12 segundos
+- Después regresa lentamente la cámara contemplativa autónoma
+
+Conserva la BSO y la Dramaturgia Viva ya instaladas.

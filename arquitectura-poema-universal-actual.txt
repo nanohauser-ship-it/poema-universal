@@ -1,0 +1,4175 @@
+==============================================================================
+PÁGINA PRINCIPAL DE POEMA UNIVERSAL
+app/poema-universal/page.tsx
+==============================================================================
+
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import WorldGlobeLive from "./components/WorldGlobeLive";
+import SupportersSection from "./components/SupportersSection";
+import PoetProfilePanel, {
+  type PoetProfile,
+} from "./components/PoetProfilePanel";
+import PoetPresence from "./components/PoetPresence";
+import AvatarRelicStudio from "./components/AvatarRelicStudio";
+import EditorialHero from "./components/EditorialHero";
+import { CURATED_VOICES_BY_POSITION } from "./data/curatedVoices";
+
+import WorldEntrance from "./components/WorldEntrance";
+const PRESENTATION_DATE = new Date(
+  "2027-01-01T00:00:00+01:00"
+).getTime();
+
+const TOTAL_VOICES = 60;
+const INCORPORATION_VOICES = 58;
+
+type CountdownTime = {
+  dias: number;
+  horas: number;
+  minutos: number;
+  segundos: number;
+};
+
+type VoiceSlot = {
+  position: number;
+  status: "incorporation" | "available";
+};
+
+const voiceSlots: VoiceSlot[] = Array.from(
+  { length: TOTAL_VOICES },
+  (_, index) => ({
+    position: index + 1,
+    status:
+      index < INCORPORATION_VOICES
+        ? "incorporation"
+        : "available",
+  })
+);
+
+
+
+
+type PublicPoetApi = {
+  id: string;
+  position: number;
+  name: string;
+  country: string;
+  countryCode: string | null;
+  city: string | null;
+  shortBio: string;
+  portraitUrl: string | null;
+  status: "confirmed" | "published";
+  profileSlug: string | null;
+};
+
+type PublicPoetsResponse = {
+  editionYear: number;
+  poets: PublicPoetApi[];
+};
+
+const manifestoPrinciples = [
+  {
+    number: "I",
+    title: "Una sola obra",
+    text: "Cada fragmento conservará su identidad, pero deberá servir a la arquitectura completa del poema.",
+  },
+  {
+    number: "II",
+    title: "Sesenta voces",
+    text: "Ninguna voz ocupará una posición superior. Todas compartirán el mismo espacio editorial.",
+  },
+  {
+    number: "III",
+    title: "Un año de escritura",
+    text: "La obra crecerá durante 2026 y permanecerá cerrada hasta su presentación pública.",
+  },
+  {
+    number: "IV",
+    title: "Una memoria común",
+    text: "El libro conservará aquello que el mundo haya dejado escrito en las personas que lo habitaron.",
+  },
+];
+
+const navigationLinks = [
+  {
+    label: "Manifiesto",
+    href: "#manifiesto",
+  },
+  {
+    label: "Las voces",
+    href: "#voces",
+  },
+  {
+    label: "El mundo",
+    href: "#mundo",
+  },
+  {
+    label: "Herramientas",
+    href: "/poema-universal/herramientas-literarias",
+  },
+  {
+    label: "El coro",
+    href: "/poema-universal/coro-de-la-tierra",
+  },
+  {
+    label: "Convocatoria",
+    href: "/poema-universal/convocatoria",
+  },
+];
+
+function calculateCountdown(): CountdownTime {
+  const difference =
+    PRESENTATION_DATE - Date.now();
+
+  if (difference <= 0) {
+    return {
+      dias: 0,
+      horas: 0,
+      minutos: 0,
+      segundos: 0,
+    };
+  }
+
+  return {
+    dias: Math.floor(
+      difference / (1000 * 60 * 60 * 24)
+    ),
+    horas: Math.floor(
+      (difference / (1000 * 60 * 60)) % 24
+    ),
+    minutos: Math.floor(
+      (difference / (1000 * 60)) % 60
+    ),
+    segundos: Math.floor(
+      (difference / 1000) % 60
+    ),
+  };
+}
+
+export default function PoemaUniversalPage() {
+  const [selectedPoet, setSelectedPoet] =
+    useState<PoetProfile | null>(null);
+
+  const [poetProfiles, setPoetProfiles] =
+    useState<Record<number, PoetProfile>>({});
+
+  const [time, setTime] =
+    useState<CountdownTime>({
+      dias: 0,
+      horas: 0,
+      minutos: 0,
+      segundos: 0,
+    });
+
+  useEffect(() => {
+    setTime(calculateCountdown());
+
+    const interval = window.setInterval(() => {
+      setTime(calculateCountdown());
+    }, 1000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPublicPoets() {
+      try {
+        const response = await fetch(
+          "/api/poema-universal/poets",
+          {
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Error ${response.status} al cargar los perfiles.`
+          );
+        }
+
+        const data =
+          (await response.json()) as PublicPoetsResponse;
+
+        if (cancelled) {
+          return;
+        }
+
+        const profilesByPosition: Record<
+          number,
+          PoetProfile
+        > = {};
+
+        for (const poet of data.poets) {
+          profilesByPosition[poet.position] = {
+            position: poet.position,
+            name: poet.name,
+            country: poet.country,
+            ...(poet.city
+              ? {
+                  city: poet.city,
+                }
+              : {}),
+            shortBio: poet.shortBio,
+            status:
+              poet.status === "published"
+                ? "published"
+                : "confirmed",
+          };
+        }
+
+        setPoetProfiles(profilesByPosition);
+      } catch (error) {
+        console.error(
+          "No se pudieron cargar los perfiles públicos:",
+          error
+        );
+      }
+    }
+
+    loadPublicPoets();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const countdownItems = [
+    {
+      value: time.dias,
+      label: "Días",
+    },
+    {
+      value: time.horas,
+      label: "Horas",
+    },
+    {
+      value: time.minutos,
+      label: "Minutos",
+    },
+    {
+      value: time.segundos,
+      label: "Segundos",
+    },
+  ];
+
+  const availableVoices =
+    TOTAL_VOICES - INCORPORATION_VOICES;
+
+  return (
+    <main
+      id="top"
+      className="min-h-screen overflow-x-hidden"
+      style={{
+        backgroundColor: "#f0e8dc",
+        color: "#171411",
+      }}
+    >
+      {/* NAVEGACIÓN */}
+
+      <header
+        className="sticky top-0 z-50 border-b backdrop-blur-xl"
+        style={{
+          borderColor: "rgba(23,20,17,0.12)",
+          backgroundColor:
+            "rgba(240,232,220,0.94)",
+        }}
+      >
+        <div className="mx-auto flex min-h-[70px] max-w-[1380px] items-center justify-between gap-8 px-5 sm:px-8 lg:px-12">
+          <Link
+            href="/poema-universal"
+            className="font-serif text-xl tracking-[-0.025em] transition hover:opacity-55"
+          >
+            Poema Universal
+          </Link>
+
+          <nav
+            aria-label="Navegación de Poema Universal"
+            className="hidden items-center gap-10 md:flex"
+          >
+            {navigationLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-[9px] uppercase tracking-[0.31em] text-stone-500 transition hover:text-stone-950"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-5">
+            <span className="hidden text-[8px] uppercase tracking-[0.3em] text-stone-400 lg:block">
+              Edición fundacional · 2026
+            </span>
+
+            <Link
+              href="/"
+              className="border border-stone-900/20 px-5 py-2.5 text-[8px] uppercase tracking-[0.3em] transition hover:bg-[#171411] hover:text-white"
+            >
+              Inicio
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* PASO DESDE LA HOME */}
+
+      <section
+        id="entrada"
+        aria-label="Entrada a la sala universal"
+        className="relative scroll-mt-[70px] overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, #f0e8dc 0%, #f3ece2 58%, #f0e8dc 100%)",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-1/2 top-0 h-full w-[720px] -translate-x-1/2"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 42%, rgba(255,255,255,0.72), transparent 54%)",
+          }}
+        />
+
+        <div className="relative mx-auto grid min-h-[116px] max-w-[1380px] items-center gap-6 px-5 pb-12 pt-6 sm:px-8 md:grid-cols-[1fr_auto_1fr] lg:px-12">
+          <Link
+            href="/"
+            className="justify-self-center text-[8px] uppercase tracking-[0.3em] text-stone-500 transition hover:text-stone-950 md:justify-self-start"
+          >
+            ← Volver a la casa
+          </Link>
+
+          <div className="flex items-center justify-center gap-4">
+            <span
+              aria-hidden="true"
+              className="hidden h-px w-20 sm:block"
+              style={{
+                background:
+                  "linear-gradient(to right, transparent, rgba(199,164,103,0.62))",
+              }}
+            />
+
+            <span
+              aria-hidden="true"
+              className="h-2 w-2 rounded-full"
+              style={{
+                backgroundColor: "#c7a467",
+                boxShadow:
+                  "0 0 20px rgba(199,164,103,0.5)",
+              }}
+            />
+
+            <p
+              className="font-serif text-base italic sm:text-lg"
+              style={{
+                color: "rgba(23,20,17,0.66)",
+              }}
+            >
+              Has cruzado el umbral.
+            </p>
+
+            <span
+              aria-hidden="true"
+              className="hidden h-px w-20 sm:block"
+              style={{
+                background:
+                  "linear-gradient(to left, transparent, rgba(199,164,103,0.62))",
+              }}
+            />
+          </div>
+
+          <p className="justify-self-center text-[8px] uppercase tracking-[0.3em] text-stone-400 md:justify-self-end">
+            60 voces · un solo libro
+          </p>
+        </div>
+
+        <span
+          aria-hidden="true"
+          className="absolute bottom-0 left-1/2 h-12 w-px -translate-x-1/2"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(199,164,103,0.72), rgba(199,164,103,0.08))",
+          }}
+        />
+      </section>
+
+      {/* 01 · UMBRAL */}
+
+      <EditorialHero
+        time={time}
+        legacyItems={countdownItems}
+      />
+
+      {/* 02 · MANIFIESTO */}
+
+      <section
+        id="manifiesto"
+        className="border-t border-stone-900/15"
+      >
+        <div className="mx-auto max-w-[1380px] px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44">
+          <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-28">
+            <div>
+              <p
+                className="text-[9px] uppercase tracking-[0.48em]"
+                style={{
+                  color: "#9a743e",
+                }}
+              >
+                Manifiesto universal
+              </p>
+
+              <h2 className="mt-9 max-w-4xl font-serif text-5xl leading-[1.02] tracking-[-0.048em] sm:text-7xl lg:text-[88px]">
+                No reunimos poemas.
+                <span className="mt-2 block italic text-stone-500">
+                  Escribimos un año.
+                </span>
+              </h2>
+            </div>
+
+            <div className="flex flex-col justify-end">
+              <p className="font-serif text-2xl italic leading-[1.55] text-stone-700 sm:text-3xl">
+                Poema Universal nace para reunir
+                sensibilidades distintas dentro de una
+                misma construcción literaria.
+              </p>
+
+              <p className="mt-8 max-w-xl text-base leading-8 text-stone-600">
+                No será una antología ni una colección
+                de nombres. Será una única obra,
+                construida lentamente durante todo un
+                año y custodiada como memoria de su
+                tiempo.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-24 border-t border-stone-900/15">
+            {manifestoPrinciples.map(
+              (principle) => (
+                <article
+                  key={principle.number}
+                  className="grid gap-5 border-b border-stone-900/15 py-8 md:grid-cols-[80px_250px_1fr] md:items-start"
+                >
+                  <span
+                    className="font-serif text-lg italic"
+                    style={{
+                      color: "#a37c44",
+                    }}
+                  >
+                    {principle.number}
+                  </span>
+
+                  <h3 className="font-serif text-2xl">
+                    {principle.title}
+                  </h3>
+
+                  <p className="max-w-2xl text-sm leading-7 text-stone-600 sm:text-base sm:leading-8">
+                    {principle.text}
+                  </p>
+                </article>
+              )
+            )}
+          </div>
+
+          <blockquote className="mx-auto mt-24 max-w-5xl text-center">
+            <p className="font-serif text-3xl italic leading-[1.5] text-stone-700 sm:text-5xl">
+              “Mientras exista una voz que todavía no
+              haya encontrado su lugar, el poema no
+              estará terminado.”
+            </p>
+
+            <footer className="mt-9 text-[8px] uppercase tracking-[0.4em] text-stone-400">
+              Declaración fundacional
+            </footer>
+          </blockquote>
+        </div>
+      </section>
+
+      {/* NOCHE INSTITUCIONAL */}
+
+      <section
+        style={{
+          backgroundColor: "#060a0e",
+          color: "#f0e8dc",
+        }}
+      >
+        {/* 03 · LAS VOCES */}
+
+        <div
+          id="voces"
+          className="mx-auto max-w-[1380px] px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28"
+        >
+          <div className="grid gap-14 lg:grid-cols-[1fr_0.8fr] lg:gap-24">
+            <div>
+              <p
+                className="text-[9px] uppercase tracking-[0.46em]"
+                style={{
+                  color: "#c7a467",
+                }}
+              >
+                Registro de la edición
+              </p>
+
+              <h2
+                className="mt-8 font-serif text-5xl leading-[0.98] tracking-[-0.05em] sm:text-7xl lg:text-[88px]"
+                style={{
+                  color: "#f0e8dc",
+                }}
+              >
+                Sesenta voces.
+                <span
+                  className="block italic"
+                  style={{
+                    color:
+                      "rgba(240,232,220,0.58)",
+                  }}
+                >
+                  Un mismo lugar.
+                </span>
+              </h2>
+            </div>
+
+            <div className="flex flex-col justify-end">
+              <p
+                className="font-serif text-2xl italic leading-[1.55] sm:text-3xl"
+                style={{
+                  color:
+                    "rgba(240,232,220,0.78)",
+                }}
+              >
+                Ocho presencias reales conviven con
+                cincuenta identidades literarias de
+                Mariposas de polvo.
+              </p>
+
+              <div className="mt-10 flex gap-12">
+                <div>
+                  <span className="block font-serif text-4xl">
+                    {INCORPORATION_VOICES}
+                  </span>
+
+                  <span
+                    className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
+                    style={{
+                      color:
+                        "rgba(240,232,220,0.58)",
+                    }}
+                  >
+                    Presencias integradas
+                  </span>
+                </div>
+
+                <div>
+                  <span className="block font-serif text-4xl">
+                    {TOTAL_VOICES - INCORPORATION_VOICES}
+                  </span>
+
+                  <span
+                    className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
+                    style={{
+                      color:
+                        "rgba(240,232,220,0.58)",
+                    }}
+                  >
+                    Plazas abiertas
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RETÍCULA */}
+
+          <div className="mt-20 flex flex-col gap-8 border-y border-white/[0.12] py-9 sm:flex-row sm:items-end sm:justify-between">
+            <p
+              className="max-w-2xl font-serif text-2xl leading-[1.12] tracking-[-0.025em] sm:text-3xl"
+              style={{ color: "#f0e8dc" }}
+            >
+              Aquí nadie entra por su nombre.
+              <span
+                className="block italic"
+                style={{
+                  color: "rgba(240,232,220,0.54)",
+                }}
+              >
+                Entra por su voz.
+              </span>
+            </p>
+
+            <p
+              className="text-[8px] uppercase tracking-[0.34em]"
+              style={{
+                color: "rgba(240,232,220,0.46)",
+              }}
+            >
+              60 voces · una misma dignidad
+            </p>
+          </div>
+
+          <ol className="mt-10 grid grid-cols-2 border-l border-t border-white/[0.16] sm:grid-cols-3 lg:grid-cols-6">
+            {voiceSlots.map((slot) => {
+              const poetProfile =
+                poetProfiles[slot.position] ?? null;
+
+              const curatedVoice =
+                CURATED_VOICES_BY_POSITION[
+                  slot.position
+                ] ?? null;
+
+              const isPublicVoice =
+                Boolean(poetProfile || curatedVoice);
+
+              const isOpenSlot =
+                slot.position >
+                INCORPORATION_VOICES;
+
+              const voiceLabel =
+                poetProfile?.name ??
+                curatedVoice?.name ??
+                (isOpenSlot
+                  ? "Voz por llegar"
+                  : "Voz en incorporación");
+
+              const territoryLabel = poetProfile
+                ? [
+                    poetProfile.country,
+                    poetProfile.city,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")
+                : curatedVoice?.territory ??
+                  (isOpenSlot
+                    ? "Plaza abierta"
+                    : "Identidad protegida");
+
+              const footerLabel = poetProfile
+                ? "Abrir ficha →"
+                : curatedVoice
+                  ? curatedVoice.poemTitle ||
+                    curatedVoice.treasure ||
+                    "Presencia integrada"
+                  : isOpenSlot
+                    ? "Poema Universal 2026"
+                    : "Edición fundacional 2026";
+
+              return (
+                <PoetPresence
+                  key={slot.position}
+                  position={slot.position}
+                  state={
+                    isPublicVoice
+                      ? "public"
+                      : isOpenSlot
+                        ? "open"
+                        : "incorporation"
+                  }
+                  name={voiceLabel}
+                  territory={territoryLabel}
+                  footer={footerLabel}
+                  onOpen={
+                    poetProfile
+                      ? () =>
+                          setSelectedPoet(
+                            poetProfile
+                          )
+                      : undefined
+                  }
+                />
+              );
+            })}
+          </ol>
+
+          <PoetProfilePanel
+            poet={selectedPoet}
+            onClose={() => setSelectedPoet(null)}
+          />
+
+          <AvatarRelicStudio />
+        </div>
+
+        {/* 04 · EL MUNDO */}
+
+        <div className="border-t border-white/10">
+          <div className="mx-auto max-w-[1380px] px-5 pt-16 text-center sm:px-8 sm:pt-20 lg:px-12">
+            <p
+              className="text-[9px] uppercase tracking-[0.46em]"
+              style={{
+                color: "#c7a467",
+              }}
+            >
+              Cartografía de una voz común
+            </p>
+
+            <h2
+              className="mx-auto mt-8 max-w-5xl font-serif text-5xl leading-[0.98] tracking-[-0.05em] sm:text-7xl lg:text-[88px]"
+              style={{
+                color: "#f0e8dc",
+              }}
+            >
+              El mundo comienza
+              <span
+                className="block italic"
+                style={{
+                  color:
+                    "rgba(240,232,220,0.58)",
+                }}
+              >
+                a escribir junto.
+              </span>
+            </h2>
+
+            <p
+              className="mx-auto mt-9 max-w-2xl text-sm leading-7 sm:text-base sm:leading-8"
+              style={{
+                color:
+                  "rgba(240,232,220,0.58)",
+              }}
+            >
+              Cada territorio iluminado representa una
+              presencia que comienza a formar parte de
+              la edición fundacional.
+            </p>
+          </div>
+
+          <WorldGlobeLive />
+        </div>
+
+        {/* CIERRE MÍNIMO */}
+
+        <footer className="mx-auto max-w-[1380px] border-t border-white/10 px-5 py-10 sm:px-8 lg:px-12">
+          <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
+            <p
+              className="text-[8px] uppercase tracking-[0.3em]"
+              style={{
+                color:
+                  "rgba(240,232,220,0.25)",
+              }}
+            >
+              © 2026 Poema Universal
+            </p>
+
+            <p
+              className="text-[8px] uppercase tracking-[0.3em]"
+              style={{
+                color: "#c7a467",
+              }}
+            >
+              Fundador y poeta · José Naveiro
+            </p>
+
+            <Link
+              href="#top"
+              className="text-[8px] uppercase tracking-[0.3em] transition hover:opacity-60"
+              style={{
+                color:
+                  "rgba(240,232,220,0.34)",
+              }}
+            >
+              Volver al inicio ↑
+            </Link>
+          </div>
+        </footer>
+      </section>
+      <SupportersSection />
+          <WorldEntrance />
+</main>
+  );
+}
+
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/components/WorldGlobeLive.tsx
+==============================================================================
+
+"use client";
+
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import WorldGlobe from "./WorldGlobe";
+import type { GlobeCountry } from "./WorldGlobe";
+
+type GlobeApiResponse = {
+  editionYear: number;
+  totalSlots: number;
+  occupiedTotal: number;
+  committedTotal: number;
+  confirmedTotal: number;
+  publishedTotal: number;
+  reservedTotal: number;
+  withdrawnTotal: number;
+  countries: GlobeCountry[];
+};
+
+const TOTAL_VOICES = 60;
+const INTEGRATED_VOICES = 58;
+
+/**
+ * Cartografía de la edición:
+ * 8 presencias reales + 50 identidades literarias.
+ *
+ * Los países repetidos comparten una misma luz y aumentan
+ * su intensidad mediante poetCount.
+ */
+const POEM_COUNTRIES: GlobeCountry[] = [
+  {
+    code: "JP",
+    name: "Japón",
+    poetCount: 2,
+    members: [],
+    lat: 35.0116,
+    lng: 135.7681,
+  },
+  {
+    code: "SN",
+    name: "Senegal",
+    poetCount: 2,
+    members: [],
+    lat: 16.0326,
+    lng: -16.4818,
+  },
+  {
+    code: "ES",
+    name: "España",
+    poetCount: 3,
+    members: [],
+    lat: 42.8782,
+    lng: -8.5448,
+  },
+  {
+    code: "MX",
+    name: "México",
+    poetCount: 2,
+    members: [],
+    lat: 19.0414,
+    lng: -98.2063,
+  },
+  {
+    code: "NO",
+    name: "Noruega",
+    poetCount: 1,
+    members: [],
+    lat: 69.6492,
+    lng: 18.9553,
+  },
+  {
+    code: "IN",
+    name: "India",
+    poetCount: 1,
+    members: [],
+    lat: 22.3072,
+    lng: 73.1812,
+  },
+  {
+    code: "CO",
+    name: "Colombia",
+    poetCount: 2,
+    members: [],
+    lat: 3.4516,
+    lng: -76.532,
+  },
+  {
+    code: "AR",
+    name: "Argentina",
+    poetCount: 1,
+    members: [],
+    lat: -31.4201,
+    lng: -64.1888,
+  },
+  {
+    code: "KR",
+    name: "Corea del Sur",
+    poetCount: 1,
+    members: [],
+    lat: 37.5665,
+    lng: 126.978,
+  },
+  {
+    code: "MA",
+    name: "Marruecos",
+    poetCount: 1,
+    members: [],
+    lat: 34.0181,
+    lng: -5.0078,
+  },
+  {
+    code: "FR",
+    name: "Francia",
+    poetCount: 1,
+    members: [],
+    lat: 45.764,
+    lng: 4.8357,
+  },
+  {
+    code: "BR",
+    name: "Brasil",
+    poetCount: 1,
+    members: [],
+    lat: -8.0476,
+    lng: -34.877,
+  },
+  {
+    code: "LB",
+    name: "Líbano",
+    poetCount: 1,
+    members: [],
+    lat: 33.8938,
+    lng: 35.5018,
+  },
+  {
+    code: "ZA",
+    name: "Sudáfrica",
+    poetCount: 1,
+    members: [],
+    lat: -26.2041,
+    lng: 28.0473,
+  },
+  {
+    code: "PL",
+    name: "Polonia",
+    poetCount: 1,
+    members: [],
+    lat: 51.7592,
+    lng: 19.456,
+  },
+  {
+    code: "PE",
+    name: "Perú",
+    poetCount: 1,
+    members: [],
+    lat: -13.5319,
+    lng: -71.9675,
+  },
+  {
+    code: "IT",
+    name: "Italia",
+    poetCount: 2,
+    members: [],
+    lat: 44.4949,
+    lng: 11.3426,
+  },
+  {
+    code: "TR",
+    name: "Turquía",
+    poetCount: 1,
+    members: [],
+    lat: 38.4237,
+    lng: 27.1428,
+  },
+  {
+    code: "ET",
+    name: "Etiopía",
+    poetCount: 1,
+    members: [],
+    lat: 8.9806,
+    lng: 38.7578,
+  },
+  {
+    code: "PT",
+    name: "Portugal",
+    poetCount: 1,
+    members: [],
+    lat: 41.1579,
+    lng: -8.6291,
+  },
+  {
+    code: "TH",
+    name: "Tailandia",
+    poetCount: 1,
+    members: [],
+    lat: 18.7883,
+    lng: 98.9853,
+  },
+  {
+    code: "CA",
+    name: "Canadá",
+    poetCount: 1,
+    members: [],
+    lat: 46.8139,
+    lng: -71.208,
+  },
+  {
+    code: "DE",
+    name: "Alemania",
+    poetCount: 1,
+    members: [],
+    lat: 51.3397,
+    lng: 12.3731,
+  },
+  {
+    code: "GH",
+    name: "Ghana",
+    poetCount: 1,
+    members: [],
+    lat: 6.6885,
+    lng: -1.6244,
+  },
+  {
+    code: "IE",
+    name: "Irlanda",
+    poetCount: 1,
+    members: [],
+    lat: 53.2707,
+    lng: -9.0568,
+  },
+  {
+    code: "NP",
+    name: "Nepal",
+    poetCount: 1,
+    members: [],
+    lat: 28.2096,
+    lng: 83.9856,
+  },
+  {
+    code: "CL",
+    name: "Chile",
+    poetCount: 1,
+    members: [],
+    lat: -33.0472,
+    lng: -71.6127,
+  },
+  {
+    code: "NZ",
+    name: "Nueva Zelanda",
+    poetCount: 1,
+    members: [],
+    lat: -45.8788,
+    lng: 170.5028,
+  },
+  {
+    code: "PH",
+    name: "Filipinas",
+    poetCount: 1,
+    members: [],
+    lat: 10.3157,
+    lng: 123.8854,
+  },
+  {
+    code: "GR",
+    name: "Grecia",
+    poetCount: 1,
+    members: [],
+    lat: 40.6401,
+    lng: 22.9444,
+  },
+  {
+    code: "CU",
+    name: "Cuba",
+    poetCount: 1,
+    members: [],
+    lat: 23.1136,
+    lng: -82.3666,
+  },
+  {
+    code: "IR",
+    name: "Irán",
+    poetCount: 1,
+    members: [],
+    lat: 29.5918,
+    lng: 52.5837,
+  },
+  {
+    code: "NL",
+    name: "Países Bajos",
+    poetCount: 1,
+    members: [],
+    lat: 51.9244,
+    lng: 4.4777,
+  },
+  {
+    code: "DO",
+    name: "República Dominicana",
+    poetCount: 1,
+    members: [],
+    lat: 18.4861,
+    lng: -69.9312,
+  },
+  {
+    code: "DZ",
+    name: "Argelia",
+    poetCount: 1,
+    members: [],
+    lat: 35.6971,
+    lng: -0.6308,
+  },
+  {
+    code: "FI",
+    name: "Finlandia",
+    poetCount: 1,
+    members: [],
+    lat: 61.4978,
+    lng: 23.761,
+  },
+  {
+    code: "UY",
+    name: "Uruguay",
+    poetCount: 1,
+    members: [],
+    lat: -34.9011,
+    lng: -56.1645,
+  },
+  {
+    code: "US",
+    name: "Estados Unidos",
+    poetCount: 1,
+    members: [],
+    lat: 41.8781,
+    lng: -87.6298,
+  },
+  {
+    code: "CN",
+    name: "China",
+    poetCount: 1,
+    members: [],
+    lat: 22.5431,
+    lng: 114.0579,
+  },
+  {
+    code: "KE",
+    name: "Kenia",
+    poetCount: 1,
+    members: [],
+    lat: -1.2921,
+    lng: 36.8219,
+  },
+  {
+    code: "RU",
+    name: "Rusia",
+    poetCount: 1,
+    members: [],
+    lat: 59.9311,
+    lng: 30.3609,
+  },
+  {
+    code: "AU",
+    name: "Australia",
+    poetCount: 1,
+    members: [],
+    lat: -37.8136,
+    lng: 144.9631,
+  },
+  {
+    code: "EG",
+    name: "Egipto",
+    poetCount: 1,
+    members: [],
+    lat: 31.2001,
+    lng: 29.9187,
+  },
+  {
+    code: "IS",
+    name: "Islandia",
+    poetCount: 1,
+    members: [],
+    lat: 64.1466,
+    lng: -21.9426,
+  },
+  {
+    code: "CR",
+    name: "Costa Rica",
+    poetCount: 1,
+    members: [],
+    lat: 9.8644,
+    lng: -83.9194,
+  },
+  {
+    code: "RO",
+    name: "Rumanía",
+    poetCount: 1,
+    members: [],
+    lat: 45.7983,
+    lng: 24.1256,
+  },
+  {
+    code: "ID",
+    name: "Indonesia",
+    poetCount: 1,
+    members: [],
+    lat: -7.7956,
+    lng: 110.3695,
+  },
+  {
+    code: "PS",
+    name: "Palestina",
+    poetCount: 1,
+    members: [],
+    lat: 31.7054,
+    lng: 35.2024,
+  },
+  {
+    code: "VE",
+    name: "Venezuela",
+    poetCount: 2,
+    members: [],
+    lat: 10.0678,
+    lng: -69.3474,
+  },
+  {
+    code: "MG",
+    name: "Madagascar",
+    poetCount: 1,
+    members: [],
+    lat: -18.8792,
+    lng: 47.5079,
+  },
+];
+
+function normalizeCountryCode(code: string) {
+  return code.trim().toUpperCase();
+}
+
+function mergePoemCountries(
+  apiCountries: GlobeCountry[]
+): GlobeCountry[] {
+  const countriesByCode = new Map<
+    string,
+    GlobeCountry
+  >();
+
+  for (const country of apiCountries) {
+    const code = normalizeCountryCode(
+      country.code
+    );
+
+    countriesByCode.set(code, {
+      ...country,
+      code,
+    });
+  }
+
+  for (const poemCountry of POEM_COUNTRIES) {
+    const code = normalizeCountryCode(
+      poemCountry.code
+    );
+
+    const existing =
+      countriesByCode.get(code);
+
+    if (!existing) {
+      countriesByCode.set(code, {
+        ...poemCountry,
+        code,
+      });
+
+      continue;
+    }
+
+    countriesByCode.set(code, {
+      ...existing,
+      ...poemCountry,
+      code,
+      name:
+        poemCountry.name ||
+        existing.name,
+      lat:
+        poemCountry.lat ??
+        existing.lat,
+      lng:
+        poemCountry.lng ??
+        existing.lng,
+      poetCount: Math.max(
+        poemCountry.poetCount ?? 0,
+        existing.poetCount ?? 0
+      ),
+      members:
+        Array.isArray(existing.members) &&
+        existing.members.length > 0
+          ? existing.members
+          : poemCountry.members,
+    });
+  }
+
+  return Array.from(
+    countriesByCode.values()
+  );
+}
+
+export default function WorldGlobeLive() {
+  const [globeData, setGlobeData] =
+    useState<GlobeApiResponse | null>(null);
+
+  useEffect(() => {
+    const controller =
+      new AbortController();
+
+    async function loadGlobeData() {
+      try {
+        const response = await fetch(
+          "/api/poema-universal/globe",
+          {
+            method: "GET",
+            cache: "no-store",
+            signal: controller.signal,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Error ${response.status} al cargar los datos del globo.`
+          );
+        }
+
+        const result =
+          (await response.json()) as GlobeApiResponse;
+
+        if (
+          !Array.isArray(result.countries)
+        ) {
+          throw new Error(
+            "La API no ha devuelto una lista válida de países."
+          );
+        }
+
+        setGlobeData(result);
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          error.name === "AbortError"
+        ) {
+          return;
+        }
+
+        console.error(
+          "Error cargando los datos del globo:",
+          error
+        );
+      }
+    }
+
+    loadGlobeData();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  const participatingCountries =
+    useMemo(() => {
+      return mergePoemCountries(
+        globeData?.countries ?? []
+      );
+    }, [globeData]);
+
+  const occupiedTotal = Math.max(
+    globeData?.occupiedTotal ?? 0,
+    INTEGRATED_VOICES
+  );
+
+  const reservedTotal = Math.max(
+    0,
+    TOTAL_VOICES - occupiedTotal
+  );
+
+  return (
+    <WorldGlobe
+      participatingCountries={
+        participatingCountries
+      }
+      occupiedTotal={occupiedTotal}
+      reservedTotal={reservedTotal}
+      totalSlots={TOTAL_VOICES}
+    />
+  );
+}
+
+
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/components/SupportersSection.tsx
+==============================================================================
+
+import Link from "next/link";
+
+const collaborationAreas = [
+  "Traducción",
+  "Corrección",
+  "Investigación",
+  "Diseño",
+  "Tecnología",
+  "Producción audiovisual",
+];
+
+const ethicalPrinciples = [
+  {
+    number: "I",
+    title: "Independencia editorial",
+    text: "Ninguna aportación concede influencia sobre la selección de poetas, poemas, territorios o decisiones editoriales.",
+  },
+  {
+    number: "II",
+    title: "Una misma dignidad",
+    text: "No existirán categorías comerciales de prestigio. Los apoyos públicos serán reconocidos sin jerarquías económicas.",
+  },
+  {
+    number: "III",
+    title: "Transparencia",
+    text: "La edición explicará qué recursos recibe y a qué necesidades concretas de la obra han sido destinados.",
+  },
+  {
+    number: "IV",
+    title: "Derecho al anonimato",
+    text: "Toda persona podrá colaborar públicamente o permanecer en silencio, siempre que el origen del apoyo sea legítimo y verificable.",
+  },
+];
+
+export default function SupportersSection() {
+  return (
+    <section
+      id="hacer-posible"
+      aria-labelledby="supporters-title"
+      className="relative overflow-hidden border-t border-white/[0.12] bg-[#080b0e] text-[#f0e8dc]"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at 18% 22%, rgba(199,164,103,0.13), transparent 28%), radial-gradient(circle at 88% 76%, rgba(104,126,143,0.1), transparent 32%), linear-gradient(145deg, #080b0e 0%, #0d1217 52%, #07090b 100%)",
+        }}
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.065]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(240,232,220,0.74) 0.5px, transparent 0.7px)",
+          backgroundSize: "22px 22px",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-[1380px] px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44">
+        <div className="grid gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
+          <div>
+            <p
+              className="text-[9px] uppercase tracking-[0.48em]"
+              style={{ color: "#c7a467" }}
+            >
+              05 · Quienes hacen posible la obra
+            </p>
+
+            <h2
+              id="supporters-title"
+              className="mt-9 max-w-3xl font-serif text-5xl leading-[0.98] tracking-[-0.05em] sm:text-7xl lg:text-[82px]"
+            >
+              Sesenta poetas
+              <span
+                className="block italic"
+                style={{
+                  color: "rgba(240,232,220,0.52)",
+                }}
+              >
+                escribirán el libro.
+              </span>
+            </h2>
+
+            <p className="mt-10 max-w-xl font-serif text-2xl leading-[1.35] text-white/76 sm:text-3xl">
+              Otras manos harán posible que esos versos
+              crucen el mundo.
+            </p>
+
+            <p className="mt-8 max-w-xl text-sm leading-8 text-white/48 sm:text-base">
+              Poema Universal necesitará traducción,
+              edición, investigación, tecnología,
+              producción, impresión y cuidado. No todas
+              las personas que formen parte de la obra
+              escribirán un verso.
+            </p>
+          </div>
+
+          <div className="grid border-l border-t border-white/[0.14] md:grid-cols-2">
+            <article className="flex min-h-[390px] flex-col justify-between border-b border-r border-white/[0.14] p-7 sm:p-9">
+              <div>
+                <span
+                  className="font-serif text-2xl italic"
+                  style={{ color: "#c7a467" }}
+                >
+                  01
+                </span>
+
+                <h3 className="mt-10 font-serif text-4xl tracking-[-0.035em]">
+                  Colaborar
+                </h3>
+
+                <p className="mt-6 text-sm leading-7 text-white/48">
+                  Personas que aporten conocimiento,
+                  oficio, tiempo o vínculos culturales a
+                  la edición fundacional.
+                </p>
+
+                <div className="mt-8 flex flex-wrap gap-x-5 gap-y-3">
+                  {collaborationAreas.map((area) => (
+                    <span
+                      key={area}
+                      className="text-[7px] uppercase tracking-[0.25em] text-white/42"
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <Link
+                href="/colaborar#colaborar"
+                className="mt-12 inline-flex items-center gap-4 text-[8px] uppercase tracking-[0.3em] text-[#c7a467] transition hover:text-[#dfc28e]"
+              >
+                Ofrecer una colaboración
+                <span aria-hidden="true">→</span>
+              </Link>
+            </article>
+
+            <article className="flex min-h-[390px] flex-col justify-between border-b border-r border-white/[0.14] p-7 sm:p-9">
+              <div>
+                <span
+                  className="font-serif text-2xl italic"
+                  style={{ color: "#c7a467" }}
+                >
+                  02
+                </span>
+
+                <h3 className="mt-10 font-serif text-4xl tracking-[-0.035em]">
+                  Sostener
+                </h3>
+
+                <p className="mt-6 text-sm leading-7 text-white/48">
+                  Personas e instituciones que ayuden a
+                  financiar traducciones, edición,
+                  infraestructura, impresión y
+                  presentación pública.
+                </p>
+
+                <p className="mt-8 font-serif text-xl italic leading-8 text-white/68">
+                  El apoyo sostiene la obra.
+                  <span className="block">
+                    Nunca compra una voz.
+                  </span>
+                </p>
+              </div>
+
+              <Link
+                href="/colaborar#sostener"
+                className="mt-12 inline-flex items-center gap-4 text-[8px] uppercase tracking-[0.3em] text-[#c7a467] transition hover:text-[#dfc28e]"
+              >
+                Sostener la edición
+                <span aria-hidden="true">→</span>
+              </Link>
+            </article>
+          </div>
+        </div>
+
+        <div className="mt-24 border-t border-white/[0.12] pt-14 sm:mt-32 sm:pt-20">
+          <div className="flex flex-col gap-7 border-b border-white/[0.12] pb-12 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p
+                className="text-[8px] uppercase tracking-[0.4em]"
+                style={{ color: "#c7a467" }}
+              >
+                Carta de independencia
+              </p>
+
+              <h3 className="mt-7 max-w-3xl font-serif text-4xl leading-[1.05] tracking-[-0.04em] sm:text-6xl">
+                La obra podrá recibir apoyo.
+                <span className="block italic text-white/46">
+                  Su criterio no estará en venta.
+                </span>
+              </h3>
+            </div>
+
+            <p className="max-w-sm text-sm leading-7 text-white/42">
+              Esta norma protegerá la selección de las
+              sesenta voces durante toda la vida de la
+              edición fundacional.
+            </p>
+          </div>
+
+          <ol className="grid border-l border-t border-white/[0.12] md:grid-cols-2 xl:grid-cols-4">
+            {ethicalPrinciples.map((principle) => (
+              <li
+                key={principle.number}
+                className="min-h-[280px] border-b border-r border-white/[0.12] p-7 sm:p-8"
+              >
+                <span
+                  className="font-serif text-xl italic"
+                  style={{ color: "#c7a467" }}
+                >
+                  {principle.number}
+                </span>
+
+                <h4 className="mt-10 font-serif text-2xl leading-tight">
+                  {principle.title}
+                </h4>
+
+                <p className="mt-6 text-sm leading-7 text-white/42">
+                  {principle.text}
+                </p>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-14 flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-2xl font-serif text-xl italic leading-8 text-white/58 sm:text-2xl">
+              Ninguna persona ocupará más espacio por
+              haber aportado más dinero.
+            </p>
+
+            <Link
+              href="/colaborar"
+              className="inline-flex w-fit items-center justify-center border border-[#c7a467] px-7 py-4 text-[8px] uppercase tracking-[0.3em] text-[#c7a467] transition hover:bg-[#c7a467] hover:text-[#080b0e]"
+            >
+              Conocer la carta completa
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/components/PoetProfilePanel.tsx
+==============================================================================
+
+"use client";
+
+import { useEffect } from "react";
+
+export type PoetProfile = {
+  position: number;
+  name: string;
+  country: string;
+  city?: string;
+  shortBio: string;
+  status: "incorporation" | "confirmed" | "published";
+};
+
+type PoetProfilePanelProps = {
+  poet: PoetProfile | null;
+  onClose: () => void;
+};
+
+export default function PoetProfilePanel({
+  poet,
+  onClose,
+}: PoetProfilePanelProps) {
+  useEffect(() => {
+    if (!poet) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [poet, onClose]);
+
+  if (!poet) return null;
+
+  const location = poet.city
+    ? `${poet.city} · ${poet.country}`
+    : poet.country;
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex justify-end"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="poet-profile-title"
+    >
+      <button
+        type="button"
+        aria-label="Cerrar ficha"
+        onClick={onClose}
+        className="absolute inset-0"
+        style={{
+          backgroundColor: "rgba(2,5,7,0.78)",
+          backdropFilter: "blur(8px)",
+        }}
+      />
+
+      <aside
+        className="relative z-10 flex h-full w-full max-w-[590px] flex-col overflow-y-auto border-l px-7 py-8 sm:px-12 sm:py-10"
+        style={{
+          borderColor: "rgba(240,232,220,0.14)",
+          background:
+            "linear-gradient(180deg, #111920 0%, #070b0f 58%, #020507 100%)",
+          color: "#f0e8dc",
+          boxShadow: "-40px 0 120px rgba(0,0,0,0.48)",
+        }}
+      >
+        <header className="flex items-start justify-between gap-8 border-b border-white/10 pb-7">
+          <div>
+            <p
+              className="text-[8px] uppercase tracking-[0.4em]"
+              style={{ color: "#c7a467" }}
+            >
+              Posición {String(poet.position).padStart(2, "0")}
+            </p>
+
+            <p
+              className="mt-3 text-[8px] uppercase tracking-[0.3em]"
+              style={{ color: "rgba(240,232,220,0.34)" }}
+            >
+              Archivo de voces · 2026
+            </p>
+          </div>
+
+          <button
+            type="button"
+            aria-label="Cerrar"
+            onClick={onClose}
+            className="flex h-11 w-11 items-center justify-center border text-xl transition hover:border-[#c7a467] hover:text-[#c7a467]"
+            style={{
+              borderColor: "rgba(240,232,220,0.18)",
+              backgroundColor: "transparent",
+              color: "rgba(240,232,220,0.65)",
+            }}
+          >
+            ×
+          </button>
+        </header>
+
+        <div className="flex flex-1 flex-col justify-center py-14">
+          <p
+            className="text-[8px] uppercase tracking-[0.36em]"
+            style={{ color: "#c7a467" }}
+          >
+            {poet.status === "published"
+              ? "Perfil publicado"
+              : poet.status === "confirmed"
+                ? "Voz confirmada"
+                : "Voz en incorporación"}
+          </p>
+
+          <h2
+            id="poet-profile-title"
+            className="mt-7 font-serif text-5xl leading-[0.98] tracking-[-0.045em] sm:text-6xl"
+          >
+            {poet.name}
+          </h2>
+
+          <p
+            className="mt-5 font-serif text-xl italic"
+            style={{ color: "rgba(240,232,220,0.52)" }}
+          >
+            {location}
+          </p>
+
+          <div className="my-10 h-px bg-white/10" />
+
+          <p
+            className="max-w-lg text-base leading-8"
+            style={{ color: "rgba(240,232,220,0.72)" }}
+          >
+            {poet.shortBio}
+          </p>
+        </div>
+
+        <footer className="border-t border-white/10 pt-7">
+          <p
+            className="text-[8px] uppercase tracking-[0.32em]"
+            style={{ color: "rgba(240,232,220,0.28)" }}
+          >
+            Poema Universal · Edición fundacional
+          </p>
+        </footer>
+      </aside>
+    </div>
+  );
+}
+
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/components/PoetPresence.tsx
+==============================================================================
+
+"use client";
+
+import {
+  useEffect,
+  useState,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
+
+import AvatarInfoDialog from "./AvatarInfoDialog";
+import { getAvatarById } from "./avatarCatalog";
+import RelicInfoDialog from "./RelicInfoDialog";
+import PoetBibliographicPanel, { type EditorialIdentity } from "./PoetBibliographicPanel";
+import styles from "./PoetPresence.module.css";
+
+export type PoetPresenceState =
+  | "public"
+  | "incorporation"
+  | "open";
+
+type PresenceDesign = {
+  avatarVariant: number;
+  relicVariant: number;
+};
+
+type PoetPresenceProps = {
+  position: number;
+  state: PoetPresenceState;
+  name: string;
+  territory: string;
+  footer: string;
+  onOpen?: () => void;
+};
+
+const STORAGE_KEY =
+  "poema-universal-presence-designs";
+
+const IDENTITY_STORAGE_KEY =
+  "poema-universal.editorial-identities.v1";
+
+function defaultDesign(
+  position: number
+): PresenceDesign {
+  return {
+    avatarVariant: position,
+    relicVariant: position,
+  };
+}
+
+function readDesign(
+  position: number
+): PresenceDesign {
+  const fallback = defaultDesign(position);
+
+  try {
+    const raw =
+      window.localStorage.getItem(STORAGE_KEY);
+
+    if (!raw) {
+      return fallback;
+    }
+
+    const designs = JSON.parse(raw) as Record<
+      string,
+      Partial<PresenceDesign>
+    >;
+
+    const stored = designs[String(position)];
+
+    if (!stored) {
+      return fallback;
+    }
+
+    const avatarVariant =
+      Number(stored.avatarVariant);
+
+    const relicVariant =
+      Number(stored.relicVariant);
+
+    return {
+      avatarVariant:
+        Number.isInteger(avatarVariant) &&
+        avatarVariant >= 1 &&
+        avatarVariant <= 60
+          ? avatarVariant
+          : fallback.avatarVariant,
+
+      relicVariant:
+        Number.isInteger(relicVariant) &&
+        relicVariant >= 1 &&
+        relicVariant <= 60
+          ? relicVariant
+          : fallback.relicVariant,
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+async function readRemoteDesign(
+  position: number
+): Promise<PresenceDesign | null> {
+  const response = await fetch(
+    "/api/poema-universal/poets",
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const payload = await response.json();
+
+  const poet = (payload.poets ?? []).find(
+    (item: {
+      position?: unknown;
+    }) =>
+      Number(item.position) === position
+  );
+
+  if (!poet) {
+    return null;
+  }
+
+  const fallback =
+    defaultDesign(position);
+
+  const avatarVariant =
+    Number(poet.avatarVariant);
+
+  const relicVariant =
+    Number(poet.relicVariant);
+
+  return {
+    avatarVariant:
+      Number.isInteger(avatarVariant) &&
+      avatarVariant >= 1 &&
+      avatarVariant <= 60
+        ? avatarVariant
+        : fallback.avatarVariant,
+
+    relicVariant:
+      Number.isInteger(relicVariant) &&
+      relicVariant >= 1 &&
+      relicVariant <= 60
+        ? relicVariant
+        : fallback.relicVariant,
+  };
+}
+
+function readEditorialIdentities():
+  EditorialIdentity[] {
+  try {
+    const raw =
+      window.localStorage.getItem(
+        IDENTITY_STORAGE_KEY
+      );
+
+    if (!raw) {
+      return [];
+    }
+
+    const parsed = JSON.parse(raw);
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+
+function formatNumber(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+export default function PoetPresence({
+  position,
+  state,
+  name,
+  territory,
+  footer,
+  onOpen,
+}: PoetPresenceProps) {
+  const [design, setDesign] =
+    useState<PresenceDesign>(() =>
+      defaultDesign(position)
+    );
+
+  const [avatarDialogOpen, setAvatarDialogOpen] =
+    useState(false);
+
+  const [relicDialogOpen, setRelicDialogOpen] =
+    useState(false);
+
+  const [
+    bibliographicOpen,
+    setBibliographicOpen,
+  ] = useState(false);
+
+  const [
+    editorialIdentities,
+    setEditorialIdentities,
+  ] = useState<EditorialIdentity[]>([]);
+
+  const identity =
+    editorialIdentities.find(
+      (item) =>
+        item.avatarId ===
+          design.avatarVariant &&
+        item.relicId ===
+          design.relicVariant
+    ) ?? null;
+
+  const displayState =
+    identity ? "public" : state;
+
+  const displayName =
+    identity?.name ?? name;
+
+  const displayTerritory =
+    identity?.territory ?? territory;
+
+  const displayFooter =
+    identity
+      ? "Abrir ficha bibliográfica"
+      : footer;
+
+  const isInteractive =
+    Boolean(identity) ||
+    (
+      state === "public" &&
+      typeof onOpen === "function"
+    );
+
+  useEffect(() => {
+    function synchronize() {
+      setDesign(readDesign(position));
+
+      void readRemoteDesign(position)
+        .then((remoteDesign) => {
+          if (remoteDesign) {
+            setDesign(remoteDesign);
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "No se pudo cargar la presencia:",
+            error
+          );
+        });
+    }
+
+    synchronize();
+
+    window.addEventListener(
+      "poema-presence-update",
+      synchronize
+    );
+
+    window.addEventListener(
+      "storage",
+      synchronize
+    );
+
+    return () => {
+      window.removeEventListener(
+        "poema-presence-update",
+        synchronize
+      );
+
+      window.removeEventListener(
+        "storage",
+        synchronize
+      );
+    };
+  }, [position]);
+
+  useEffect(() => {
+    function synchronizeIdentities() {
+      setEditorialIdentities(
+        readEditorialIdentities()
+      );
+    }
+
+    synchronizeIdentities();
+
+    window.addEventListener(
+      "poema-universal:identity-saved",
+      synchronizeIdentities
+    );
+
+    window.addEventListener(
+      "storage",
+      synchronizeIdentities
+    );
+
+    return () => {
+      window.removeEventListener(
+        "poema-universal:identity-saved",
+        synchronizeIdentities
+      );
+
+      window.removeEventListener(
+        "storage",
+        synchronizeIdentities
+      );
+    };
+  }, []);
+
+  function openBibliographicProfile() {
+    if (identity) {
+      setBibliographicOpen(true);
+      return;
+    }
+
+    onOpen?.();
+  }
+
+  function handleKeyDown(
+    event: KeyboardEvent<HTMLLIElement>
+  ) {
+    if (
+      !isInteractive ||
+      (event.key !== "Enter" &&
+        event.key !== " ")
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    openBibliographicProfile();
+  }
+
+  function openAvatar(
+    event: MouseEvent<HTMLButtonElement>
+  ) {
+    event.stopPropagation();
+    setAvatarDialogOpen(true);
+  }
+
+  function openRelic(
+    event: MouseEvent<HTMLButtonElement>
+  ) {
+    event.stopPropagation();
+    setRelicDialogOpen(true);
+  }
+
+  const avatarNumber = formatNumber(
+    design.avatarVariant
+  );
+
+  const relicNumber = formatNumber(
+    design.relicVariant
+  );
+
+  const avatarInfo = getAvatarById(
+    design.avatarVariant
+  );
+
+  return (
+    <>
+      <li
+        role={isInteractive ? "button" : undefined}
+        tabIndex={isInteractive ? 0 : -1}
+        aria-label={
+          isInteractive
+            ? `Abrir ficha de ${displayName}`
+            : undefined
+        }
+        className={[
+          styles.item,
+          styles[displayState],
+        ].join(" ")}
+        onClick={
+          isInteractive
+            ? openBibliographicProfile
+            : undefined
+        }
+        onKeyDown={handleKeyDown}
+      >
+        <div className={styles.header}>
+          <span className={styles.number}>
+            {formatNumber(position)}
+          </span>
+
+          <span
+            aria-hidden="true"
+            className={styles.statusDot}
+          />
+        </div>
+
+        <div className={styles.stage}>
+          <span
+            aria-hidden="true"
+            className={styles.thread}
+          />
+
+          <button
+            type="button"
+            className={styles.avatarFrame}
+            aria-label={`Conocer el avatar ${avatarInfo.title}`}
+            title={avatarInfo.title}
+            onClick={openAvatar}
+            style={{
+              overflow: "hidden",
+              padding: 0,
+              background: "#050708",
+              cursor: "pointer",
+            }}
+          >
+            <img
+              src={`/avatars/avatar-${avatarNumber}.webp`}
+              alt=""
+              draggable={false}
+              className="block h-full w-full object-contain object-center transition duration-500 hover:scale-[1.035]"
+              style={{
+                opacity:
+                  displayState === "public"
+                    ? 1
+                    : displayState === "incorporation"
+                      ? 0.72
+                      : 0.4,
+                filter:
+                  displayState === "public"
+                    ? "saturate(.84) contrast(1.04)"
+                    : "grayscale(.48) saturate(.48) brightness(.72)",
+              }}
+            />
+          </button>
+
+          <button
+            type="button"
+            className={styles.relic}
+            aria-label={`Conocer el tesoro T${relicNumber}`}
+            title="Conocer este tesoro"
+            onClick={openRelic}
+            style={{
+              overflow: "hidden",
+              padding: 0,
+              background: "#050708",
+              cursor: "pointer",
+            }}
+          >
+            <img
+              src={`/relics/relic-${relicNumber}.webp`}
+              alt=""
+              draggable={false}
+              className="block h-full w-full rounded-full object-cover transition duration-300 hover:scale-110"
+            />
+          </button>
+        </div>
+
+        <div className={styles.copy}>
+          <p className={styles.name}>
+            {displayName}
+          </p>
+
+          <p className={styles.territory}>
+            {displayTerritory}
+          </p>
+
+          <div className={styles.footer}>
+            <span>{displayFooter}</span>
+
+            <span className={styles.relicLabel}>
+              A{avatarNumber} · T{relicNumber}
+            </span>
+          </div>
+        </div>
+      </li>
+
+      <AvatarInfoDialog
+        avatarId={design.avatarVariant}
+        open={avatarDialogOpen}
+        onClose={() =>
+          setAvatarDialogOpen(false)
+        }
+      />
+
+      <RelicInfoDialog
+        relicId={design.relicVariant}
+        open={relicDialogOpen}
+        onClose={() =>
+          setRelicDialogOpen(false)
+        }
+      />
+
+      <PoetBibliographicPanel
+        position={position}
+        identity={identity}
+        avatarId={design.avatarVariant}
+        relicId={design.relicVariant}
+        open={bibliographicOpen}
+        onClose={() =>
+          setBibliographicOpen(false)
+        }
+      />
+    </>
+  );
+}
+
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/components/AvatarRelicStudio.tsx
+==============================================================================
+
+"use client";
+
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import { getAvatarById } from "./avatarCatalog";
+import { getRelicById } from "./relicCatalog";
+import styles from "./AvatarRelicStudio.module.css";
+
+import EditorialIdentityPanel from "./EditorialIdentityPanel";
+type PresenceDesign = {
+  avatarVariant: number;
+  relicVariant: number;
+};
+
+type DesignMap = Record<
+  string,
+  PresenceDesign
+>;
+
+const STORAGE_KEY =
+  "poema-universal-presence-designs";
+
+const ADMIN_SESSION_KEY =
+  "poema-universal-curator-secret";
+
+const TOTAL_PRESENCES = 60;
+
+function formatNumber(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+function normalizeVariant(
+  value: unknown,
+  fallback: number
+) {
+  const parsed = Number(value);
+
+  if (
+    !Number.isInteger(parsed) ||
+    parsed < 1 ||
+    parsed > TOTAL_PRESENCES
+  ) {
+    return fallback;
+  }
+
+  return parsed;
+}
+
+function defaultDesign(
+  position: number
+): PresenceDesign {
+  return {
+    avatarVariant: position,
+    relicVariant: position,
+  };
+}
+
+function normalizeDesign(
+  position: number,
+  design?: Partial<PresenceDesign>
+): PresenceDesign {
+  const fallback = defaultDesign(position);
+
+  return {
+    avatarVariant: normalizeVariant(
+      design?.avatarVariant,
+      fallback.avatarVariant
+    ),
+    relicVariant: normalizeVariant(
+      design?.relicVariant,
+      fallback.relicVariant
+    ),
+  };
+}
+
+async function readRemoteDesigns():
+  Promise<DesignMap> {
+  const response = await fetch(
+    "/api/poema-universal/poets",
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      "No se pudieron cargar las asignaciones."
+    );
+  }
+
+  const payload = await response.json();
+
+  const remoteDesigns: DesignMap = {};
+
+  for (const poet of payload.poets ?? []) {
+    const position = Number(poet.position);
+
+    if (
+      !Number.isInteger(position) ||
+      position < 1 ||
+      position > TOTAL_PRESENCES
+    ) {
+      continue;
+    }
+
+    remoteDesigns[String(position)] =
+      normalizeDesign(position, {
+        avatarVariant:
+          poet.avatarVariant ??
+          position,
+        relicVariant:
+          poet.relicVariant ??
+          position,
+      });
+  }
+
+  return remoteDesigns;
+}
+
+function getAdministratorSecret() {
+  const stored =
+    window.sessionStorage.getItem(
+      ADMIN_SESSION_KEY
+    );
+
+  if (stored) {
+    return stored;
+  }
+
+  const entered = window.prompt(
+    "Introduce tu clave privada de administración."
+  );
+
+  const normalized = entered?.trim();
+
+  if (!normalized) {
+    return null;
+  }
+
+  window.sessionStorage.setItem(
+    ADMIN_SESSION_KEY,
+    normalized
+  );
+
+  return normalized;
+}
+
+async function persistRemoteDesign(
+  position: number,
+  design: {
+    avatarVariant: number | null;
+    relicVariant: number | null;
+  }
+) {
+  const secret =
+    getAdministratorSecret();
+
+  if (!secret) {
+    throw new Error(
+      "No se introdujo la clave administrativa."
+    );
+  }
+
+  const response = await fetch(
+    "/api/poema-universal/poets",
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type":
+          "application/json",
+        "x-admin-secret": secret,
+      },
+      body: JSON.stringify({
+        position,
+        avatarVariant:
+          design.avatarVariant,
+        relicVariant:
+          design.relicVariant,
+      }),
+    }
+  );
+
+  const payload = await response.json();
+
+  if (!response.ok) {
+    if (response.status === 401) {
+      window.sessionStorage.removeItem(
+        ADMIN_SESSION_KEY
+      );
+    }
+
+    throw new Error(
+      payload.error ??
+        "No se pudo guardar la asignación."
+    );
+  }
+}
+
+function readDesigns(): DesignMap {
+  try {
+    const raw =
+      window.localStorage.getItem(STORAGE_KEY);
+
+    if (!raw) {
+      return {};
+    }
+
+    const stored = JSON.parse(raw) as Record<
+      string,
+      Partial<PresenceDesign>
+    >;
+
+    const normalized: DesignMap = {};
+
+    for (
+      let position = 1;
+      position <= TOTAL_PRESENCES;
+      position += 1
+    ) {
+      const key = String(position);
+
+      if (stored[key]) {
+        normalized[key] = normalizeDesign(
+          position,
+          stored[key]
+        );
+      }
+    }
+
+    return normalized;
+  } catch {
+    return {};
+  }
+}
+
+export default function AvatarRelicStudio() {
+  const [enabled, setEnabled] =
+    useState(false);
+
+  const [open, setOpen] =
+    useState(false);
+
+  const [position, setPosition] =
+    useState(1);
+
+  const [designs, setDesigns] =
+    useState<DesignMap>({});
+
+  useEffect(() => {
+    const search =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    setEnabled(
+      window.location.hostname ===
+        "localhost" ||
+        search.get("curator") === "1"
+    );
+
+    const localDesigns =
+      readDesigns();
+
+    setDesigns(localDesigns);
+
+    void readRemoteDesigns()
+      .then((remoteDesigns) => {
+        setDesigns({
+          ...localDesigns,
+          ...remoteDesigns,
+        });
+      })
+      .catch((error) => {
+        console.error(
+          "No se pudieron cargar las presencias:",
+          error
+        );
+      });
+  }, []);
+
+  const positions = useMemo(
+    () =>
+      Array.from(
+        { length: TOTAL_PRESENCES },
+        (_, index) => index + 1
+      ),
+    []
+  );
+
+  const currentDesign = useMemo(
+    () =>
+      normalizeDesign(
+        position,
+        designs[String(position)]
+      ),
+    [designs, position]
+  );
+
+  const selectedAvatar = getAvatarById(
+    currentDesign.avatarVariant
+  );
+
+  const selectedRelic = getRelicById(
+    currentDesign.relicVariant
+  );
+
+  function saveDesign(
+    nextDesign: PresenceDesign
+  ) {
+    const nextDesigns: DesignMap = {
+      ...designs,
+      [String(position)]: nextDesign,
+    };
+
+    setDesigns(nextDesigns);
+
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(nextDesigns)
+    );
+
+    void persistRemoteDesign(
+      position,
+      nextDesign
+    )
+      .then(() => {
+        window.dispatchEvent(
+          new CustomEvent(
+            "poema-presence-update"
+          )
+        );
+      })
+      .catch((error) => {
+        window.alert(
+          error instanceof Error
+            ? error.message
+            : "No se pudo guardar."
+        );
+      });
+  }
+
+  function selectAvatar(
+    avatarVariant: number
+  ) {
+    saveDesign({
+      ...currentDesign,
+      avatarVariant,
+    });
+  }
+
+  function selectRelic(
+    relicVariant: number
+  ) {
+    saveDesign({
+      ...currentDesign,
+      relicVariant,
+    });
+  }
+
+  function resetPosition() {
+    const nextDesigns = {
+      ...designs,
+    };
+
+    delete nextDesigns[String(position)];
+
+    setDesigns(nextDesigns);
+
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(nextDesigns)
+    );
+
+    void persistRemoteDesign(
+      position,
+      {
+        avatarVariant: null,
+        relicVariant: null,
+      }
+    )
+      .then(() => {
+        window.dispatchEvent(
+          new CustomEvent(
+            "poema-presence-update"
+          )
+        );
+      })
+      .catch((error) => {
+        window.alert(
+          error instanceof Error
+            ? error.message
+            : "No se pudo reiniciar."
+        );
+      });
+  }
+
+  if (!enabled) {
+    return null;
+  }
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        className={styles.trigger}
+        onClick={() => setOpen(true)}
+      >
+        Curar presencias
+      </button>
+    );
+  }
+
+  return (
+    <aside className={styles.panel}>
+      <div className={styles.header}>
+        <div>
+          <p className={styles.eyebrow}>
+            Poema Universal
+          </p>
+
+          <h2 className={styles.title}>
+            Taller de presencias
+          </h2>
+        </div>
+
+        <button
+          type="button"
+          className={styles.close}
+          aria-label="Cerrar taller"
+          onClick={() => setOpen(false)}
+        >
+          ×
+        </button>
+      </div>
+
+      <div className={styles.section}>
+        <label
+          className={styles.label}
+          htmlFor="presence-position"
+        >
+          Plaza seleccionada
+        </label>
+
+        <select
+          id="presence-position"
+          className={styles.select}
+          value={position}
+          onChange={(event) =>
+            setPosition(
+              Number(event.target.value)
+            )
+          }
+        >
+          {positions.map((slot) => (
+            <option
+              key={slot}
+              value={slot}
+            >
+              Plaza {formatNumber(slot)}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* COMBINACIÓN SELECCIONADA */}
+
+      <div
+        style={{
+          display: "grid",
+          gap: "12px",
+          marginTop: "18px",
+        }}
+      >
+        {/* FICHA DEL AVATAR */}
+
+        <article
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "105px minmax(0, 1fr)",
+            gap: "18px",
+            border:
+              "1px solid rgba(199,164,103,.28)",
+            background:
+              "rgba(199,164,103,.055)",
+            padding: "13px",
+          }}
+        >
+          <img
+            src={`/avatars/avatar-${formatNumber(
+              selectedAvatar.id
+            )}.webp`}
+            alt={selectedAvatar.title}
+            style={{
+              display: "block",
+              width: "105px",
+              height: "130px",
+              objectFit: "contain",
+              objectPosition: "center",
+              background: "#050708",
+            }}
+          />
+
+          <div>
+            <p
+              style={{
+                color: "#c7a467",
+                fontSize: "8px",
+                letterSpacing: ".24em",
+                textTransform: "uppercase",
+              }}
+            >
+              {selectedAvatar.code} ·{" "}
+              {selectedAvatar.presence}
+            </p>
+
+            <h3
+              style={{
+                marginTop: "8px",
+                fontFamily:
+                  'Georgia, "Times New Roman", serif',
+                fontSize: "21px",
+                lineHeight: "1.1",
+                color: "#f0e8dc",
+              }}
+            >
+              {selectedAvatar.title}
+            </h3>
+
+            <p
+              style={{
+                marginTop: "8px",
+                fontFamily:
+                  'Georgia, "Times New Roman", serif',
+                fontStyle: "italic",
+                fontSize: "13px",
+                lineHeight: "1.55",
+                color:
+                  "rgba(240,232,220,.64)",
+              }}
+            >
+              {selectedAvatar.description}
+            </p>
+
+            <p
+              style={{
+                marginTop: "9px",
+                color:
+                  "rgba(240,232,220,.36)",
+                fontSize: "8px",
+                letterSpacing: ".12em",
+                textTransform: "uppercase",
+              }}
+            >
+              Gesto · {selectedAvatar.gesture}
+            </p>
+          </div>
+        </article>
+
+        {/* FICHA DE LA RELIQUIA */}
+
+        <article
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "105px minmax(0, 1fr)",
+            gap: "18px",
+            border:
+              "1px solid rgba(199,164,103,.28)",
+            background:
+              "rgba(199,164,103,.055)",
+            padding: "13px",
+          }}
+        >
+          <img
+            src={`/relics/relic-${formatNumber(
+              selectedRelic.id
+            )}.webp`}
+            alt={selectedRelic.name}
+            style={{
+              display: "block",
+              width: "105px",
+              height: "105px",
+              objectFit: "cover",
+              background: "#050708",
+            }}
+          />
+
+          <div>
+            <p
+              style={{
+                color: "#c7a467",
+                fontSize: "8px",
+                letterSpacing: ".24em",
+                textTransform: "uppercase",
+              }}
+            >
+              {selectedRelic.code} ·{" "}
+              {selectedRelic.meaning}
+            </p>
+
+            <h3
+              style={{
+                marginTop: "8px",
+                fontFamily:
+                  'Georgia, "Times New Roman", serif',
+                fontSize: "21px",
+                lineHeight: "1.1",
+                color: "#f0e8dc",
+              }}
+            >
+              {selectedRelic.name}
+            </h3>
+
+            <p
+              style={{
+                marginTop: "8px",
+                fontFamily:
+                  'Georgia, "Times New Roman", serif',
+                fontStyle: "italic",
+                fontSize: "13px",
+                lineHeight: "1.55",
+                color:
+                  "rgba(240,232,220,.64)",
+              }}
+            >
+              {selectedRelic.description}
+            </p>
+
+            <p
+              style={{
+                marginTop: "9px",
+                color:
+                  "rgba(240,232,220,.36)",
+                fontSize: "8px",
+                letterSpacing: ".12em",
+                textTransform: "uppercase",
+              }}
+            >
+              Materia · {selectedRelic.material}
+            </p>
+          </div>
+        </article>
+      </div>
+
+
+      <EditorialIdentityPanel
+        avatarId={selectedAvatar.id}
+        relicId={selectedRelic.id}
+      />
+
+      {/* GALERÍA DE AVATARES */}
+
+      <div className={styles.section}>
+        <p className={styles.label}>
+          Elige uno de los 60 avatares
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(5, minmax(0, 1fr))",
+            gap: "7px",
+          }}
+        >
+          {positions.map((avatarId) => {
+            const avatar =
+              getAvatarById(avatarId);
+
+            const selected =
+              currentDesign.avatarVariant ===
+              avatarId;
+
+            return (
+              <button
+                key={`avatar-${avatarId}`}
+                type="button"
+                aria-pressed={selected}
+                aria-label={`${avatar.code}: ${avatar.title}`}
+                title={avatar.title}
+                onClick={() =>
+                  selectAvatar(avatarId)
+                }
+                style={{
+                  position: "relative",
+                  aspectRatio: "0.8",
+                  overflow: "hidden",
+                  border: selected
+                    ? "1px solid #c7a467"
+                    : "1px solid rgba(240,232,220,.12)",
+                  background: selected
+                    ? "rgba(199,164,103,.12)"
+                    : "rgba(240,232,220,.025)",
+                  boxShadow: selected
+                    ? "0 0 16px rgba(199,164,103,.15)"
+                    : "none",
+                  cursor: "pointer",
+                }}
+              >
+                <img
+                  src={`/avatars/avatar-${formatNumber(
+                    avatarId
+                  )}.webp`}
+                  alt=""
+                  loading="lazy"
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                    objectPosition: "center",
+                    background: "#050708",
+                  }}
+                />
+
+                <span
+                  style={{
+                    position: "absolute",
+                    right: "3px",
+                    bottom: "3px",
+                    padding: "2px 4px",
+                    background:
+                      "rgba(5,8,11,.84)",
+                    color: selected
+                      ? "#c7a467"
+                      : "rgba(240,232,220,.68)",
+                    fontSize: "8px",
+                  }}
+                >
+                  {formatNumber(avatarId)}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* GALERÍA DE RELIQUIAS */}
+
+      <div className={styles.section}>
+        <p className={styles.label}>
+          Elige una de las 60 reliquias
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(5, minmax(0, 1fr))",
+            gap: "7px",
+          }}
+        >
+          {positions.map((relicId) => {
+            const relic =
+              getRelicById(relicId);
+
+            const selected =
+              currentDesign.relicVariant ===
+              relicId;
+
+            return (
+              <button
+                key={`relic-${relicId}`}
+                type="button"
+                aria-pressed={selected}
+                aria-label={`${relic.code}: ${relic.name}`}
+                title={relic.name}
+                onClick={() =>
+                  selectRelic(relicId)
+                }
+                style={{
+                  position: "relative",
+                  aspectRatio: "1",
+                  overflow: "hidden",
+                  border: selected
+                    ? "1px solid #c7a467"
+                    : "1px solid rgba(240,232,220,.12)",
+                  background: selected
+                    ? "rgba(199,164,103,.12)"
+                    : "rgba(240,232,220,.025)",
+                  boxShadow: selected
+                    ? "0 0 16px rgba(199,164,103,.15)"
+                    : "none",
+                  cursor: "pointer",
+                }}
+              >
+                <img
+                  src={`/relics/relic-${formatNumber(
+                    relicId
+                  )}.webp`}
+                  alt=""
+                  loading="lazy"
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    background: "#050708",
+                  }}
+                />
+
+                <span
+                  style={{
+                    position: "absolute",
+                    right: "3px",
+                    bottom: "3px",
+                    padding: "2px 4px",
+                    background:
+                      "rgba(5,8,11,.82)",
+                    color: selected
+                      ? "#c7a467"
+                      : "rgba(240,232,220,.66)",
+                    fontSize: "8px",
+                  }}
+                >
+                  {formatNumber(relicId)}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div
+        style={{
+          marginTop: "20px",
+          borderTop:
+            "1px solid rgba(240,232,220,.12)",
+          paddingTop: "17px",
+        }}
+      >
+        <p className={styles.note}>
+          El avatar y la reliquia elegidos
+          quedan asignados inmediatamente a la
+          plaza {formatNumber(position)}.
+        </p>
+
+        <button
+          type="button"
+          onClick={resetPosition}
+          style={{
+            marginTop: "12px",
+            color:
+              "rgba(240,232,220,.48)",
+            fontSize: "8px",
+            letterSpacing: ".22em",
+            textTransform: "uppercase",
+          }}
+        >
+          Restaurar combinación original
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/components/EditorialHero.tsx
+==============================================================================
+
+"use client";
+
+import Link from "next/link";
+import styles from "./EditorialHero.module.css";
+
+type CountdownTime = {
+  dias: number;
+  horas: number;
+  minutos: number;
+  segundos: number;
+};
+
+type EditorialHeroProps = {
+  time: CountdownTime;
+  legacyItems?: unknown;
+};
+
+const pad = (value: number) =>
+  String(Math.max(0, value)).padStart(2, "0");
+
+export default function EditorialHero({
+  time,
+  legacyItems,
+}: EditorialHeroProps) {
+  void legacyItems;
+
+  const countdown = [
+    { value: String(time.dias), label: "Días" },
+    { value: pad(time.horas), label: "Horas" },
+    { value: pad(time.minutos), label: "Minutos" },
+    { value: pad(time.segundos), label: "Segundos" },
+  ];
+
+  return (
+    <section
+      aria-labelledby="poema-universal-title"
+      className={styles.hero}
+    >
+      <div aria-hidden="true" className={styles.paper} />
+      <div aria-hidden="true" className={styles.axis} />
+
+      <div
+        aria-hidden="true"
+        className={styles.constellation}
+      >
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+
+      <div className={styles.frame}>
+        <div className={styles.meta}>
+          <p>Institución literaria internacional</p>
+          <p>Presentación · 01.01.2027</p>
+        </div>
+
+        <div className={styles.stage}>
+          <p className={styles.kicker}>
+            Edición fundacional
+          </p>
+
+          <div className={styles.titleWrap}>
+            <span
+              aria-hidden="true"
+              className={styles.orbit}
+            />
+
+            <h1
+              id="poema-universal-title"
+              className={styles.title}
+            >
+              <span className={styles.poema}>
+                Poema
+              </span>
+
+              <span className={styles.universal}>
+                Universal
+              </span>
+            </h1>
+          </div>
+
+          <p className={styles.lead}>
+            Una única obra escrita durante un año
+            <span>
+              por sesenta voces del mundo.
+            </span>
+          </p>
+
+          <p className={styles.mantra}>
+            Sesenta voces · un solo año · una misma
+            dignidad
+          </p>
+
+          <Link
+            href="#manifiesto"
+            className={styles.manifestoLink}
+          >
+            Leer la declaración fundacional
+            <span aria-hidden="true">↓</span>
+          </Link>
+        </div>
+
+        <div className={styles.countdownHeader}>
+          <p>Tiempo restante</p>
+          <p>Apertura del primer libro</p>
+        </div>
+
+        <div
+          className={styles.countdown}
+          aria-label="Cuenta atrás para la presentación"
+        >
+          {countdown.map((item) => (
+            <div
+              key={item.label}
+              className={styles.countdownItem}
+            >
+              <span className={styles.countdownValue}>
+                {item.value}
+              </span>
+
+              <span className={styles.countdownLabel}>
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.footerLine}>
+          <span>Poema Universal · 2026</span>
+          <span>60 voces · un solo libro</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/data/curatedVoices.ts
+==============================================================================
+
+export type CuratedVoice = {
+  position: number;
+  kind: "real" | "literary";
+  name: string;
+  territory: string;
+  poemTitle: string;
+  treasure: string;
+  chapter?: string;
+  occupation?: string;
+  language?: string;
+  age?: string;
+};
+
+export const CURATED_VOICES: CuratedVoice[] = [
+  {
+    "position": 1,
+    "kind": "real",
+    "name": "José Naveiro",
+    "territory": "Galicia · España",
+    "poemTitle": "El huerto",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 2,
+    "kind": "real",
+    "name": "ASATAKA",
+    "territory": "Japón",
+    "poemTitle": "La luz regresa descalza",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 3,
+    "kind": "real",
+    "name": "Azucena",
+    "territory": "México",
+    "poemTitle": "",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 4,
+    "kind": "real",
+    "name": "Johan Rodríguez Martínez",
+    "territory": "Venezuela",
+    "poemTitle": "Lo que permanece",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 5,
+    "kind": "real",
+    "name": "Andrés Giraldo Flórez",
+    "territory": "Colombia",
+    "poemTitle": "",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 6,
+    "kind": "real",
+    "name": "Marco Indrio",
+    "territory": "Italia · Italy",
+    "poemTitle": "Solo dos hombres",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 7,
+    "kind": "real",
+    "name": "Cheik Ndiaye",
+    "territory": "Sénégal · Senegal",
+    "poemTitle": "Je suis arrivé vivant",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 8,
+    "kind": "real",
+    "name": "Jacobo Blanco Piñeiro",
+    "territory": "Galicia · España",
+    "poemTitle": "Cofundador · librero",
+    "treasure": "Tesoro actual de la presencia"
+  },
+  {
+    "position": 9,
+    "kind": "literary",
+    "name": "Aiko Mori",
+    "territory": "Kioto · Japón",
+    "poemTitle": "La madre del tiempo",
+    "treasure": "una rueda dentada guardada en un pañuelo",
+    "chapter": "La casa anterior al miedo",
+    "occupation": "relojera jubilada",
+    "language": "JAPONÉS (TRANSLITERACIÓN RŌMAJI)",
+    "age": "72 años"
+  },
+  {
+    "position": 10,
+    "kind": "literary",
+    "name": "Mamadou Diop",
+    "territory": "Saint-Louis · Senegal",
+    "poemTitle": "Primer mar",
+    "treasure": "una viruta de madera con forma de ola",
+    "chapter": "La casa anterior al miedo",
+    "occupation": "carpintero de ribera",
+    "language": "WOLOF (WOLOF DE SAINT-LOUIS)",
+    "age": "33 años"
+  },
+  {
+    "position": 11,
+    "kind": "literary",
+    "name": "Lúa Carballo",
+    "territory": "Santiago de Compostela · España",
+    "poemTitle": "Inventario de la casa pequeña",
+    "treasure": "una llave que ya no abre ninguna puerta",
+    "chapter": "La casa anterior al miedo",
+    "occupation": "archivera",
+    "language": "GALEGO (GALEGO DE GALICIA)",
+    "age": "29 años"
+  },
+  {
+    "position": 12,
+    "kind": "literary",
+    "name": "Ximena Téllez",
+    "territory": "Puebla · México",
+    "poemTitle": "Historia clínica de una luz",
+    "treasure": "una pulsera de hospital sin nombre",
+    "chapter": "La casa anterior al miedo",
+    "occupation": "obstetra",
+    "language": "ESPAÑOL (ESPAÑOL DE MÉXICO)",
+    "age": "41 años"
+  },
+  {
+    "position": 13,
+    "kind": "literary",
+    "name": "Ingrid Solheim",
+    "territory": "Tromsø · Noruega",
+    "poemTitle": "Constelación de invierno",
+    "treasure": "un mapa celeste doblado cuatro veces",
+    "chapter": "La casa anterior al miedo",
+    "occupation": "estudiante de astronomía",
+    "language": "NORUEGO (BOKMÅL)",
+    "age": "17 años"
+  },
+  {
+    "position": 14,
+    "kind": "literary",
+    "name": "Aarav Mehta",
+    "territory": "Vadodara · India",
+    "poemTitle": "Aviso a los viajeros",
+    "treasure": "un billete de andén perforado",
+    "chapter": "La casa anterior al miedo",
+    "occupation": "locutor ferroviario",
+    "language": "GUYARATÍ (TRANSLITERACIÓN LATINA)",
+    "age": "38 años"
+  },
+  {
+    "position": 15,
+    "kind": "literary",
+    "name": "Valentina Caicedo",
+    "territory": "Cali · Colombia",
+    "poemTitle": "Puntada invisible",
+    "treasure": "un dedal abollado",
+    "chapter": "La casa anterior al miedo",
+    "occupation": "costurera",
+    "language": "ESPAÑOL (ESPAÑOL DE COLOMBIA)",
+    "age": "63 años"
+  },
+  {
+    "position": 16,
+    "kind": "literary",
+    "name": "Tomás Lucero",
+    "territory": "Córdoba · Argentina",
+    "poemTitle": "Ensayo general",
+    "treasure": "una cinta elástica gastada",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "estudiante de danza",
+    "language": "ESPAÑOL (ESPAÑOL DE ARGENTINA)",
+    "age": "19 años"
+  },
+  {
+    "position": 17,
+    "kind": "literary",
+    "name": "Park Seo-yeon",
+    "territory": "Seúl · Corea del Sur",
+    "poemTitle": "Condiciones de uso",
+    "treasure": "un teléfono con la pantalla rota",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "diseñadora de interfaces",
+    "language": "COREANO (TRANSLITERACIÓN ROMANIZADA)",
+    "age": "26 años"
+  },
+  {
+    "position": 18,
+    "kind": "literary",
+    "name": "Salma El Idrissi",
+    "territory": "Fez · Marruecos",
+    "poemTitle": "Almuerzo para una hija",
+    "treasure": "una cuchara de mango azul",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "cocinera escolar",
+    "language": "ÁRABE MARROQUÍ (DARIJA DE FEZ)",
+    "age": "44 años"
+  },
+  {
+    "position": 19,
+    "kind": "literary",
+    "name": "Camille Duret",
+    "territory": "Lyon · Francia",
+    "poemTitle": "Capa de ajuste",
+    "treasure": "una fotografía sin editar",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "retocadora fotográfica",
+    "language": "FRANCÉS (FRANÇAIS DE FRANCE)",
+    "age": "31 años"
+  },
+  {
+    "position": 20,
+    "kind": "literary",
+    "name": "Rafael Nascimento",
+    "territory": "Recife · Brasil",
+    "poemTitle": "Radiografía",
+    "treasure": "una placa velada",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "técnico de radiología",
+    "language": "PORTUGUÉS (PORTUGUÊS DO BRASIL)",
+    "age": "28 años"
+  },
+  {
+    "position": 21,
+    "kind": "literary",
+    "name": "Nadine Khoury",
+    "territory": "Beirut · Líbano",
+    "poemTitle": "Posología",
+    "treasure": "un frasco ámbar vacío",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "farmacéutica",
+    "language": "ÁRABE LIBANÉS (ÁRABE DE BEIRUT)",
+    "age": "36 años"
+  },
+  {
+    "position": 22,
+    "kind": "literary",
+    "name": "Thando Maseko",
+    "territory": "Johannesburgo · Sudáfrica",
+    "poemTitle": "Doce asaltos",
+    "treasure": "una venda con una pequeña mancha de sangre",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "boxeadora",
+    "language": "ISIZULU (ISIZULU DE JOHANNESBURGO)",
+    "age": "23 años"
+  },
+  {
+    "position": 23,
+    "kind": "literary",
+    "name": "Zofia Nowak",
+    "territory": "Łódź · Polonia",
+    "poemTitle": "Ticket de compra",
+    "treasure": "un recibo casi borrado",
+    "chapter": "Los espejos tienen hambre",
+    "occupation": "cajera de supermercado",
+    "language": "POLACO (POLSKI)",
+    "age": "55 años"
+  },
+  {
+    "position": 24,
+    "kind": "literary",
+    "name": "Milagros Quispe",
+    "territory": "Cusco · Perú",
+    "poemTitle": "Papa para los días rotos",
+    "treasure": "un cuaderno manchado de caldo",
+    "chapter": "Cocinas para regresar",
+    "occupation": "cocinera de escuela pública",
+    "language": "QUECHUA (QUECHUA SUREÑO DE CUSCO)",
+    "age": "48 años"
+  },
+  {
+    "position": 25,
+    "kind": "literary",
+    "name": "Enzo Bellini",
+    "territory": "Bolonia · Italia",
+    "poemTitle": "Las cuatro de la mañana",
+    "treasure": "una rasqueta de panadero heredada",
+    "chapter": "Cocinas para regresar",
+    "occupation": "panadero",
+    "language": "ITALIANO (ITALIANO DE BOLONIA)",
+    "age": "61 años"
+  },
+  {
+    "position": 26,
+    "kind": "literary",
+    "name": "Deniz Kaya",
+    "territory": "Esmirna · Turquía",
+    "poemTitle": "El cuenco imperfecto",
+    "treasure": "un cuenco con el borde irregular",
+    "chapter": "Cocinas para regresar",
+    "occupation": "ceramista",
+    "language": "TURCO (TÜRKÇE)",
+    "age": "27 años"
+  },
+  {
+    "position": 27,
+    "kind": "literary",
+    "name": "Hana Tesfaye",
+    "territory": "Adís Abeba · Etiopía",
+    "poemTitle": "Guardia nocturna",
+    "treasure": "una servilleta con una receta escrita",
+    "chapter": "Cocinas para regresar",
+    "occupation": "médica de urgencias",
+    "language": "AMHÁRICO (TRANSLITERACIÓN LATINA)",
+    "age": "32 años"
+  },
+  {
+    "position": 28,
+    "kind": "literary",
+    "name": "Inês Carvalho",
+    "territory": "Oporto · Portugal",
+    "poemTitle": "Mezcla final",
+    "treasure": "unos auriculares reparados con cinta",
+    "chapter": "Cocinas para regresar",
+    "occupation": "ingeniera de sonido",
+    "language": "PORTUGUÉS (PORTUGUÊS DE PORTUGAL)",
+    "age": "36 años"
+  },
+  {
+    "position": 29,
+    "kind": "literary",
+    "name": "Niran Sutham",
+    "territory": "Chiang Mai · Tailandia",
+    "poemTitle": "El mango y el cuchillo",
+    "treasure": "un cuchillo de cocina sin punta",
+    "chapter": "Cocinas para regresar",
+    "occupation": "cultivador de orquídeas",
+    "language": "TAILANDÉS (TRANSLITERACIÓN LATINA)",
+    "age": "46 años"
+  },
+  {
+    "position": 30,
+    "kind": "literary",
+    "name": "Élise Tremblay",
+    "territory": "Quebec · Canadá",
+    "poemTitle": "Caldo de despedida",
+    "treasure": "una taza de porcelana con una grieta",
+    "chapter": "Cocinas para regresar",
+    "occupation": "voluntaria de cuidados paliativos",
+    "language": "FRANCÉS (FRANÇAIS QUÉBÉCOIS)",
+    "age": "68 años"
+  },
+  {
+    "position": 31,
+    "kind": "literary",
+    "name": "Marta Klein",
+    "territory": "Leipzig · Alemania",
+    "poemTitle": "Prueba de memoria",
+    "treasure": "un lápiz mordido por su padre",
+    "chapter": "Donde la luz aprende a morir",
+    "occupation": "neuróloga",
+    "language": "ALEMÁN (DEUTSCH)",
+    "age": "52 años"
+  },
+  {
+    "position": 32,
+    "kind": "literary",
+    "name": "Kojo Mensah",
+    "territory": "Kumasi · Ghana",
+    "poemTitle": "Tambor pequeño",
+    "treasure": "el collar de un perro",
+    "chapter": "Donde la luz aprende a morir",
+    "occupation": "aprendiz de percusión",
+    "language": "TWI (ASANTE TWI)",
+    "age": "14 años"
+  },
+  {
+    "position": 33,
+    "kind": "literary",
+    "name": "Eimear O’Connell",
+    "territory": "Galway · Irlanda",
+    "poemTitle": "Cuaderno del faro",
+    "treasure": "una lente de vidrio verde",
+    "chapter": "Donde la luz aprende a morir",
+    "occupation": "antigua farera",
+    "language": "IRLANDÉS (GAEILGE CHONAMARA)",
+    "age": "83 años"
+  },
+  {
+    "position": 34,
+    "kind": "literary",
+    "name": "Nima Gurung",
+    "territory": "Pokhara · Nepal",
+    "poemTitle": "Frecuencia perdida",
+    "treasure": "una válvula quemada",
+    "chapter": "Donde la luz aprende a morir",
+    "occupation": "técnico de radio",
+    "language": "NEPALÍ (TRANSLITERACIÓN LATINA)",
+    "age": "39 años"
+  },
+  {
+    "position": 35,
+    "kind": "literary",
+    "name": "Rocío Valdés",
+    "territory": "Valparaíso · Chile",
+    "poemTitle": "Jardinera del cementerio",
+    "treasure": "una etiqueta de rosal escrita a mano",
+    "chapter": "Donde la luz aprende a morir",
+    "occupation": "jardinera",
+    "language": "ESPAÑOL (ESPAÑOL DE CHILE)",
+    "age": "45 años"
+  },
+  {
+    "position": 36,
+    "kind": "literary",
+    "name": "Maia Bennett",
+    "territory": "Dunedin · Nueva Zelanda",
+    "poemTitle": "Cosas que devuelve el mar",
+    "treasure": "una caja con conchas y un botón",
+    "chapter": "Donde la luz aprende a morir",
+    "occupation": "coleccionista de orillas",
+    "language": "INGLÉS (NEW ZEALAND ENGLISH)",
+    "age": "10 años"
+  },
+  {
+    "position": 37,
+    "kind": "literary",
+    "name": "Lila Santos",
+    "territory": "Cebú · Filipinas",
+    "poemTitle": "Manual de motores detenidos",
+    "treasure": "una llave inglesa de su madre",
+    "chapter": "Donde la luz aprende a morir",
+    "occupation": "ingeniera naval",
+    "language": "CEBUANO (CEBUANO SA SUGBO)",
+    "age": "35 años"
+  },
+  {
+    "position": 38,
+    "kind": "literary",
+    "name": "Eleni Papadakis",
+    "territory": "Tesalónica · Grecia",
+    "poemTitle": "Diccionario para después de ti",
+    "treasure": "una página arrancada de un diccionario",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "traductora",
+    "language": "GRIEGO (ΕΛΛΗΝΙΚΆ)",
+    "age": "26 años"
+  },
+  {
+    "position": 39,
+    "kind": "literary",
+    "name": "Mariela Suárez",
+    "territory": "La Habana · Cuba",
+    "poemTitle": "Ocho tiempos",
+    "treasure": "un zapato rojo sin pareja",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "profesora de baile",
+    "language": "ESPAÑOL (ESPAÑOL DE CUBA)",
+    "age": "58 años"
+  },
+  {
+    "position": 40,
+    "kind": "literary",
+    "name": "Parisa Rahimi",
+    "territory": "Shiraz · Irán",
+    "poemTitle": "Plano de una casa imposible",
+    "treasure": "una regla metálica doblada",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "arquitecta",
+    "language": "PERSA (فارسی)",
+    "age": "30 años"
+  },
+  {
+    "position": 41,
+    "kind": "literary",
+    "name": "Noor de Vries",
+    "territory": "Róterdam · Países Bajos",
+    "poemTitle": "Tinta para un cuerpo verdadero",
+    "treasure": "una aguja esterilizada dentro de su sobre",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "artista del tatuaje",
+    "language": "NEERLANDÉS (NEDERLANDS)",
+    "age": "24 años"
+  },
+  {
+    "position": 42,
+    "kind": "literary",
+    "name": "Yadira Peña",
+    "territory": "Santo Domingo · República Dominicana",
+    "poemTitle": "Demanda de separación",
+    "treasure": "dos anillos dentro de un sobre judicial",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "abogada de familia",
+    "language": "ESPAÑOL (ESPAÑOL DE REPÚBLICA DOMINICANA)",
+    "age": "40 años"
+  },
+  {
+    "position": 43,
+    "kind": "literary",
+    "name": "Sami Benyamina",
+    "territory": "Orán · Argelia",
+    "poemTitle": "Película quemada",
+    "treasure": "un fotograma ennegrecido",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "proyeccionista de cine",
+    "language": "ÁRABE ARGELINO (DARIJA DE ORÁN)",
+    "age": "33 años"
+  },
+  {
+    "position": 44,
+    "kind": "literary",
+    "name": "Aino Laakso",
+    "territory": "Tampere · Finlandia",
+    "poemTitle": "Antes de entrar al hielo",
+    "treasure": "un gorro de lana rojo",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "bibliotecaria",
+    "language": "FINÉS (SUOMI)",
+    "age": "51 años"
+  },
+  {
+    "position": 45,
+    "kind": "literary",
+    "name": "Mateo Silveira",
+    "territory": "Montevideo · Uruguay",
+    "poemTitle": "Cartas no entregadas",
+    "treasure": "una bolsa postal de cuero",
+    "chapter": "Los cuerpos exiliados",
+    "occupation": "cartero jubilado",
+    "language": "ESPAÑOL (ESPAÑOL DE URUGUAY)",
+    "age": "70 años"
+  },
+  {
+    "position": 46,
+    "kind": "literary",
+    "name": "Malik Carter",
+    "territory": "Chicago · Estados Unidos",
+    "poemTitle": "Entrega en curso",
+    "treasure": "una luz trasera rota",
+    "chapter": "Ciudades que no duermen",
+    "occupation": "repartidor en bicicleta",
+    "language": "INGLÉS (AMERICAN ENGLISH)",
+    "age": "22 años"
+  },
+  {
+    "position": 47,
+    "kind": "literary",
+    "name": "Lin Xiaoyu",
+    "territory": "Shenzhen · China",
+    "poemTitle": "Diagnóstico del sistema",
+    "treasure": "una placa base inutilizada",
+    "chapter": "Ciudades que no duermen",
+    "occupation": "ingeniera de semiconductores",
+    "language": "CHINO MANDARÍN (TRANSLITERACIÓN PINYIN)",
+    "age": "35 años"
+  },
+  {
+    "position": 48,
+    "kind": "literary",
+    "name": "Wanjiku Njoroge",
+    "territory": "Nairobi · Kenia",
+    "poemTitle": "Su llamada es importante",
+    "treasure": "una diadema con un auricular gastado",
+    "chapter": "Ciudades que no duermen",
+    "occupation": "operadora de atención telefónica",
+    "language": "GIKUYU (GĨKŨYŨ)",
+    "age": "27 años"
+  },
+  {
+    "position": 49,
+    "kind": "literary",
+    "name": "Lev Morózov",
+    "territory": "San Petersburgo · Rusia",
+    "poemTitle": "Último metro",
+    "treasure": "una ficha de transporte antigua",
+    "chapter": "Ciudades que no duermen",
+    "occupation": "limpiador nocturno",
+    "language": "RUSO (РУССКИЙ)",
+    "age": "62 años"
+  },
+  {
+    "position": 50,
+    "kind": "literary",
+    "name": "Maeve Turner",
+    "territory": "Melbourne · Australia",
+    "poemTitle": "Triaje",
+    "treasure": "una manta térmica doblada",
+    "chapter": "Ciudades que no duermen",
+    "occupation": "paramédica",
+    "language": "INGLÉS (AUSTRALIAN ENGLISH)",
+    "age": "29 años"
+  },
+  {
+    "position": 51,
+    "kind": "literary",
+    "name": "Mariam Hassan",
+    "territory": "Alejandría · Egipto",
+    "poemTitle": "Gambito de la madre",
+    "treasure": "una reina blanca sin corona",
+    "chapter": "Ciudades que no duermen",
+    "occupation": "jugadora de ajedrez",
+    "language": "ÁRABE EGIPCIO (ÁRABE DE ALEJANDRÍA)",
+    "age": "18 años"
+  },
+  {
+    "position": 52,
+    "kind": "literary",
+    "name": "Jónas Einarsson",
+    "territory": "Reikiavik · Islandia",
+    "poemTitle": "Centro de datos",
+    "treasure": "un disco duro etiquetado “FAMILIA”",
+    "chapter": "Ciudades que no duermen",
+    "occupation": "técnico de servidores",
+    "language": "ISLANDÉS (ÍSLENSKA)",
+    "age": "47 años"
+  },
+  {
+    "position": 53,
+    "kind": "literary",
+    "name": "Daniela Quesada",
+    "territory": "Cartago · Costa Rica",
+    "poemTitle": "Rehabilitación",
+    "treasure": "una banda elástica amarilla",
+    "chapter": "El oficio de las alas",
+    "occupation": "fisioterapeuta",
+    "language": "ESPAÑOL (ESPAÑOL DE COSTA RICA)",
+    "age": "37 años"
+  },
+  {
+    "position": 54,
+    "kind": "literary",
+    "name": "Andrei Ionescu",
+    "territory": "Sibiu · Rumanía",
+    "poemTitle": "Restauración de un rostro",
+    "treasure": "un pincel de pelo muy fino",
+    "chapter": "El oficio de las alas",
+    "occupation": "restaurador de frescos",
+    "language": "RUMANO (ROMÂNĂ)",
+    "age": "45 años"
+  },
+  {
+    "position": 55,
+    "kind": "literary",
+    "name": "Sari Wulandari",
+    "territory": "Yogyakarta · Indonesia",
+    "poemTitle": "Teatro de sombras",
+    "treasure": "una figura de cuero sin un brazo",
+    "chapter": "El oficio de las alas",
+    "occupation": "titiritera",
+    "language": "JAVANÉS (BASA JAWA EN ALFABETO LATINO)",
+    "age": "33 años"
+  },
+  {
+    "position": 56,
+    "kind": "literary",
+    "name": "Noura al-Khatib",
+    "territory": "Belén · Palestina",
+    "poemTitle": "Oficio de comadrona",
+    "treasure": "una sábana bordada por su abuela",
+    "chapter": "El oficio de las alas",
+    "occupation": "comadrona",
+    "language": "ÁRABE PALESTINO (ÁRABE DE BELÉN)",
+    "age": "42 años"
+  },
+  {
+    "position": 57,
+    "kind": "literary",
+    "name": "Samuel Urrutia",
+    "territory": "Barquisimeto · Venezuela",
+    "poemTitle": "Partitura para un país lejano",
+    "treasure": "una cuerda de violín enrollada",
+    "chapter": "El oficio de las alas",
+    "occupation": "violinista",
+    "language": "ESPAÑOL (ESPAÑOL DE VENEZUELA)",
+    "age": "16 años"
+  },
+  {
+    "position": 58,
+    "kind": "literary",
+    "name": "Anaïs Ravelomanana",
+    "territory": "Antananarivo · Madagascar",
+    "poemTitle": "Catálogo de semillas para después del incendio",
+    "treasure": "un sobre con cincuenta semillas distintas",
+    "chapter": "El oficio de las alas",
+    "occupation": "conservadora de semillas",
+    "language": "MALGACHE (MALAGASY)",
+    "age": "67 años"
+  }
+];
+
+export const CURATED_VOICES_BY_POSITION: Record<number, CuratedVoice> =
+  Object.fromEntries(
+    CURATED_VOICES.map((voice) => [voice.position, voice]),
+  );
+
+
+==============================================================================
+COMPONENTE IMPORTADO
+app/poema-universal/components/WorldEntrance.tsx
+==============================================================================
+
+"use client";
+
+import Link from "next/link";
+import styles from "./WorldEntrance.module.css";
+
+export default function WorldEntrance() {
+  return (
+    <section
+      className={styles.section}
+      aria-labelledby="world-entrance-title"
+    >
+      <div className={styles.atmosphere} />
+
+      <div className={styles.inner}>
+        <div className={styles.number}>
+          60
+        </div>
+
+        <div className={styles.content}>
+          <p className={styles.eyebrow}>
+            La obra viva
+          </p>
+
+          <h2
+            id="world-entrance-title"
+            className={styles.title}
+          >
+            El mundo de las sesenta voces
+          </h2>
+
+          <p className={styles.description}>
+            Una tierra incompleta recibe sesenta
+            poemas. Cada voz entrega una parte de
+            sí al Libro Fundacional, hasta que el
+            Árbol Blanco recuerda cómo florecer.
+          </p>
+
+          <Link
+            href="/poema-universal/mundo"
+            className={styles.link}
+          >
+            <span>Entrar en el Mundo Vivo</span>
+            <span
+              className={styles.arrow}
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </Link>
+        </div>
+
+        <div
+          className={styles.symbol}
+          aria-hidden="true"
+        >
+          <span className={styles.trunk} />
+
+          {Array.from({ length: 7 }).map(
+            (_, index) => (
+              <span
+                key={index}
+                className={styles.branch}
+                style={{
+                  transform: `rotate(${
+                    -72 + index * 24
+                  }deg)`,
+                }}
+              />
+            )
+          )}
+
+          <span className={styles.light} />
+        </div>
+      </div>
+
+      <div className={styles.footer}>
+        <span>Libro de las Sesenta Voces</span>
+        <span>Edición fundacional 2026</span>
+      </div>
+    </section>
+  );
+}
+
+
+==============================================================================
+ARCHIVOS DIRECTOS DE COMPONENTS
+==============================================================================
+app/poema-universal/components/AnnualArchive.tsx
+app/poema-universal/components/AtlasInteriorEntrance.module.css
+app/poema-universal/components/AtlasInteriorEntrance.tsx
+app/poema-universal/components/AvatarInfoDialog.tsx
+app/poema-universal/components/AvatarRelicStudio.before-avatar-fix.tsx
+app/poema-universal/components/AvatarRelicStudio.before-relic-info.tsx
+app/poema-universal/components/AvatarRelicStudio.before-supabase.tsx
+app/poema-universal/components/AvatarRelicStudio.module.css
+app/poema-universal/components/AvatarRelicStudio.tsx
+app/poema-universal/components/AvatarRelicStudio.tsx.backup-editorial-20260718-005456
+app/poema-universal/components/AvatarRelicStudio.tsx.backup-identities-20260718-005118
+app/poema-universal/components/AvatarRelicStudio.tsx.broken-20260718-005224
+app/poema-universal/components/BestiarioEntrance.tsx
+app/poema-universal/components/BorgesEntrance.module.css
+app/poema-universal/components/BorgesEntrance.module.css.before-final-20260720-183830
+app/poema-universal/components/BorgesEntrance.tsx
+app/poema-universal/components/BorgesEntrance.tsx.before-final-20260720-183830
+app/poema-universal/components/Countdown.tsx
+app/poema-universal/components/EditorialHero.module.css
+app/poema-universal/components/EditorialHero.tsx
+app/poema-universal/components/EditorialIdentityPanel.tsx
+app/poema-universal/components/EditorialIdentityPanel.tsx.backup-20260718-005456
+app/poema-universal/components/EditorialIdentityPanel.tsx.backup-azucena-20260722-163509
+app/poema-universal/components/FoundationalEdition.tsx
+app/poema-universal/components/Hero.tsx
+app/poema-universal/components/InstitutionalFooter.tsx
+app/poema-universal/components/InstitutionalFooter.tsx.bak
+app/poema-universal/components/JardinPrototype.module.css
+app/poema-universal/components/JardinPrototype.tsx
+app/poema-universal/components/Manifesto.tsx
+app/poema-universal/components/MatrizEntrance.module.css
+app/poema-universal/components/MatrizEntrance.tsx
+app/poema-universal/components/PoetAvatar.contaminated-shell-copy.txt
+app/poema-universal/components/PoetAvatar.tsx
+app/poema-universal/components/PoetBibliographicPanel.tsx
+app/poema-universal/components/PoetPresence.before-avatar-fix.tsx
+app/poema-universal/components/PoetPresence.before-avatar-info.tsx
+app/poema-universal/components/PoetPresence.before-relic-info.tsx
+app/poema-universal/components/PoetPresence.before-supabase.tsx
+app/poema-universal/components/PoetPresence.module.css
+app/poema-universal/components/PoetPresence.tsx
+app/poema-universal/components/PoetPresence.tsx.backup-bibliography-20260718-012131
+app/poema-universal/components/PoetProfilePanel.before-avatar-relics.tsx
+app/poema-universal/components/PoetProfilePanel.tsx
+app/poema-universal/components/RelicInfoDialog.tsx
+app/poema-universal/components/SupportersSection.tsx
+app/poema-universal/components/ThreePresencesEntrance.module.css
+app/poema-universal/components/ThreePresencesEntrance.tsx
+app/poema-universal/components/Timeline.tsx
+app/poema-universal/components/VoicesWall.before-architecture.tsx
+app/poema-universal/components/VoicesWall.tsx
+app/poema-universal/components/VoicesWall.tsx.bak
+app/poema-universal/components/WorldEntrance.module.css
+app/poema-universal/components/WorldEntrance.tsx
+app/poema-universal/components/WorldGlobe.before-final-polish.tsx
+app/poema-universal/components/WorldGlobe.before-structural-cleanup.tsx
+app/poema-universal/components/WorldGlobe.before-visual-polish.tsx
+app/poema-universal/components/WorldGlobe.final-centrado-20260806.tsx
+app/poema-universal/components/WorldGlobe.tsx
+app/poema-universal/components/WorldGlobe.tsx.before-rollback-20260806-011205
+app/poema-universal/components/WorldGlobeLive.before-argentina-rusia-italia-venezuela.tsx
+app/poema-universal/components/WorldGlobeLive.before-brasil-noruega-colombia.tsx
+app/poema-universal/components/WorldGlobeLive.tsx
+app/poema-universal/components/WorldGlobeLive.tsx.corrupt-backup-20260717-220511
+app/poema-universal/components/WorldMap.tsx
+app/poema-universal/components/avatarCatalog.ts
+app/poema-universal/components/relicCatalog.ts

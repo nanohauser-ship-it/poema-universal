@@ -1,0 +1,217 @@
+"use client";
+
+import { useState } from "react";
+import styles from "./PoemBook.module.css";
+
+export type PoemEntry = {
+  id: string;
+  poetName: string;
+  country: string;
+  title: string;
+  poem: string;
+  translation?: string;
+};
+
+type PoemBookProps = {
+  poems: PoemEntry[];
+};
+
+type ReadingLanguage = "original" | "translation";
+
+export default function PoemBook({
+  poems,
+}: PoemBookProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [language, setLanguage] =
+    useState<ReadingLanguage>("original");
+
+  if (poems.length === 0) {
+    return null;
+  }
+
+  const currentPoem =
+    poems[currentIndex] ?? poems[0];
+
+  if (!currentPoem) {
+    return null;
+  }
+
+  const hasTranslation =
+    Boolean(currentPoem.translation);
+
+  const displayedPoem =
+    language === "translation" &&
+    currentPoem.translation
+      ? currentPoem.translation
+      : currentPoem.poem;
+
+  function previousPoem() {
+    setCurrentIndex((index) =>
+      index === 0
+        ? poems.length - 1
+        : index - 1
+    );
+  }
+
+  function nextPoem() {
+    setCurrentIndex((index) =>
+      index === poems.length - 1
+        ? 0
+        : index + 1
+    );
+  }
+
+  return (
+    <>
+      {!isOpen && (
+        <button
+          type="button"
+          className={styles.trigger}
+          onClick={() => setIsOpen(true)}
+        >
+          <span className={styles.symbol}>◇</span>
+          <span>Libro de las voces</span>
+          <small>Abrir</small>
+        </button>
+      )}
+
+      <aside
+        className={`${styles.book} ${
+          isOpen ? styles.open : ""
+        }`}
+      >
+        <div className={styles.spine}>
+          POEMA UNIVERSAL
+        </div>
+
+        <div className={styles.content}>
+          <header className={styles.header}>
+            <div>
+              <p className={styles.eyebrow}>
+                Archivo fundacional
+              </p>
+
+              <h2>Libro de las Sesenta Voces</h2>
+            </div>
+
+            <button
+              type="button"
+              className={styles.close}
+              onClick={() => setIsOpen(false)}
+              aria-label="Cerrar libro"
+            >
+              ×
+            </button>
+          </header>
+
+          <section className={styles.author}>
+            <div>
+              <span>Voz</span>
+              <strong>
+                {currentPoem.poetName}
+              </strong>
+            </div>
+
+            <div>
+              <span>Territorio</span>
+              <strong>
+                {currentPoem.country}
+              </strong>
+            </div>
+          </section>
+
+          <div
+            className={styles.languageSwitch}
+            aria-label="Idioma de lectura"
+          >
+            <button
+              type="button"
+              className={`${styles.languageButton} ${
+                language === "original"
+                  ? styles.languageButtonActive
+                  : ""
+              }`}
+              onClick={() =>
+                setLanguage("original")
+              }
+            >
+              Original 日本語
+            </button>
+
+            <button
+              type="button"
+              className={`${styles.languageButton} ${
+                language === "translation"
+                  ? styles.languageButtonActive
+                  : ""
+              }`}
+              onClick={() =>
+                setLanguage("translation")
+              }
+              disabled={!hasTranslation}
+            >
+              Traducción ES
+            </button>
+          </div>
+
+          <article
+            key={`${currentPoem.id}-${language}`}
+            className={styles.page}
+          >
+            <p className={styles.number}>
+              Poema{" "}
+              {String(currentIndex + 1).padStart(
+                2,
+                "0"
+              )}
+              {" · "}
+              {language === "original"
+                ? "Original"
+                : "Traducción al español"}
+            </p>
+
+            <h3>{currentPoem.title}</h3>
+
+            {language === "translation" && (
+              <p className={styles.translationNote}>
+                Traducción poética al español
+              </p>
+            )}
+
+            <div className={styles.poem}>
+              {displayedPoem
+                .split("\n")
+                .map((line, lineIndex) => (
+                  <p key={lineIndex}>
+                    {line || "\u00A0"}
+                  </p>
+                ))}
+            </div>
+          </article>
+
+          <footer className={styles.footer}>
+            <button
+              type="button"
+              onClick={previousPoem}
+            >
+              ← Anterior
+            </button>
+
+            <span>
+              {currentIndex + 1} /{" "}
+              {poems.length}
+            </span>
+
+            <button
+              type="button"
+              onClick={nextPoem}
+            >
+              Siguiente →
+            </button>
+          </footer>
+        </div>
+      </aside>
+    </>
+  );
+}

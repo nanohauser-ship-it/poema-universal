@@ -1,0 +1,20 @@
+V3 añade o actualiza:
+
+app/api/poema-universal/gran-avatar/align/route.ts
+app/poema-universal/gran-avatar/GranAvatarExperience.tsx
+app/poema-universal/gran-avatar/avatarConfig.ts
+app/poema-universal/gran-avatar/components/AvatarBody.tsx
+app/poema-universal/gran-avatar/components/CinematicAvatarBody.tsx
+app/poema-universal/gran-avatar/components/LiveAvatarBody.tsx
+app/poema-universal/gran-avatar/components/OrganismAvatarBody.tsx
+app/poema-universal/gran-avatar/components/PoeticOrganism.tsx
+app/poema-universal/gran-avatar/components/SynchronizedAvatarBody.tsx
+app/poema-universal/gran-avatar/gran-avatar.module.css
+app/poema-universal/gran-avatar/lib/avatarLipSync.ts
+app/poema-universal/gran-avatar/lib/avatarVoiceSignal.ts
+app/poema-universal/gran-avatar/types.ts
+public/poema-universal/gran-avatar/cinematic/avatar-acoge.mp4
+public/poema-universal/gran-avatar/cinematic/avatar-habla.mp4
+public/poema-universal/gran-avatar/cinematic/avatar-reposo.webp
+public/poema-universal/gran-avatar/organism-portrait.webp
+public/poema-universal/gran-avatar/sync/*.webp

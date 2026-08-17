@@ -1,0 +1,62 @@
+EMBRIÓN V6 · ARCHIVO SIMBÓLICO VIVO
+====================================
+
+Esta instalación transforma el campo de gravedad en un archivo rico y trazable:
+
+- 10 fuentes procesadas.
+- 329.467 términos útiles indexados.
+- 302 posibles núcleos.
+- 11.948 relaciones.
+- Entre 40 y 48 impulsos para los núcleos probados, no cuatro palabras.
+- Seis familias: palabra, símbolo, imagen, materia, verbo y tensión.
+- Procedencia, fuerza y explicación inspeccionables.
+
+Los documentos originales no se incluyen en este paquete. La aplicación solo recibe
+un índice derivado de coapariciones, fuentes y niveles de evidencia.
+
+INSTALACIÓN
+-----------
+
+1. Descomprime el ZIP en Descargas.
+2. Abre Terminal.
+3. Copia y pega, cambiando el nombre de la carpeta si macOS añadió un número:
+
+   xattr -dr com.apple.quarantine "$HOME/Downloads/EMBRION-V6-ARCHIVO-SIMBOLICO"
+   chmod +x "$HOME/Downloads/EMBRION-V6-ARCHIVO-SIMBOLICO/INSTALAR-EMBRION-V6.command"
+   "$HOME/Downloads/EMBRION-V6-ARCHIVO-SIMBOLICO/INSTALAR-EMBRION-V6.command"
+
+4. Reinicia el servidor desde la carpeta Poema Universal:
+
+   cd "$HOME/poema-universal"
+   pkill -f "next dev" 2>/dev/null || true
+   npm run dev -- --webpack -p 3000
+
+5. Abre:
+
+   http://localhost:3000/embrion
+
+El instalador guarda automáticamente una copia de seguridad de cada archivo existente
+que vaya a sustituir. No modifica variables de entorno, Supabase ni localStorage.
+
+MÉTODO DEL ARCHIVO
+------------------
+
+Las relaciones documentales proceden de coapariciones ponderadas en una ventana de
+nueve términos. Las imágenes y tensiones compuestas están marcadas como síntesis
+computacional o relación curatorial. Embrión no presenta esas composiciones como citas
+ni como equivalencias históricas definitivas.
+
+FUENTES CONECTADAS
+------------------
+
+- Diccionario de símbolos · Juan Eduardo Cirlot.
+- El agua y los sueños · Gaston Bachelard.
+- Gramática de la fantasía · Gianni Rodari.
+- Estudio sobre el diccionario ideológico de Julio Casares.
+- Mitos y leyendas del mundo.
+- Fragmento bibliográfico cargado sobre Chevalier/Gheerbrant.
+- La Jerarquía del Hambre.
+- Memorias de Bielka.
+- Mariposas de polvo · Poema Universal.
+- No dejes que desaparezcamos.
+

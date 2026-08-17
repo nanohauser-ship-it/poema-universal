@@ -1,0 +1,13 @@
+KIT DE CARÁTULAS · SALA DE LAS TRES PRESENCIAS
+
+Incluye:
+- camus.png
+- borges.png
+- pizarnik.png
+- instalar-caratulas.sh
+
+Instalación:
+1. Mueve o descomprime esta carpeta dentro de ~/poema-universal
+2. Ejecuta:
+   cd ~/poema-universal
+   bash caratulas-tres-presencias-kit/instalar-caratulas.sh

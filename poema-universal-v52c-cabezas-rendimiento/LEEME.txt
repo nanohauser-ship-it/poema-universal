@@ -1,0 +1,21 @@
+POEMA UNIVERSAL · V5.2C · CABEZAS + RENDIMIENTO
+
+Corrige:
+- el cabello que cortaba visualmente las cabezas
+- el casquete se desplaza arriba y atrás
+
+Optimiza:
+- menos segmentos geométricos invisibles a esta escala
+- elimina shadow-pass individual de piezas pequeñas
+- sombra escultórica barata por figura
+- DPR máximo 1.3 en Retina
+- shadow map básico
+- menos Sparkles
+- preferencia GPU high-performance
+
+No modifica:
+- arquitectura
+- Libro de las Sesenta Voces
+- BSO
+- Dramaturgia Viva
+- Mirada Orbital

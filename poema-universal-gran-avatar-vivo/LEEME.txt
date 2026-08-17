@@ -1,0 +1,32 @@
+EL GRAN AVATAR · ORGANISMO VIVO
+================================
+
+Esta actualización amplía la sala El Gran Avatar ya instalada. No crea otro
+proyecto, no reemplaza la home, no toca Supabase y no modifica .env.local.
+
+Añade:
+- vida audiovisual en tiempo real con LiveAvatar LITE;
+- respiración, parpadeo, mirada y movimiento natural durante la sesión;
+- lectura de poemas con sincronización labial;
+- respuestas habladas sobre poemas y literatura general;
+- continuidad mediante retrato y películas locales si el motor no está activo;
+- secretos únicamente en rutas de servidor;
+- retrato privado 1920 × 1080 preparado para entrenar la identidad;
+- backups automáticos de todo archivo sustituido.
+
+Instalación:
+
+  cd "$HOME/poema-universal"
+  bash "./poema-universal-gran-avatar-vivo/INSTALAR-GRAN-AVATAR-VIVO.sh" \
+    "$HOME/poema-universal"
+
+Después abre:
+
+  material-avatar/gran-avatar/CONFIGURAR-VIDA.txt
+
+La integración se instala sin claves y permanece en modo seguro. No genera
+ningún coste hasta que tú crees una cuenta de LiveAvatar, añadas la clave en
+tu propio .env.local y abras una sesión viva.
+
+Ruta final:
+http://localhost:3000/poema-universal/gran-avatar

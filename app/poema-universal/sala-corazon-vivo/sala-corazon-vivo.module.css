@@ -1,0 +1,5692 @@
+.page {
+  --bg: #080705;
+  --panel: rgba(18, 15, 11, 0.82);
+  --panel-soft: rgba(25, 20, 14, 0.62);
+  --line: rgba(210, 170, 91, 0.2);
+  --gold: #d8b36b;
+  --gold-bright: #f0d18c;
+  --ivory: #f3ead8;
+  --muted: #9f9586;
+  --red: #d76248;
+
+  min-height: 100vh;
+  color: var(--ivory);
+  background:
+    radial-gradient(
+      circle at 50% 8%,
+      rgba(173, 120, 45, 0.13),
+      transparent 27rem
+    ),
+    radial-gradient(
+      circle at 50% 60%,
+      rgba(110, 72, 28, 0.08),
+      transparent 35rem
+    ),
+    var(--bg);
+  padding: 24px;
+}
+
+.page * {
+  box-sizing: border-box;
+}
+
+.page button,
+.page input,
+.page textarea {
+  font: inherit;
+}
+
+.header {
+  width: min(1900px, 100%);
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.kicker,
+.sectionEyebrow {
+  margin: 0 0 7px;
+  color: var(--gold);
+  font-size: 0.68rem;
+  letter-spacing: 0.23em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 3.4rem);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+
+.liveStatus,
+.smallLiveBadge,
+.playingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #d9b9a9;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.liveDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--red);
+  box-shadow: 0 0 18px rgba(215, 98, 72, 0.7);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.75);
+  }
+}
+
+.marquee {
+  width: min(1900px, 100%);
+  margin: 0 auto 18px;
+  overflow: hidden;
+  border-top: 1px solid rgba(234, 196, 121, 0.25);
+  border-bottom: 1px solid rgba(234, 196, 121, 0.25);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(107, 70, 22, 0.13),
+      rgba(212, 168, 82, 0.08),
+      rgba(107, 70, 22, 0.13)
+    );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  animation: marquee 95s linear infinite;
+  will-change: transform;
+}
+
+.marqueeTrack span {
+  display: inline-flex;
+  align-items: center;
+  gap: 40px;
+  padding: 16px 28px;
+  white-space: nowrap;
+  color: var(--gold-bright);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.9rem, 1.2vw, 1.25rem);
+  letter-spacing: 0.1em;
+}
+
+.marqueeTrack i {
+  color: rgba(234, 196, 121, 0.42);
+  font-style: normal;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.mainGrid {
+  width: min(1900px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns:
+    minmax(280px, 0.8fr)
+    minmax(520px, 1.7fr)
+    minmax(300px, 0.95fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.leftColumn,
+.rightColumn,
+.centerColumn {
+  display: grid;
+  gap: 16px;
+}
+
+.panel,
+.deposit,
+.filmPanel,
+.centralStatement {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(29, 23, 15, 0.78),
+      rgba(10, 9, 7, 0.9)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 18px 70px rgba(0, 0, 0, 0.2);
+}
+
+.panel {
+  padding: 17px;
+}
+
+.panelHeader,
+.depositTitle {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.panelHeader h2,
+.depositTitle h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.18rem;
+  font-weight: 400;
+}
+
+.videoStage {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(231, 193, 121, 0.17);
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(211, 158, 74, 0.18),
+      transparent 14rem
+    ),
+    linear-gradient(
+      145deg,
+      #211910,
+      #080706
+    );
+}
+
+.cameraAura {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      110deg,
+      transparent 25%,
+      rgba(224, 175, 90, 0.06),
+      transparent 65%
+    );
+}
+
+.cameraPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 7px;
+  padding: 30px;
+  text-align: center;
+}
+
+.cameraPlaceholder span {
+  color: var(--gold);
+  font-size: 2rem;
+}
+
+.cameraPlaceholder strong {
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+}
+
+.cameraPlaceholder small {
+  max-width: 220px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.guestBadge {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: grid;
+  gap: 2px;
+  min-width: 160px;
+  padding: 12px 14px;
+  border: 1px solid rgba(234, 196, 121, 0.26);
+  border-radius: 14px;
+  background: rgba(7, 6, 5, 0.82);
+  backdrop-filter: blur(12px);
+}
+
+.guestBadge span,
+.hostMeta span,
+.organismSection > span,
+.currentMessage > span,
+.dialogueDock span {
+  color: var(--gold);
+  font-size: 0.61rem;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.guestBadge small,
+.hostMeta small,
+.queuePerson small,
+.inviteList small,
+.dialogueDock small {
+  color: var(--muted);
+}
+
+.hostMeta {
+  display: grid;
+  gap: 3px;
+  margin: 15px 2px;
+}
+
+.hostMeta strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.12rem;
+  font-weight: 400;
+}
+
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.actionGrid button {
+  min-height: 92px;
+  border: 1px solid rgba(224, 181, 97, 0.19);
+  border-radius: 14px;
+  color: var(--ivory);
+  background: rgba(255, 255, 255, 0.015);
+  cursor: pointer;
+  display: grid;
+  justify-items: start;
+  align-content: center;
+  gap: 3px;
+  padding: 13px;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.actionGrid button:hover {
+  border-color: rgba(224, 181, 97, 0.5);
+  background: rgba(216, 179, 107, 0.07);
+  transform: translateY(-2px);
+}
+
+.actionGrid button span {
+  margin-bottom: 5px;
+  color: var(--gold);
+}
+
+.actionGrid button strong {
+  font-size: 0.74rem;
+}
+
+.actionGrid button small {
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+.counter {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 999px;
+  color: var(--gold-bright);
+  background: rgba(216, 179, 107, 0.09);
+  font-size: 0.72rem;
+}
+
+.queue {
+  display: grid;
+}
+
+.queuePerson {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(224, 181, 97, 0.1);
+}
+
+.queuePerson:first-child {
+  border-top: 0;
+}
+
+.queuePerson > div:nth-child(2) {
+  display: grid;
+  gap: 2px;
+}
+
+.queuePerson strong {
+  font-size: 0.77rem;
+  font-weight: 500;
+}
+
+.queuePerson > span {
+  color: var(--gold);
+  font-size: 0.62rem;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  border: 1px solid rgba(225, 184, 101, 0.28);
+  color: var(--gold-bright);
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      rgba(219, 174, 91, 0.22),
+      rgba(19, 15, 10, 0.9)
+    );
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.heartStage {
+  min-height: 150px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.heart {
+  color: #d6a858;
+  font-size: 3.3rem;
+  filter: drop-shadow(0 0 24px rgba(214, 168, 88, 0.33));
+  animation: heartBeat 2.15s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  8% {
+    transform: scale(1.09);
+  }
+
+  17% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.055);
+  }
+
+  40% {
+    transform: scale(1);
+  }
+}
+
+.heartStage > div:last-child {
+  display: grid;
+  gap: 1px;
+}
+
+.heartStage span {
+  color: var(--gold);
+  font-size: 0.61rem;
+  letter-spacing: 0.21em;
+}
+
+.heartStage strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+
+.heartStage small {
+  color: var(--muted);
+}
+
+.centralStatement {
+  min-height: 360px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: clamp(30px, 5vw, 70px);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(209, 162, 76, 0.17),
+      transparent 19rem
+    ),
+    linear-gradient(
+      145deg,
+      rgba(23, 18, 11, 0.82),
+      rgba(7, 6, 5, 0.95)
+    );
+}
+
+.centralStatement::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.38;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(237, 209, 154, 0.6) 0 1px,
+      transparent 1.5px
+    );
+  background-size: 47px 47px;
+  mask-image: radial-gradient(
+    circle at center,
+    black,
+    transparent 75%
+  );
+}
+
+.centralStatement > * {
+  position: relative;
+}
+
+.centralStatement p {
+  margin: 0 0 7px;
+  color: var(--gold);
+  letter-spacing: 0.25em;
+  font-size: 0.68rem;
+}
+
+.centralStatement h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(4rem, 8vw, 8.5rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 55px rgba(226, 180, 95, 0.18);
+}
+
+.centralStatement blockquote {
+  margin: 16px auto 20px;
+  color: #d6cbbb;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.centralStatement > span {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.deposit {
+  padding: 18px;
+}
+
+.depositTitle small {
+  color: var(--muted);
+}
+
+.wordVessel {
+  min-height: 160px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  justify-content: center;
+  gap: 8px;
+  overflow: hidden;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(231, 195, 126, 0.2);
+  background:
+    linear-gradient(
+      to top,
+      rgba(191, 139, 58, 0.14),
+      rgba(255, 255, 255, 0.015)
+    );
+  box-shadow:
+    inset 0 -20px 60px rgba(209, 153, 57, 0.06);
+}
+
+.wordTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: #312616;
+  background: #d9c39c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8rem;
+  transform: rotate(-1deg);
+  animation: wordArrive 450ms ease both;
+}
+
+.wordTile:nth-child(2n) {
+  transform: rotate(1.2deg);
+}
+
+.wordTile:nth-child(3n) {
+  transform: rotate(-2deg);
+}
+
+@keyframes wordArrive {
+  from {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.wordForm,
+.wallForm {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.wordForm label,
+.wallForm label {
+  color: var(--gold);
+  font-size: 0.67rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.wordForm > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.wordForm input,
+.wallForm textarea {
+  width: 100%;
+  border: 1px solid rgba(228, 188, 108, 0.19);
+  border-radius: 12px;
+  outline: none;
+  color: var(--ivory);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.wordForm input {
+  padding: 12px 14px;
+}
+
+.wallForm textarea {
+  min-height: 94px;
+  resize: vertical;
+  padding: 12px 14px;
+}
+
+.wordForm input:focus,
+.wallForm textarea:focus {
+  border-color: rgba(228, 188, 108, 0.5);
+}
+
+.wordForm button,
+.wallForm button,
+.transport button,
+.inviteList button,
+.dialogueDock button {
+  border: 1px solid rgba(225, 184, 99, 0.32);
+  border-radius: 11px;
+  color: #19130b;
+  background: var(--gold);
+  cursor: pointer;
+  padding: 11px 15px;
+  font-size: 0.73rem;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.wordForm button:hover,
+.wallForm button:hover,
+.transport button:hover:not(:disabled),
+.inviteList button:hover,
+.dialogueDock button:hover {
+  transform: translateY(-1px);
+}
+
+.filmPanel {
+  padding: 18px;
+}
+
+.playingBadge {
+  color: #a1b49a;
+}
+
+.filmStage {
+  min-height: 295px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(226, 184, 96, 0.17);
+  background:
+    linear-gradient(
+      to top,
+      rgba(9, 12, 11, 0.35),
+      rgba(0, 0, 0, 0.4)
+    ),
+    radial-gradient(
+      ellipse at 50% 82%,
+      rgba(216, 203, 161, 0.19),
+      transparent 9rem
+    ),
+    linear-gradient(
+      150deg,
+      #0a0e0d,
+      #17150f 48%,
+      #050505
+    );
+}
+
+.filmStage::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  height: 2px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(236, 214, 171, 0.55),
+      transparent
+    );
+  transform: perspective(180px) rotateX(60deg);
+}
+
+.filmFog {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 50% 60%,
+      rgba(231, 218, 181, 0.08),
+      transparent 16rem
+    );
+}
+
+.filmTree {
+  position: absolute;
+  left: 50%;
+  top: 25%;
+  transform: translateX(-50%);
+  color: #eadfc5;
+  font-size: 4.5rem;
+  text-shadow:
+    0 0 30px rgba(238, 225, 188, 0.6),
+    0 0 90px rgba(238, 225, 188, 0.28);
+}
+
+.sceneText {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  width: min(420px, 62%);
+}
+
+.sceneText span {
+  color: var(--gold);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+}
+
+.sceneText h3 {
+  margin: 5px 0 5px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.7rem;
+  font-weight: 400;
+}
+
+.sceneText p {
+  margin: 0;
+  color: #a79d8f;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+.filmTitle {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  color: rgba(238, 227, 205, 0.72);
+  text-align: right;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+}
+
+.transport {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.transport button {
+  min-width: 108px;
+  color: var(--ivory);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.transport button:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.pulseCard {
+  position: relative;
+  min-height: 130px;
+  display: grid;
+  align-content: center;
+  padding: 18px;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(223, 181, 95, 0.14);
+  background:
+    radial-gradient(
+      circle at 20% 50%,
+      rgba(212, 164, 78, 0.12),
+      transparent 10rem
+    );
+}
+
+.pulseCard strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.3rem;
+  font-weight: 400;
+}
+
+.pulseCard small {
+  color: var(--muted);
+}
+
+.pulseLine {
+  position: absolute;
+  right: 10px;
+  top: 46%;
+  color: rgba(221, 175, 88, 0.46);
+  font-family: monospace;
+  font-size: 1.4rem;
+  letter-spacing: -0.2em;
+}
+
+.organismSection {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.activeWords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.activeWords span {
+  padding: 6px 9px;
+  border: 1px solid rgba(225, 185, 106, 0.15);
+  border-radius: 999px;
+  color: #cfc2ad;
+  font-size: 0.65rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.connections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.connections div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 10px;
+  border: 1px solid rgba(221, 178, 93, 0.12);
+  border-radius: 10px;
+  color: #b8ad9c;
+  font-size: 0.69rem;
+}
+
+.connections i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+}
+
+.online {
+  background: #84a779;
+  box-shadow: 0 0 8px rgba(132, 167, 121, 0.55);
+}
+
+.ready {
+  background: #8a7046;
+}
+
+.currentMessage {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 15px;
+  border-left: 2px solid rgba(216, 179, 107, 0.42);
+  background: rgba(216, 179, 107, 0.035);
+}
+
+.currentMessage blockquote {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  color: #d7cbb7;
+  line-height: 1.55;
+}
+
+.wall {
+  min-height: 490px;
+}
+
+.wallMessages {
+  display: grid;
+  max-height: 280px;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.wallMessages article {
+  padding: 12px 0;
+  border-top: 1px solid rgba(221, 179, 95, 0.1);
+}
+
+.wallMessages article:first-child {
+  border-top: 0;
+}
+
+.wallMessages header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 5px;
+}
+
+.wallMessages strong {
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.wallMessages header span {
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+.wallMessages p {
+  margin: 0;
+  color: #c5bbac;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.83rem;
+  line-height: 1.45;
+}
+
+.footer {
+  width: min(1900px, 100%);
+  margin: 18px auto 0;
+  padding: 14px 3px 5px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid rgba(220, 178, 95, 0.12);
+  color: #6f675c;
+  font-size: 0.58rem;
+  letter-spacing: 0.13em;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(3, 3, 3, 0.75);
+  backdrop-filter: blur(12px);
+}
+
+.modal {
+  width: min(600px, 100%);
+  padding: 22px;
+  border: 1px solid rgba(222, 180, 95, 0.25);
+  border-radius: 20px;
+  color: var(--ivory);
+  background:
+    linear-gradient(
+      145deg,
+      #18130d,
+      #090806
+    );
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.55);
+}
+
+.modal > header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.modal h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+}
+
+.modal > header > button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  color: var(--ivory);
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.8rem;
+}
+
+.modal > p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.inviteList {
+  display: grid;
+}
+
+.inviteList > div {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 11px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid rgba(221, 179, 95, 0.1);
+}
+
+.inviteList > div > div:nth-child(2) {
+  display: grid;
+  gap: 2px;
+}
+
+.inviteList button {
+  padding: 8px 12px;
+}
+
+.dialogueDock {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 80;
+  width: min(460px, calc(100% - 30px));
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 13px;
+  border: 1px solid rgba(225, 182, 97, 0.32);
+  border-radius: 16px;
+  background: rgba(12, 10, 7, 0.92);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.45);
+}
+
+.dialogueDock > div:nth-child(2) {
+  display: grid;
+  gap: 1px;
+}
+
+.dialogueDock button {
+  padding: 8px 11px;
+}
+
+@media (max-width: 1250px) {
+  .mainGrid {
+    grid-template-columns: minmax(270px, 0.8fr) 1.5fr;
+  }
+
+  .rightColumn {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 850px) {
+  .page {
+    padding: 14px;
+  }
+
+  .mainGrid,
+  .rightColumn {
+    grid-template-columns: 1fr;
+  }
+
+  .leftColumn,
+  .centerColumn,
+  .rightColumn {
+    grid-column: auto;
+  }
+
+  .header {
+    align-items: flex-start;
+  }
+
+  .actionGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .actionGrid button {
+    min-height: 70px;
+  }
+
+  .centralStatement {
+    min-height: 300px;
+  }
+
+  .connections {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .page {
+    padding: 10px;
+  }
+
+  .panel,
+  .deposit,
+  .filmPanel,
+  .centralStatement {
+    border-radius: 16px;
+  }
+
+  .wordForm > div {
+    grid-template-columns: 1fr;
+  }
+
+  .transport {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .transport button {
+    min-width: 0;
+    padding-inline: 7px;
+  }
+
+  .filmTitle {
+    display: none;
+  }
+
+  .sceneText {
+    width: calc(100% - 44px);
+  }
+}
+
+/* ===== DÍPTICO VIVO V2 ===== */
+
+.liveExperience {
+  grid-column: 1 / -1;
+  position: relative;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 42fr)
+    minmax(0, 58fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.readerPanel,
+.storyPanel {
+  min-width: 0;
+  height: 100%;
+}
+
+.readerPanel {
+  display: flex;
+  flex-direction: column;
+}
+
+.storyPanel {
+  display: flex;
+  flex-direction: column;
+}
+
+.readerPanel .videoStage,
+.storyPanel .filmStage {
+  min-height: clamp(360px, 33vw, 540px);
+}
+
+.readerPanel .videoStage {
+  flex: 1;
+}
+
+.storyPanel .filmStage {
+  flex: 1;
+}
+
+
+/* Conexión visual entre voz e imagen */
+
+.voiceBridge {
+  position: absolute;
+  z-index: 15;
+  left: 40.8%;
+  top: 45%;
+  width: 4.5%;
+  height: 1px;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(238, 204, 139, 0.7),
+      transparent
+    );
+
+  box-shadow:
+    0 0 15px rgba(222, 177, 91, 0.25);
+}
+
+.voiceBridge::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #dfb66c;
+  box-shadow:
+    0 0 12px rgba(223, 182, 108, 0.8);
+}
+
+.voiceBridge span {
+  position: absolute;
+  left: 50%;
+  top: -21px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+
+  color: rgba(220, 184, 114, 0.65);
+  font-size: 0.48rem;
+  letter-spacing: 0.18em;
+}
+
+
+/* Corazón horizontal entre experiencia y comunidad */
+
+.heartRibbon {
+  grid-column: 1 / -1;
+
+  min-height: 104px;
+
+  display: grid;
+  grid-template-columns:
+    auto
+    auto
+    minmax(220px, 1fr)
+    minmax(160px, auto);
+
+  align-items: center;
+  gap: 18px;
+
+  padding: 18px 24px;
+
+  border:
+    1px solid rgba(220, 178, 95, 0.18);
+
+  border-radius: 18px;
+
+  background:
+    radial-gradient(
+      circle at 12% 50%,
+      rgba(214, 163, 73, 0.1),
+      transparent 12rem
+    ),
+    linear-gradient(
+      90deg,
+      rgba(20, 16, 11, 0.9),
+      rgba(9, 8, 6, 0.95)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.heartMini {
+  color: #dcac5e;
+  font-size: 2.5rem;
+
+  filter:
+    drop-shadow(
+      0 0 20px rgba(219, 171, 91, 0.34)
+    );
+
+  animation:
+    heartBeat 2.15s ease-in-out infinite;
+}
+
+.heartIdentity {
+  display: grid;
+  min-width: 90px;
+}
+
+.heartIdentity span {
+  color: var(--gold);
+  font-size: 0.56rem;
+  letter-spacing: 0.17em;
+}
+
+.heartIdentity strong {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 1.85rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
+.heartIdentity small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+.heartMessage {
+  margin: 0;
+
+  color: #d9cfbd;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(1rem, 1.35vw, 1.3rem);
+
+  font-style: italic;
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+.heartEvent {
+  color: var(--muted);
+  font-size: 0.64rem;
+  line-height: 1.45;
+  text-align: right;
+}
+
+
+/* Cola */
+
+.openInviteButton {
+  width: 100%;
+
+  margin-top: 13px;
+
+  padding: 11px 14px;
+
+  border:
+    1px solid rgba(220, 178, 95, 0.22);
+
+  border-radius: 11px;
+
+  color: var(--gold-bright);
+
+  background:
+    rgba(216, 179, 107, 0.045);
+
+  cursor: pointer;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.openInviteButton:hover {
+  border-color:
+    rgba(220, 178, 95, 0.5);
+
+  background:
+    rgba(216, 179, 107, 0.09);
+}
+
+
+/* El depósito gana altura para equilibrar
+   el organismo y el muro */
+
+.centerColumn .deposit {
+  min-height: 100%;
+}
+
+.centerColumn .wordVessel {
+  min-height: 260px;
+}
+
+
+/* Responsive del Díptico */
+
+@media (max-width: 1250px) {
+
+  .mainGrid {
+    grid-template-columns:
+      minmax(260px, 0.8fr)
+      minmax(0, 1.5fr);
+  }
+
+  .rightColumn {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .heartRibbon {
+    grid-template-columns:
+      auto
+      auto
+      1fr;
+  }
+
+  .heartEvent {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+}
+
+
+@media (max-width: 980px) {
+
+  .liveExperience {
+    grid-template-columns: 1fr;
+  }
+
+  .voiceBridge {
+    display: none;
+  }
+
+  .readerPanel .videoStage,
+  .storyPanel .filmStage {
+    min-height: 380px;
+  }
+
+  .heartRibbon {
+    grid-template-columns:
+      auto
+      1fr;
+  }
+
+  .heartMessage,
+  .heartEvent {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+}
+
+
+@media (max-width: 850px) {
+
+  .mainGrid,
+  .rightColumn {
+    grid-template-columns: 1fr;
+  }
+
+  .rightColumn {
+    grid-column: auto;
+  }
+
+  .readerPanel .videoStage,
+  .storyPanel .filmStage {
+    min-height: 320px;
+  }
+}
+
+
+@media (max-width: 560px) {
+
+  .heartRibbon {
+    padding: 15px;
+
+    grid-template-columns:
+      auto
+      1fr;
+  }
+
+  .heartMessage {
+    font-size: 0.95rem;
+  }
+
+  .readerPanel .videoStage,
+  .storyPanel .filmStage {
+    min-height: 270px;
+  }
+}
+
+/* ===== FIN DÍPTICO VIVO V2 ===== */
+
+/* ===== BSO VISIBLE ===== */
+
+.storyPanel {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.filmPanel.storyPanel {
+  overflow: visible !important;
+}
+
+.bsoZone {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 260px !important;
+  margin-top: 18px !important;
+  padding-top: 4px !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 20 !important;
+}
+
+.bsoZone::before {
+  content: "BANDA SONORA";
+  display: block;
+  margin: 0 0 8px 2px;
+  color: rgba(216, 179, 107, 0.62);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+}
+
+/* ===== FIN BSO VISIBLE ===== */
+
+/* ===== CORAZÓN REACTIVO V1 ===== */
+
+.heartMini {
+  --heart-scale: 1;
+  --heart-glow: 0.3;
+  --heart-beat: 1.1s;
+
+  position: relative;
+  width: 54px;
+  height: 54px;
+
+  display: grid;
+  place-items: center;
+
+  color: #dcac5e;
+
+  transform:
+    scale(var(--heart-scale));
+
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
+
+  filter:
+    drop-shadow(
+      0 0 calc(12px + 22px * var(--heart-glow))
+      rgba(219, 171, 91, var(--heart-glow))
+    );
+}
+
+.heartCore {
+  position: relative;
+  z-index: 3;
+
+  display: block;
+
+  font-size: 2.65rem;
+  line-height: 1;
+
+  animation:
+    livingHeartBeat
+    var(--heart-beat)
+    ease-in-out
+    infinite;
+
+  transform-origin: center;
+}
+
+.heartWave,
+.heartWaveSecond {
+  position: absolute;
+  inset: 50% auto auto 50%;
+
+  width: 42px;
+  height: 42px;
+
+  transform:
+    translate(-50%, -50%);
+
+  border:
+    1px solid rgba(222, 178, 92, 0.3);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  animation:
+    heartWavePulse
+    calc(var(--heart-beat) * 1.75)
+    ease-out
+    infinite;
+}
+
+.heartWaveSecond {
+  animation-delay:
+    calc(var(--heart-beat) * 0.6);
+
+  opacity: 0.6;
+}
+
+@keyframes livingHeartBeat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  12% {
+    transform: scale(1.12);
+  }
+
+  24% {
+    transform: scale(0.97);
+  }
+
+  35% {
+    transform: scale(1.07);
+  }
+
+  48% {
+    transform: scale(1);
+  }
+}
+
+@keyframes heartWavePulse {
+  0% {
+    opacity: 0.5;
+    transform:
+      translate(-50%, -50%)
+      scale(0.72);
+  }
+
+  70% {
+    opacity: 0.12;
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(-50%, -50%)
+      scale(2.15);
+  }
+}
+
+/* ===== FIN CORAZÓN REACTIVO V1 ===== */
+
+/* ===== ORGANISMO VIVO V1 ===== */
+
+.organismLiving {
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(216, 179, 107, 0.08),
+      transparent 14rem
+    ),
+    linear-gradient(
+      145deg,
+      rgba(19, 15, 10, 0.96),
+      rgba(7, 6, 5, 0.98)
+    );
+}
+
+.organismState {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid rgba(216, 179, 107, 0.15);
+  border-radius: 14px;
+  background: rgba(216, 179, 107, 0.025);
+}
+
+.organismState span,
+.organismDecision span {
+  color: var(--gold);
+  font-size: 0.52rem;
+  letter-spacing: 0.18em;
+}
+
+.organismState strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--gold-bright);
+}
+
+.organismState small {
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+.organismLayers {
+  display: grid;
+  gap: 9px;
+}
+
+.organismLayer {
+  padding: 13px;
+  border: 1px solid rgba(216, 179, 107, 0.11);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.organismLayer header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.organismLayer header > span {
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(216, 179, 107, 0.18);
+  border-radius: 999px;
+  color: var(--gold);
+}
+
+.organismLayer header > div {
+  display: grid;
+}
+
+.organismLayer header small {
+  color: var(--gold);
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+}
+
+.organismLayer header strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 0.94rem;
+  color: #ded1bd;
+}
+
+.organismLayer p {
+  margin: 9px 0 0;
+  color: #968c7e;
+  font-size: 0.67rem;
+  line-height: 1.5;
+}
+
+.organismMeter {
+  height: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.organismMeter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gold);
+  transition: width 150ms ease;
+}
+
+.organismTags,
+.memoryWords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.organismTags span,
+.memoryWords span {
+  padding: 5px 7px;
+  border: 1px solid rgba(216, 179, 107, 0.12);
+  border-radius: 999px;
+  color: #bbaa91;
+  font-size: 0.57rem;
+}
+
+.soulCurrent {
+  color: #d2c5b1 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8rem !important;
+}
+
+.soulAuthor {
+  display: block;
+  margin-top: 7px;
+  color: var(--gold);
+  font-size: 0.56rem;
+}
+
+.organismSpeakButton {
+  width: 100%;
+  margin-top: 13px;
+  padding: 11px 13px;
+  border: 1px solid rgba(216, 179, 107, 0.28);
+  border-radius: 10px;
+  background: rgba(216, 179, 107, 0.055);
+  color: var(--gold-bright);
+  cursor: pointer;
+  font-size: 0.61rem;
+  letter-spacing: 0.13em;
+}
+
+.organismSpeakButton:hover {
+  background: rgba(216, 179, 107, 0.1);
+}
+
+.organismDecision {
+  margin-top: 12px;
+  padding: 12px;
+  border-left: 2px solid rgba(216, 179, 107, 0.35);
+  background: rgba(216, 179, 107, 0.02);
+}
+
+.organismDecision p {
+  margin: 6px 0 0;
+  color: #a79b8a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+/* ===== FIN ORGANISMO VIVO V1 ===== */
+
+/* ===== ORGANISMO COGNITIVO V2 ===== */
+
+.organismLiving {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 10% 4%,
+      rgba(216, 179, 107, 0.11),
+      transparent 14rem
+    ),
+    linear-gradient(
+      145deg,
+      rgba(20, 16, 10, 0.97),
+      rgba(6, 5, 4, 0.99)
+    );
+}
+
+.organismOnline {
+  color: #9bb28e;
+  font-size: 0.54rem;
+  letter-spacing: 0.16em;
+}
+
+.organismState {
+  display: grid;
+  gap: 4px;
+
+  margin-bottom: 12px;
+  padding: 14px;
+
+  border:
+    1px solid rgba(216,179,107,.17);
+
+  border-radius: 13px;
+
+  background:
+    rgba(216,179,107,.035);
+}
+
+.organismState span {
+  color: var(--gold);
+  font-size: .5rem;
+  letter-spacing: .18em;
+}
+
+.organismState strong {
+  color: var(--gold-bright);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.organismState small {
+  color: var(--muted);
+  font-size: .6rem;
+}
+
+.organismLayers {
+  display: grid;
+  gap: 8px;
+}
+
+.organismLayer {
+  padding: 12px;
+
+  border:
+    1px solid rgba(216,179,107,.11);
+
+  border-radius: 12px;
+
+  background:
+    rgba(255,255,255,.012);
+}
+
+.organismLayer header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.organismLayer header > span {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  border:
+    1px solid rgba(216,179,107,.2);
+
+  border-radius: 999px;
+
+  color: var(--gold);
+
+  box-shadow:
+    0 0 18px rgba(216,179,107,.035);
+}
+
+.organismLayer header > div {
+  display: grid;
+  gap: 1px;
+}
+
+.organismLayer header small {
+  color: var(--gold);
+
+  font-size: .48rem;
+  letter-spacing: .17em;
+}
+
+.organismLayer header strong {
+  color: #ded1bc;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: .96rem;
+  font-weight: 400;
+}
+
+.organismLayer p {
+  margin: 9px 0 0;
+
+  color: #968b7b;
+
+  font-size: .65rem;
+  line-height: 1.5;
+}
+
+.organismMeter {
+  height: 4px;
+
+  margin-top: 10px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255,255,255,.055);
+}
+
+.organismMeter i {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #8c6934,
+      #e1b75f
+    );
+
+  box-shadow:
+    0 0 10px rgba(216,179,107,.3);
+
+  transition:
+    width 150ms ease;
+}
+
+.organismTags,
+.memoryWords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+
+  margin-top: 9px;
+}
+
+.organismTags span,
+.memoryWords span {
+  padding: 5px 7px;
+
+  border:
+    1px solid rgba(216,179,107,.12);
+
+  border-radius: 999px;
+
+  color: #b8a98f;
+
+  font-size: .55rem;
+}
+
+.soulCurrent {
+  color: #d3c6b1 !important;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: .78rem !important;
+}
+
+.soulAuthor {
+  display: block;
+
+  margin-top: 7px;
+
+  color: var(--gold);
+
+  font-size: .55rem;
+}
+
+.organismSpeakButton {
+  width: 100%;
+
+  margin-top: 12px;
+  padding: 11px 12px;
+
+  border:
+    1px solid rgba(216,179,107,.3);
+
+  border-radius: 10px;
+
+  background:
+    rgba(216,179,107,.055);
+
+  color: var(--gold-bright);
+
+  cursor: pointer;
+
+  font-size: .58rem;
+  letter-spacing: .13em;
+
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.organismSpeakButton:hover {
+  border-color:
+    rgba(216,179,107,.55);
+
+  background:
+    rgba(216,179,107,.1);
+}
+
+.organismDecision {
+  margin-top: 11px;
+  padding: 11px 12px;
+
+  border-left:
+    2px solid rgba(216,179,107,.35);
+
+  background:
+    rgba(216,179,107,.025);
+}
+
+.organismDecision span {
+  color: var(--gold);
+
+  font-size: .48rem;
+  letter-spacing: .16em;
+}
+
+.organismDecision p {
+  margin: 6px 0 0;
+
+  color: #a99c89;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: .7rem;
+  line-height: 1.45;
+}
+
+/* ===== FIN ORGANISMO COGNITIVO V2 ===== */
+
+
+/* =========================================================
+   ORGANISMO · COMPOSICIÓN MONUMENTAL V1
+========================================================= */
+
+.organismLiving {
+  position: relative;
+  overflow: hidden;
+}
+
+.organismBody {
+  aspect-ratio: 1 / 1.12;
+  min-height: 560px;
+  margin: 20px 0 22px;
+
+  border:
+    1px solid rgba(
+      216,
+      179,
+      107,
+      0.13
+    );
+
+  background:
+    radial-gradient(
+      circle at 50% 46%,
+      rgba(218, 168, 73, 0.10),
+      rgba(40, 25, 8, 0.035) 32%,
+      rgba(0, 0, 0, 0.98) 72%
+    );
+}
+
+.organismBodyVideo {
+  width: 100%;
+  height: 100%;
+  padding: 16px 8px;
+
+  object-fit: contain;
+
+  mix-blend-mode: screen;
+
+  filter:
+    brightness(
+      calc(
+        0.86 +
+        var(--organism-intensity) * 0.38
+      )
+    )
+    contrast(1.10)
+    saturate(1.08);
+}
+
+.organismBodyGlow {
+  width: 72%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 189, 70, 0.22),
+      rgba(255, 155, 30, 0.07) 42%,
+      transparent 72%
+    );
+
+  filter: blur(36px);
+}
+
+.organismState {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.organismState > span {
+  display: block;
+  margin-bottom: 7px;
+}
+
+.organismState > strong {
+  display: block;
+  font-size: clamp(24px, 3vw, 42px);
+  letter-spacing: 0.06em;
+  font-weight: 400;
+}
+
+.organismLayers {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.organismLayer {
+  min-height: 150px;
+}
+
+.organismSpeakButton {
+  margin-top: 16px;
+}
+
+.organismDecision {
+  margin-top: 12px;
+}
+
+@media (min-width: 1200px) {
+  .rightColumn {
+    min-width: 420px;
+  }
+
+  .organismBody {
+    min-height: 620px;
+  }
+}
+
+@media (max-width: 900px) {
+  .organismBody {
+    min-height: 430px;
+  }
+
+  .organismLayers {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   ORGANISMO · CENTRO NERVIOSO V2
+   ocupa el ancho inferior completo
+========================================================= */
+
+/* La columna del organismo baja debajo de las otras dos */
+.rightColumn {
+  grid-column: 1 / -1 !important;
+  width: 100%;
+  min-width: 0 !important;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+
+/* Panel principal del organismo */
+.organismLiving {
+  width: 100%;
+  min-width: 0;
+
+  padding: 18px 20px 20px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 38%,
+      rgba(190, 133, 38, 0.045),
+      transparent 38%
+    ),
+    rgba(0, 0, 0, 0.88);
+}
+
+
+/* Estado arriba, limpio y centrado */
+.organismState {
+  max-width: 420px;
+  margin: 10px auto 18px;
+
+  text-align: center;
+
+  background: transparent;
+  border-color:
+    rgba(216, 179, 107, 0.12);
+}
+
+.organismState > strong {
+  font-size:
+    clamp(26px, 3vw, 44px);
+
+  line-height: 1;
+}
+
+
+/* =========================================================
+   CUERPO
+========================================================= */
+
+.organismBody {
+  position: relative;
+
+  width: min(100%, 760px);
+  height: min(72vh, 760px);
+  min-height: 620px;
+
+  aspect-ratio: auto;
+
+  margin:
+    0 auto
+    24px;
+
+  border: 0;
+  border-radius: 0;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(220, 155, 47, 0.075),
+      rgba(36, 21, 5, 0.025) 42%,
+      transparent 70%
+    );
+
+  display: grid;
+  place-items: center;
+}
+
+
+/*
+  El vídeo se ve COMPLETO.
+  No cortamos cabeza ni gota inferior.
+*/
+.organismBodyVideo {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 20px 34px;
+
+  object-fit: contain !important;
+  object-position: center center;
+
+  background: transparent !important;
+
+  mix-blend-mode: screen;
+
+  transform:
+    scale(
+      calc(
+        0.90 +
+        var(--organism-intensity) * 0.035
+      )
+    );
+
+  filter:
+    brightness(
+      calc(
+        0.90 +
+        var(--organism-intensity) * 0.30
+      )
+    )
+    contrast(1.08)
+    saturate(1.06);
+
+  transition:
+    transform 900ms ease,
+    filter 900ms ease;
+}
+
+
+/* halo detrás de la criatura */
+.organismBodyGlow {
+  width: 62%;
+  max-width: 470px;
+
+  filter: blur(50px);
+
+  opacity:
+    calc(
+      0.16 +
+      var(--organism-intensity) * 0.48
+    );
+}
+
+
+/* pulso central más discreto */
+.organismBodyPulse {
+  width: 12%;
+  max-width: 88px;
+
+  border-color:
+    rgba(255, 191, 85, 0.16);
+}
+
+
+/* =========================================================
+   RITMO · MENTE · ALMA · MEMORIA
+========================================================= */
+
+.organismLayers {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-top: 4px;
+}
+
+.organismLayer {
+  min-width: 0;
+  min-height: 145px;
+
+  padding: 14px;
+
+  background:
+    rgba(10, 7, 3, 0.34);
+
+  border-color:
+    rgba(216, 179, 107, 0.12);
+}
+
+
+/* botón central */
+.organismSpeakButton {
+  display: block;
+
+  width: min(100%, 520px);
+
+  margin:
+    20px auto
+    0;
+}
+
+
+/* decisión final */
+.organismDecision {
+  width: min(100%, 700px);
+
+  margin:
+    12px auto 0;
+
+  text-align: center;
+}
+
+
+/* El muro vivo queda debajo del organismo */
+.wall {
+  width: 100%;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .organismBody {
+    height: 650px;
+    min-height: 560px;
+  }
+
+  .organismLayers {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .organismLiving {
+    padding:
+      14px 12px
+      16px;
+  }
+
+  .organismBody {
+    width: 100%;
+    height: 540px;
+    min-height: 480px;
+  }
+
+  .organismBodyVideo {
+    padding: 12px;
+  }
+
+  .organismLayers {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   SALA DEL CORAZÓN VIVO
+   CONTROL ROOM COMPACTA · V1
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   ZONA INFERIOR GENERAL
+--------------------------------------------------------- */
+
+.rightColumn {
+  grid-column: auto !important;
+  width: 100%;
+  min-width: 0 !important;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+
+/* ---------------------------------------------------------
+   ORGANISMO · MÁS PEQUEÑO
+--------------------------------------------------------- */
+
+.organismLiving {
+  width: 100%;
+  min-width: 0;
+
+  padding: 15px 16px 16px !important;
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(185, 126, 32, 0.04),
+      transparent 40%
+    ),
+    rgba(0, 0, 0, 0.88);
+
+  overflow: hidden;
+}
+
+
+/* cuerpo */
+.organismBody {
+  width: min(100%, 430px) !important;
+
+  height: 390px !important;
+  min-height: 0 !important;
+
+  aspect-ratio: auto !important;
+
+  margin:
+    4px auto
+    8px !important;
+
+  border: 0 !important;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(218, 154, 45, 0.055),
+      transparent 66%
+    ) !important;
+
+  overflow: visible !important;
+}
+
+
+/* vídeo del organismo */
+.organismBodyVideo {
+  width: 100% !important;
+  height: 100% !important;
+
+  padding: 5px !important;
+
+  object-fit: contain !important;
+  object-position: center center !important;
+
+  background: transparent !important;
+
+  transform:
+    scale(
+      calc(
+        0.82 +
+        var(--organism-intensity) * 0.025
+      )
+    ) !important;
+
+  filter:
+    brightness(
+      calc(
+        0.92 +
+        var(--organism-intensity) * 0.25
+      )
+    )
+    contrast(1.08)
+    saturate(1.05) !important;
+}
+
+
+/* halo más discreto */
+.organismBodyGlow {
+  width: 52% !important;
+
+  filter: blur(34px) !important;
+
+  opacity:
+    calc(
+      0.12 +
+      var(--organism-intensity) * 0.34
+    ) !important;
+}
+
+
+/* ---------------------------------------------------------
+   ESTADO ACTUAL
+--------------------------------------------------------- */
+
+.organismState {
+  width: min(100%, 300px) !important;
+
+  margin:
+    -6px auto
+    10px !important;
+
+  padding:
+    10px 12px !important;
+
+  text-align: center;
+}
+
+.organismState > span {
+  margin-bottom: 4px !important;
+
+  font-size: 7px !important;
+  letter-spacing: 0.16em;
+}
+
+.organismState > strong {
+  font-size:
+    clamp(25px, 2.2vw, 34px) !important;
+
+  line-height: 1 !important;
+}
+
+.organismState > small {
+  font-size: 8px !important;
+}
+
+
+/* ---------------------------------------------------------
+   RITMO · MENTE · ALMA · MEMORIA
+--------------------------------------------------------- */
+
+.organismLayers {
+  width: 100%;
+
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr)) !important;
+
+  gap: 8px !important;
+
+  margin-top: 5px !important;
+}
+
+.organismLayer {
+  min-width: 0;
+  min-height: 116px !important;
+
+  padding: 11px !important;
+
+  background:
+    rgba(8, 6, 3, 0.32) !important;
+
+  border-color:
+    rgba(216, 179, 107, 0.10) !important;
+}
+
+.organismLayer header {
+  margin-bottom: 6px !important;
+}
+
+.organismLayer header > span {
+  width: 27px !important;
+  height: 27px !important;
+
+  font-size: 11px !important;
+}
+
+.organismLayer small {
+  font-size: 7px !important;
+}
+
+.organismLayer strong {
+  font-size: 13px !important;
+}
+
+.organismLayer p {
+  margin:
+    6px 0 !important;
+
+  font-size: 8px !important;
+  line-height: 1.45 !important;
+
+  color:
+    rgba(235, 220, 185, 0.48) !important;
+}
+
+
+/* ---------------------------------------------------------
+   BOTÓN HABLAR
+--------------------------------------------------------- */
+
+.organismSpeakButton {
+  display: block;
+
+  width: min(100%, 380px) !important;
+
+  margin:
+    12px auto
+    0 !important;
+
+  padding:
+    9px 12px !important;
+
+  font-size: 8px !important;
+  letter-spacing: 0.14em !important;
+}
+
+
+/* última decisión */
+.organismDecision {
+  width: min(100%, 500px) !important;
+
+  margin:
+    8px auto
+    0 !important;
+
+  padding: 6px !important;
+
+  text-align: center;
+}
+
+.organismDecision span {
+  font-size: 7px !important;
+}
+
+.organismDecision p {
+  margin:
+    4px 0 0 !important;
+
+  font-size: 8px !important;
+}
+
+
+/* =========================================================
+   NÚCLEO INTERACTIVO
+   pequeño y exactamente sobre el corazón
+========================================================= */
+
+.organismCoreButton {
+  width: 58px !important;
+  height: 58px !important;
+
+  left: 50% !important;
+
+  /*
+    Ajustaremos este porcentaje
+    con una captura si hace falta.
+  */
+  top: 55% !important;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 221, 151, 0.15),
+      rgba(255, 164, 34, 0.05) 42%,
+      transparent 72%
+    ) !important;
+}
+
+.organismCoreDot {
+  width: 13px !important;
+  height: 13px !important;
+}
+
+.organismCoreLabel {
+  font-size: 7px !important;
+
+  top:
+    calc(100% + 3px) !important;
+}
+
+
+/* =========================================================
+   DEPÓSITO DE PALABRAS · MENOS PROTAGONISMO
+========================================================= */
+
+/*
+  Reducimos cualquier panel de memoria colectiva
+  que esté dentro de la zona inferior.
+*/
+
+.memoryWords {
+  gap: 5px !important;
+}
+
+.memoryWords span {
+  padding:
+    4px 7px !important;
+
+  font-size: 8px !important;
+}
+
+
+/* formulario de palabra */
+.organismLiving form {
+  margin-bottom: 0;
+}
+
+
+/* inputs de la zona */
+input#word-input {
+  min-height: 34px !important;
+
+  padding:
+    7px 10px !important;
+
+  font-size: 9px !important;
+}
+
+
+/* =========================================================
+   DIÁLOGO
+   LO CONSERVAMOS VISIBLE
+========================================================= */
+
+.actionGrid {
+  gap: 7px !important;
+}
+
+.actionGrid button {
+  min-height: 60px !important;
+}
+
+
+/* =========================================================
+   VOCES DEL PÚBLICO · CHAT
+========================================================= */
+
+.wall {
+  width: 100%;
+
+  max-height: 520px;
+
+  overflow: hidden;
+}
+
+.wallMessages {
+  max-height: 300px;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+}
+
+.wallMessages article {
+  padding:
+    10px 0 !important;
+}
+
+
+/* =========================================================
+   ARCHIVO UNIVERSAL
+   MÁS COMPACTO
+========================================================= */
+
+.rightColumn > section + section {
+  margin-top: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .organismBody {
+    width: min(100%, 390px) !important;
+
+    height: 350px !important;
+  }
+
+  .organismLayers {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      ) !important;
+  }
+}
+
+
+@media (max-width: 700px) {
+
+  .organismLiving {
+    padding:
+      12px !important;
+  }
+
+  .organismBody {
+    width: 100% !important;
+
+    height: 310px !important;
+  }
+
+  .organismLayers {
+    grid-template-columns:
+      1fr !important;
+  }
+
+  .organismLayer {
+    min-height: auto !important;
+  }
+}
+
+
+
+/* =========================================================
+   SALA DEL CORAZÓN VIVO · ARQUITECTURA UNIVERSAL V1
+========================================================= */
+
+/* ---------------------------------------------------------
+   ZONA INFERIOR: DIÁLOGO + DEPÓSITO + ORGANISMO
+--------------------------------------------------------- */
+
+.rightColumn {
+  grid-column: auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 12px !important;
+}
+
+
+/* ---------------------------------------------------------
+   ORGANISMO COMPACTO
+--------------------------------------------------------- */
+
+.organismLiving {
+  width: 100% !important;
+  min-width: 0 !important;
+
+  padding: 14px !important;
+
+  overflow: hidden !important;
+}
+
+.organismBody {
+  width: min(100%, 360px) !important;
+  height: 330px !important;
+  min-height: 0 !important;
+
+  margin:
+    0 auto
+    4px !important;
+
+  overflow: visible !important;
+}
+
+.organismBodyVideo {
+  width: 100% !important;
+  height: 100% !important;
+
+  padding: 0 !important;
+
+  object-fit: contain !important;
+  object-position: center !important;
+
+  transform:
+    scale(
+      calc(
+        0.80 +
+        var(--organism-intensity) * 0.022
+      )
+    ) !important;
+}
+
+
+/* Estado integrado debajo del cuerpo */
+.organismState {
+  width: auto !important;
+  max-width: none !important;
+
+  margin:
+    -4px auto
+    6px !important;
+
+  padding:
+    5px 8px !important;
+
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.organismState > span {
+  display: inline !important;
+
+  margin-right: 6px !important;
+
+  font-size: 7px !important;
+}
+
+.organismState > strong {
+  display: inline !important;
+
+  font-size: 16px !important;
+  letter-spacing: 0.08em !important;
+}
+
+.organismState > small {
+  display: inline !important;
+
+  margin-left: 7px !important;
+
+  font-size: 7px !important;
+}
+
+
+/* Las cuatro capas dejan de parecer tarjetas grandes */
+.organismLayers {
+  display: grid !important;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr)) !important;
+
+  gap: 6px !important;
+
+  margin-top: 5px !important;
+}
+
+.organismLayer {
+  min-height: 76px !important;
+
+  padding:
+    8px !important;
+}
+
+.organismLayer header {
+  margin-bottom: 2px !important;
+}
+
+.organismLayer header > span {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.organismLayer p {
+  margin:
+    4px 0 !important;
+
+  font-size: 7px !important;
+  line-height: 1.35 !important;
+}
+
+
+/* Hablar */
+.organismSpeakButton {
+  width: 100% !important;
+
+  margin:
+    8px 0 0 !important;
+
+  padding:
+    8px !important;
+}
+
+
+/* Última decisión */
+.organismDecision {
+  width: 100% !important;
+
+  margin:
+    6px 0 0 !important;
+
+  padding:
+    5px !important;
+}
+
+
+/* ---------------------------------------------------------
+   DEPÓSITO DE PALABRAS
+--------------------------------------------------------- */
+
+.memoryWords {
+  gap: 4px !important;
+}
+
+.memoryWords span {
+  padding:
+    3px 6px !important;
+
+  font-size: 7px !important;
+}
+
+#word-input {
+  min-height: 30px !important;
+
+  font-size: 8px !important;
+}
+
+
+/* ---------------------------------------------------------
+   ARCHIVO UNIVERSAL
+   OBLIGATORIAMENTE A TODO EL ANCHO
+--------------------------------------------------------- */
+
+.rightColumn > section:nth-of-type(2) {
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+}
+
+
+/*
+  Si UniversalArchiveStage está renderizado
+  inmediatamente después de OrganismLiving,
+  le damos presencia horizontal.
+*/
+.organismLiving + section {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin-top: 2px !important;
+}
+
+
+/* ---------------------------------------------------------
+   VOCES DEL PÚBLICO
+--------------------------------------------------------- */
+
+.wall {
+  width: 100% !important;
+  max-width: none !important;
+
+  max-height: none !important;
+}
+
+.wallMessages {
+  max-height: 300px !important;
+
+  overflow-y: auto !important;
+}
+
+
+/* ---------------------------------------------------------
+   ZONA INFERIOR PRINCIPAL
+--------------------------------------------------------- */
+
+@media (min-width: 1100px) {
+
+  /*
+    El grid madre queda en tres columnas:
+    diálogo · depósito · organismo
+  */
+  .lowerGrid,
+  .mainLowerGrid {
+    grid-template-columns:
+      0.72fr
+      1.55fr
+      0.95fr !important;
+  }
+
+}
+
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+--------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+  .organismBody {
+    width: min(100%, 320px) !important;
+    height: 300px !important;
+  }
+
+  .organismLayers {
+    grid-template-columns:
+      1fr !important;
+  }
+
+}
+
+
+/* =========================================================
+   ARCHIVO UNIVERSAL + VOCES
+   BLOQUE A TODO EL ANCHO
+========================================================= */
+
+.universalFullWidth {
+  grid-column: 1 / -1;
+
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns: 1fr;
+
+  gap: 14px;
+
+  margin-top: 14px;
+}
+
+
+/* Archivo Universal */
+.universalFullWidth > section:first-child {
+  width: 100%;
+  max-width: none;
+}
+
+
+/* Voces del público */
+.universalFullWidth .wall {
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+}
+
+
+/* Chat más horizontal */
+.universalFullWidth .wallMessages {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 0 16px;
+
+  max-height: 280px;
+
+  overflow-y: auto;
+}
+
+.universalFullWidth .wallMessages article {
+  min-width: 0;
+}
+
+
+/* Formulario del chat */
+.universalFullWidth .wallForm {
+  margin-top: 12px;
+}
+
+
+/* Responsive */
+@media (max-width: 1000px) {
+
+  .universalFullWidth .wallMessages {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .universalFullWidth .wallMessages {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+/* =========================================================
+   SALA DEL CORAZÓN VIVO
+   ARQUITECTURA MAESTRA V2
+   13 · 08 · 2026
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   PRINCIPIO GENERAL
+--------------------------------------------------------- */
+
+.page {
+  --v2-gap: 14px;
+}
+
+
+/* =========================================================
+   CABECERA / EXPERIENCIA SUPERIOR
+========================================================= */
+
+.liveExperience {
+  gap: var(--v2-gap) !important;
+}
+
+
+/*
+  Cámara y Campo Visual deben conservar
+  una presencia cinematográfica.
+*/
+
+.readerPanel {
+  min-width: 0;
+}
+
+.videoStage {
+  min-height: 420px;
+}
+
+
+/* =========================================================
+   CORAZÓN / FRASE EFÍMERA
+========================================================= */
+
+/*
+  La franja deja de competir con el resto.
+*/
+
+.heartBar {
+  min-height: 68px !important;
+  padding:
+    10px 18px !important;
+}
+
+.heartMessage {
+  font-size:
+    clamp(
+      15px,
+      1.25vw,
+      21px
+    ) !important;
+}
+
+
+/* =========================================================
+   FILA DE HERRAMIENTAS
+   PEDIR · DEPÓSITO · ORGANISMO
+========================================================= */
+
+.mainGrid {
+  gap: 14px !important;
+}
+
+
+/*
+  La zona inferior existente vuelve a trabajar
+  como tres columnas proporcionadas.
+*/
+
+.lowerGrid {
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(210px, .72fr)
+    minmax(420px, 1.45fr)
+    minmax(320px, 1fr) !important;
+
+  align-items: start;
+
+  gap: 14px !important;
+}
+
+
+/* =========================================================
+   PEDIR LA PALABRA
+========================================================= */
+
+.queuePanel {
+  min-height: 0 !important;
+}
+
+.queuePanel,
+.dialoguePanel {
+  padding:
+    14px !important;
+}
+
+.queuePanel article,
+.dialoguePanel article {
+  padding:
+    8px 0 !important;
+}
+
+
+/* =========================================================
+   DEPÓSITO DE PALABRAS
+========================================================= */
+
+.wordsPanel,
+.memoryPanel {
+  min-height: 0 !important;
+}
+
+.wordCloud,
+.wordStage {
+  min-height: 130px !important;
+  height: auto !important;
+
+  padding:
+    18px !important;
+}
+
+.wordTile {
+  padding:
+    5px 8px !important;
+
+  font-size:
+    9px !important;
+}
+
+.wordForm {
+  margin-top:
+    10px !important;
+}
+
+.wordForm label {
+  font-size:
+    8px !important;
+}
+
+.wordForm > div {
+  gap:
+    8px !important;
+}
+
+.wordForm input {
+  min-height:
+    36px !important;
+}
+
+
+/* =========================================================
+   ORGANISMO VIVO
+========================================================= */
+
+.rightColumn {
+  min-width: 0 !important;
+
+  display: block !important;
+}
+
+
+.organismLiving {
+  position: relative;
+
+  width: 100% !important;
+
+  min-height: 0 !important;
+
+  padding:
+    14px !important;
+
+  overflow: hidden !important;
+
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(215, 150, 42, .055),
+      transparent 43%
+    ),
+    rgba(0,0,0,.88) !important;
+}
+
+
+/* ---------------------------------------------------------
+   Cuerpo
+--------------------------------------------------------- */
+
+.organismBody {
+  position: relative;
+
+  width:
+    min(100%, 390px) !important;
+
+  height:
+    360px !important;
+
+  min-height:
+    0 !important;
+
+  margin:
+    4px auto
+    0 !important;
+
+  overflow:
+    visible !important;
+
+  border:
+    0 !important;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,174,51,.07),
+      transparent 65%
+    ) !important;
+}
+
+
+.organismBodyVideo {
+  width:
+    100% !important;
+
+  height:
+    100% !important;
+
+  padding:
+    0 !important;
+
+  object-fit:
+    contain !important;
+
+  object-position:
+    center center !important;
+
+  background:
+    transparent !important;
+
+  transform:
+    scale(
+      calc(
+        .86 +
+        var(--organism-intensity) * .025
+      )
+    ) !important;
+
+  filter:
+    brightness(
+      calc(
+        .92 +
+        var(--organism-intensity) * .26
+      )
+    )
+    contrast(1.08)
+    saturate(1.05) !important;
+}
+
+
+/* =========================================================
+   NÚCLEO
+========================================================= */
+
+.organismNucleus {
+  position: absolute;
+
+  z-index: 20;
+
+  left: 50%;
+  top: 55%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 96px;
+  height: 96px;
+
+  padding: 0;
+
+  border:
+    1px solid
+    rgba(234,180,78,.22);
+
+  border-radius:
+    50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,223,153,.13),
+      rgba(255,165,37,.045) 42%,
+      transparent 70%
+    );
+
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+
+  transition:
+    transform .3s ease,
+    filter .3s ease,
+    border-color .3s ease;
+}
+
+
+.organismNucleus:hover {
+  transform:
+    translate(-50%, -50%)
+    scale(1.10);
+
+  filter:
+    brightness(1.35);
+
+  border-color:
+    rgba(235,184,84,.45);
+}
+
+
+.nucleusLight {
+  width: 17px;
+  height: 17px;
+
+  border-radius:
+    50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #fff4d6 0%,
+      #ffc662 30%,
+      #d57915 60%,
+      transparent 72%
+    );
+
+  box-shadow:
+    0 0 12px
+      rgba(255,216,133,.95),
+    0 0 30px
+      rgba(255,165,51,.65),
+    0 0 60px
+      rgba(214,111,12,.32);
+
+  animation:
+    nucleusBreath 1.25s
+    ease-in-out infinite;
+}
+
+
+.nucleusText {
+  position: absolute;
+
+  left: 50%;
+  top: calc(100% + 7px);
+
+  transform:
+    translateX(-50%);
+
+  white-space:
+    nowrap;
+
+  opacity: 0;
+
+  font-size:
+    7px;
+
+  letter-spacing:
+    .18em;
+
+  color:
+    rgba(232,198,132,.86);
+
+  transition:
+    opacity .22s ease;
+}
+
+
+.organismNucleus:hover
+.nucleusText {
+  opacity: 1;
+}
+
+
+@keyframes nucleusBreath {
+
+  0%,
+  100% {
+    transform:
+      scale(.82);
+
+    opacity:
+      .68;
+  }
+
+  50% {
+    transform:
+      scale(1.2);
+
+    opacity:
+      1;
+  }
+}
+
+
+/* =========================================================
+   ESTADO DEL ORGANISMO
+========================================================= */
+
+.organismState {
+  width:
+    max-content !important;
+
+  max-width:
+    90% !important;
+
+  margin:
+    -8px auto
+    8px !important;
+
+  padding:
+    4px 10px !important;
+
+  border:
+    0 !important;
+
+  background:
+    transparent !important;
+
+  text-align:
+    center !important;
+}
+
+
+.organismState span,
+.organismState strong,
+.organismState small {
+  display:
+    inline !important;
+}
+
+
+.organismState span {
+  margin-right:
+    5px !important;
+
+  font-size:
+    7px !important;
+}
+
+
+.organismState strong {
+  font-size:
+    14px !important;
+
+  letter-spacing:
+    .08em !important;
+}
+
+
+.organismState small {
+  margin-left:
+    6px !important;
+
+  font-size:
+    7px !important;
+}
+
+
+/* =========================================================
+   RITMO · MENTE · ALMA · MEMORIA
+========================================================= */
+
+.organismLayers {
+  display:
+    grid !important;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0,1fr)
+    ) !important;
+
+  gap:
+    6px !important;
+
+  margin-top:
+    5px !important;
+}
+
+
+.organismLayer {
+  min-height:
+    70px !important;
+
+  padding:
+    7px !important;
+
+  background:
+    rgba(7,5,2,.30) !important;
+}
+
+
+.organismLayer header {
+  margin:
+    0 0 3px !important;
+}
+
+
+.organismLayer header > span {
+  width:
+    20px !important;
+
+  height:
+    20px !important;
+
+  font-size:
+    9px !important;
+}
+
+
+.organismLayer small {
+  font-size:
+    6px !important;
+}
+
+
+.organismLayer strong {
+  font-size:
+    10px !important;
+}
+
+
+.organismLayer p {
+  display:
+    none !important;
+}
+
+
+.organismTags,
+.memoryWords {
+  margin-top:
+    4px !important;
+}
+
+
+.organismTags span,
+.memoryWords span {
+  padding:
+    2px 4px !important;
+
+  font-size:
+    6px !important;
+}
+
+
+/* =========================================================
+   BOTÓN MANUAL DEL ORGANISMO
+========================================================= */
+
+/*
+  El Organismo ya dispone de autonomía.
+  Dejamos el botón manual como control secundario.
+*/
+
+.organismSpeakButton {
+  opacity:
+    .45 !important;
+
+  width:
+    70% !important;
+
+  margin:
+    8px auto 0 !important;
+
+  padding:
+    6px !important;
+
+  font-size:
+    6px !important;
+}
+
+
+.organismSpeakButton:hover {
+  opacity:
+    1 !important;
+}
+
+
+.organismDecision {
+  margin-top:
+    5px !important;
+
+  padding:
+    3px !important;
+
+  font-size:
+    6px !important;
+}
+
+
+/* =========================================================
+   ARCHIVO UNIVERSAL
+========================================================= */
+
+.universalFullWidth {
+  grid-column:
+    1 / -1 !important;
+
+  width:
+    100% !important;
+
+  margin-top:
+    2px !important;
+
+  display:
+    grid !important;
+
+  grid-template-columns:
+    1fr !important;
+
+  gap:
+    14px !important;
+}
+
+
+/*
+  El Archivo será una gran ficha horizontal.
+*/
+
+.universalFullWidth
+> section:first-child {
+  width:
+    100% !important;
+
+  max-width:
+    none !important;
+}
+
+
+/* =========================================================
+   VOCES DEL PÚBLICO
+========================================================= */
+
+.universalFullWidth .wall {
+  width:
+    100% !important;
+
+  max-width:
+    none !important;
+
+  margin:
+    0 !important;
+}
+
+
+.universalFullWidth
+.wallMessages {
+  display:
+    grid !important;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0,1fr)
+    ) !important;
+
+  gap:
+    0 16px !important;
+
+  max-height:
+    230px !important;
+
+  overflow-y:
+    auto !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+  .lowerGrid {
+    grid-template-columns:
+      1fr 1.4fr !important;
+  }
+
+  .rightColumn {
+    grid-column:
+      1 / -1;
+  }
+
+  .organismBody {
+    width:
+      min(100%, 360px) !important;
+  }
+
+}
+
+
+@media (max-width: 760px) {
+
+  .lowerGrid {
+    grid-template-columns:
+      1fr !important;
+  }
+
+  .organismLayers {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0,1fr)
+      ) !important;
+  }
+
+  .universalFullWidth
+  .wallMessages {
+    grid-template-columns:
+      1fr !important;
+  }
+
+}
+
+
+/* =========================================================
+   SALA DEL CORAZÓN VIVO · ARQUITECTURA V3
+   Núcleo Universal + herramientas secundarias
+========================================================= */
+
+
+/* =========================================================
+   ORGANISMO + ARCHIVO
+========================================================= */
+
+.universalTool {
+  grid-column: 1 / -1;
+
+  width: 100%;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(360px, .85fr);
+
+  gap: 14px;
+
+  align-items: stretch;
+  margin-top: 14px;
+}
+
+
+.universalOrganismPanel {
+  position: relative;
+
+  min-width: 0;
+
+  padding: 16px 18px 18px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 48% 48%,
+      rgba(215, 147, 38, .07),
+      transparent 46%
+    ),
+    rgba(0, 0, 0, .90);
+}
+
+
+/* =========================================================
+   CUERPO DEL ORGANISMO
+========================================================= */
+
+.universalOrganismStage {
+  --organism-intensity: .15;
+  --organism-pulse: 70;
+
+  position: relative;
+
+  width: min(100%, 570px);
+  height: 470px;
+
+  margin: -8px auto -12px;
+
+  display: grid;
+  place-items: center;
+
+  overflow: visible;
+}
+
+
+.universalOrganismVideo {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  background: transparent;
+
+  transform:
+    scale(
+      calc(
+        .90 +
+        var(--organism-intensity) * .035
+      )
+    );
+
+  filter:
+    brightness(
+      calc(
+        .90 +
+        var(--organism-intensity) * .30
+      )
+    )
+    contrast(1.08)
+    saturate(1.06);
+
+  transition:
+    transform .8s ease,
+    filter .8s ease;
+}
+
+
+.universalOrganismGlow {
+  position: absolute;
+  z-index: 1;
+
+  left: 50%;
+  top: 49%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 52%;
+  aspect-ratio: 1;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 190, 78, .16),
+      rgba(211, 115, 17, .04) 45%,
+      transparent 72%
+    );
+
+  filter: blur(42px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   NÚCLEO INTERACTIVO
+========================================================= */
+
+.universalNucleus {
+  position: absolute;
+  z-index: 10;
+
+  left: 50%;
+  top: 55%;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 102px;
+  height: 102px;
+
+  padding: 0;
+
+  border:
+    1px solid rgba(230, 176, 78, .18);
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 225, 160, .14),
+      rgba(255, 163, 35, .045) 40%,
+      transparent 70%
+    );
+
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+
+  transition:
+    transform .3s ease,
+    border-color .3s ease,
+    filter .3s ease;
+}
+
+
+.universalNucleus:hover {
+  transform:
+    translate(-50%, -50%)
+    scale(1.10);
+
+  border-color:
+    rgba(234, 184, 88, .42);
+
+  filter: brightness(1.3);
+}
+
+
+.universalNucleusLight {
+  width: 17px;
+  height: 17px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #fff6dc 0%,
+      #ffc762 30%,
+      #d87c17 58%,
+      transparent 72%
+    );
+
+  box-shadow:
+    0 0 12px
+      rgba(255, 218, 138, .96),
+    0 0 30px
+      rgba(255, 169, 55, .66),
+    0 0 60px
+      rgba(210, 106, 10, .34);
+
+  animation:
+    universalNucleusBeat 1.2s
+    ease-in-out infinite;
+}
+
+
+.universalNucleusLabel {
+  position: absolute;
+
+  top: calc(100% + 6px);
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  white-space: nowrap;
+
+  opacity: .52;
+
+  font-size: 7px;
+  letter-spacing: .18em;
+
+  color:
+    rgba(235, 202, 136, .86);
+
+  transition: opacity .2s ease;
+}
+
+
+.universalNucleus:hover
+.universalNucleusLabel {
+  opacity: 1;
+}
+
+
+@keyframes universalNucleusBeat {
+  0%,
+  100% {
+    transform: scale(.82);
+    opacity: .68;
+  }
+
+  50% {
+    transform: scale(1.20);
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   INFORMACIÓN DEL ORGANISMO
+========================================================= */
+
+.organismCompactStatus {
+  width: min(100%, 700px);
+
+  margin: 4px auto 0;
+
+  padding: 10px 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  border:
+    1px solid rgba(216, 179, 107, .09);
+
+  border-radius: 10px;
+
+  background:
+    rgba(9, 6, 2, .38);
+}
+
+
+.organismCompactStatus > span {
+  min-width: 0;
+
+  display: grid;
+  gap: 2px;
+
+  text-align: center;
+}
+
+
+.organismCompactStatus small {
+  font-size: 6px;
+
+  letter-spacing: .14em;
+
+  color:
+    rgba(216, 179, 107, .48);
+}
+
+
+.organismCompactStatus strong {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  color:
+    rgba(237, 220, 185, .76);
+}
+
+
+.organismCompactStatus > i {
+  width: 1px;
+  height: 22px;
+
+  background:
+    rgba(216, 179, 107, .10);
+}
+
+
+.organismWhisper {
+  min-height: 25px;
+
+  margin-top: 7px;
+
+  display: grid;
+  place-items: center;
+
+  text-align: center;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 11px;
+  font-style: italic;
+
+  color:
+    rgba(235, 219, 184, .38);
+}
+
+
+/* =========================================================
+   ARCHIVO UNIVERSAL
+========================================================= */
+
+.universalArchiveV3 {
+  min-width: 0;
+
+  display: flex;
+}
+
+
+.universalArchiveV3 > section {
+  flex: 1;
+
+  width: 100%;
+
+  margin-top: 0 !important;
+}
+
+
+/* =========================================================
+   HERRAMIENTAS SECUNDARIAS
+========================================================= */
+
+.secondaryTools {
+  grid-column: 1 / -1;
+
+  width: 100%;
+
+  margin-top: 14px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(230px, .75fr)
+    minmax(300px, .95fr)
+    minmax(380px, 1.30fr);
+
+  gap: 14px;
+
+  align-items: stretch;
+}
+
+
+.compactDialogue,
+.compactDeposit,
+.compactPublicWall {
+  min-width: 0;
+
+  padding: 14px;
+}
+
+
+/* =========================================================
+   DIÁLOGO
+========================================================= */
+
+.compactQueue {
+  display: grid;
+
+  gap: 4px;
+
+  margin-top: 5px;
+}
+
+
+.compactQueuePerson {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    30px minmax(0, 1fr) auto;
+
+  gap: 8px;
+
+  align-items: center;
+
+  padding: 6px 0;
+
+  border-bottom:
+    1px solid rgba(216, 179, 107, .07);
+}
+
+
+.compactQueuePerson strong,
+.compactQueuePerson small {
+  display: block;
+}
+
+
+.compactQueuePerson strong {
+  font-size: 9px;
+
+  font-weight: 500;
+}
+
+
+.compactQueuePerson small,
+.compactQueuePerson > span {
+  font-size: 7px;
+
+  color:
+    rgba(235, 220, 185, .38);
+}
+
+
+.compactActions {
+  margin-top: 10px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 6px;
+}
+
+
+.compactActions button {
+  min-height: 34px;
+
+  border:
+    1px solid rgba(216, 179, 107, .15);
+
+  border-radius: 7px;
+
+  background:
+    rgba(216, 179, 107, .04);
+
+  color:
+    rgba(235, 220, 185, .62);
+
+  cursor: pointer;
+
+  font-size: 7px;
+  letter-spacing: .08em;
+}
+
+
+/* =========================================================
+   DEPÓSITO
+========================================================= */
+
+.compactWords {
+  min-height: 92px;
+
+  display: flex;
+
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+
+  padding: 10px;
+}
+
+
+.compactWords span {
+  padding: 3px 6px;
+
+  border:
+    1px solid rgba(216, 179, 107, .09);
+
+  border-radius: 999px;
+
+  font-size: 7px;
+
+  color:
+    rgba(235, 220, 185, .46);
+}
+
+
+.compactWordForm {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 7px;
+}
+
+
+.compactWordForm input {
+  min-width: 0;
+  height: 34px;
+
+  padding: 7px 9px;
+
+  border:
+    1px solid rgba(216, 179, 107, .13);
+
+  border-radius: 7px;
+
+  background:
+    rgba(0, 0, 0, .42);
+
+  color:
+    rgba(235, 220, 185, .82);
+
+  outline: none;
+}
+
+
+.compactWordForm button {
+  padding: 0 12px;
+
+  border:
+    1px solid rgba(216, 179, 107, .15);
+
+  border-radius: 7px;
+
+  background:
+    rgba(216, 179, 107, .05);
+
+  color:
+    rgba(235, 220, 185, .62);
+
+  cursor: pointer;
+
+  font-size: 7px;
+  letter-spacing: .08em;
+}
+
+
+/* =========================================================
+   VOCES DEL PÚBLICO
+========================================================= */
+
+.compactWallMessages {
+  max-height: 158px;
+
+  overflow-y: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 0 12px;
+
+  scrollbar-width: thin;
+}
+
+
+.compactWallMessages article {
+  min-width: 0;
+
+  padding: 7px 0;
+
+  border-bottom:
+    1px solid rgba(216, 179, 107, .07);
+}
+
+
+.compactWallMessages header {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+
+.compactWallMessages strong {
+  font-size: 8px;
+}
+
+
+.compactWallMessages header span {
+  font-size: 6px;
+
+  color:
+    rgba(216, 179, 107, .46);
+}
+
+
+.compactWallMessages p {
+  margin:
+    5px 0 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 9px;
+  line-height: 1.45;
+
+  color:
+    rgba(235, 220, 185, .54);
+}
+
+
+.compactWallForm {
+  margin-top: 8px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 7px;
+}
+
+
+.compactWallForm textarea {
+  min-width: 0;
+
+  height: 38px;
+
+  resize: none;
+
+  padding: 8px 9px;
+
+  border:
+    1px solid rgba(216, 179, 107, .13);
+
+  border-radius: 7px;
+
+  background:
+    rgba(0, 0, 0, .42);
+
+  color:
+    rgba(235, 220, 185, .82);
+
+  outline: none;
+
+  font-size: 8px;
+}
+
+
+.compactWallForm button {
+  padding: 0 13px;
+
+  border:
+    1px solid rgba(216, 179, 107, .15);
+
+  border-radius: 7px;
+
+  background:
+    rgba(216, 179, 107, .05);
+
+  color:
+    rgba(235, 220, 185, .62);
+
+  cursor: pointer;
+
+  font-size: 7px;
+  letter-spacing: .08em;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+  .universalTool {
+    grid-template-columns: 1fr;
+  }
+
+  .universalOrganismStage {
+    height: 430px;
+  }
+
+  .secondaryTools {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .compactPublicWall {
+    grid-column: 1 / -1;
+  }
+}
+
+
+@media (max-width: 720px) {
+
+  .universalOrganismStage {
+    width: 100%;
+    height: 350px;
+  }
+
+  .organismCompactStatus {
+    flex-wrap: wrap;
+  }
+
+  .organismCompactStatus > i {
+    display: none;
+  }
+
+  .secondaryTools {
+    grid-template-columns: 1fr;
+  }
+
+  .compactPublicWall {
+    grid-column: auto;
+  }
+
+  .compactWallMessages {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================================
+   CORAZÓN VIVO · V4
+   ORGANISMO PEQUEÑO + ARCHIVO UNIVERSAL DOMINANTE
+========================================================= */
+
+
+/* =========================================================
+   PROPORCIÓN PRINCIPAL
+========================================================= */
+
+.universalTool {
+  grid-template-columns:
+    minmax(300px, .58fr)
+    minmax(680px, 1.42fr)
+    !important;
+
+  gap: 14px !important;
+}
+
+
+/* =========================================================
+   ORGANISMO MÁS PEQUEÑO Y A LA IZQUIERDA
+========================================================= */
+
+.universalOrganismPanel {
+  padding:
+    16px !important;
+}
+
+
+.universalOrganismStage {
+  width:
+    min(100%, 350px) !important;
+
+  height:
+    350px !important;
+
+  margin:
+    -6px auto -12px !important;
+
+  transform:
+    translateX(-20px);
+}
+
+
+.universalOrganismVideo {
+  transform:
+    scale(
+      calc(
+        .82 +
+        var(--organism-intensity) * .025
+      )
+    ) !important;
+}
+
+
+.universalOrganismGlow {
+  width:
+    44% !important;
+}
+
+
+/* núcleo */
+.universalNucleus {
+  width:
+    74px !important;
+
+  height:
+    74px !important;
+
+  top:
+    55% !important;
+}
+
+
+.universalNucleusLight {
+  width:
+    14px !important;
+
+  height:
+    14px !important;
+}
+
+
+.universalNucleusLabel {
+  font-size:
+    6px !important;
+}
+
+
+/* información inferior */
+.organismCompactStatus {
+  gap:
+    7px !important;
+
+  padding:
+    8px !important;
+}
+
+
+.organismCompactStatus small {
+  font-size:
+    5px !important;
+}
+
+
+.organismCompactStatus strong {
+  font-size:
+    8px !important;
+}
+
+
+/* =========================================================
+   ARCHIVO UNIVERSAL · GRAN ENCICLOPEDIA VIVA
+========================================================= */
+
+.archiveUniverse {
+  width: 100%;
+
+  min-height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .16);
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 35% 35%,
+      rgba(183, 116, 20, .055),
+      transparent 42%
+    ),
+    rgba(0, 0, 0, .92);
+}
+
+
+.archiveUniverseHeader {
+  min-height: 66px;
+
+  padding:
+    15px 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 20px;
+
+  border-bottom:
+    1px solid
+    rgba(216, 179, 107, .09);
+}
+
+
+.archiveUniverseHeader h2 {
+  margin:
+    4px 0 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      20px,
+      1.5vw,
+      28px
+    );
+
+  font-weight: 400;
+}
+
+
+.archiveReady {
+  font-size: 7px;
+
+  letter-spacing:
+    .14em;
+
+  color:
+    rgba(154, 203, 133, .72);
+}
+
+
+/* =========================================================
+   ARCHIVO DORMIDO
+========================================================= */
+
+.archiveSleeping {
+  flex: 1;
+
+  min-height: 420px;
+
+  display: grid;
+
+  place-content: center;
+
+  justify-items: center;
+
+  gap: 8px;
+
+  text-align: center;
+
+  color:
+    rgba(235, 220, 185, .38);
+}
+
+
+.archiveSleepingMark {
+  width: 54px;
+  height: 54px;
+
+  display: grid;
+
+  place-items: center;
+
+  margin-bottom: 8px;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .15);
+
+  border-radius: 50%;
+
+  color:
+    rgba(227, 179, 82, .68);
+
+  box-shadow:
+    0 0 36px
+    rgba(190, 111, 12, .08);
+}
+
+
+.archiveSleeping strong {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 16px;
+
+  font-weight: 400;
+
+  color:
+    rgba(235, 220, 185, .60);
+}
+
+
+.archiveSleeping p {
+  max-width: 330px;
+
+  margin: 0;
+
+  font-size: 9px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   TRES ZONAS DEL ARCHIVO
+========================================================= */
+
+.archiveHeroGrid {
+  flex: 1;
+
+  min-height: 445px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(210px, .72fr)
+    minmax(320px, 1.15fr)
+    minmax(250px, .85fr);
+
+  gap: 10px;
+
+  padding: 12px;
+}
+
+
+.archivePortrait,
+.archiveBiography,
+.archiveCuriosities {
+  min-width: 0;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .09);
+
+  border-radius: 10px;
+
+  background:
+    rgba(8, 5, 2, .34);
+
+  overflow: hidden;
+}
+
+
+.archiveCardLabel {
+  display: block;
+
+  padding:
+    12px 13px 0;
+
+  font-size: 6px;
+
+  letter-spacing:
+    .16em;
+
+  color:
+    rgba(216, 179, 107, .54);
+}
+
+
+/* =========================================================
+   LÁMINA
+========================================================= */
+
+.archivePortrait {
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.archivePortraitStage {
+  flex: 1;
+
+  min-height: 335px;
+
+  display: grid;
+
+  place-content: center;
+
+  justify-items: center;
+
+  gap: 12px;
+
+  margin: 12px;
+
+  border-radius: 8px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(215, 171, 98, .10),
+      rgba(40, 32, 22, .24) 45%,
+      rgba(0, 0, 0, .48)
+    );
+
+  box-shadow:
+    inset 0 0 80px
+    rgba(0, 0, 0, .62);
+}
+
+
+.archivePortraitStage > span {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    64px;
+
+  color:
+    rgba(224, 196, 145, .32);
+}
+
+
+.archivePortraitStage small {
+  font-size: 6px;
+
+  letter-spacing:
+    .13em;
+
+  color:
+    rgba(224, 196, 145, .24);
+}
+
+
+.archivePortrait > button {
+  height: 34px;
+
+  margin:
+    0 12px 12px;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .13);
+
+  border-radius: 7px;
+
+  background:
+    rgba(216, 179, 107, .035);
+
+  color:
+    rgba(235, 220, 185, .54);
+
+  font-size: 6px;
+
+  letter-spacing:
+    .12em;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   BIOGRAFÍA / WIKIPEDIA
+========================================================= */
+
+.archiveBiography {
+  padding:
+    0 20px 18px;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+.archiveBiography
+.archiveCardLabel {
+  margin-left: -20px;
+}
+
+
+.archiveBiography h3 {
+  margin:
+    42px 0 7px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      30px,
+      2.4vw,
+      46px
+    );
+
+  line-height: .98;
+
+  font-weight: 400;
+
+  color:
+    rgba(241, 221, 184, .94);
+}
+
+
+.archiveMeta {
+  margin:
+    8px 0 3px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 11px;
+
+  color:
+    rgba(218, 180, 111, .72);
+}
+
+
+.archiveDiscipline {
+  font-size: 8px;
+
+  font-weight: 400;
+
+  letter-spacing:
+    .04em;
+
+  color:
+    rgba(235, 220, 185, .50);
+}
+
+
+.archiveIntro {
+  max-width: 620px;
+
+  margin:
+    30px 0 20px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    13px;
+
+  line-height: 1.7;
+
+  color:
+    rgba(235, 220, 185, .60);
+}
+
+
+.archiveRelated {
+  margin-top: auto;
+
+  padding-top: 16px;
+
+  border-top:
+    1px solid
+    rgba(216, 179, 107, .08);
+}
+
+
+.archiveRelated > span {
+  display: block;
+
+  margin-bottom: 9px;
+
+  font-size: 6px;
+
+  letter-spacing:
+    .14em;
+
+  color:
+    rgba(216, 179, 107, .47);
+}
+
+
+.archiveRelated > div {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+}
+
+
+.archiveRelated button {
+  padding:
+    5px 8px;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .08);
+
+  border-radius: 999px;
+
+  background:
+    rgba(216, 179, 107, .035);
+
+  color:
+    rgba(235, 220, 185, .48);
+
+  cursor: pointer;
+
+  font-size: 7px;
+}
+
+
+/* =========================================================
+   DATOS CURIOSOS
+========================================================= */
+
+.archiveCuriosities {
+  display: flex;
+
+  flex-direction: column;
+
+  padding-bottom: 12px;
+}
+
+
+.archiveCuriosityList {
+  flex: 1;
+
+  padding:
+    8px 12px;
+}
+
+
+.archiveCuriosityList article {
+  display: grid;
+
+  grid-template-columns:
+    30px 1fr;
+
+  gap: 9px;
+
+  padding:
+    11px 0;
+
+  border-bottom:
+    1px solid
+    rgba(216, 179, 107, .07);
+}
+
+
+.archiveCuriosityList article > span {
+  width: 27px;
+  height: 27px;
+
+  display: grid;
+
+  place-items: center;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .15);
+
+  border-radius: 50%;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 9px;
+
+  color:
+    rgba(222, 171, 72, .74);
+}
+
+
+.archiveCuriosityList p {
+  margin: 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  color:
+    rgba(235, 220, 185, .54);
+}
+
+
+.archiveNextTopic {
+  height: 36px;
+
+  margin:
+    5px 12px 0;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .16);
+
+  border-radius: 7px;
+
+  background:
+    rgba(216, 179, 107, .04);
+
+  color:
+    rgba(235, 220, 185, .62);
+
+  cursor: pointer;
+
+  font-size: 7px;
+
+  letter-spacing:
+    .12em;
+}
+
+
+/* =========================================================
+   FOOTER DEL ARCHIVO
+========================================================= */
+
+.archiveFooter {
+  min-height: 36px;
+
+  padding:
+    0 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content:
+    space-between;
+
+  gap: 20px;
+
+  border-top:
+    1px solid
+    rgba(216, 179, 107, .08);
+
+  font-size: 5px;
+
+  letter-spacing:
+    .12em;
+
+  color:
+    rgba(216, 179, 107, .30);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1250px) {
+
+  .universalTool {
+    grid-template-columns:
+      minmax(280px, .7fr)
+      minmax(580px, 1.3fr)
+      !important;
+  }
+
+  .archiveHeroGrid {
+    grid-template-columns:
+      .72fr
+      1.1fr;
+  }
+
+  .archiveCuriosities {
+    grid-column:
+      1 / -1;
+  }
+}
+
+
+@media (max-width: 950px) {
+
+  .universalTool {
+    grid-template-columns:
+      1fr !important;
+  }
+
+  .universalOrganismStage {
+    transform: none;
+  }
+
+  .archiveHeroGrid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .archiveCuriosities {
+    grid-column:
+      auto;
+  }
+}
+
+/* =========================================================
+   LEGIBILIDAD · CUADROS INFERIORES
+========================================================= */
+
+/* títulos principales */
+.compactDialogue h2,
+.compactDeposit h2,
+.compactPublicWall h2 {
+  font-size: 24px !important;
+  line-height: 1.15 !important;
+}
+
+/* cejas: DIÁLOGO / MEMORIA COLECTIVA / EN TIEMPO REAL */
+.compactDialogue .sectionEyebrow,
+.compactDeposit .sectionEyebrow,
+.compactPublicWall .sectionEyebrow {
+  font-size: 10px !important;
+  letter-spacing: .16em !important;
+}
+
+/* pedir la palabra */
+.compactQueuePerson strong {
+  font-size: 14px !important;
+}
+
+.compactQueuePerson small,
+.compactQueuePerson > span {
+  font-size: 10px !important;
+}
+
+.compactActions button {
+  font-size: 11px !important;
+}
+
+/* depósito */
+.compactWords span {
+  font-size: 10px !important;
+  padding: 5px 8px !important;
+}
+
+.compactWordForm input {
+  font-size: 15px !important;
+}
+
+.compactWordForm button {
+  font-size: 11px !important;
+}
+
+/* chat */
+.compactWallMessages strong {
+  font-size: 12px !important;
+}
+
+.compactWallMessages header span {
+  font-size: 9px !important;
+}
+
+.compactWallMessages p {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.compactWallForm textarea {
+  font-size: 12px !important;
+}
+
+.compactWallForm button {
+  font-size: 11px !important;
+}
+
+/* contadores */
+.counter {
+  font-size: 14px !important;
+}
+
+/* =========================================================
+   LEGIBILIDAD FUERTE · BLOQUES INFERIORES
+========================================================= */
+
+/* PEDIR LA PALABRA */
+.compactDialogue h2 {
+  font-size: 28px !important;
+  line-height: 1.1 !important;
+}
+
+.compactDialogue .sectionEyebrow {
+  font-size: 11px !important;
+}
+
+.compactQueuePerson strong {
+  font-size: 16px !important;
+}
+
+.compactQueuePerson small,
+.compactQueuePerson > span {
+  font-size: 12px !important;
+}
+
+.compactActions button {
+  font-size: 13px !important;
+  min-height: 40px !important;
+}
+
+
+/* DEPOSITAR UNA PALABRA */
+.compactDeposit h2 {
+  font-size: 28px !important;
+  line-height: 1.1 !important;
+}
+
+.compactDeposit .sectionEyebrow {
+  font-size: 11px !important;
+}
+
+.compactWords span {
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+}
+
+.compactWordForm input {
+  font-size: 18px !important;
+  height: 42px !important;
+}
+
+.compactWordForm button {
+  font-size: 13px !important;
+  min-height: 42px !important;
+}
+
+.counter {
+  font-size: 16px !important;
+}

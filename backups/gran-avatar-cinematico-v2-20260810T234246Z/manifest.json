@@ -1,0 +1,63 @@
+{
+  "version": "2.0.0-experimental",
+  "createdAt": "2026-08-10T23:42:46.482Z",
+  "targetDirectory": "/Users/josebalonaveiro/poema-universal",
+  "files": [
+    {
+      "path": "app/poema-universal/gran-avatar/GranAvatarExperience.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/avatarConfig.ts",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/AvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/CinematicAvatarBody.tsx",
+      "existed": false
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/LiveAvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/OrganismAvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/PoeticOrganism.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/gran-avatar.module.css",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/lib/avatarVoiceSignal.ts",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/types.ts",
+      "existed": true
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/cinematic/avatar-acoge.mp4",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/cinematic/avatar-habla.mp4",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/cinematic/avatar-reposo.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/organism-portrait.webp",
+      "existed": true
+    }
+  ]
+}

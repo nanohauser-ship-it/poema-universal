@@ -1,0 +1,2734 @@
+/* =========================================================
+   EL CORO DE LA TIERRA
+   MONUMENTO SONORO UNIVERSAL
+   POEMA UNIVERSAL · 2026
+
+   DIRECCIÓN:
+   obra museística / planetario humano / altar sonoro
+========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+.museum-room {
+  --black: #030302;
+  --black-soft: #090806;
+  --black-warm: #0e0b06;
+
+  --gold: #d8a64b;
+  --gold-light: #f1d090;
+  --gold-bright: #fff1c4;
+  --gold-dark: #72501d;
+
+  --line: rgba(216, 166, 75, 0.24);
+  --line-soft: rgba(216, 166, 75, 0.11);
+
+  --paper: #f0dfbc;
+  --muted: rgba(232, 210, 167, 0.54);
+
+  --serif:
+    "Cormorant Garamond",
+    "Times New Roman",
+    Georgia,
+    serif;
+
+  --sans:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+
+/* =========================================================
+   SALA
+========================================================= */
+
+.coro-room.museum-room {
+  position: relative;
+
+  width: 100%;
+  min-height: 100svh;
+  height: 100svh;
+
+  overflow: hidden;
+
+  color: var(--paper);
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(90, 58, 18, 0.18) 0%,
+      rgba(24, 17, 8, 0.12) 28%,
+      rgba(3, 3, 2, 0.96) 68%
+    ),
+    #020201;
+
+  isolation: isolate;
+
+  font-family: var(--sans);
+}
+
+.museum-room,
+.museum-room * {
+  box-sizing: border-box;
+}
+
+.museum-room button,
+.museum-room a,
+.museum-room input,
+.museum-room textarea {
+  font: inherit;
+}
+
+
+/* =========================================================
+   OSCURIDAD Y PROFUNDIDAD
+========================================================= */
+
+.museum-darkness {
+  position: absolute;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 18%,
+      rgba(199, 139, 45, 0.06),
+      transparent 37%
+    ),
+    radial-gradient(
+      ellipse at 50% 72%,
+      rgba(173, 113, 30, 0.08),
+      transparent 47%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.98),
+      rgba(10, 8, 4, 0.72) 18%,
+      rgba(9, 7, 4, 0.39) 50%,
+      rgba(10, 8, 4, 0.72) 82%,
+      rgba(0, 0, 0, 0.98)
+    );
+}
+
+
+/* =========================================================
+   BÓVEDAS
+========================================================= */
+
+.museum-vault {
+  position: absolute;
+  left: 50%;
+  top: -49vh;
+
+  width: 122vw;
+  height: 105vh;
+
+  border-radius: 50%;
+
+  transform: translateX(-50%);
+
+  pointer-events: none;
+  z-index: -16;
+}
+
+.vault-one {
+  border:
+    1px solid
+    rgba(200, 147, 56, 0.13);
+
+  box-shadow:
+    inset 0 -1px 0 rgba(255, 218, 147, 0.07),
+    0 0 120px rgba(113, 73, 22, 0.08);
+}
+
+.vault-two {
+  top: -44vh;
+
+  width: 97vw;
+  height: 91vh;
+
+  border:
+    1px solid
+    rgba(209, 158, 69, 0.08);
+}
+
+
+/* =========================================================
+   COLUMNAS ARQUITECTÓNICAS
+========================================================= */
+
+.museum-columns {
+  position: absolute;
+  inset: 0;
+
+  z-index: -15;
+
+  display: flex;
+  justify-content: space-between;
+
+  padding: 0 3.8vw;
+
+  pointer-events: none;
+}
+
+.museum-columns span {
+  position: relative;
+
+  display: block;
+
+  width: 1px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(218, 169, 83, 0.03) 9%,
+      rgba(218, 169, 83, 0.15) 34%,
+      rgba(218, 169, 83, 0.08) 77%,
+      transparent 100%
+    );
+
+  box-shadow:
+    0 0 30px rgba(208, 147, 55, 0.08);
+}
+
+.museum-columns span::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 16%;
+
+  width: 9vw;
+  height: 64vh;
+
+  transform: translateX(-50%);
+
+  border-left:
+    1px solid
+    rgba(216, 166, 75, 0.035);
+
+  border-right:
+    1px solid
+    rgba(216, 166, 75, 0.025);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(216, 166, 75, 0.018),
+      transparent
+    );
+}
+
+
+/* =========================================================
+   RAYOS DE LUZ
+========================================================= */
+
+.museum-rays {
+  position: absolute;
+  inset: 0;
+
+  z-index: -12;
+
+  pointer-events: none;
+}
+
+.museum-rays span {
+  position: absolute;
+
+  top: -8vh;
+
+  width: 8vw;
+  height: 85vh;
+
+  opacity: 0.19;
+
+  filter: blur(12px);
+
+  transform-origin: top center;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(248, 204, 120, 0.22),
+      rgba(198, 127, 35, 0.06) 44%,
+      transparent 84%
+    );
+}
+
+.museum-rays span:nth-child(1) {
+  left: 10%;
+  transform: rotate(7deg);
+}
+
+.museum-rays span:nth-child(2) {
+  left: 29%;
+  transform: rotate(3deg);
+  opacity: 0.1;
+}
+
+.museum-rays span:nth-child(3) {
+  left: 46%;
+  width: 12vw;
+  opacity: 0.17;
+}
+
+.museum-rays span:nth-child(4) {
+  right: 29%;
+  transform: rotate(-3deg);
+  opacity: 0.1;
+}
+
+.museum-rays span:nth-child(5) {
+  right: 10%;
+  transform: rotate(-7deg);
+}
+
+
+/* =========================================================
+   POLVO ATMOSFÉRICO
+========================================================= */
+
+.museum-dust {
+  position: absolute;
+  inset: 0;
+
+  z-index: -10;
+  pointer-events: none;
+
+  opacity: 0.36;
+
+  background-image:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(255, 222, 155, 0.48) 0 0.6px,
+      transparent 0.8px
+    ),
+    radial-gradient(
+      circle at 40% 55%,
+      rgba(255, 210, 125, 0.35) 0 0.7px,
+      transparent 0.9px
+    ),
+    radial-gradient(
+      circle at 77% 28%,
+      rgba(255, 221, 150, 0.4) 0 0.5px,
+      transparent 0.8px
+    );
+
+  background-size:
+    83px 91px,
+    117px 131px,
+    149px 113px;
+
+  animation:
+    museumDust 24s linear infinite;
+}
+
+
+/* =========================================================
+   HORIZONTE
+========================================================= */
+
+.museum-horizon {
+  position: absolute;
+
+  left: 5vw;
+  right: 5vw;
+  bottom: 20vh;
+
+  height: 1px;
+
+  z-index: -8;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(213, 161, 72, 0.12),
+      rgba(236, 189, 99, 0.35),
+      rgba(213, 161, 72, 0.12),
+      transparent
+    );
+
+  box-shadow:
+    0 0 24px rgba(204, 137, 43, 0.12);
+}
+
+
+/* =========================================================
+   SUELO
+========================================================= */
+
+.museum-floor {
+  position: absolute;
+
+  left: -10vw;
+  right: -10vw;
+  bottom: -25vh;
+
+  height: 52vh;
+
+  z-index: -9;
+
+  transform:
+    perspective(850px)
+    rotateX(67deg);
+
+  transform-origin: center top;
+
+  opacity: 0.52;
+
+  background:
+    repeating-radial-gradient(
+      ellipse at center,
+      rgba(210, 154, 64, 0.08) 0 1px,
+      transparent 1px 65px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10vw,
+      rgba(207, 153, 67, 0.055) 10vw calc(10vw + 1px)
+    );
+}
+
+.museum-floor-glow {
+  position: absolute;
+
+  left: 50%;
+  bottom: -12vh;
+
+  width: 70vw;
+  height: 28vh;
+
+  transform: translateX(-50%);
+
+  z-index: -7;
+  pointer-events: none;
+
+  filter: blur(38px);
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(220, 153, 53, 0.18),
+      rgba(119, 73, 15, 0.06) 45%,
+      transparent 72%
+    );
+}
+
+
+/* =========================================================
+   NAVEGACIÓN
+========================================================= */
+
+.museum-navigation {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 40;
+
+  height: 68px;
+
+  padding: 0 2.3vw;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  border-bottom:
+    1px solid
+    rgba(216, 166, 75, 0.11);
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(2, 2, 1, 0.72),
+      transparent
+    );
+}
+
+.museum-brand {
+  justify-self: start;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+
+  color:
+    rgba(239, 213, 163, 0.64);
+
+  text-decoration: none;
+
+  font-family: var(--serif);
+
+  font-size: 10px;
+  letter-spacing: 0.34em;
+
+  transition:
+    color 300ms ease;
+}
+
+.museum-brand:hover {
+  color: var(--gold-light);
+}
+
+.museum-brand-symbol {
+  font-size: 9px;
+
+  color:
+    rgba(237, 188, 92, 0.8);
+
+  filter:
+    drop-shadow(
+      0 0 7px
+      rgba(225, 158, 57, 0.52)
+    );
+}
+
+.museum-room-number {
+  justify-self: center;
+
+  color:
+    rgba(215, 178, 109, 0.4);
+
+  font-size: 8px;
+  letter-spacing: 0.44em;
+}
+
+.museum-add-voice {
+  justify-self: end;
+
+  border: 0;
+  background: transparent;
+
+  padding: 10px 0;
+
+  color:
+    rgba(233, 204, 150, 0.55);
+
+  cursor: pointer;
+
+  font-size: 8px;
+  letter-spacing: 0.32em;
+
+  transition:
+    color 250ms ease,
+    text-shadow 250ms ease;
+}
+
+.museum-add-voice span {
+  margin-right: 8px;
+
+  color: var(--gold);
+}
+
+.museum-add-voice:hover {
+  color: var(--gold-light);
+
+  text-shadow:
+    0 0 12px
+    rgba(222, 164, 63, 0.28);
+}
+
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.museum-title {
+  position: absolute;
+
+  top: 8.4vh;
+  left: 50%;
+
+  z-index: 18;
+
+  width: min(850px, 68vw);
+
+  transform: translateX(-50%);
+
+  text-align: center;
+  pointer-events: none;
+}
+
+.museum-kicker {
+  margin: 0 0 8px;
+
+  color:
+    rgba(218, 171, 87, 0.58);
+
+  font-size:
+    clamp(7px, 0.53vw, 10px);
+
+  letter-spacing: 0.53em;
+}
+
+.museum-title h1 {
+  margin: 0;
+
+  color:
+    rgba(242, 221, 182, 0.94);
+
+  font-family: var(--serif);
+  font-weight: 400;
+
+  font-size:
+    clamp(38px, 4.25vw, 72px);
+
+  line-height: 0.78;
+
+  letter-spacing: 0.12em;
+
+  text-shadow:
+    0 0 30px
+    rgba(212, 161, 74, 0.08);
+}
+
+.museum-title h1 span {
+  display: block;
+
+  margin-top: 0.33em;
+
+  font-size: 0.72em;
+
+  letter-spacing: 0.24em;
+}
+
+.museum-subtitle {
+  margin: 17px 0 0;
+
+  color:
+    rgba(229, 204, 158, 0.61);
+
+  font-family: var(--serif);
+  font-style: italic;
+
+  font-size:
+    clamp(12px, 1vw, 17px);
+
+  letter-spacing: 0.08em;
+}
+
+.museum-title-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+
+  margin-top: 11px;
+
+  color:
+    rgba(224, 174, 82, 0.52);
+
+  font-size: 6px;
+}
+
+.museum-title-mark span {
+  width: 32px;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(218, 166, 75, 0.4)
+    );
+}
+
+.museum-title-mark span:last-child {
+  transform: scaleX(-1);
+}
+
+
+/* =========================================================
+   MONUMENTO CENTRAL
+========================================================= */
+
+.monument-stage {
+  position: absolute;
+
+  left: 50%;
+  top: 20.5vh;
+
+  width:
+    min(76vw, 1120px);
+
+  height: 65vh;
+
+  transform:
+    translateX(-50%);
+
+  z-index: 10;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   ESFERA
+========================================================= */
+
+.museum-sphere-stage {
+  position: absolute;
+
+  left: 50%;
+  top: 0;
+
+  width:
+    min(68vw, 950px);
+
+  height:
+    min(68vw, 950px);
+
+  max-height: 68vh;
+
+  transform:
+    translateX(-50%);
+
+  z-index: 7;
+
+  pointer-events: auto;
+}
+
+.voice-sphere {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  cursor: grab;
+  touch-action: none;
+
+  filter:
+    drop-shadow(
+      0 0 25px
+      rgba(214, 151, 53, 0.12)
+    );
+}
+
+.voice-sphere:active {
+  cursor: grabbing;
+}
+
+
+/* =========================================================
+   AURA PLANETARIA
+========================================================= */
+
+.planet-aura {
+  position: absolute;
+
+  left: 50%;
+  top: 40%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+.aura-outer {
+  width: min(70vw, 980px);
+  aspect-ratio: 1;
+
+  opacity: 0.26;
+
+  filter: blur(28px);
+
+  background:
+    radial-gradient(
+      circle,
+      transparent 46%,
+      rgba(223, 156, 50, 0.10) 57%,
+      transparent 73%
+    );
+
+  animation:
+    auraBreath 8s ease-in-out infinite;
+}
+
+.aura-inner {
+  width: min(57vw, 800px);
+  aspect-ratio: 1;
+
+  opacity: 0.25;
+
+  box-shadow:
+    0 0 85px
+      rgba(213, 151, 56, 0.11),
+    inset 0 0 70px
+      rgba(233, 183, 93, 0.06);
+}
+
+
+/* =========================================================
+   ÓRBITAS EXTERNAS
+========================================================= */
+
+.planet-apparatus {
+  position: absolute;
+  inset: -4vh -4vw;
+
+  z-index: 8;
+  pointer-events: none;
+
+  perspective: 1100px;
+}
+
+.planet-orbit {
+  position: absolute;
+
+  left: 50%;
+  top: 41%;
+
+  width: 86%;
+  height: 38%;
+
+  border:
+    1px solid
+    rgba(228, 178, 87, 0.18);
+
+  border-radius: 50%;
+
+  transform-origin: center;
+
+  box-shadow:
+    0 0 18px
+    rgba(205, 140, 40, 0.035);
+}
+
+.orbit-a {
+  transform:
+    translate(-50%, -50%)
+    rotate(-8deg);
+
+  animation:
+    orbitA 34s linear infinite;
+}
+
+.orbit-b {
+  width: 76%;
+  height: 47%;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(26deg);
+
+  border-color:
+    rgba(228, 178, 87, 0.12);
+
+  animation:
+    orbitB 45s linear infinite reverse;
+}
+
+.orbit-c {
+  width: 67%;
+  height: 53%;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(-32deg);
+
+  opacity: 0.66;
+
+  animation:
+    orbitC 56s linear infinite;
+}
+
+.orbit-d {
+  width: 94%;
+  height: 29%;
+
+  transform:
+    translate(-50%, -50%)
+    rotate(7deg);
+
+  opacity: 0.42;
+
+  animation:
+    orbitD 63s linear infinite reverse;
+}
+
+
+/* =========================================================
+   MERIDIANOS
+========================================================= */
+
+.planet-meridian {
+  position: absolute;
+
+  left: 50%;
+  top: 41%;
+
+  width: 49%;
+  height: 64%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border:
+    1px solid
+    rgba(230, 181, 93, 0.07);
+
+  border-radius: 50%;
+}
+
+.meridian-a {
+  transform:
+    translate(-50%, -50%)
+    rotate(12deg);
+}
+
+.meridian-b {
+  transform:
+    translate(-50%, -50%)
+    rotate(68deg);
+
+  opacity: 0.6;
+}
+
+
+/* =========================================================
+   SOMBRA ESFERA
+========================================================= */
+
+.sphere-shadow {
+  position: absolute;
+
+  left: 50%;
+  bottom: 5%;
+
+  width: 45%;
+  height: 5%;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background:
+    rgba(203, 139, 41, 0.15);
+
+  filter: blur(21px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   INDICACIÓN GIRAR
+========================================================= */
+
+.museum-drag-hint {
+  position: absolute;
+
+  left: 50%;
+  bottom: 2.4vh;
+
+  z-index: 12;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  transform:
+    translateX(-50%);
+
+  color:
+    rgba(221, 186, 119, 0.33);
+
+  font-size: 6px;
+  letter-spacing: 0.42em;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+.drag-line {
+  width: 26px;
+  height: 1px;
+
+  background:
+    rgba(212, 158, 65, 0.23);
+}
+
+
+/* =========================================================
+   CARTELA CURATORIAL IZQUIERDA
+========================================================= */
+
+.museum-manifesto {
+  position: absolute;
+
+  left: 4.2vw;
+  top: 39%;
+
+  z-index: 18;
+
+  width:
+    clamp(135px, 12vw, 205px);
+
+  color:
+    rgba(229, 205, 157, 0.63);
+
+  pointer-events: none;
+}
+
+.manifesto-line {
+  width: 26px;
+  height: 1px;
+
+  margin-bottom: 19px;
+
+  background: var(--gold);
+
+  opacity: 0.58;
+}
+
+.manifesto-label {
+  margin: 0 0 12px;
+
+  color:
+    rgba(211, 159, 68, 0.55);
+
+  font-size: 6px;
+  letter-spacing: 0.41em;
+}
+
+.museum-manifesto h2 {
+  margin: 0;
+
+  font-family: var(--serif);
+  font-weight: 400;
+
+  color:
+    rgba(237, 216, 177, 0.8);
+
+  font-size:
+    clamp(20px, 1.7vw, 31px);
+
+  letter-spacing: 0.12em;
+
+  line-height: 0.95;
+}
+
+.museum-manifesto h2 span {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 0.65em;
+  letter-spacing: 0.21em;
+}
+
+.manifesto-copy {
+  margin: 18px 0 22px;
+
+  max-width: 155px;
+
+  color:
+    rgba(226, 205, 166, 0.38);
+
+  font-family: var(--serif);
+  font-style: italic;
+
+  font-size:
+    clamp(9px, 0.7vw, 12px);
+
+  line-height: 1.55;
+}
+
+.museum-statistics {
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.museum-statistics div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.museum-statistics dt {
+  min-width: 24px;
+
+  color:
+    rgba(235, 187, 97, 0.74);
+
+  font-family: var(--serif);
+
+  font-size:
+    clamp(13px, 1vw, 17px);
+}
+
+.museum-statistics dd {
+  margin: 0;
+
+  color:
+    rgba(218, 192, 144, 0.35);
+
+  font-size: 5px;
+  letter-spacing: 0.35em;
+}
+
+
+/* =========================================================
+   CARTELA DE VOZ DERECHA
+========================================================= */
+
+.museum-voice-plaque {
+  position: absolute;
+
+  right: 4vw;
+  top: 40%;
+
+  z-index: 25;
+
+  width:
+    clamp(220px, 18vw, 310px);
+
+  min-height: 154px;
+
+  padding:
+    clamp(16px, 1.4vw, 23px);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(9, 7, 4, 0.76),
+      rgba(2, 2, 1, 0.86)
+    );
+
+  border:
+    1px solid
+    rgba(213, 161, 73, 0.31);
+
+  box-shadow:
+    0 0 50px
+      rgba(0, 0, 0, 0.55),
+    inset 0 0 42px
+      rgba(214, 155, 56, 0.025);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition:
+    border-color 300ms ease,
+    background 300ms ease;
+}
+
+.museum-voice-plaque::before {
+  content: "";
+
+  position: absolute;
+
+  top: -1px;
+  left: 23px;
+
+  width: 34px;
+  height: 1px;
+
+  background:
+    var(--gold-light);
+
+  box-shadow:
+    0 0 12px
+    rgba(235, 184, 88, 0.65);
+
+  opacity: 0.75;
+}
+
+.plaque-corner {
+  position: absolute;
+
+  width: 13px;
+  height: 13px;
+
+  pointer-events: none;
+}
+
+.plaque-corner-a {
+  top: -1px;
+  right: -1px;
+
+  border-top:
+    1px solid
+    rgba(244, 200, 113, 0.68);
+
+  border-right:
+    1px solid
+    rgba(244, 200, 113, 0.68);
+}
+
+.plaque-corner-b {
+  left: -1px;
+  bottom: -1px;
+
+  border-left:
+    1px solid
+    rgba(244, 200, 113, 0.44);
+
+  border-bottom:
+    1px solid
+    rgba(244, 200, 113, 0.44);
+}
+
+.plaque-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.plaque-eyebrow {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color:
+    rgba(215, 160, 67, 0.61);
+
+  font-size: 6px;
+  letter-spacing: 0.35em;
+}
+
+.plaque-header h2,
+.museum-empty h2 {
+  margin: 0;
+
+  color:
+    rgba(243, 222, 180, 0.91);
+
+  font-family: var(--serif);
+  font-weight: 400;
+
+  font-size:
+    clamp(18px, 1.45vw, 27px);
+
+  line-height: 1.06;
+}
+
+.plaque-origin {
+  margin: 6px 0 0;
+
+  color:
+    rgba(225, 196, 140, 0.47);
+
+  font-family: var(--serif);
+  font-style: italic;
+
+  font-size:
+    clamp(8px, 0.64vw, 11px);
+
+  letter-spacing: 0.04em;
+}
+
+.museum-play {
+  flex: 0 0 auto;
+
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 39px;
+  height: 39px;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(229, 176, 80, 0.48);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(219, 160, 63, 0.08),
+      rgba(0, 0, 0, 0.3)
+    );
+
+  color: var(--gold-light);
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 0 5px
+      rgba(214, 153, 50, 0.02);
+
+  transition:
+    transform 250ms ease,
+    border-color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.museum-play:hover {
+  transform: scale(1.07);
+
+  border-color:
+    rgba(248, 211, 137, 0.82);
+
+  box-shadow:
+    0 0 24px
+      rgba(222, 160, 56, 0.13);
+}
+
+.play-icon {
+  width: 0;
+  height: 0;
+
+  margin-left: 2px;
+
+  border-top:
+    4px solid transparent;
+
+  border-bottom:
+    4px solid transparent;
+
+  border-left:
+    7px solid
+    rgba(255, 229, 176, 0.9);
+}
+
+.pause-icon {
+  width: 8px;
+  height: 9px;
+
+  border-left:
+    2px solid
+    rgba(255, 229, 176, 0.9);
+
+  border-right:
+    2px solid
+    rgba(255, 229, 176, 0.9);
+}
+
+.plaque-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 14px 0 11px;
+
+  color:
+    rgba(227, 175, 80, 0.44);
+
+  font-size: 5px;
+}
+
+.plaque-divider span {
+  flex: 1;
+  height: 1px;
+
+  background:
+    rgba(216, 166, 75, 0.13);
+}
+
+.plaque-divider i {
+  font-style: normal;
+}
+
+
+/* =========================================================
+   WAVEFORM
+========================================================= */
+
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  height: 30px;
+
+  opacity: 0.46;
+
+  overflow: hidden;
+}
+
+.waveform span {
+  flex: 1;
+
+  min-width: 1px;
+  max-width: 2px;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(163, 105, 26, 0.38),
+      rgba(235, 183, 88, 0.88)
+    );
+
+  transform-origin: center;
+
+  transition:
+    opacity 250ms ease;
+}
+
+.waveform.is-active {
+  opacity: 0.94;
+}
+
+.waveform.is-active span {
+  animation:
+    voiceWave
+    700ms ease-in-out
+    infinite alternate;
+}
+
+
+/* =========================================================
+   PROGRESO AUDIO
+========================================================= */
+
+.museum-audio-progress {
+  display: grid;
+
+  grid-template-columns:
+    auto 1fr auto;
+
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 6px;
+
+  color:
+    rgba(218, 184, 119, 0.37);
+
+  font-size: 6px;
+}
+
+.museum-audio-progress input {
+  width: 100%;
+  height: 1px;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background:
+    rgba(217, 164, 73, 0.16);
+
+  outline: none;
+}
+
+.museum-audio-progress input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--gold-light);
+
+  box-shadow:
+    0 0 8px
+      rgba(239, 184, 82, 0.55);
+
+  cursor: pointer;
+}
+
+.museum-quote {
+  margin:
+    15px 0 0;
+
+  padding:
+    12px 0 0;
+
+  border-top:
+    1px solid
+    rgba(215, 160, 66, 0.1);
+
+  color:
+    rgba(232, 209, 164, 0.54);
+
+  font-family: var(--serif);
+  font-style: italic;
+
+  font-size:
+    clamp(10px, 0.75vw, 13px);
+
+  line-height: 1.5;
+}
+
+.plaque-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 15px;
+}
+
+.plaque-actions button {
+  border: 0;
+  background: transparent;
+
+  padding: 0;
+
+  color:
+    rgba(218, 178, 105, 0.4);
+
+  cursor: pointer;
+
+  font-size: 5px;
+  letter-spacing: 0.28em;
+
+  transition:
+    color 250ms ease;
+}
+
+.plaque-actions button:hover {
+  color:
+    rgba(244, 211, 149, 0.88);
+}
+
+.plaque-actions .museum-remove {
+  color:
+    rgba(174, 108, 79, 0.39);
+}
+
+
+/* =========================================================
+   CARTELA VACÍA / CARGANDO
+========================================================= */
+
+.museum-loading,
+.museum-empty {
+  color:
+    rgba(226, 203, 157, 0.52);
+}
+
+.museum-loading p,
+.museum-empty p {
+  margin: 11px 0;
+
+  font-family: var(--serif);
+  font-style: italic;
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.museum-empty button {
+  margin-top: 5px;
+
+  border: 0;
+  background: transparent;
+
+  padding: 0;
+
+  color:
+    rgba(227, 174, 79, 0.6);
+
+  cursor: pointer;
+
+  font-size: 6px;
+  letter-spacing: 0.25em;
+}
+
+
+/* =========================================================
+   INSCRIPCIÓN DERECHA
+========================================================= */
+
+.museum-remembrance {
+  position: absolute;
+
+  right: 4.5vw;
+  top: 72%;
+
+  z-index: 15;
+
+  width:
+    clamp(130px, 11vw, 190px);
+
+  text-align: right;
+
+  pointer-events: none;
+}
+
+.museum-remembrance > p {
+  margin: 0 0 4px;
+
+  color:
+    rgba(215, 161, 69, 0.4);
+
+  font-size: 5px;
+  letter-spacing: 0.37em;
+}
+
+.museum-remembrance h2 {
+  margin: 0;
+
+  color:
+    rgba(230, 205, 156, 0.55);
+
+  font-family: var(--serif);
+  font-weight: 400;
+
+  font-size:
+    clamp(13px, 1.1vw, 20px);
+
+  letter-spacing: 0.13em;
+}
+
+.remembrance-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+
+  margin: 10px 0;
+}
+
+.remembrance-symbol span {
+  width: 20px;
+  height: 1px;
+
+  background:
+    rgba(213, 158, 64, 0.18);
+}
+
+.remembrance-symbol i {
+  width: 5px;
+  height: 5px;
+
+  border:
+    1px solid
+    rgba(222, 171, 81, 0.36);
+
+  border-radius: 50%;
+}
+
+.museum-remembrance blockquote {
+  margin: 0;
+
+  color:
+    rgba(228, 207, 168, 0.28);
+
+  font-family: var(--serif);
+  font-style: italic;
+
+  font-size:
+    clamp(8px, 0.65vw, 11px);
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   ALTAR SONORO
+========================================================= */
+
+.sonic-altar {
+  position: absolute;
+
+  left: 50%;
+  bottom: 2.4vh;
+
+  z-index: 20;
+
+  width:
+    min(48vw, 690px);
+
+  height: 15vh;
+
+  transform:
+    translateX(-50%);
+
+  pointer-events: none;
+}
+
+.altar-reflection {
+  position: absolute;
+
+  left: 50%;
+  bottom: -5vh;
+
+  width: 70%;
+  height: 15vh;
+
+  transform:
+    translateX(-50%);
+
+  border-radius: 50%;
+
+  opacity: 0.46;
+
+  filter: blur(23px);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(224, 157, 53, 0.17),
+      rgba(133, 82, 17, 0.04) 45%,
+      transparent 72%
+    );
+}
+
+.altar-rings {
+  position: absolute;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+}
+
+.altar-rings span {
+  position: absolute;
+
+  border:
+    1px solid
+    rgba(221, 164, 69, 0.17);
+
+  border-radius: 50%;
+}
+
+.altar-rings span:nth-child(1) {
+  width: 99%;
+  height: 58%;
+}
+
+.altar-rings span:nth-child(2) {
+  width: 85%;
+  height: 47%;
+}
+
+.altar-rings span:nth-child(3) {
+  width: 68%;
+  height: 36%;
+}
+
+.altar-rings span:nth-child(4) {
+  width: 48%;
+  height: 25%;
+}
+
+.altar-rings span:nth-child(5) {
+  width: 22%;
+  height: 11%;
+
+  border-color:
+    rgba(242, 200, 115, 0.52);
+
+  box-shadow:
+    0 0 20px
+      rgba(224, 153, 44, 0.18);
+}
+
+.altar-core {
+  position: absolute;
+
+  left: 50%;
+  top: 48%;
+
+  z-index: 2;
+
+  transform:
+    translate(-50%, -50%);
+
+  width: 70%;
+
+  text-align: center;
+
+  pointer-events: auto;
+}
+
+.altar-light {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 110%;
+  height: 80px;
+
+  transform:
+    translate(-50%, -50%);
+
+  z-index: -1;
+
+  filter: blur(30px);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(228, 161, 57, 0.13),
+      transparent 70%
+    );
+
+  animation:
+    altarBreath
+    6s ease-in-out infinite;
+}
+
+.museum-humanity-button {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+
+  min-width: 68%;
+
+  padding:
+    13px 22px;
+
+  border:
+    1px solid
+    rgba(224, 168, 73, 0.38);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(9, 6, 2, 0.66),
+      rgba(33, 21, 7, 0.45),
+      rgba(9, 6, 2, 0.66)
+    );
+
+  color:
+    rgba(246, 218, 164, 0.8);
+
+  cursor: pointer;
+
+  font-family: var(--serif);
+
+  font-size:
+    clamp(8px, 0.68vw, 12px);
+
+  letter-spacing: 0.25em;
+
+  box-shadow:
+    inset 0 0 20px
+      rgba(210, 143, 43, 0.04),
+    0 0 18px
+      rgba(204, 135, 33, 0.03);
+
+  transition:
+    color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.museum-humanity-button:hover {
+  color: #fff0c9;
+
+  border-color:
+    rgba(244, 200, 115, 0.72);
+
+  box-shadow:
+    inset 0 0 24px
+      rgba(221, 154, 49, 0.08),
+    0 0 25px
+      rgba(221, 154, 49, 0.12);
+
+  transform:
+    translateY(-1px);
+}
+
+.altar-star {
+  color:
+    rgba(233, 178, 79, 0.6);
+
+  font-size: 6px;
+}
+
+.altar-core > p {
+  margin: 8px 0 0;
+
+  color:
+    rgba(221, 181, 110, 0.25);
+
+  font-size: 5px;
+  letter-spacing: 0.37em;
+}
+
+
+/* =========================================================
+   FIRMA INFERIOR
+========================================================= */
+
+.museum-footer-inscription {
+  position: absolute;
+
+  left: 2.4vw;
+  bottom: 2.3vh;
+
+  z-index: 15;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color:
+    rgba(215, 175, 102, 0.24);
+
+  font-size: 5px;
+  letter-spacing: 0.31em;
+
+  pointer-events: none;
+}
+
+.museum-footer-inscription i {
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(222, 166, 69, 0.5);
+
+  box-shadow:
+    0 0 8px
+      rgba(222, 166, 69, 0.4);
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-toast {
+  position: fixed;
+
+  left: 50%;
+  bottom: 24px;
+
+  z-index: 300;
+
+  transform:
+    translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  max-width: min(480px, 90vw);
+
+  padding:
+    12px 16px;
+
+  border:
+    1px solid
+    rgba(181, 106, 82, 0.32);
+
+  background:
+    rgba(15, 8, 6, 0.96);
+
+  color:
+    rgba(241, 207, 191, 0.8);
+
+  font-size: 11px;
+
+  box-shadow:
+    0 15px 50px
+    rgba(0, 0, 0, 0.7);
+}
+
+.error-toast button {
+  border: 0;
+  background: transparent;
+
+  color:
+    rgba(255, 220, 201, 0.6);
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   MODAL ARCHIVO SONORO
+========================================================= */
+
+.studio-backdrop {
+  position: fixed;
+  inset: 0;
+
+  z-index: 500;
+
+  display: grid;
+  place-items: center;
+
+  padding: 4vh 4vw;
+
+  overflow-y: auto;
+
+  background:
+    rgba(0, 0, 0, 0.86);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.upload-studio {
+  position: relative;
+
+  width:
+    min(1000px, 92vw);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  border:
+    1px solid
+    rgba(211, 158, 70, 0.27);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15, 11, 6, 0.98),
+      rgba(4, 4, 3, 0.99)
+    );
+
+  box-shadow:
+    0 30px 100px
+      rgba(0, 0, 0, 0.9),
+    inset 0 0 80px
+      rgba(196, 128, 30, 0.02);
+
+  color:
+    rgba(234, 214, 177, 0.75);
+}
+
+.studio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 24px;
+
+  padding:
+    32px 34px 24px;
+
+  border-bottom:
+    1px solid
+    rgba(215, 161, 72, 0.12);
+}
+
+.studio-header .eyebrow {
+  margin: 0 0 8px;
+
+  color:
+    rgba(216, 161, 69, 0.55);
+
+  font-size: 7px;
+  letter-spacing: 0.39em;
+}
+
+.studio-header h2 {
+  margin: 0;
+
+  color:
+    rgba(243, 224, 190, 0.9);
+
+  font-family: var(--serif);
+  font-weight: 400;
+
+  font-size:
+    clamp(27px, 2.4vw, 40px);
+
+  letter-spacing: 0.04em;
+}
+
+.studio-header p {
+  margin:
+    8px 0 0;
+
+  color:
+    rgba(229, 208, 168, 0.42);
+
+  font-family: var(--serif);
+  font-style: italic;
+
+  font-size: 13px;
+}
+
+.close-button {
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  border:
+    1px solid
+    rgba(218, 163, 71, 0.2);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color:
+    rgba(232, 200, 142, 0.58);
+
+  cursor: pointer;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   DROP ZONE
+========================================================= */
+
+.drop-zone {
+  margin:
+    28px 34px;
+
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  border:
+    1px dashed
+    rgba(217, 164, 73, 0.27);
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(197, 127, 25, 0.05),
+      transparent 67%
+    );
+
+  color:
+    rgba(231, 210, 171, 0.46);
+
+  transition:
+    border-color 250ms ease,
+    background 250ms ease;
+}
+
+.drop-zone.is-dragging {
+  border-color:
+    rgba(242, 198, 112, 0.75);
+
+  background:
+    rgba(195, 126, 25, 0.08);
+}
+
+.drop-icon {
+  color:
+    rgba(229, 176, 80, 0.58);
+
+  font-size: 25px;
+}
+
+.drop-zone strong {
+  color:
+    rgba(241, 219, 179, 0.75);
+
+  font-family: var(--serif);
+  font-weight: 400;
+
+  font-size: 20px;
+}
+
+.drop-zone > span:not(.drop-icon) {
+  font-size: 10px;
+}
+
+.secondary-button,
+.primary-button {
+  border:
+    1px solid
+    rgba(218, 163, 71, 0.35);
+
+  background:
+    rgba(17, 12, 5, 0.5);
+
+  padding:
+    10px 17px;
+
+  color:
+    rgba(240, 210, 154, 0.7);
+
+  cursor: pointer;
+
+  font-size: 7px;
+  letter-spacing: 0.27em;
+
+  transition:
+    border-color 250ms ease,
+    color 250ms ease;
+}
+
+.secondary-button:hover,
+.primary-button:hover {
+  border-color:
+    rgba(244, 202, 121, 0.7);
+
+  color:
+    rgba(255, 231, 184, 0.92);
+}
+
+
+/* =========================================================
+   LISTA DE AUDIOS
+========================================================= */
+
+.draft-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding:
+    0 34px 28px;
+}
+
+.draft-card {
+  position: relative;
+
+  display: grid;
+  grid-template-columns:
+    42px 1fr auto;
+
+  gap: 18px;
+
+  padding:
+    20px;
+
+  border:
+    1px solid
+    rgba(213, 159, 68, 0.13);
+
+  background:
+    rgba(255, 255, 255, 0.01);
+}
+
+.draft-number {
+  color:
+    rgba(220, 165, 73, 0.48);
+
+  font-family: var(--serif);
+  font-size: 18px;
+}
+
+.file-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+
+  margin-bottom: 14px;
+}
+
+.file-line strong {
+  color:
+    rgba(239, 216, 175, 0.68);
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.file-line span {
+  color:
+    rgba(220, 195, 148, 0.32);
+
+  font-size: 8px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns:
+    1fr 1fr 1fr;
+
+  gap: 12px;
+}
+
+.field-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  color:
+    rgba(219, 184, 117, 0.42);
+
+  font-size: 6px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.field-grid input,
+.field-grid textarea {
+  width: 100%;
+
+  border: 0;
+  border-bottom:
+    1px solid
+    rgba(214, 160, 68, 0.18);
+
+  outline: none;
+
+  padding:
+    8px 0;
+
+  background: transparent;
+
+  color:
+    rgba(240, 222, 190, 0.78);
+
+  font-family: var(--serif);
+  font-size: 13px;
+
+  resize: vertical;
+}
+
+.field-grid input:focus,
+.field-grid textarea:focus {
+  border-bottom-color:
+    rgba(232, 183, 96, 0.62);
+}
+
+.excerpt-field {
+  grid-column:
+    1 / -1;
+}
+
+.remove-draft {
+  align-self: start;
+
+  border: 0;
+  background: transparent;
+
+  color:
+    rgba(182, 117, 92, 0.47);
+
+  cursor: pointer;
+
+  font-size: 16px;
+}
+
+.status-line {
+  margin:
+    11px 0 0;
+
+  color:
+    rgba(222, 188, 122, 0.5);
+
+  font-size: 9px;
+}
+
+.status-line.success {
+  color:
+    rgba(170, 199, 147, 0.66);
+}
+
+.status-line.error {
+  color:
+    rgba(211, 139, 112, 0.72);
+}
+
+
+/* =========================================================
+   FOOTER MODAL
+========================================================= */
+
+.studio-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  padding:
+    22px 34px 30px;
+
+  border-top:
+    1px solid
+    rgba(215, 161, 72, 0.1);
+}
+
+.studio-footer p {
+  margin: 0;
+
+  color:
+    rgba(228, 204, 160, 0.34);
+
+  font-size: 9px;
+}
+
+.primary-button:disabled {
+  opacity: 0.27;
+  cursor: default;
+}
+
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
+
+@keyframes museumDust {
+  from {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        -11px,
+        8px,
+        0
+      );
+  }
+
+  to {
+    transform:
+      translate3d(0, 0, 0);
+  }
+}
+
+@keyframes auraBreath {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform:
+      translate(-50%, -50%)
+      scale(0.98);
+  }
+
+  50% {
+    opacity: 0.34;
+    transform:
+      translate(-50%, -50%)
+      scale(1.035);
+  }
+}
+
+@keyframes altarBreath {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes voiceWave {
+  from {
+    transform:
+      scaleY(0.55);
+  }
+
+  to {
+    transform:
+      scaleY(1.25);
+  }
+}
+
+@keyframes orbitA {
+  from {
+    transform:
+      translate(-50%, -50%)
+      rotate(-8deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      translate(-50%, -50%)
+      rotate(-8deg)
+      rotateZ(360deg);
+  }
+}
+
+@keyframes orbitB {
+  from {
+    transform:
+      translate(-50%, -50%)
+      rotate(26deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      translate(-50%, -50%)
+      rotate(26deg)
+      rotateZ(360deg);
+  }
+}
+
+@keyframes orbitC {
+  from {
+    transform:
+      translate(-50%, -50%)
+      rotate(-32deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      translate(-50%, -50%)
+      rotate(-32deg)
+      rotateZ(360deg);
+  }
+}
+
+@keyframes orbitD {
+  from {
+    transform:
+      translate(-50%, -50%)
+      rotate(7deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      translate(-50%, -50%)
+      rotate(7deg)
+      rotateZ(360deg);
+  }
+}
+
+
+/* =========================================================
+   PANTALLAS MEDIANAS
+========================================================= */
+
+@media (max-width: 1180px) {
+  .museum-manifesto {
+    left: 2.4vw;
+
+    opacity: 0.72;
+  }
+
+  .museum-voice-plaque {
+    right: 2.4vw;
+  }
+
+  .museum-remembrance {
+    display: none;
+  }
+
+  .monument-stage {
+    width: 82vw;
+  }
+}
+
+
+/* =========================================================
+   MÓVIL / TABLET
+========================================================= */
+
+@media (max-width: 820px) {
+  .coro-room.museum-room {
+    min-height: 100svh;
+    height: auto;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding-bottom: 180px;
+  }
+
+  .museum-navigation {
+    height: 56px;
+
+    padding:
+      0 16px;
+  }
+
+  .museum-room-number {
+    display: none;
+  }
+
+  .museum-navigation {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .museum-brand {
+    font-size: 8px;
+  }
+
+  .museum-title {
+    position: relative;
+
+    top: auto;
+    left: auto;
+
+    width: calc(100% - 38px);
+
+    transform: none;
+
+    margin:
+      92px auto 0;
+  }
+
+  .museum-title h1 {
+    font-size:
+      clamp(37px, 10vw, 56px);
+  }
+
+  .museum-title h1 span {
+    margin-top: 0.4em;
+  }
+
+  .monument-stage {
+    position: relative;
+
+    left: auto;
+    top: auto;
+
+    width: 100%;
+    height: 60vh;
+
+    min-height: 500px;
+
+    transform: none;
+
+    margin-top: 12px;
+  }
+
+  .museum-sphere-stage {
+    width: 95vw;
+    height: 95vw;
+
+    max-height: none;
+
+    top: 5vh;
+  }
+
+  .planet-apparatus {
+    inset:
+      0 -18vw;
+  }
+
+  .museum-manifesto {
+    display: none;
+  }
+
+  .museum-remembrance {
+    display: none;
+  }
+
+  .museum-voice-plaque {
+    position: relative;
+
+    top: auto;
+    right: auto;
+
+    width:
+      calc(100% - 36px);
+
+    margin:
+      -15px auto 0;
+  }
+
+  .sonic-altar {
+    position: relative;
+
+    left: auto;
+    bottom: auto;
+
+    width: 94vw;
+    height: 120px;
+
+    transform: none;
+
+    margin:
+      34px auto 0;
+  }
+
+  .museum-humanity-button {
+    min-width: 88%;
+
+    font-size: 8px;
+  }
+
+  .museum-footer-inscription {
+    position: relative;
+
+    left: auto;
+    bottom: auto;
+
+    justify-content: center;
+
+    margin-top: 22px;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .excerpt-field {
+    grid-column: auto;
+  }
+
+  .draft-card {
+    grid-template-columns:
+      30px 1fr auto;
+
+    padding: 15px;
+  }
+
+  .studio-header,
+  .studio-footer {
+    padding:
+      22px 20px;
+  }
+
+  .drop-zone {
+    margin:
+      20px;
+  }
+
+  .draft-list {
+    padding:
+      0 20px 20px;
+  }
+
+  .studio-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+
+/* =========================================================
+   REDUCIR MOVIMIENTO
+========================================================= */
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .museum-dust,
+  .planet-orbit,
+  .planet-aura,
+  .altar-light,
+  .waveform span {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,88 @@
+"use client";
+
+import { Canvas, useFrame } from "@react-three/fiber";
+import { ContactShadows, Environment, Float, PresentationControls, Sparkles, useGLTF } from "@react-three/drei";
+import { Suspense, useEffect, useRef } from "react";
+import * as THREE from "three";
+import type { Guardian } from "@/lib/bestiario-poetico/guardians";
+
+type Stage = "waiting" | "listening" | "revealed";
+
+function GuardianModel({ guardian, stage }: { guardian: Guardian; stage: Stage }) {
+  const group = useRef<THREE.Group>(null);
+  const { scene } = useGLTF(guardian.modelUrl);
+
+  useEffect(() => {
+    scene.traverse((object) => {
+      if (!(object instanceof THREE.Mesh)) return;
+      object.castShadow = true;
+      object.receiveShadow = true;
+    });
+  }, [scene]);
+
+  useFrame((state, delta) => {
+    if (!group.current) return;
+    const targetScale = stage === "revealed" ? guardian.scale : 0.001;
+    const current = group.current.scale.x;
+    const next = THREE.MathUtils.damp(current, targetScale, 3.2, delta);
+    group.current.scale.setScalar(next);
+    group.current.rotation.y += delta * (stage === "revealed" ? 0.035 : 0);
+    group.current.position.y = guardian.position[1] + Math.sin(state.clock.elapsedTime * 0.7) * 0.025;
+  });
+
+  return (
+    <group ref={group} position={guardian.position} rotation={guardian.rotation} scale={0.001}>
+      <primitive object={scene.clone()} />
+    </group>
+  );
+}
+
+function RitualRoom({ guardian, stage }: { guardian: Guardian; stage: Stage }) {
+  return (
+    <>
+      <color attach="background" args={["#070604"]} />
+      <fog attach="fog" args={["#070604", 6, 15]} />
+      <ambientLight intensity={0.35} />
+      <directionalLight castShadow position={[4, 7, 5]} intensity={2.2} color="#e8cf9d" />
+      <pointLight position={[-4, 1.2, 2]} intensity={1.1} color="#82623e" />
+      <pointLight position={[4, 1.2, 2]} intensity={1.1} color="#82623e" />
+      <spotLight position={[0, 7, 1]} angle={0.34} penumbra={0.8} intensity={stage === "revealed" ? 5 : 1.7} color={stage === "revealed" ? "#f4dba9" : "#8b6c45"} castShadow />
+
+      <mesh position={[0, 1.25, -2.1]}>
+        <torusGeometry args={[2.25, 0.035, 16, 128]} />
+        <meshStandardMaterial color="#a7834c" emissive="#6d4d25" emissiveIntensity={stage === "revealed" ? 1.4 : 0.35} metalness={0.8} roughness={0.35} />
+      </mesh>
+
+      <mesh position={[0, -1.75, 0]} receiveShadow>
+        <cylinderGeometry args={[2.35, 2.65, 0.36, 64]} />
+        <meshStandardMaterial color="#17120d" roughness={0.72} metalness={0.18} />
+      </mesh>
+
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.95, 0]} receiveShadow>
+        <circleGeometry args={[8, 96]} />
+        <meshStandardMaterial color="#0b0907" roughness={1} />
+      </mesh>
+
+      {stage === "listening" && <Sparkles count={85} scale={[7, 5, 5]} size={1.7} speed={0.38} opacity={0.55} color="#d8b575" />}
+
+      <Float speed={0.45} rotationIntensity={0.025} floatIntensity={0.08}>
+        <GuardianModel guardian={guardian} stage={stage} />
+      </Float>
+
+      <ContactShadows position={[0, -1.92, 0]} opacity={0.65} scale={7} blur={2.5} far={4} />
+      <Environment preset="warehouse" />
+    </>
+  );
+}
+
+export function InvocationScene({ guardian, stage }: { guardian: Guardian; stage: Stage }) {
+  return (
+    <Canvas shadows dpr={[1, 1.6]} camera={{ position: [0, 0.4, 7.3], fov: 37 }} gl={{ antialias: true, alpha: false }}>
+      <Suspense fallback={null}>
+        <PresentationControls global cursor polar={[-0.12, 0.18]} azimuth={[-0.25, 0.25]} config={{ mass: 1.7, tension: 170 }} snap={{ mass: 3, tension: 220 }}>
+          <RitualRoom guardian={guardian} stage={stage} />
+        </PresentationControls>
+      </Suspense>
+    </Canvas>
+  );
+}

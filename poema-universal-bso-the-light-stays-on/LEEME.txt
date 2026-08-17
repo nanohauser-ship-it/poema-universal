@@ -1,0 +1,23 @@
+POEMA UNIVERSAL · THE LIGHT STAYS ON
+
+Este paquete NO sustituye la escenografía de «La Construcción del Poema».
+Añade únicamente:
+
+1. La BSO The Light Stays On.
+2. Un reproductor editorial mínimo en la esquina inferior izquierda.
+3. Una capa de cuatro luces Three.js que escucha el audio en tiempo real:
+   - subgrave → materia/plataformas bajas
+   - medios → figuras y zona humana
+   - agudos → estructura superior
+   - energía global → luz de memoria lenta
+
+La música necesita un clic inicial por las restricciones normales del navegador.
+Cuando la canción está pausada, las nuevas luces vuelven suavemente a intensidad 0,
+por lo que la escenografía original queda intacta.
+
+INSTALACIÓN
+
+cd "$HOME/poema-universal"
+bash ./instalar-bso-the-light-stays-on.sh
+
+Después reinicia Next según las instrucciones del instalador.

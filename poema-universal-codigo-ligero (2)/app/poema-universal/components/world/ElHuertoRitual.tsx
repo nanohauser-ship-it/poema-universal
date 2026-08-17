@@ -1,0 +1,1220 @@
+"use client";
+
+import { Html } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import * as THREE from "three";
+
+type RitualPhase =
+  | "idle"
+  | "silence"
+  | "digging"
+  | "memory"
+  | "offering"
+  | "roots"
+  | "blooming"
+  | "completed";
+
+type PoemOpenedDetail = {
+  id?: string;
+  title?: string;
+};
+
+type TimelineEntry = {
+  phase: RitualPhase;
+  duration: number;
+  text: string;
+};
+
+const EVENT_NAMES = [
+  "poema-universal:poem-opened",
+  "poema-book-change",
+  "poema-universal-poem-change",
+] as const;
+
+const DISCOVERY_KEY =
+  "poema-universal.el-huerto-bloomed";
+
+const TIMELINE: TimelineEntry[] = [
+  {
+    phase: "silence",
+    duration: 2.4,
+    text:
+      "La tierra guarda silencio antes de recordar.",
+  },
+  {
+    phase: "digging",
+    duration: 2.8,
+    text:
+      "A la tercera palada, algo permanece.",
+  },
+  {
+    phase: "memory",
+    duration: 3,
+    text:
+      "La memoria conserva un poco de calor.",
+  },
+  {
+    phase: "offering",
+    duration: 2.8,
+    text:
+      "El tesoro reconoce aquello que fue amado.",
+  },
+  {
+    phase: "roots",
+    duration: 3.2,
+    text:
+      "Sobre aquel lugar fue plantado un árbol.",
+  },
+  {
+    phase: "blooming",
+    duration: 3.4,
+    text:
+      "Algo corre desde el fondo de la tierra.",
+  },
+];
+
+const SOIL_POSITION =
+  new THREE.Vector3(0.35, 0.08, -0.55);
+
+const TREE_ROOT_POSITION =
+  new THREE.Vector3(1.8, 0.14, -2.4);
+
+const FLOWER_POSITION =
+  new THREE.Vector3(1.84, 3.48, -2.35);
+
+const AVATAR_START =
+  new THREE.Vector3(-1.75, 0, 0.8);
+
+const AVATAR_AT_SOIL =
+  new THREE.Vector3(-0.25, 0, -0.18);
+
+const AVATAR_AFTER_OFFERING =
+  new THREE.Vector3(-0.55, 0, 0.05);
+
+function clamp01(value: number) {
+  return Math.max(
+    0,
+    Math.min(1, value)
+  );
+}
+
+function isElHuerto(
+  detail: PoemOpenedDetail
+) {
+  const id =
+    detail.id?.toLowerCase() ?? "";
+
+  const title =
+    detail.title?.toLowerCase() ?? "";
+
+  return (
+    id.includes("huerto") ||
+    title.includes("huerto")
+  );
+}
+
+function resolveTimeline(
+  elapsed: number
+) {
+  let cursor = 0;
+
+  for (const entry of TIMELINE) {
+    const start = cursor;
+    const end =
+      start + entry.duration;
+
+    if (
+      elapsed >= start &&
+      elapsed < end
+    ) {
+      return {
+        phase: entry.phase,
+        text: entry.text,
+        progress: clamp01(
+          (elapsed - start) /
+            entry.duration
+        ),
+      };
+    }
+
+    cursor = end;
+  }
+
+  return {
+    phase:
+      "completed" as RitualPhase,
+    text: "",
+    progress: 1,
+  };
+}
+
+function dampVector(
+  current: THREE.Vector3,
+  target: THREE.Vector3,
+  speed: number,
+  delta: number
+) {
+  current.lerp(
+    target,
+    1 - Math.exp(-speed * delta)
+  );
+}
+
+type ElHuertoRitualProps = {
+  activeScene: boolean;
+};
+
+export default function ElHuertoRitual({
+  activeScene,
+}: ElHuertoRitualProps) {
+  const avatarRef =
+    useRef<THREE.Group>(null);
+
+  const treasureRef =
+    useRef<THREE.Group>(null);
+
+  const flowerRef =
+    useRef<THREE.Group>(null);
+
+  const groundRingRef =
+    useRef<THREE.Mesh>(null);
+
+  const memoryRef =
+    useRef<THREE.Mesh>(null);
+
+  const rootPulseRef =
+    useRef<THREE.Mesh>(null);
+
+  const ringMaterialRef =
+    useRef<THREE.MeshBasicMaterial>(
+      null
+    );
+
+  const memoryMaterialRef =
+    useRef<THREE.MeshBasicMaterial>(
+      null
+    );
+
+  const rootMaterialRef =
+    useRef<THREE.MeshBasicMaterial>(
+      null
+    );
+
+  const treasureMaterialRef =
+    useRef<THREE.MeshStandardMaterial>(
+      null
+    );
+
+  const warmthLightRef =
+    useRef<THREE.PointLight>(null);
+
+  const elapsedRef = useRef(0);
+
+  const phaseRef =
+    useRef<RitualPhase>("idle");
+
+  const completionRef =
+    useRef(false);
+
+  const [, setActive] =
+    useState(false);
+
+  const active = activeScene;
+
+  const [discovered, setDiscovered] =
+    useState(false);
+
+  const [phase, setPhase] =
+    useState<RitualPhase>("idle");
+
+  const [ritualText, setRitualText] =
+    useState("");
+
+  const rootCurve = useMemo(
+    () =>
+      new THREE.CatmullRomCurve3([
+        new THREE.Vector3(
+          SOIL_POSITION.x,
+          SOIL_POSITION.y + 0.03,
+          SOIL_POSITION.z
+        ),
+        new THREE.Vector3(
+          0.72,
+          0.11,
+          -1.02
+        ),
+        new THREE.Vector3(
+          1.25,
+          0.1,
+          -1.7
+        ),
+        TREE_ROOT_POSITION.clone(),
+      ]),
+    []
+  );
+
+  useEffect(() => {
+    try {
+      setDiscovered(
+        window.localStorage.getItem(
+          DISCOVERY_KEY
+        ) === "true"
+      );
+    } catch {
+      setDiscovered(false);
+    }
+
+    const handlePoemOpened:
+      EventListener = (event) => {
+        const detail =
+          (
+            event as CustomEvent<
+              PoemOpenedDetail
+            >
+          ).detail ?? {};
+
+        if (!isElHuerto(detail)) {
+          setActive(false);
+          setPhase("idle");
+          setRitualText("");
+          return;
+        }
+
+        elapsedRef.current = 0;
+        phaseRef.current =
+          "silence";
+        completionRef.current =
+          false;
+
+        setPhase("silence");
+        setRitualText(
+          TIMELINE[0].text
+        );
+        setActive(true);
+      };
+
+    EVENT_NAMES.forEach(
+      (eventName) => {
+        window.addEventListener(
+          eventName,
+          handlePoemOpened
+        );
+      }
+    );
+
+    return () => {
+      EVENT_NAMES.forEach(
+        (eventName) => {
+          window.removeEventListener(
+            eventName,
+            handlePoemOpened
+          );
+        }
+      );
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const synchronizeActivePoem:
+      EventListener = (event) => {
+        const detail =
+          (
+            event as CustomEvent<
+              PoemOpenedDetail & {
+                poetName?: string;
+                open?: boolean;
+              }
+            >
+          ).detail ?? {};
+
+        const shouldBeActive =
+          detail.open !== false &&
+          isElHuerto(detail);
+
+        if (!shouldBeActive) {
+          setActive(false);
+          setPhase("idle");
+          setRitualText("");
+
+          elapsedRef.current = 0;
+          phaseRef.current = "idle";
+          completionRef.current = false;
+
+          return;
+        }
+
+        elapsedRef.current = 0;
+        phaseRef.current = "silence";
+        completionRef.current = false;
+
+        setPhase("silence");
+        setRitualText(
+          TIMELINE[0].text
+        );
+        setActive(true);
+      };
+
+    window.addEventListener(
+      "poema-universal:active-poem",
+      synchronizeActivePoem
+    );
+
+    return () => {
+      window.removeEventListener(
+        "poema-universal:active-poem",
+        synchronizeActivePoem
+      );
+    };
+  }, []);
+
+  useFrame((state, delta) => {
+    const avatar =
+      avatarRef.current;
+
+    const treasure =
+      treasureRef.current;
+
+    const flower =
+      flowerRef.current;
+
+    if (
+      !avatar ||
+      !treasure ||
+      !flower
+    ) {
+      return;
+    }
+
+    const time =
+      state.clock.elapsedTime;
+
+    if (!active) {
+      avatar.position.copy(
+        AVATAR_START
+      );
+
+      treasure.position.set(
+        AVATAR_START.x + 0.25,
+        0.76,
+        AVATAR_START.z
+      );
+
+      const restingFlowerScale =
+        discovered ? 1 : 0.001;
+
+      flower.scale.lerp(
+        new THREE.Vector3(
+          restingFlowerScale,
+          restingFlowerScale,
+          restingFlowerScale
+        ),
+        1 - Math.exp(-4 * delta)
+      );
+
+      if (
+        ringMaterialRef.current
+      ) {
+        ringMaterialRef.current.opacity =
+          0;
+      }
+
+      if (
+        memoryMaterialRef.current
+      ) {
+        memoryMaterialRef.current.opacity =
+          0;
+      }
+
+      if (
+        rootMaterialRef.current
+      ) {
+        rootMaterialRef.current.opacity =
+          0;
+      }
+
+      if (
+        warmthLightRef.current
+      ) {
+        warmthLightRef.current.intensity =
+          0;
+      }
+
+      return;
+    }
+
+    elapsedRef.current += delta;
+
+    const resolved =
+      resolveTimeline(
+        elapsedRef.current
+      );
+
+    if (
+      resolved.phase !==
+      phaseRef.current
+    ) {
+      phaseRef.current =
+        resolved.phase;
+
+      setPhase(resolved.phase);
+      setRitualText(
+        resolved.text
+      );
+
+      if (
+        resolved.phase ===
+        "blooming"
+      ) {
+        setDiscovered(true);
+
+        try {
+          window.localStorage.setItem(
+            DISCOVERY_KEY,
+            "true"
+          );
+        } catch {
+          // La flor permanece
+          // durante la sesión.
+        }
+      }
+    }
+
+    if (
+      resolved.phase ===
+        "completed" &&
+      !completionRef.current
+    ) {
+      completionRef.current =
+        true;
+
+      setDiscovered(true);
+
+      window.setTimeout(() => {
+        setActive(false);
+        setPhase("idle");
+        setRitualText("");
+      }, 1400);
+    }
+
+    const avatarTarget =
+      (
+        resolved.phase ===
+          "silence" ||
+        resolved.phase ===
+          "digging" ||
+        resolved.phase ===
+          "memory"
+      )
+        ? AVATAR_AT_SOIL
+        : AVATAR_AFTER_OFFERING;
+
+    dampVector(
+      avatar.position,
+      avatarTarget,
+      2.1,
+      delta
+    );
+
+    avatar.position.y =
+      Math.sin(time * 1.4) *
+      0.015;
+
+    avatar.lookAt(
+      resolved.phase ===
+        "blooming"
+        ? FLOWER_POSITION
+        : SOIL_POSITION
+    );
+
+    const diggingTilt =
+      resolved.phase ===
+        "digging"
+        ? 0.34 +
+          Math.sin(time * 5.4) *
+            0.08
+        : 0;
+
+    avatar.rotation.x =
+      THREE.MathUtils.lerp(
+        avatar.rotation.x,
+        diggingTilt,
+        1 -
+          Math.exp(-4 * delta)
+      );
+
+    if (
+      resolved.phase ===
+        "silence" ||
+      resolved.phase ===
+        "digging"
+    ) {
+      treasure.position.set(
+        avatar.position.x + 0.25,
+        0.73,
+        avatar.position.z + 0.02
+      );
+    }
+
+    if (
+      resolved.phase ===
+        "memory" ||
+      resolved.phase ===
+        "offering"
+    ) {
+      dampVector(
+        treasure.position,
+        new THREE.Vector3(
+          SOIL_POSITION.x,
+          0.52,
+          SOIL_POSITION.z
+        ),
+        3.2,
+        delta
+      );
+    }
+
+    if (
+      resolved.phase === "roots" ||
+      resolved.phase ===
+        "blooming"
+    ) {
+      const treasureTarget =
+        rootCurve.getPoint(
+          resolved.phase === "roots"
+            ? resolved.progress *
+                0.88
+            : 0.88 +
+                resolved.progress *
+                  0.12
+        );
+
+      dampVector(
+        treasure.position,
+        treasureTarget,
+        4,
+        delta
+      );
+
+      treasure.position.y +=
+        0.28;
+    }
+
+    treasure.rotation.y +=
+      delta * 0.9;
+
+    const treasurePulse =
+      1 +
+      Math.sin(time * 5.2) *
+        0.06 +
+      (
+        resolved.phase ===
+        "offering"
+          ? 0.12
+          : 0
+      );
+
+    treasure.scale.setScalar(
+      treasurePulse
+    );
+
+    if (
+      treasureMaterialRef.current
+    ) {
+      treasureMaterialRef.current
+        .emissiveIntensity =
+        resolved.phase ===
+          "offering"
+          ? 2.8
+          : 1.2;
+    }
+
+    if (
+      ringMaterialRef.current &&
+      groundRingRef.current
+    ) {
+      const ringVisible =
+        resolved.phase ===
+          "digging";
+
+      const thirdPulse =
+        (
+          Math.floor(
+            resolved.progress * 3
+          ) + 1
+        ) / 3;
+
+      ringMaterialRef.current.opacity =
+        ringVisible
+          ? 0.52 *
+            (
+              1 -
+              (
+                resolved.progress *
+                  3
+              ) %
+                1
+            )
+          : 0;
+
+      const ringScale =
+        0.7 +
+        thirdPulse * 0.65;
+
+      groundRingRef.current.scale
+        .setScalar(ringScale);
+    }
+
+    if (
+      memoryMaterialRef.current &&
+      memoryRef.current
+    ) {
+      const memoryVisible =
+        resolved.phase ===
+          "memory" ||
+        resolved.phase ===
+          "offering";
+
+      const targetOpacity =
+        memoryVisible
+          ? 0.7
+          : 0;
+
+      memoryMaterialRef.current.opacity =
+        THREE.MathUtils.lerp(
+          memoryMaterialRef.current
+            .opacity,
+          targetOpacity,
+          1 -
+            Math.exp(-4 * delta)
+        );
+
+      memoryRef.current.scale
+        .setScalar(
+          1 +
+            Math.sin(time * 3.8) *
+              0.055
+        );
+    }
+
+    if (
+      warmthLightRef.current
+    ) {
+      const targetIntensity =
+        resolved.phase ===
+          "memory"
+          ? 9
+          : resolved.phase ===
+              "offering"
+            ? 6
+            : 0;
+
+      warmthLightRef.current
+        .intensity =
+        THREE.MathUtils.lerp(
+          warmthLightRef.current
+            .intensity,
+          targetIntensity,
+          1 -
+            Math.exp(-4 * delta)
+        );
+    }
+
+    if (
+      rootMaterialRef.current
+    ) {
+      const rootVisible =
+        resolved.phase ===
+          "roots" ||
+        resolved.phase ===
+          "blooming";
+
+      rootMaterialRef.current.opacity =
+        THREE.MathUtils.lerp(
+          rootMaterialRef.current
+            .opacity,
+          rootVisible ? 0.66 : 0,
+          1 -
+            Math.exp(-4 * delta)
+        );
+    }
+
+    if (
+      rootPulseRef.current &&
+      (
+        resolved.phase ===
+          "roots" ||
+        resolved.phase ===
+          "blooming"
+      )
+    ) {
+      const pulseProgress =
+        resolved.phase === "roots"
+          ? resolved.progress *
+              0.85
+          : 0.85 +
+              resolved.progress *
+                0.15;
+
+      rootPulseRef.current
+        .position.copy(
+          rootCurve.getPoint(
+            clamp01(
+              pulseProgress
+            )
+          )
+        );
+
+      rootPulseRef.current.position.y +=
+        0.04;
+    }
+
+    let targetFlowerScale =
+      discovered ? 1 : 0.001;
+
+    if (
+      resolved.phase ===
+        "blooming"
+    ) {
+      targetFlowerScale =
+        0.05 +
+        resolved.progress * 1.12;
+    }
+
+    const currentScale =
+      flower.scale.x;
+
+    const nextScale =
+      THREE.MathUtils.lerp(
+        currentScale,
+        targetFlowerScale,
+        1 -
+          Math.exp(-4.2 * delta)
+      );
+
+    flower.scale.setScalar(
+      nextScale
+    );
+
+    flower.rotation.y +=
+      delta * 0.34;
+
+    flower.position.y =
+      FLOWER_POSITION.y +
+      Math.sin(time * 2.1) *
+        0.024;
+  });
+
+  const pulseVisible =
+    active &&
+    (
+      phase === "roots" ||
+      phase === "blooming"
+    );
+
+  return (
+    <group>
+      <group visible={active}>
+        <group
+          position={[
+            SOIL_POSITION.x,
+            SOIL_POSITION.y,
+            SOIL_POSITION.z,
+          ]}
+        >
+          <mesh
+            rotation={[
+              -Math.PI / 2,
+              0,
+              0,
+            ]}
+            receiveShadow
+          >
+            <circleGeometry
+              args={[0.64, 48]}
+            />
+
+            <meshStandardMaterial
+              color="#26180f"
+              roughness={1}
+            />
+          </mesh>
+
+          <mesh
+            ref={groundRingRef}
+            position={[0, 0.012, 0]}
+            rotation={[
+              -Math.PI / 2,
+              0,
+              0,
+            ]}
+          >
+            <ringGeometry
+              args={[
+                0.28,
+                0.36,
+                48,
+              ]}
+            />
+
+            <meshBasicMaterial
+              ref={ringMaterialRef}
+              color="#d6a05a"
+              transparent
+              opacity={0}
+              depthWrite={false}
+            />
+          </mesh>
+
+          <mesh
+            ref={memoryRef}
+            position={[0, 0.08, 0]}
+            rotation={[
+              -Math.PI / 2,
+              0.45,
+              0.1,
+            ]}
+          >
+            <torusGeometry
+              args={[
+                0.22,
+                0.026,
+                16,
+                34,
+                Math.PI * 1.32,
+              ]}
+            />
+
+            <meshBasicMaterial
+              ref={
+                memoryMaterialRef
+              }
+              color="#f0e2c4"
+              transparent
+              opacity={0}
+              depthWrite={false}
+            />
+          </mesh>
+
+          <pointLight
+            ref={warmthLightRef}
+            color="#daa05d"
+            distance={3}
+            intensity={0}
+            position={[0, 0.4, 0]}
+          />
+        </group>
+
+        <group
+          ref={avatarRef}
+          position={[
+            AVATAR_START.x,
+            AVATAR_START.y,
+            AVATAR_START.z,
+          ]}
+        >
+          <mesh
+            position={[0, 0.64, 0]}
+            castShadow
+          >
+            <cylinderGeometry
+              args={[
+                0.16,
+                0.22,
+                0.78,
+                12,
+              ]}
+            />
+
+            <meshStandardMaterial
+              color="#c8c0b2"
+              roughness={0.96}
+            />
+          </mesh>
+
+          <mesh
+            position={[0, 1.17, 0]}
+            castShadow
+          >
+            <sphereGeometry
+              args={[0.14, 18, 18]}
+            />
+
+            <meshStandardMaterial
+              color="#e6ddcf"
+              roughness={0.95}
+            />
+          </mesh>
+
+          <mesh
+            position={[
+              -0.18,
+              0.63,
+              0,
+            ]}
+            rotation={[
+              0,
+              0,
+              -0.28,
+            ]}
+          >
+            <cylinderGeometry
+              args={[
+                0.04,
+                0.045,
+                0.58,
+                10,
+              ]}
+            />
+
+            <meshStandardMaterial
+              color="#b8afa1"
+              roughness={1}
+            />
+          </mesh>
+
+          <mesh
+            position={[
+              0.18,
+              0.63,
+              0,
+            ]}
+            rotation={[
+              0,
+              0,
+              0.28,
+            ]}
+          >
+            <cylinderGeometry
+              args={[
+                0.04,
+                0.045,
+                0.58,
+                10,
+              ]}
+            />
+
+            <meshStandardMaterial
+              color="#b8afa1"
+              roughness={1}
+            />
+          </mesh>
+        </group>
+
+        <group
+          ref={treasureRef}
+          position={[
+            AVATAR_START.x + 0.25,
+            0.73,
+            AVATAR_START.z,
+          ]}
+        >
+          <mesh castShadow>
+            <dodecahedronGeometry
+              args={[0.115, 0]}
+            />
+
+            <meshStandardMaterial
+              ref={
+                treasureMaterialRef
+              }
+              color="#c49b5a"
+              emissive="#856023"
+              emissiveIntensity={1.2}
+              metalness={0.28}
+              roughness={0.42}
+            />
+          </mesh>
+
+          <pointLight
+            color="#e2b66b"
+            intensity={3}
+            distance={1.5}
+          />
+        </group>
+
+        <mesh>
+          <tubeGeometry
+            args={[
+              rootCurve,
+              72,
+              0.018,
+              8,
+              false,
+            ]}
+          />
+
+          <meshBasicMaterial
+            ref={rootMaterialRef}
+            color="#e2c98f"
+            transparent
+            opacity={0}
+            depthWrite={false}
+          />
+        </mesh>
+
+        <mesh
+          ref={rootPulseRef}
+          visible={pulseVisible}
+        >
+          <sphereGeometry
+            args={[0.065, 18, 18]}
+          />
+
+          <meshBasicMaterial
+            color="#fff0bf"
+            transparent
+            opacity={0.95}
+          />
+        </mesh>
+
+        {active &&
+          phase !== "completed" && (
+          <Html
+            position={[
+              -2.85,
+              0.62,
+              1.75,
+            ]}
+            center
+            distanceFactor={18}
+            style={{
+              pointerEvents: "none",
+            }}
+          >
+            <div
+              style={{
+                width: "380px",
+                padding:
+                  "15px 19px 17px",
+                border:
+                  "1px solid rgba(199,164,103,.24)",
+                background:
+                  "rgba(5,8,10,.82)",
+                backdropFilter:
+                  "blur(9px)",
+                boxShadow:
+                  "0 16px 45px rgba(0,0,0,.34)",
+                textAlign: "center",
+                color: "#f0e8dc",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  color:
+                    "rgba(199,164,103,.9)",
+                  fontSize: "9px",
+                  letterSpacing: ".32em",
+                  textTransform:
+                    "uppercase",
+                }}
+              >
+                Primer ritual · El huerto
+              </p>
+
+              <p
+                style={{
+                  margin:
+                    "11px 0 0",
+                  fontFamily:
+                    'Georgia, "Times New Roman", serif',
+                  fontSize: "18px",
+                  fontStyle: "italic",
+                  lineHeight: 1.55,
+                  color:
+                    "rgba(240,232,220,.88)",
+                }}
+              >
+                {ritualText}
+              </p>
+            </div>
+          </Html>
+        )}
+      </group>
+
+      <group
+        ref={flowerRef}
+        position={[
+          FLOWER_POSITION.x,
+          FLOWER_POSITION.y,
+          FLOWER_POSITION.z,
+        ]}
+        scale={[0.001, 0.001, 0.001]}
+        visible={active || discovered}
+      >
+        {Array.from({
+          length: 7,
+        }).map((_, index) => {
+          const angle =
+            (
+              index / 7
+            ) *
+            Math.PI *
+            2;
+
+          return (
+            <mesh
+              key={index}
+              position={[
+                Math.cos(angle) *
+                  0.115,
+                Math.sin(angle) *
+                  0.115,
+                0,
+              ]}
+              scale={[
+                1.25,
+                0.72,
+                0.65,
+              ]}
+            >
+              <sphereGeometry
+                args={[
+                  0.075,
+                  16,
+                  16,
+                ]}
+              />
+
+              <meshStandardMaterial
+                color="#f2ead9"
+                emissive="#bca775"
+                emissiveIntensity={0.75}
+                roughness={0.8}
+              />
+            </mesh>
+          );
+        })}
+
+        <mesh>
+          <sphereGeometry
+            args={[
+              0.055,
+              18,
+              18,
+            ]}
+          />
+
+          <meshStandardMaterial
+            color="#c8a25d"
+            emissive="#8d6829"
+            emissiveIntensity={1.2}
+          />
+        </mesh>
+
+        <pointLight
+          color="#f3dfae"
+          intensity={5}
+          distance={2.2}
+        />
+      </group>
+    </group>
+  );
+}

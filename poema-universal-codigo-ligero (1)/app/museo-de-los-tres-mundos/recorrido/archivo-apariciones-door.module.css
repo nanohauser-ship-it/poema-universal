@@ -1,0 +1,152 @@
+.access {
+  position: fixed;
+  right: clamp(16px, 2vw, 30px);
+  bottom: clamp(16px, 2vw, 30px);
+  z-index: 99999;
+  pointer-events: none;
+}
+
+.door {
+  position: relative;
+  display: grid;
+  grid-template-columns:
+    34px
+    minmax(0, 1fr)
+    24px;
+  width: min(310px, calc(100vw - 32px));
+  min-height: 78px;
+  padding: 13px 15px;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+  border:
+    1px solid
+    rgba(218, 190, 137, 0.34);
+  color: #e2d3b8;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(17, 14, 10, 0.94),
+      rgba(4, 4, 4, 0.94)
+    );
+  box-shadow:
+    0 22px 60px
+    rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(13px);
+  pointer-events: auto;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.door::before {
+  position: absolute;
+  inset: 5px;
+  content: "";
+  pointer-events: none;
+  border:
+    1px solid
+    rgba(218, 190, 137, 0.08);
+}
+
+.door:hover {
+  border-color:
+    rgba(232, 204, 150, 0.68);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(29, 22, 14, 0.97),
+      rgba(6, 6, 5, 0.97)
+    );
+  transform: translateY(-3px);
+}
+
+.number {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border:
+    1px solid
+    rgba(213, 180, 118, 0.32);
+  border-radius: 50%;
+  color: #b99356;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 0.78rem;
+}
+
+.copy {
+  display: grid;
+  min-width: 0;
+}
+
+.copy small {
+  color: #92764d;
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.copy strong {
+  margin-top: 4px;
+  overflow: hidden;
+  color: #e3d5bf;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy em {
+  margin-top: 3px;
+  color: #817667;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 0.61rem;
+}
+
+.arrow {
+  color: #b69660;
+  font-size: 1rem;
+  transition:
+    transform 180ms ease;
+}
+
+.door:hover .arrow {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 560px) {
+  .access {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .door {
+    width: min(275px, calc(100vw - 24px));
+    min-height: 68px;
+    padding: 10px 12px;
+  }
+
+  .copy em {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door,
+  .arrow {
+    transition: none;
+  }
+}

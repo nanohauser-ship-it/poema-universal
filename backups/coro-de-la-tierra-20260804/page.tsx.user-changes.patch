@@ -1,0 +1,47 @@
+diff --git a/app/poema-universal/page.tsx b/app/poema-universal/page.tsx
+index de1c43e..cc3cab2 100644
+--- a/app/poema-universal/page.tsx
++++ b/app/poema-universal/page.tsx
+@@ -15,6 +15,11 @@ import WorldEntrance from "./components/WorldEntrance";
+ import MatrizEntrance from "./components/MatrizEntrance";
+ import BorgesEntrance from "./components/BorgesEntrance";
+ import AtlasInteriorEntrance from "./components/AtlasInteriorEntrance";
++import BestiarioEntrance from "./components/BestiarioEntrance";
++
++import ThreePresencesEntrance
++  from "./components/ThreePresencesEntrance";
++
+ const PRESENTATION_DATE = new Date(
+   "2027-01-01T00:00:00+01:00"
+ ).getTime();
+@@ -102,6 +107,14 @@ const navigationLinks = [
+     label: "El mundo",
+     href: "#mundo",
+   },
++  {
++    label: "Bestiario",
++    href: "/poema-universal/bestiario-poetico",
++  },
++  {
++    label: "Encadenamiento",
++    href: "/poema-universal/encadenamiento",
++  },
+   {
+     label: "Convocatoria",
+     href: "/poema-universal/convocatoria",
+@@ -849,9 +862,13 @@ export default function PoemaUniversalPage() {
+ 
+           <MatrizEntrance />
+ 
++      <BestiarioEntrance />
++
++      <ThreePresencesEntrance />
++
+       <BorgesEntrance />
+ 
+       <AtlasInteriorEntrance />
+ </main>
+   );
+-}
+\ No newline at end of file
++}

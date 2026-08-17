@@ -1,0 +1,1307 @@
+.page {
+  --black: #030303;
+  --panel: #070706;
+  --paper: #e8dfd2;
+  --muted: rgba(232, 223, 210, 0.43);
+  --faint: rgba(232, 223, 210, 0.09);
+  --bronze: #ad7d37;
+  --bronze-soft: rgba(173, 125, 55, 0.38);
+  min-height: 100svh;
+  overflow-x: hidden;
+  background: var(--black);
+  color: var(--paper);
+}
+
+.page button,
+.page input,
+.page textarea {
+  border-radius: 0;
+}
+
+.header {
+  position: relative;
+  z-index: 50;
+  width: min(1820px, calc(100% - 40px));
+  min-height: 76px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--faint);
+  display: grid;
+  grid-template-columns: 250px 1fr auto;
+  align-items: center;
+  gap: 32px;
+}
+
+.wordmark {
+  display: inline-flex;
+  flex-direction: column;
+  justify-self: start;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 0.84;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c9974c;
+  transition: opacity 260ms ease;
+}
+
+.wordmark:hover {
+  opacity: 0.68;
+}
+
+.headerNavigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 3.2vw, 62px);
+}
+
+.headerNavigation a,
+.sessionState {
+  font-size: 8px;
+  letter-spacing: 0.19em;
+  text-transform: uppercase;
+  color: rgba(232, 223, 210, 0.46);
+}
+
+.headerNavigation a {
+  transition: color 220ms ease;
+}
+
+.headerNavigation a:hover,
+.headerNavigation a:focus-visible {
+  color: var(--paper);
+}
+
+.sessionState {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+}
+
+.sessionState i,
+.avatarIdentity > i,
+.footer i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4fc27c;
+  box-shadow: 0 0 12px rgba(79, 194, 124, 0.42);
+}
+
+.experienceGrid {
+  width: min(1820px, calc(100% - 40px));
+  min-height: calc(100svh - 126px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 300px minmax(570px, 1fr) 330px;
+  grid-template-areas: "poem avatar conversation";
+  border-bottom: 1px solid var(--faint);
+}
+
+.poemPanel,
+.conversationPanel {
+  position: relative;
+  z-index: 3;
+  min-width: 0;
+  padding: 44px 28px 30px;
+  background: rgba(3, 3, 3, 0.94);
+}
+
+.poemPanel {
+  grid-area: poem;
+  border-right: 1px solid var(--faint);
+}
+
+.conversationPanel {
+  grid-area: conversation;
+  border-left: 1px solid var(--faint);
+  display: flex;
+  flex-direction: column;
+}
+
+.panelHeading p,
+.panelHeading h1,
+.panelHeading h2 {
+  margin: 0;
+}
+
+.panelHeading p,
+.index,
+.libraryHeading h2,
+.presencePrinciples h3 {
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--bronze);
+}
+
+.panelHeading h1,
+.panelHeading h2 {
+  margin-top: 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.1;
+  color: rgba(232, 223, 210, 0.92);
+}
+
+.inputModes {
+  margin-top: 26px;
+  border-bottom: 1px solid var(--faint);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.inputModes button {
+  min-height: 34px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 0 6px;
+  background: transparent;
+  font-size: 8px;
+  color: rgba(232, 223, 210, 0.37);
+  cursor: pointer;
+  transition:
+    background 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease;
+}
+
+.inputModes button:hover,
+.inputModes .activeMode {
+  border-bottom-color: var(--bronze);
+  background: rgba(232, 223, 210, 0.035);
+  color: var(--paper);
+}
+
+.titleField {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid var(--faint);
+  padding: 15px 0 10px;
+}
+
+.titleField span {
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(232, 223, 210, 0.3);
+}
+
+.titleField input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  color: var(--paper);
+}
+
+.titleField input::placeholder,
+.poemField textarea::placeholder,
+.messageComposer textarea::placeholder {
+  color: rgba(232, 223, 210, 0.22);
+}
+
+.poemField {
+  display: block;
+}
+
+.poemField textarea {
+  width: 100%;
+  height: clamp(220px, 29svh, 360px);
+  resize: vertical;
+  border: 0;
+  outline: 0;
+  padding: 24px 2px;
+  background: transparent;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.72;
+  color: rgba(232, 223, 210, 0.82);
+}
+
+.poemActions {
+  border-top: 1px solid var(--faint);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 14px;
+}
+
+.poemActions span {
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: rgba(232, 223, 210, 0.28);
+}
+
+.poemActions button,
+.messageComposer > button {
+  border: 1px solid rgba(173, 125, 55, 0.54);
+  padding: 12px 18px;
+  background: #8e601f;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f3e6d1;
+  cursor: pointer;
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    opacity 220ms ease;
+}
+
+.poemActions button:hover,
+.messageComposer > button:hover {
+  border-color: #d0a15c;
+  background: #a6752d;
+}
+
+.poemActions button:disabled,
+.messageComposer > button:disabled,
+.readingControls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.26;
+}
+
+.library {
+  margin-top: 42px;
+}
+
+.libraryHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--faint);
+  padding-bottom: 12px;
+}
+
+.libraryHeading h2 {
+  margin: 0;
+}
+
+.libraryHeading span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+  color: rgba(232, 223, 210, 0.3);
+}
+
+.library ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.library li {
+  border-bottom: 1px solid rgba(232, 223, 210, 0.055);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.libraryPoem,
+.removePoem {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.libraryPoem {
+  min-width: 0;
+  padding: 13px 8px 13px 0;
+  text-align: left;
+}
+
+.libraryPoem strong,
+.libraryPoem span {
+  display: block;
+}
+
+.libraryPoem strong {
+  overflow: hidden;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(232, 223, 210, 0.69);
+  transition: color 180ms ease;
+}
+
+.libraryPoem span {
+  margin-top: 4px;
+  font-size: 7px;
+  color: rgba(232, 223, 210, 0.25);
+}
+
+.libraryPoem:hover strong {
+  color: var(--paper);
+}
+
+.removePoem {
+  padding: 12px 2px 12px 12px;
+  font-size: 17px;
+  color: rgba(232, 223, 210, 0.2);
+  transition: color 180ms ease;
+}
+
+.removePoem:hover {
+  color: #c47d62;
+}
+
+.emptyLibrary {
+  margin: 0;
+  padding: 18px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-style: italic;
+  color: rgba(232, 223, 210, 0.25);
+}
+
+.avatarStage {
+  position: relative;
+  grid-area: avatar;
+  min-width: 0;
+  min-height: 760px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #050504;
+}
+
+.avatarBody {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+}
+
+.avatarMedia {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.organismPortraitFallback {
+  z-index: 0;
+  object-fit: cover;
+  object-position: 50% 50%;
+  filter: brightness(0.78) saturate(0.82);
+}
+
+.organismCanvas {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  opacity: 0;
+  background: #030302;
+  transition: opacity 1.4s ease;
+}
+
+.avatarBody[data-live="organism"] .organismCanvas {
+  opacity: 1;
+}
+
+.organismCanvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: crosshair;
+}
+
+.organismAura {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.48;
+  background:
+    radial-gradient(circle at 43% 45%, rgba(159, 102, 32, 0.08), transparent 30%),
+    linear-gradient(to bottom, transparent 44%, rgba(0, 0, 0, 0.38));
+  mix-blend-mode: screen;
+}
+
+.liveAvatarMedia {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.avatarBody[data-live="alive"] .liveAvatarMedia {
+  opacity: 1;
+}
+
+.wakePresence,
+.sleepPresence {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 144px;
+  border: 1px solid rgba(173, 125, 55, 0.42);
+  padding: 9px 14px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.68);
+  font-size: 6px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232, 223, 210, 0.57);
+  cursor: pointer;
+  backdrop-filter: blur(9px);
+  transition:
+    border-color 220ms ease,
+    color 220ms ease,
+    opacity 500ms ease;
+}
+
+.sleepPresence {
+  opacity: 0;
+}
+
+.avatarBody:hover .sleepPresence,
+.sleepPresence:focus-visible {
+  opacity: 1;
+}
+
+.wakePresence:hover:not(:disabled),
+.sleepPresence:hover {
+  border-color: var(--bronze);
+  color: var(--paper);
+}
+
+.wakePresence:disabled {
+  cursor: wait;
+  opacity: 0.48;
+}
+
+.avatarVignette {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.38), transparent 22%, transparent 60%, rgba(0, 0, 0, 0.92)),
+    linear-gradient(to right, rgba(0, 0, 0, 0.48), transparent 22%, transparent 74%, rgba(0, 0, 0, 0.56));
+}
+
+.avatarIdentity {
+  position: absolute;
+  z-index: 4;
+  top: 28px;
+  left: 30px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.avatarIdentity > i {
+  margin-top: 4px;
+}
+
+.avatarIdentity p,
+.avatarIdentity span {
+  display: block;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.avatarIdentity p {
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  color: var(--bronze);
+}
+
+.avatarIdentity span {
+  margin-top: 6px;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(232, 223, 210, 0.48);
+}
+
+.avatarTelemetry {
+  position: absolute;
+  z-index: 4;
+  top: 27px;
+  right: 28px;
+  width: 210px;
+  border: 1px solid rgba(232, 223, 210, 0.085);
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.44);
+  backdrop-filter: blur(9px);
+}
+
+.avatarTelemetry dl,
+.avatarTelemetry div {
+  margin: 0;
+}
+
+.avatarTelemetry div {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.avatarTelemetry dt,
+.avatarTelemetry dd {
+  margin: 0;
+  font-size: 7px;
+  line-height: 1.4;
+}
+
+.avatarTelemetry dt {
+  color: var(--bronze);
+}
+
+.avatarTelemetry dd {
+  color: rgba(232, 223, 210, 0.48);
+}
+
+.avatarMotto {
+  position: absolute;
+  z-index: 3;
+  top: 162px;
+  right: 5%;
+  width: min(220px, 30%);
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2.1vw, 31px);
+  font-style: italic;
+  line-height: 1.38;
+  color: rgba(193, 135, 57, 0.67);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.8);
+}
+
+.avatarMotto em {
+  display: block;
+  font-weight: 400;
+}
+
+.currentReading {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 78px;
+  width: min(520px, calc(100% - 60px));
+  padding: 12px 18px 14px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.72);
+  text-align: center;
+  backdrop-filter: blur(12px);
+}
+
+.currentReading span,
+.currentReading strong {
+  display: block;
+}
+
+.currentReading span {
+  font-size: 6px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(232, 223, 210, 0.29);
+}
+
+.currentReading strong {
+  margin-top: 7px;
+  overflow: hidden;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 400;
+  font-style: italic;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(232, 223, 210, 0.79);
+}
+
+.currentReading > div {
+  height: 1px;
+  margin-top: 10px;
+  background: rgba(232, 223, 210, 0.12);
+}
+
+.currentReading > div i {
+  display: block;
+  height: 1px;
+  background: var(--bronze);
+  transition: width 180ms linear;
+}
+
+.readingControls {
+  position: absolute;
+  z-index: 6;
+  right: 0;
+  bottom: 22px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.readingControls button {
+  border: 1px solid rgba(232, 223, 210, 0.12);
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.6);
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: rgba(232, 223, 210, 0.58);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.readingControls button:hover:not(:disabled) {
+  border-color: var(--bronze-soft);
+  background: rgba(0, 0, 0, 0.84);
+  color: var(--paper);
+}
+
+.conversationPanel .panelHeading {
+  flex: 0 0 auto;
+}
+
+.conversation {
+  min-height: 280px;
+  max-height: 43svh;
+  margin-top: 26px;
+  overflow-y: auto;
+  padding-right: 5px;
+  scrollbar-color: rgba(173, 125, 55, 0.36) transparent;
+  scrollbar-width: thin;
+}
+
+.conversation article {
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+.conversation article > span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 6px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.conversation article p {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.avatarMessage {
+  border-left: 1px solid var(--bronze-soft);
+  background: rgba(173, 125, 55, 0.035);
+  color: rgba(232, 223, 210, 0.75);
+}
+
+.avatarMessage > span {
+  color: var(--bronze);
+}
+
+.userMessage {
+  margin-left: 28px;
+  border-right: 1px solid rgba(232, 223, 210, 0.1);
+  background: rgba(232, 223, 210, 0.025);
+  text-align: right;
+  color: rgba(232, 223, 210, 0.52);
+}
+
+.userMessage > span {
+  color: rgba(232, 223, 210, 0.25);
+}
+
+.avatarMessage button {
+  margin-top: 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(173, 125, 55, 0.38);
+  padding: 0 0 3px;
+  background: transparent;
+  font-size: 6px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(173, 125, 55, 0.8);
+  cursor: pointer;
+}
+
+.thinking {
+  display: flex;
+  gap: 5px;
+  padding: 8px 15px;
+}
+
+.thinking i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--bronze);
+  animation: thought 1.3s infinite ease-in-out;
+}
+
+.thinking i:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.thinking i:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+@keyframes thought {
+  0%,
+  70%,
+  100% {
+    opacity: 0.2;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+.messageComposer {
+  border-top: 1px solid var(--faint);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  padding-top: 16px;
+}
+
+.messageComposer label {
+  min-width: 0;
+}
+
+.messageComposer textarea {
+  width: 100%;
+  height: 58px;
+  resize: none;
+  border: 1px solid rgba(232, 223, 210, 0.08);
+  outline: 0;
+  padding: 10px 12px;
+  background: rgba(232, 223, 210, 0.025);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--paper);
+}
+
+.messageComposer textarea:focus {
+  border-color: var(--bronze-soft);
+}
+
+.voiceConversation {
+  border-bottom: 1px solid var(--faint);
+  padding: 18px 0 20px;
+  text-align: center;
+}
+
+.voiceConversation button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  color: rgba(232, 223, 210, 0.48);
+  cursor: pointer;
+}
+
+.voiceConversation button span {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  margin-right: 9px;
+  border: 1px solid var(--bronze-soft);
+  border-radius: 50%;
+  place-items: center;
+  color: var(--bronze);
+}
+
+.voiceConversation .recording span {
+  border-color: #b55e45;
+  color: #d77f62;
+  box-shadow: 0 0 20px rgba(181, 94, 69, 0.18);
+}
+
+.presencePrinciples {
+  margin-top: 24px;
+}
+
+.presencePrinciples h3 {
+  margin: 0 0 14px;
+}
+
+.presencePrinciples ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.presencePrinciples li {
+  border-top: 1px solid rgba(232, 223, 210, 0.055);
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.presencePrinciples strong,
+.presencePrinciples span {
+  font-size: 7px;
+  line-height: 1.45;
+}
+
+.presencePrinciples strong {
+  font-weight: 400;
+  color: var(--bronze);
+}
+
+.presencePrinciples span {
+  color: rgba(232, 223, 210, 0.3);
+}
+
+.footer {
+  width: min(1820px, calc(100% - 40px));
+  min-height: 50px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr auto;
+  align-items: center;
+  gap: 24px;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  color: rgba(232, 223, 210, 0.28);
+}
+
+.footer div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-transform: uppercase;
+}
+
+.footer p {
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer a {
+  text-transform: uppercase;
+  transition: color 180ms ease;
+}
+
+.footer a:hover {
+  color: var(--paper);
+}
+
+.hiddenInput,
+.visuallyHidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  clip-path: inset(50%) !important;
+}
+
+.page :focus-visible {
+  outline: 1px solid var(--bronze);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1420px) {
+  .header,
+  .experienceGrid,
+  .footer {
+    width: min(100% - 24px, 1820px);
+  }
+
+  .experienceGrid {
+    grid-template-columns: 270px minmax(520px, 1fr) 300px;
+  }
+
+  .poemPanel,
+  .conversationPanel {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .header {
+    grid-template-columns: 180px 1fr auto;
+  }
+
+  .headerNavigation {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 1120px) {
+  .header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .headerNavigation {
+    display: none;
+  }
+
+  .experienceGrid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "avatar avatar"
+      "poem conversation";
+  }
+
+  .avatarStage {
+    min-height: min(720px, 76svh);
+    border-bottom: 1px solid var(--faint);
+  }
+
+  .poemPanel {
+    border-right: 1px solid var(--faint);
+  }
+
+  .conversationPanel {
+    border-left: 0;
+  }
+
+  .conversation {
+    max-height: 420px;
+  }
+}
+
+@media (max-width: 720px) {
+  .header,
+  .experienceGrid,
+  .footer {
+    width: 100%;
+  }
+
+  .header {
+    min-height: 64px;
+    padding: 0 15px;
+  }
+
+  .wordmark {
+    font-size: 14px;
+  }
+
+  .sessionState {
+    font-size: 6px;
+    letter-spacing: 0.12em;
+  }
+
+  .experienceGrid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .avatarStage {
+    order: 1;
+    min-height: 70svh;
+  }
+
+  .poemPanel {
+    order: 2;
+    border-right: 0;
+    border-bottom: 1px solid var(--faint);
+    padding: 44px 18px;
+  }
+
+  .conversationPanel {
+    order: 3;
+    padding: 44px 18px;
+  }
+
+  .avatarMedia {
+    object-position: 48% 50%;
+  }
+
+  .avatarTelemetry,
+  .avatarMotto {
+    display: none;
+  }
+
+  .avatarIdentity {
+    top: 18px;
+    left: 18px;
+  }
+
+  .currentReading {
+    bottom: 94px;
+    width: calc(100% - 28px);
+  }
+
+  .readingControls {
+    bottom: 18px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 0 14px 4px;
+  }
+
+  .readingControls button {
+    flex: 0 0 auto;
+  }
+
+  .poemField textarea {
+    height: 300px;
+  }
+
+  .conversation {
+    max-height: none;
+  }
+
+  .footer {
+    min-height: 70px;
+    grid-template-columns: 1fr auto;
+    padding: 0 15px;
+  }
+
+  .footer p {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liveAvatarMedia,
+  .organismCanvas,
+  .wakePresence,
+  .sleepPresence {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .page *::before,
+  .page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== GRAN AVATAR V2 · PRESENCIA CINEMATOGRÁFICA ===== */
+.cinematicPoster {
+  z-index: 0;
+  object-fit: cover;
+  object-position: 50% 46%;
+  filter: brightness(0.96) saturate(0.91) contrast(1.02);
+  transform: scale(1.012);
+  animation: cinematicBreath 8.6s ease-in-out infinite alternate;
+}
+
+.cinematicVideo {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 46%;
+  filter: brightness(0.96) saturate(0.9) contrast(1.03);
+  opacity: 1;
+}
+
+.cinematicVideo[data-kind="listening"] {
+  object-position: 50% 28%;
+}
+
+.cinematicVideo[data-kind="speaking"] {
+  object-position: 50% 48%;
+}
+
+.cinematicVideoBlend {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(5, 4, 3, 0.18);
+  transition: opacity 650ms ease;
+}
+
+.cinematicVideoBlend[data-visible="true"] {
+  opacity: 1;
+}
+
+.cinematicLight {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(206, 154, 86, 0.075), transparent 29%),
+    radial-gradient(circle at 50% 52%, transparent 20%, rgba(0, 0, 0, 0.08) 64%, rgba(0, 0, 0, 0.2) 100%);
+  mix-blend-mode: screen;
+}
+
+.cinematicVignette {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.12), transparent 22%, transparent 67%, rgba(0, 0, 0, 0.58)),
+    linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.22));
+}
+
+.avatarBody[data-live="cinematic"][data-state="thinking"] .cinematicPoster {
+  filter: brightness(0.9) saturate(0.82) contrast(1.04);
+  transform: scale(1.018) translateY(0.15%);
+}
+
+.avatarBody[data-live="cinematic"][data-state="paused"] .cinematicPoster {
+  filter: brightness(0.84) saturate(0.72);
+}
+
+.avatarBody[data-live="cinematic"][data-state="error"] .cinematicPoster {
+  filter: brightness(0.78) saturate(0.58);
+}
+
+@keyframes cinematicBreath {
+  0% {
+    transform: scale(1.01) translate3d(0, 0, 0);
+  }
+  52% {
+    transform: scale(1.014) translate3d(0, -0.08%, 0);
+  }
+  100% {
+    transform: scale(1.018) translate3d(0.08%, -0.12%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematicPoster {
+    animation: none;
+  }
+}
+
+/* ===== GRAN AVATAR V3 · SINCRONIZACIÓN LABIAL ===== */
+.syncPoster {
+  z-index: 0;
+  object-fit: cover;
+  object-position: 50% 46%;
+  filter: brightness(0.96) saturate(0.91) contrast(1.02);
+  transform: scale(1.012);
+  animation: syncBreath 8.8s ease-in-out infinite alternate;
+}
+
+.syncVisemeFrame,
+.syncListeningVideo {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 46%;
+  filter: brightness(0.95) saturate(0.9) contrast(1.03);
+}
+
+.syncVisemeFrame {
+  opacity: 0.985;
+  animation: syncSpeakingBreath 5.8s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+.syncListeningVideo {
+  object-position: 50% 28%;
+}
+
+.syncListeningBlend {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(5, 4, 3, 0.16);
+  transition: opacity 500ms ease;
+}
+
+.syncListeningBlend[data-visible="true"] {
+  opacity: 1;
+}
+
+.syncLight {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(206, 154, 86, 0.075), transparent 29%),
+    radial-gradient(circle at 50% 52%, transparent 20%, rgba(0, 0, 0, 0.07) 64%, rgba(0, 0, 0, 0.2) 100%);
+  mix-blend-mode: screen;
+}
+
+.syncVignette {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.12), transparent 22%, transparent 67%, rgba(0, 0, 0, 0.58)),
+    linear-gradient(to right, rgba(0, 0, 0, 0.2), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.22));
+}
+
+.avatarBody[data-live="synchronized"][data-state="thinking"] .syncPoster {
+  filter: brightness(0.9) saturate(0.82) contrast(1.04);
+  transform: scale(1.018) translateY(0.15%);
+}
+
+.avatarBody[data-live="synchronized"][data-state="paused"] .syncPoster,
+.avatarBody[data-live="synchronized"][data-state="paused"] .syncVisemeFrame {
+  filter: brightness(0.84) saturate(0.72);
+}
+
+.avatarBody[data-live="synchronized"][data-state="error"] .syncPoster {
+  filter: brightness(0.78) saturate(0.58);
+}
+
+.avatarBody[data-live="synchronized"][data-state="reading"] .syncLight,
+.avatarBody[data-live="synchronized"][data-state="speaking"] .syncLight {
+  background:
+    radial-gradient(circle at 50% 39%, rgba(214, 158, 88, 0.1), transparent 31%),
+    radial-gradient(circle at 50% 55%, transparent 20%, rgba(0, 0, 0, 0.07) 66%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+@keyframes syncBreath {
+  0% {
+    transform: scale(1.01) translate3d(0, 0, 0);
+  }
+  52% {
+    transform: scale(1.014) translate3d(0, -0.08%, 0);
+  }
+  100% {
+    transform: scale(1.018) translate3d(0.08%, -0.12%, 0);
+  }
+}
+
+@keyframes syncSpeakingBreath {
+  0% {
+    transform: scale(1.006) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.012) translate3d(0.05%, -0.08%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .syncPoster,
+  .syncVisemeFrame {
+    animation: none;
+  }
+}

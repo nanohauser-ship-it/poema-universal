@@ -1,0 +1,20 @@
+POEMA UNIVERSAL · THE LIGHT STAYS ON · DRAMATURGIA VIVA V2
+
+Esta versión NO rediseña La Construcción del Poema.
+Conserva la página canónica y reemplaza únicamente la capa de BSO/iluminación.
+
+NUEVO:
+- Análisis de audio por graves, medios y agudos.
+- Dramaturgia temporal adaptada a la canción (4:05.95 aprox.).
+- Coro de luz por zonas de las terrazas.
+- Luz que viaja lentamente hacia la estructura superior.
+- Dos acontecimientos lumínicos irrepetibles alrededor de 1:53 y 3:13.
+- Memoria luminosa acumulativa y resplandor residual.
+- Cada cambio de poema produce una entrega breve de luz.
+- La voz 60 queda preparada para activar una convergencia especial hacia el Árbol Blanco.
+
+SEGURIDAD:
+- Copia de seguridad automática en ~/.poema-universal-backups/
+- No modifica PoemBook.tsx.
+- No modifica MundoPoema.module.css.
+- No sustituye la escena 3D existente.

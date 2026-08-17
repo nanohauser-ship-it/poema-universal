@@ -1,0 +1,54 @@
+EMBRIÓN V5 — CAMPO DE GRAVEDAD SIMBÓLICA
+=========================================
+
+QUÉ CONSERVA
+
+- El organismo tridimensional de Embrión Tecno.
+- La cámara de incubación y el campo donde escribes.
+- La alimentación verbal letra por letra.
+- La evolución, los hábitats y la dirección musical.
+- La memoria local del organismo actual.
+
+QUÉ AÑADE
+
+- Un líquido amniótico poblado por un campo denso de letras en latencia.
+- Selección de cualquiera de las palabras escritas como núcleo gravitatorio.
+- Emisiones lentas de palabras, símbolos, imágenes, materias, verbos y tensiones.
+- Controles para conservar, disolver, llevar al texto o convertir un impulso en núcleo.
+- Vivero persistente en el navegador: sobrevive cuando creas otro organismo.
+- Botón «¿Por qué Embrión envía esto?» con relación, constelación, fuerza y fuentes.
+- Diferencia visible entre huella documental, relación curatorial y conexión experimental.
+- Aceleración de los impulsos sin alterar el ciclo musical.
+
+CÓMO FUNCIONA
+
+1. Entra en /embrion.
+2. Si todavía no existe un organismo, incuba un texto inicial como antes.
+3. Escribe palabras o un fragmento en «Alimentación verbal».
+4. Pulsa una de las palabras bajo «Elige qué palabra ejerce gravedad».
+5. Embrión iluminará letras y enviará impulsos lentamente.
+6. Ningún impulso entra solo en tu escrito. Tú decides.
+
+ARCHIVO SIMBÓLICO INICIAL
+
+El motor contiene constelaciones procedentes de una síntesis curatorial de:
+
+- No dejes que desaparezcamos y su archivo simbólico documentado.
+- La Jerarquía del Hambre y Memorias de Bielka como universo autoral.
+- Mariposas de polvo como archivo colectivo de Poema Universal.
+- Juan Eduardo Cirlot.
+- Jean Chevalier y Alain Gheerbrant.
+- Gaston Bachelard.
+- Gianni Rodari.
+- La navegación ideológica vinculada a Julio Casares.
+- El archivo de mitos y leyendas aportado.
+
+No se copian definiciones ni fragmentos de esos libros. El sistema trabaja con relaciones
+destiladas, tipos de operación y constelaciones curatoriales. Las conexiones oblicuas se
+marcan como experimentales: Embrión no finge certeza documental.
+
+SEGURIDAD
+
+El instalador crea una copia de seguridad antes de sustituir cualquier archivo existente.
+No incluye ni modifica .env.local, claves privadas, Supabase ni las rutas de API actuales.
+

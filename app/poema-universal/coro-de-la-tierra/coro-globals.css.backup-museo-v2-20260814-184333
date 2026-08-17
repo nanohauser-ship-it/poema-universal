@@ -1,0 +1,2196 @@
+
+/* =========================================================
+   EL CORO DE LA TIERRA
+   MONUMENTO SONORO UNIVERSAL
+   VERSIÓN MUSEÍSTICA · POEMA UNIVERSAL
+========================================================= */
+
+.coro-room {
+  --black: #020201;
+  --black-warm: #080603;
+  --gold: #c9963e;
+  --gold-bright: #f2d18d;
+  --gold-pale: #f4e2bb;
+  --gold-muted: rgba(216, 170, 84, 0.42);
+  --line: rgba(218, 171, 82, 0.18);
+  --line-soft: rgba(218, 171, 82, 0.07);
+
+  position: relative;
+
+  width: 100%;
+  height: 100svh;
+  min-height: 720px;
+
+  overflow: hidden;
+
+  color: #ead7b2;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 45%,
+      rgba(77, 51, 16, 0.2) 0%,
+      rgba(16, 11, 5, 0.2) 33%,
+      rgba(2, 2, 1, 0.97) 72%
+    ),
+    #020201;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  isolation: isolate;
+}
+
+.coro-room,
+.coro-room * {
+  box-sizing: border-box;
+}
+
+.coro-room button,
+.coro-room input,
+.coro-room textarea {
+  font: inherit;
+}
+
+
+/* =========================================================
+   CAPA GENERAL DE OSCURIDAD
+========================================================= */
+
+.coro-room::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -20;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.97) 0%,
+      rgba(4,3,2,.72) 10%,
+      rgba(10,7,3,.22) 36%,
+      rgba(10,7,3,.15) 50%,
+      rgba(10,7,3,.22) 64%,
+      rgba(4,3,2,.72) 90%,
+      rgba(0,0,0,.97) 100%
+    ),
+    radial-gradient(
+      ellipse at 50% 105%,
+      rgba(196,126,27,.10),
+      transparent 48%
+    );
+}
+
+
+/* =========================================================
+   VIÑETA / PROFUNDIDAD
+========================================================= */
+
+.coro-room::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 100;
+
+  pointer-events: none;
+
+  box-shadow:
+    inset 0 0 150px rgba(0,0,0,.9),
+    inset 0 -100px 170px rgba(0,0,0,.8);
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.1),
+      transparent 16%,
+      transparent 76%,
+      rgba(0,0,0,.37)
+    );
+}
+
+
+/* =========================================================
+   ARQUITECTURA VERTICAL
+========================================================= */
+
+.architectural-light {
+  position: absolute;
+  inset: 0;
+
+  z-index: -15;
+
+  pointer-events: none;
+
+  opacity: .95;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 7%,
+      rgba(210,153,59,.10) 7.04%,
+      transparent 7.12%,
+
+      transparent 15%,
+      rgba(210,153,59,.04) 15.05%,
+      transparent 15.11%,
+
+      transparent 24%,
+      rgba(210,153,59,.06) 24.04%,
+      transparent 24.1%,
+
+      transparent 33%,
+      rgba(210,153,59,.025) 33.04%,
+      transparent 33.1%,
+
+      transparent 50%,
+      rgba(229,179,87,.06) 50.04%,
+      transparent 50.1%,
+
+      transparent 67%,
+      rgba(210,153,59,.025) 67.04%,
+      transparent 67.1%,
+
+      transparent 76%,
+      rgba(210,153,59,.06) 76.04%,
+      transparent 76.1%,
+
+      transparent 85%,
+      rgba(210,153,59,.04) 85.05%,
+      transparent 85.11%,
+
+      transparent 93%,
+      rgba(210,153,59,.10) 93.04%,
+      transparent 93.12%
+    ),
+
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(239,194,111,.09),
+      transparent 36%
+    );
+}
+
+.architectural-light::before,
+.architectural-light::after {
+  content: "";
+
+  position: absolute;
+
+  top: -10vh;
+
+  width: 11vw;
+  height: 85vh;
+
+  opacity: .18;
+
+  filter: blur(18px);
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(240,194,110,.30),
+      rgba(191,119,29,.06) 52%,
+      transparent 87%
+    );
+}
+
+.architectural-light::before {
+  left: 12vw;
+  transform: rotate(8deg);
+}
+
+.architectural-light::after {
+  right: 12vw;
+  transform: rotate(-8deg);
+}
+
+
+/* =========================================================
+   GRAN BÓVEDA SUPERIOR
+========================================================= */
+
+.ceiling-rings {
+  position: absolute;
+
+  left: 50%;
+  top: -59vh;
+
+  width: 126vw;
+  height: 105vh;
+
+  transform: translateX(-50%);
+
+  z-index: -13;
+
+  pointer-events: none;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(216,163,70,.10);
+
+  box-shadow:
+    inset 0 -1px 0 rgba(239,195,111,.05),
+    inset 0 -24px 80px rgba(176,112,25,.025);
+}
+
+.ceiling-rings::before,
+.ceiling-rings::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+}
+
+.ceiling-rings::before {
+  width: 81%;
+  height: 81%;
+
+  border:
+    1px solid
+    rgba(218,166,75,.07);
+}
+
+.ceiling-rings::after {
+  width: 57%;
+  height: 57%;
+
+  border:
+    1px solid
+    rgba(218,166,75,.045);
+}
+
+
+/* =========================================================
+   COLUMNAS / PANELES LATERALES
+========================================================= */
+
+.distant-archive {
+  position: absolute;
+
+  top: 14vh;
+
+  width: 12vw;
+  height: 68vh;
+
+  z-index: -9;
+
+  pointer-events: none;
+
+  opacity: .58;
+
+  border-left:
+    1px solid
+    rgba(214,158,63,.06);
+
+  border-right:
+    1px solid
+    rgba(214,158,63,.04);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(187,119,25,.018),
+      transparent
+    );
+}
+
+.distant-archive.left {
+  left: 6vw;
+}
+
+.distant-archive.right {
+  right: 6vw;
+}
+
+.distant-archive::before {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 0;
+
+  width: 1px;
+  height: 100%;
+
+  transform: translateX(-50%);
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent,
+      rgba(237,185,91,.2) 15%,
+      rgba(204,140,42,.05) 72%,
+      transparent
+    );
+
+  box-shadow:
+    0 0 28px
+    rgba(206,143,46,.09);
+}
+
+.distant-archive::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 14%;
+
+  width: 42%;
+  aspect-ratio: 1;
+
+  transform: translateX(-50%) rotate(45deg);
+
+  border:
+    1px solid
+    rgba(224,171,78,.10);
+}
+
+
+/* =========================================================
+   SUELO DEL MUSEO
+========================================================= */
+
+.floor-reflection {
+  position: absolute;
+
+  left: -10vw;
+  right: -10vw;
+
+  bottom: -27vh;
+
+  height: 55vh;
+
+  z-index: -7;
+
+  pointer-events: none;
+
+  transform:
+    perspective(850px)
+    rotateX(67deg);
+
+  transform-origin: center top;
+
+  opacity: .62;
+
+  background:
+    repeating-radial-gradient(
+      ellipse at center,
+      rgba(212,154,57,.09) 0 1px,
+      transparent 1px 54px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10vw,
+      rgba(216,163,71,.045)
+      10vw calc(10vw + 1px)
+    );
+}
+
+.floor-reflection::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 5%;
+
+  width: 45vw;
+  height: 22vh;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  filter: blur(30px);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(214,143,34,.20),
+      rgba(113,67,12,.05) 45%,
+      transparent 72%
+    );
+}
+
+
+/* =========================================================
+   NAVEGACIÓN SUPERIOR
+========================================================= */
+
+.topbar {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 0;
+
+  height: 64px;
+
+  z-index: 50;
+
+  padding: 0 22px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  border-bottom:
+    1px solid
+    rgba(212,161,72,.11);
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(2,2,1,.88),
+      rgba(2,2,1,.18)
+    );
+}
+
+.brand {
+  justify-self: start;
+
+  color:
+    rgba(233,207,159,.58);
+
+  text-decoration: none;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 9px;
+
+  letter-spacing: .36em;
+}
+
+.brand:hover {
+  color: #efd495;
+}
+
+.room-label {
+  justify-self: center;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  color:
+    rgba(215,165,77,.38);
+
+  font-size: 6px;
+
+  letter-spacing: .46em;
+}
+
+.room-label span {
+  display: block;
+
+  width: 28px;
+  height: 1px;
+
+  background:
+    rgba(215,165,77,.25);
+}
+
+.add-top {
+  justify-self: end;
+
+  padding: 10px 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color:
+    rgba(234,204,147,.52);
+
+  cursor: pointer;
+
+  font-size: 7px;
+
+  letter-spacing: .3em;
+
+  transition:
+    color 250ms ease,
+    text-shadow 250ms ease;
+}
+
+.add-top:hover {
+  color: #f1d18c;
+
+  text-shadow:
+    0 0 12px
+    rgba(214,149,49,.35);
+}
+
+
+/* =========================================================
+   TÍTULO MONUMENTAL
+========================================================= */
+
+.title-block {
+  position: absolute;
+
+  top: 8.5vh;
+  left: 50%;
+
+  z-index: 25;
+
+  width: min(760px, 62vw);
+
+  transform: translateX(-50%);
+
+  text-align: center;
+
+  pointer-events: none;
+}
+
+.title-block p {
+  margin: 0 0 8px;
+
+  color:
+    rgba(213,161,70,.53);
+
+  font-size:
+    clamp(6px, .47vw, 9px);
+
+  letter-spacing: .52em;
+}
+
+.title-block h1 {
+  margin: 0;
+
+  color:
+    rgba(244,223,184,.94);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-weight: 400;
+
+  font-size:
+    clamp(38px, 4vw, 70px);
+
+  line-height: .92;
+
+  letter-spacing: .13em;
+
+  text-shadow:
+    0 0 30px
+    rgba(222,159,58,.08);
+}
+
+.title-block > span {
+  display: block;
+
+  margin-top: 13px;
+
+  color:
+    rgba(232,204,153,.53);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(11px, .92vw, 16px);
+
+  font-style: italic;
+
+  letter-spacing: .08em;
+}
+
+
+/* =========================================================
+   ESCENARIO DE LA ESFERA
+========================================================= */
+
+.sphere-stage {
+  position: absolute;
+
+  left: 50%;
+  top: 18.5vh;
+
+  z-index: 15;
+
+  width:
+    min(65vw, 970px);
+
+  height:
+    min(65vw, 970px);
+
+  max-height: 68vh;
+
+  transform: translateX(-50%);
+
+  pointer-events: auto;
+}
+
+.voice-sphere {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  cursor: grab;
+
+  touch-action: none;
+
+  filter:
+    drop-shadow(
+      0 0 18px
+      rgba(215,150,48,.13)
+    );
+}
+
+.voice-sphere:active {
+  cursor: grabbing;
+}
+
+
+/* =========================================================
+   HALO / SUSPENSIÓN DE LA ESFERA
+========================================================= */
+
+.sphere-stage::before {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 96%;
+  height: 96%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  z-index: -2;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle,
+      transparent 49%,
+      rgba(213,147,47,.06) 62%,
+      transparent 75%
+    );
+
+  box-shadow:
+    0 0 90px
+      rgba(204,136,38,.07);
+
+  animation:
+    museumPlanetBreath 8s ease-in-out infinite;
+}
+
+.sphere-stage::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 3%;
+
+  width: 52%;
+  height: 5%;
+
+  transform: translateX(-50%);
+
+  z-index: -1;
+
+  border-radius: 50%;
+
+  background:
+    rgba(209,139,36,.14);
+
+  filter: blur(19px);
+}
+
+
+/* =========================================================
+   SOMBRA DEL PLANETA
+========================================================= */
+
+.sphere-shadow {
+  position: absolute;
+
+  left: 50%;
+  bottom: 2%;
+
+  width: 45%;
+  height: 4%;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+
+  background:
+    rgba(211,144,41,.14);
+
+  filter: blur(22px);
+}
+
+
+/* =========================================================
+   INDICACIÓN DE ARRASTRE
+========================================================= */
+
+.drag-hint {
+  position: absolute;
+
+  left: 50%;
+  bottom: -1.6vh;
+
+  transform: translateX(-50%);
+
+  z-index: 20;
+
+  color:
+    rgba(221,181,107,.26);
+
+  font-size: 5px;
+
+  letter-spacing: .42em;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+.drag-hint span {
+  margin-right: 8px;
+
+  color:
+    rgba(227,172,75,.45);
+}
+
+
+/* =========================================================
+   CARTELA DE VOZ · DERECHA
+========================================================= */
+
+.voice-card {
+  position: absolute;
+
+  right: 3.6vw;
+  top: 38%;
+
+  z-index: 30;
+
+  width:
+    clamp(230px, 18vw, 310px);
+
+  min-height: 180px;
+
+  padding:
+    clamp(17px, 1.5vw, 24px);
+
+  border:
+    1px solid
+    rgba(217,164,73,.29);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(11,8,4,.83),
+      rgba(2,2,1,.9)
+    );
+
+  box-shadow:
+    0 20px 70px
+      rgba(0,0,0,.65),
+    inset 0 0 40px
+      rgba(218,153,46,.025);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.voice-card::before {
+  content: "";
+
+  position: absolute;
+
+  left: 22px;
+  top: -1px;
+
+  width: 42px;
+  height: 1px;
+
+  background:
+    rgba(244,198,111,.75);
+
+  box-shadow:
+    0 0 12px
+    rgba(229,164,58,.5);
+}
+
+.voice-card::after {
+  content: "";
+
+  position: absolute;
+
+  right: -1px;
+  top: -1px;
+
+  width: 14px;
+  height: 14px;
+
+  border-top:
+    1px solid
+    rgba(242,198,112,.65);
+
+  border-right:
+    1px solid
+    rgba(242,198,112,.65);
+}
+
+.voice-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 14px;
+}
+
+.voice-index {
+  color:
+    rgba(215,159,66,.58);
+
+  font-size: 6px;
+
+  letter-spacing: .36em;
+}
+
+.gold-rule {
+  width: 100%;
+  height: 1px;
+
+  margin: 13px 0 12px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(219,164,72,.3),
+      rgba(219,164,72,.06),
+      transparent
+    );
+}
+
+.voice-card h2 {
+  margin: 0;
+
+  color:
+    rgba(244,223,182,.9);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-weight: 400;
+
+  font-size:
+    clamp(19px, 1.5vw, 28px);
+
+  letter-spacing: .04em;
+}
+
+.origin {
+  margin: 5px 0 12px;
+
+  color:
+    rgba(224,195,139,.43);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(8px, .64vw, 11px);
+
+  font-style: italic;
+}
+
+
+/* =========================================================
+   BOTÓN PLAY
+========================================================= */
+
+.play-button {
+  position: relative;
+
+  flex: 0 0 auto;
+
+  display: grid;
+  place-items: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  border:
+    1px solid
+    rgba(226,172,76,.45);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(218,151,47,.08),
+      rgba(0,0,0,.25)
+    );
+
+  cursor: pointer;
+
+  transition:
+    transform 250ms ease,
+    border-color 250ms ease,
+    box-shadow 250ms ease;
+}
+
+.play-button:hover {
+  transform: scale(1.08);
+
+  border-color:
+    rgba(246,205,126,.78);
+
+  box-shadow:
+    0 0 24px
+    rgba(218,151,47,.14);
+}
+
+.play-icon {
+  width: 0;
+  height: 0;
+
+  margin-left: 3px;
+
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left:
+    7px solid
+    rgba(255,229,177,.92);
+}
+
+.pause-icon {
+  width: 8px;
+  height: 9px;
+
+  border-left:
+    2px solid
+    rgba(255,229,177,.92);
+
+  border-right:
+    2px solid
+    rgba(255,229,177,.92);
+}
+
+
+/* =========================================================
+   FORMA DE ONDA
+========================================================= */
+
+.waveform {
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  gap: 2px;
+
+  overflow: hidden;
+
+  opacity: .44;
+}
+
+.waveform span {
+  flex: 1;
+
+  min-width: 1px;
+  max-width: 2px;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(153,96,22,.4),
+      rgba(237,185,86,.91)
+    );
+
+  transform-origin: center;
+}
+
+.waveform.is-active {
+  opacity: .95;
+}
+
+.waveform.is-active span {
+  animation:
+    museumVoiceWave
+    700ms ease-in-out
+    infinite alternate;
+}
+
+
+/* =========================================================
+   PROGRESO
+========================================================= */
+
+.audio-progress {
+  display: grid;
+
+  grid-template-columns:
+    auto 1fr auto;
+
+  align-items: center;
+  gap: 7px;
+
+  margin-top: 5px;
+
+  color:
+    rgba(220,183,112,.34);
+
+  font-size: 6px;
+}
+
+.audio-progress input {
+  width: 100%;
+  height: 1px;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background:
+    rgba(216,162,69,.18);
+
+  outline: none;
+}
+
+.audio-progress input::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 7px;
+  height: 7px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: #edca84;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 9px
+    rgba(233,173,66,.65);
+}
+
+
+/* =========================================================
+   FRAGMENTO DE LA VOZ
+========================================================= */
+
+.voice-card blockquote {
+  margin: 14px 0 0;
+
+  padding: 12px 0 0;
+
+  border-top:
+    1px solid
+    rgba(215,161,70,.09);
+
+  color:
+    rgba(232,208,164,.52);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(10px, .73vw, 13px);
+
+  font-style: italic;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   ACCIONES CARTELA
+========================================================= */
+
+.card-actions {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 15px;
+}
+
+.card-actions button {
+  border: 0;
+  background: transparent;
+
+  padding: 0;
+
+  color:
+    rgba(220,179,103,.38);
+
+  cursor: pointer;
+
+  font-size: 5px;
+
+  letter-spacing: .28em;
+
+  transition:
+    color 250ms ease;
+}
+
+.card-actions button:hover {
+  color:
+    rgba(244,210,148,.85);
+}
+
+.card-actions .remove-voice {
+  color:
+    rgba(176,105,78,.38);
+}
+
+
+/* =========================================================
+   ESTADO SIN VOZ
+========================================================= */
+
+.empty-voice {
+  color:
+    rgba(231,207,164,.48);
+}
+
+.empty-voice h2 {
+  margin: 9px 0 8px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-weight: 400;
+
+  color:
+    rgba(243,221,181,.85);
+}
+
+.empty-voice p {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   CONTADOR IZQUIERDO · CARTELA DE MUSEO
+========================================================= */
+
+.voice-count {
+  position: absolute;
+
+  left: 4.3vw;
+  top: 45%;
+
+  z-index: 22;
+
+  width: 150px;
+
+  display: flex;
+  flex-direction: column;
+
+  pointer-events: none;
+}
+
+.voice-count::before {
+  content: "ARCHIVO VIVO";
+
+  display: block;
+
+  margin-bottom: 13px;
+
+  color:
+    rgba(214,158,66,.46);
+
+  font-size: 5px;
+
+  letter-spacing: .42em;
+}
+
+.voice-count::after {
+  content:
+    "Cada voz conservada se convierte en una luz.";
+
+  display: block;
+
+  width: 125px;
+
+  margin-top: 13px;
+
+  color:
+    rgba(225,201,156,.25);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-style: italic;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+.voice-count strong {
+  color:
+    rgba(240,205,139,.8);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-weight: 400;
+
+  font-size:
+    clamp(28px, 2vw, 38px);
+
+  line-height: 1;
+}
+
+.voice-count span {
+  margin-top: 7px;
+
+  color:
+    rgba(219,183,116,.34);
+
+  font-size: 5px;
+
+  letter-spacing: .32em;
+}
+
+
+/* =========================================================
+   ALTAR SONORO
+========================================================= */
+
+.humanity-button {
+  position: absolute;
+
+  left: 50%;
+  bottom: 4.5vh;
+
+  z-index: 35;
+
+  min-width:
+    clamp(290px, 31vw, 470px);
+
+  height: 47px;
+
+  transform: translateX(-50%);
+
+  border:
+    1px solid
+    rgba(222,167,73,.39);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4,3,1,.74),
+      rgba(33,21,6,.52),
+      rgba(4,3,1,.74)
+    );
+
+  color:
+    rgba(246,218,163,.79);
+
+  cursor: pointer;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(8px, .68vw, 11px);
+
+  letter-spacing: .27em;
+
+  box-shadow:
+    inset 0 0 24px
+      rgba(215,145,38,.035),
+    0 0 20px
+      rgba(216,145,38,.03);
+
+  transition:
+    color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.humanity-button::before {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  z-index: -2;
+
+  width: 165%;
+  height: 330%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border:
+    1px solid
+    rgba(217,159,63,.11);
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 25px
+      rgba(217,159,63,.025),
+    0 0 0 53px
+      rgba(217,159,63,.012);
+
+  pointer-events: none;
+}
+
+.humanity-button::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  z-index: -1;
+
+  width: 190%;
+  height: 280%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  filter: blur(27px);
+
+  opacity: .72;
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(223,152,44,.15),
+      rgba(128,74,10,.04) 45%,
+      transparent 70%
+    );
+
+  pointer-events: none;
+
+  animation:
+    museumAltarBreath
+    6s ease-in-out infinite;
+}
+
+.humanity-button:hover {
+  color: #fff0c8;
+
+  border-color:
+    rgba(246,201,115,.72);
+
+  box-shadow:
+    inset 0 0 30px
+      rgba(222,150,41,.07),
+    0 0 28px
+      rgba(222,150,41,.11);
+}
+
+.button-light {
+  position: absolute;
+
+  left: 50%;
+  top: -1px;
+
+  width: 52px;
+  height: 1px;
+
+  transform: translateX(-50%);
+
+  background:
+    rgba(250,210,131,.82);
+
+  box-shadow:
+    0 0 14px
+    rgba(238,177,68,.65);
+}
+
+
+/* =========================================================
+   MODAL DE SUBIDA
+========================================================= */
+
+.studio-backdrop {
+  position: fixed;
+  inset: 0;
+
+  z-index: 500;
+
+  display: grid;
+  place-items: center;
+
+  padding: 4vh 4vw;
+
+  overflow-y: auto;
+
+  background:
+    rgba(0,0,0,.88);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.upload-studio {
+  width:
+    min(1000px, 92vw);
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  border:
+    1px solid
+    rgba(214,159,68,.27);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(15,11,6,.99),
+      rgba(4,4,3,.99)
+    );
+
+  color:
+    rgba(235,214,177,.74);
+
+  box-shadow:
+    0 30px 100px
+      rgba(0,0,0,.92),
+    inset 0 0 80px
+      rgba(190,122,27,.025);
+}
+
+.studio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 22px;
+
+  padding: 30px 34px 24px;
+
+  border-bottom:
+    1px solid
+    rgba(214,160,69,.11);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+
+  color:
+    rgba(215,159,67,.56);
+
+  font-size: 6px;
+
+  letter-spacing: .4em;
+}
+
+.studio-header h2 {
+  margin: 0;
+
+  color:
+    rgba(244,224,188,.9);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-weight: 400;
+
+  font-size:
+    clamp(26px, 2.2vw, 39px);
+}
+
+.studio-header p {
+  margin: 8px 0 0;
+
+  color:
+    rgba(230,207,165,.41);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 12px;
+
+  font-style: italic;
+}
+
+.close-button {
+  width: 35px;
+  height: 35px;
+
+  border:
+    1px solid
+    rgba(215,159,66,.2);
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color:
+    rgba(235,202,142,.58);
+
+  cursor: pointer;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   DROP ZONE
+========================================================= */
+
+.drop-zone {
+  margin: 27px 34px;
+
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border:
+    1px dashed
+    rgba(217,162,70,.28);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(196,126,25,.05),
+      transparent 67%
+    );
+
+  color:
+    rgba(232,210,171,.46);
+}
+
+.drop-zone.is-dragging {
+  border-color:
+    rgba(244,199,110,.72);
+
+  background:
+    rgba(195,124,24,.08);
+}
+
+.drop-icon {
+  color:
+    rgba(231,177,78,.62);
+
+  font-size: 25px;
+}
+
+.drop-zone strong {
+  color:
+    rgba(241,219,179,.76);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 20px;
+
+  font-weight: 400;
+}
+
+.drop-zone > span:not(.drop-icon) {
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   BOTONES GENERALES DEL MODAL
+========================================================= */
+
+.secondary-button,
+.primary-button {
+  margin-top: 6px;
+
+  padding: 10px 17px;
+
+  border:
+    1px solid
+    rgba(218,163,70,.34);
+
+  background:
+    rgba(17,12,5,.5);
+
+  color:
+    rgba(240,210,154,.7);
+
+  cursor: pointer;
+
+  font-size: 7px;
+
+  letter-spacing: .27em;
+}
+
+.secondary-button:hover,
+.primary-button:hover {
+  border-color:
+    rgba(245,202,120,.72);
+
+  color:
+    rgba(255,231,184,.92);
+}
+
+
+/* =========================================================
+   TARJETAS DE ARCHIVOS
+========================================================= */
+
+.draft-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  padding: 0 34px 28px;
+}
+
+.draft-card {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    42px 1fr auto;
+
+  gap: 17px;
+
+  padding: 20px;
+
+  border:
+    1px solid
+    rgba(212,158,66,.13);
+
+  background:
+    rgba(255,255,255,.01);
+}
+
+.draft-number {
+  color:
+    rgba(220,164,71,.48);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 18px;
+}
+
+.file-line {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 14px;
+}
+
+.file-line strong {
+  color:
+    rgba(239,216,174,.68);
+
+  font-size: 11px;
+
+  font-weight: 500;
+}
+
+.file-line span {
+  color:
+    rgba(219,194,147,.32);
+
+  font-size: 8px;
+}
+
+.field-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr 1fr;
+
+  gap: 12px;
+}
+
+.field-grid label {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  color:
+    rgba(219,184,117,.42);
+
+  font-size: 6px;
+
+  letter-spacing: .22em;
+
+  text-transform: uppercase;
+}
+
+.field-grid input,
+.field-grid textarea {
+  width: 100%;
+
+  padding: 8px 0;
+
+  border: 0;
+
+  border-bottom:
+    1px solid
+    rgba(214,160,68,.18);
+
+  outline: none;
+
+  background: transparent;
+
+  color:
+    rgba(240,222,190,.78);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 13px;
+
+  resize: vertical;
+}
+
+.field-grid input:focus,
+.field-grid textarea:focus {
+  border-bottom-color:
+    rgba(232,183,96,.62);
+}
+
+.excerpt-field {
+  grid-column: 1 / -1;
+}
+
+.remove-draft {
+  align-self: start;
+
+  border: 0;
+
+  background: transparent;
+
+  color:
+    rgba(182,116,91,.47);
+
+  cursor: pointer;
+
+  font-size: 16px;
+}
+
+.status-line {
+  margin: 11px 0 0;
+
+  color:
+    rgba(222,188,122,.5);
+
+  font-size: 9px;
+}
+
+.status-line.success {
+  color:
+    rgba(169,199,146,.68);
+}
+
+.status-line.error {
+  color:
+    rgba(211,138,111,.72);
+}
+
+
+/* =========================================================
+   FOOTER DEL MODAL
+========================================================= */
+
+.studio-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  padding: 22px 34px 30px;
+
+  border-top:
+    1px solid
+    rgba(215,161,71,.10);
+}
+
+.studio-footer p {
+  margin: 0;
+
+  color:
+    rgba(228,204,160,.34);
+
+  font-size: 9px;
+}
+
+.primary-button:disabled {
+  opacity: .26;
+
+  cursor: default;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-toast {
+  position: fixed;
+
+  left: 50%;
+  bottom: 25px;
+
+  z-index: 900;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  max-width: min(480px,90vw);
+
+  padding: 12px 16px;
+
+  border:
+    1px solid
+    rgba(181,105,81,.34);
+
+  background:
+    rgba(15,8,6,.97);
+
+  color:
+    rgba(242,207,191,.8);
+
+  font-size: 11px;
+}
+
+.error-toast button {
+  border: 0;
+
+  background: transparent;
+
+  color:
+    rgba(255,220,201,.6);
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
+
+@keyframes museumPlanetBreath {
+  0%,
+  100% {
+    opacity: .72;
+
+    transform:
+      translate(-50%,-50%)
+      scale(.985);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform:
+      translate(-50%,-50%)
+      scale(1.025);
+  }
+}
+
+@keyframes museumAltarBreath {
+  0%,
+  100% {
+    opacity: .48;
+
+    transform:
+      translate(-50%,-50%)
+      scale(.98);
+  }
+
+  50% {
+    opacity: .9;
+
+    transform:
+      translate(-50%,-50%)
+      scale(1.04);
+  }
+}
+
+@keyframes museumVoiceWave {
+  from {
+    transform: scaleY(.48);
+  }
+
+  to {
+    transform: scaleY(1.28);
+  }
+}
+
+
+/* =========================================================
+   PORTÁTIL
+========================================================= */
+
+@media (max-width: 1180px) {
+
+  .sphere-stage {
+    width: 68vw;
+    height: 68vw;
+  }
+
+  .voice-card {
+    right: 2vw;
+
+    width: 225px;
+  }
+
+  .voice-count {
+    left: 2.2vw;
+  }
+}
+
+
+/* =========================================================
+   MÓVIL
+========================================================= */
+
+@media (max-width: 820px) {
+
+  .coro-room {
+    height: auto;
+
+    min-height: 100svh;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding-bottom: 180px;
+  }
+
+  .topbar {
+    height: 56px;
+
+    grid-template-columns:
+      1fr auto;
+
+    padding: 0 15px;
+  }
+
+  .room-label {
+    display: none;
+  }
+
+  .brand {
+    font-size: 7px;
+  }
+
+  .title-block {
+    position: relative;
+
+    left: auto;
+    top: auto;
+
+    width: calc(100% - 34px);
+
+    transform: none;
+
+    margin: 90px auto 0;
+  }
+
+  .title-block h1 {
+    font-size:
+      clamp(38px, 10vw, 55px);
+  }
+
+  .sphere-stage {
+    position: relative;
+
+    left: 50%;
+    top: auto;
+
+    width: 96vw;
+    height: 96vw;
+
+    max-height: none;
+
+    margin-top: 20px;
+  }
+
+  .voice-count {
+    display: none;
+  }
+
+  .voice-card {
+    position: relative;
+
+    right: auto;
+    top: auto;
+
+    width: calc(100% - 36px);
+
+    margin:
+      10px auto 0;
+  }
+
+  .humanity-button {
+    position: relative;
+
+    left: auto;
+    bottom: auto;
+
+    display: block;
+
+    width: calc(100% - 55px);
+    min-width: 0;
+
+    transform: none;
+
+    margin:
+      65px auto 0;
+  }
+
+  .field-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .excerpt-field {
+    grid-column: auto;
+  }
+
+  .draft-card {
+    grid-template-columns:
+      30px 1fr auto;
+  }
+
+  .studio-header,
+  .studio-footer {
+    padding:
+      22px 20px;
+  }
+
+  .drop-zone {
+    margin: 20px;
+  }
+
+  .draft-list {
+    padding:
+      0 20px 20px;
+  }
+
+  .studio-footer {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .sphere-stage::before,
+  .humanity-button::after,
+  .waveform span {
+    animation: none !important;
+  }
+}
+

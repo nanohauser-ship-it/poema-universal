@@ -1,0 +1,34 @@
+GRAN AVATAR V5 · CUERPO CONTINUO / CERO CORTES
+
+POR QUÉ EXISTE ESTA VERSIÓN
+Las V3 y V4 intentaban sincronizar la presencia mediante poses, clips y pausas.
+El resultado podía sentirse primitivo porque el ojo humano detecta cualquier
+salto mínimo de escala, gesto, luz o posición de cabeza.
+
+CAMBIO CENTRAL
+V5 usa UN ÚNICO vídeo maestro como cuerpo del avatar durante toda la sesión.
+Nunca cambia de clip al escuchar, pensar, hablar o callar.
+Nunca hace seek al cambiar de estado.
+Nunca congela una boca para esconder una pausa.
+
+QUÉ CAMBIA CON LA VOZ
+- El vídeo sigue vivo todo el tiempo.
+- Hablar/recitar aumenta muy suavemente la velocidad según la energía del TTS.
+- Las pausas NO paran el cuerpo.
+- Los estados modifican luz, ritmo y cámara, no la identidad.
+
+PLANOS
+Los planos ya no son vídeos diferentes. Son movimientos de cámara digitales
+muy lentos sobre el mismo cuerpo: busto, retrato, íntimo, izquierda y derecha.
+
+SINCRONIZACIÓN
+Esta V5 prioriza continuidad y naturalidad. No pretende lip-sync fonético exacto
+con un vídeo pregrabado. La infraestructura de alineación sigue instalada para
+una futura fase con un motor neuronal de lip-sync sobre el mismo vídeo.
+
+INSTALACIÓN
+cd "$HOME/poema-universal"
+unzip -o "GRAN-AVATAR-V5-CONTINUO.zip"
+bash "GRAN-AVATAR-V5-CONTINUO/INSTALAR-GRAN-AVATAR-V5.sh" "$HOME/poema-universal"
+
+Después reinicia Next.js.

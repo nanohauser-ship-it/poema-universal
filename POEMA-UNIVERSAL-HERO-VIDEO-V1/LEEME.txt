@@ -1,0 +1,17 @@
+POEMA UNIVERSAL · PORTADA CINEMATOGRÁFICA V1
+
+Intervención mínima:
+- sustituye únicamente EditorialHero.tsx y EditorialHero.module.css;
+- instala el vídeo y su poster en public/poema-universal/media/;
+- NO modifica app/poema-universal/page.tsx;
+- conserva la cuenta atrás real que page.tsx ya calcula para 01.01.2027;
+- conserva el enlace al manifiesto;
+- crea backup automático de los dos componentes sustituidos.
+
+Composición:
+- navegación actual intacta;
+- vídeo de 10 s en loop, muted, autoplay y playsInline;
+- expansión atmosférica lateral del vídeo vertical, sin deformarlo;
+- título Poema Universal superpuesto;
+- lema y declaración fundacional;
+- cuenta atrás integrada al pie del hero.

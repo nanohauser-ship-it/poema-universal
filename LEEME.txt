@@ -1,0 +1,18 @@
+MUSEO DE LOS TRES MUNDOS — 9 FOTOGRAFÍAS
+
+Sala I — No dejes que desaparezcamos
+- el-exiliado.webp
+- la-promesa.webp
+- el-arbol-blanco.webp
+
+Sala II — La Jerarquía del Hambre
+- la-cadena-rota.webp
+- la-cocina-sin-fuego.webp
+- los-perros-encadenados.webp
+
+Sala III — Memorias de Bielka
+- el-corazon-de-dos-mitades.webp
+- la-entrada-al-laberinto.webp
+- la-memoria-bajo-el-agua.webp
+
+El ZIP conserva la estructura public/museo/coleccion/...

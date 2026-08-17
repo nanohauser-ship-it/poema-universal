@@ -1,0 +1,484 @@
+import Link from "next/link";
+
+import HomeObraComunGateway from "./components/HomeObraComunGateway";
+import HomeStoreGateway from "./components/HomeStoreGateway";
+import HomeSupportGateway from "./components/HomeSupportGateway";
+
+const publicRooms = [
+  {
+    eyebrow: "Influencias",
+    title: "Artistas Fundamentales",
+    description:
+      "Voces, imágenes, músicas y presencias que abrieron una forma de mirar.",
+    href: "/artistas",
+  },
+  {
+    eyebrow: "Poema colectivo",
+    title: "Cadena del Poema Universal",
+    description:
+      "Una línea humana detrás de otra. Un poema común escrito verso a verso.",
+    href: "/cadena",
+  },
+  {
+    eyebrow: "Cartas públicas",
+    title: "Cartas",
+    description:
+      "Un espacio para escribir a quienes todavía permanecen dentro de nosotros.",
+    href: "/cartas",
+  },
+  {
+    eyebrow: "Memoria",
+    title: "Duelo",
+    description:
+      "Una sala para acompañar la pérdida sin convertirla en silencio.",
+    href: "/duelo",
+  },
+  {
+    eyebrow: "Archivo sonoro",
+    title: "Coro de la Tierra",
+    description:
+      "Voces, lenguas y respiraciones reunidas en una constelación audible.",
+    href: "/poema-universal/coro-de-la-tierra",
+  },
+  {
+    eyebrow: "Arquitectura colectiva",
+    title: "Encadenamiento",
+    description:
+      "La columna de las voces: institutos, poetas y libros enlazados en una misma estructura.",
+    href: "/poema-universal/encadenamiento",
+  },
+  {
+    eyebrow: "Taller literario",
+    title: "Herramientas Literarias",
+    description:
+      "Matriz Poética, Bestiario, Tres Presencias, Ojos de Borges y Atlas Interior.",
+    href: "/poema-universal/herramientas-literarias",
+  },
+];
+
+const houseStates = [
+  {
+    number: "01",
+    title: "Casa pública",
+    description:
+      "Fundación, obra, voces, artistas y salas compartidas abiertas al mundo.",
+  },
+  {
+    number: "02",
+    title: "Habitación privada",
+    description:
+      "Poemas, cartas, velas, rincones y recuerdos protegidos en el dispositivo.",
+  },
+  {
+    number: "03",
+    title: "Cuarto de llaves",
+    description:
+      "Administración, moderación y cuidado de aquello que debe permanecer limpio.",
+  },
+];
+
+export default function HomePage() {
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[#f6efe7] text-stone-950">
+      <div className="pointer-events-none fixed inset-0 z-0">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(circle at 50% 7%, rgba(255,255,255,0.95), transparent 28%), radial-gradient(circle at 50% 42%, rgba(214,186,135,0.2), transparent 38%), linear-gradient(180deg, #fbf4eb 0%, #efe0cf 48%, #f8efe5 100%)",
+          }}
+        />
+
+        <div className="absolute left-0 top-0 hidden h-full w-[22vw] min-w-[230px] max-w-[360px] overflow-hidden md:block">
+          <video
+            src="/flores.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover opacity-[0.56]"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, black 0%, black 48%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, black 0%, black 48%, transparent 100%)",
+            }}
+          />
+
+          <div className="absolute inset-0 bg-[#f6efe7]/28" />
+        </div>
+
+        <div className="absolute right-0 top-0 hidden h-full w-[22vw] min-w-[230px] max-w-[360px] overflow-hidden md:block">
+          <video
+            src="/flores.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full scale-x-[-1] object-cover opacity-[0.56]"
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to left, black 0%, black 48%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to left, black 0%, black 48%, transparent 100%)",
+            }}
+          />
+
+          <div className="absolute inset-0 bg-[#f6efe7]/28" />
+        </div>
+
+        <div className="absolute left-1/2 top-[8%] h-[760px] w-[760px] -translate-x-1/2 rounded-full bg-white/35 blur-3xl" />
+
+        <div
+          className="absolute inset-0 opacity-[0.055]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(70,48,29,0.24) 0.55px, transparent 0.75px)",
+            backgroundSize: "18px 18px",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto w-full max-w-[1240px] px-5 py-6 sm:px-8 lg:px-10">
+        <nav className="sticky top-4 z-50 flex flex-wrap items-center justify-between gap-4 rounded-full border border-stone-200/80 bg-white/72 px-5 py-3 shadow-[0_14px_48px_rgba(70,48,29,0.08)] backdrop-blur-xl">
+          <Link
+            href="/"
+            className="font-serif text-sm tracking-wide text-stone-900"
+          >
+            Poema Universal
+          </Link>
+
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-stone-600">
+            <Link href="/fundacion" className="transition hover:text-black">
+              Fundación
+            </Link>
+            <Link href="/obra" className="transition hover:text-black">
+              Obra
+            </Link>
+            <Link href="/poema-universal" className="transition hover:text-black">
+              Voces
+            </Link>
+            <Link
+              href="/poema-universal/herramientas-literarias"
+              className="transition hover:text-black"
+            >
+              Herramientas
+            </Link>
+            <Link
+              href="/mi-habitacion"
+              className="rounded-full border border-stone-300 bg-white/80 px-4 py-2 text-[9px] font-semibold uppercase tracking-[0.2em] text-stone-700 transition hover:bg-stone-950 hover:text-white"
+            >
+              Mi Habitación
+            </Link>
+          </div>
+        </nav>
+
+        <header className="mx-auto flex min-h-[760px] max-w-5xl flex-col items-center justify-center py-20 text-center sm:min-h-[850px]">
+          <p className="text-[9px] uppercase tracking-[0.52em] text-[#a77d3f]">
+            Una casa emocional para la palabra
+          </p>
+
+          <h1 className="mt-10 font-serif text-[5.2rem] font-medium leading-[0.82] tracking-[-0.065em] text-stone-950 sm:text-[8.5rem] lg:text-[11rem]">
+            Poema
+            <span className="block italic text-stone-500">Universal</span>
+          </h1>
+
+          <p className="mx-auto mt-14 max-w-2xl font-serif text-2xl italic leading-[1.5] text-stone-700 sm:text-3xl">
+            Una casa para escribir, recordar, despedirse, encender una luz y
+            reunir las presencias que nos enseñaron a mirar.
+          </p>
+
+          <div className="mt-12 flex flex-wrap justify-center gap-4">
+            <Link
+              href="/poema-universal"
+              className="rounded-full bg-stone-950 px-8 py-4 text-[10px] font-semibold uppercase tracking-[0.25em] text-white shadow-[0_18px_45px_rgba(0,0,0,0.16)] transition hover:-translate-y-0.5 hover:bg-stone-800"
+            >
+              Entrar en la edición
+            </Link>
+            <Link
+              href="#la-casa"
+              className="rounded-full border border-stone-300 bg-white/72 px-8 py-4 text-[10px] font-semibold uppercase tracking-[0.25em] text-stone-700 transition hover:-translate-y-0.5 hover:bg-white hover:text-black"
+            >
+              Recorrer la casa
+            </Link>
+          </div>
+        </header>
+
+        <section
+          id="la-casa"
+          className="mx-auto max-w-4xl border-y border-stone-300/70 py-24 text-center"
+        >
+          <p className="font-serif text-4xl leading-[1.35] text-stone-900 sm:text-6xl">
+            No todo lo que se pierde desaparece.
+            <span className="block italic text-stone-500">
+              A veces solo necesita una casa.
+            </span>
+          </p>
+
+          <p className="mx-auto mt-10 max-w-2xl text-sm leading-9 text-stone-600">
+            Poema Universal es una arquitectura literaria abierta: un lugar
+            para escribir juntos, preservar la memoria y cuidar aquello que no
+            debe quedar a la intemperie.
+          </p>
+        </section>
+
+        <section className="mt-28">
+          <div className="mb-12 flex flex-col justify-between gap-5 border-b border-stone-300/70 pb-7 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-[8px] uppercase tracking-[0.42em] text-[#a77d3f]">
+                I · La casa pública
+              </p>
+              <h2 className="mt-4 font-serif text-5xl tracking-[-0.04em] text-stone-950 sm:text-7xl">
+                Tres puertas.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-7 text-stone-500">
+              El origen, la creación y las voces forman la estructura principal
+              de Poema Universal.
+            </p>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-3">
+            <Link
+              href="/fundacion"
+              className="group flex min-h-[450px] flex-col justify-between border border-stone-200/90 bg-white/68 p-9 shadow-[0_22px_65px_rgba(70,48,29,0.09)] backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/90"
+            >
+              <div>
+                <p className="text-[8px] uppercase tracking-[0.38em] text-[#a77d3f]">
+                  Puerta 01 · Origen
+                </p>
+                <h3 className="mt-9 font-serif text-5xl tracking-[-0.04em]">
+                  Fundación
+                </h3>
+                <p className="mt-7 text-sm leading-8 text-stone-600">
+                  El manifiesto, la ética y la promesa profunda que sostienen la
+                  casa.
+                </p>
+              </div>
+              <span className="text-[9px] uppercase tracking-[0.28em] text-stone-400 transition group-hover:text-stone-900">
+                Atravesar la puerta →
+              </span>
+            </Link>
+
+            <Link
+              href="/obra"
+              className="group flex min-h-[450px] flex-col justify-between border border-stone-200/90 bg-white/68 p-9 shadow-[0_22px_65px_rgba(70,48,29,0.09)] backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/90"
+            >
+              <div>
+                <p className="text-[8px] uppercase tracking-[0.38em] text-[#a77d3f]">
+                  Puerta 02 · Tríptico
+                </p>
+                <h3 className="mt-9 font-serif text-5xl tracking-[-0.04em]">
+                  La Obra
+                </h3>
+                <p className="mt-7 text-sm leading-8 text-stone-600">
+                  No dejes que desaparezcamos, La Jerarquía del Hambre y
+                  Memorias de Bielka.
+                </p>
+              </div>
+              <span className="text-[9px] uppercase tracking-[0.28em] text-stone-400 transition group-hover:text-stone-900">
+                Atravesar la puerta →
+              </span>
+            </Link>
+
+            <Link
+              href="/poema-universal"
+              className="group flex min-h-[450px] flex-col justify-between bg-stone-950 p-9 text-[#f2eadf] shadow-[0_30px_80px_rgba(0,0,0,0.2)] transition hover:-translate-y-1 hover:bg-stone-900"
+            >
+              <div>
+                <p className="text-[8px] uppercase tracking-[0.38em] text-[#c7a467]">
+                  Puerta 03 · Edición fundacional
+                </p>
+                <h3 className="mt-9 font-serif text-5xl tracking-[-0.04em]">
+                  Las Voces
+                </h3>
+                <p className="mt-7 text-sm leading-8 text-white/55">
+                  Sesenta presencias, cincuenta territorios y una obra escrita
+                  durante un año.
+                </p>
+              </div>
+              <span className="text-[9px] uppercase tracking-[0.28em] text-white/38 transition group-hover:text-[#c7a467]">
+                Entrar en la edición →
+              </span>
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-28">
+          <div className="mb-12 flex flex-col justify-between gap-5 border-b border-stone-300/70 pb-7 sm:flex-row sm:items-end">
+            <div>
+              <p className="text-[8px] uppercase tracking-[0.42em] text-[#a77d3f]">
+                II · Estancias compartidas
+              </p>
+              <h2 className="mt-4 font-serif text-5xl tracking-[-0.04em] text-stone-950 sm:text-7xl">
+                Salas abiertas.
+              </h2>
+            </div>
+            <p className="max-w-md text-sm leading-7 text-stone-500">
+              Lugares públicos para leer, escribir, escuchar, recordar y
+              trabajar la materia literaria.
+            </p>
+          </div>
+
+          <div className="grid gap-px overflow-hidden border border-stone-200/90 bg-stone-200/80 sm:grid-cols-2 lg:grid-cols-3">
+            {publicRooms.map((room) => (
+              <Link
+                key={room.href}
+                href={room.href}
+                className="group flex min-h-[280px] flex-col justify-between bg-[#fffaf4]/92 p-8 transition hover:bg-white"
+              >
+                <div>
+                  <p className="text-[8px] uppercase tracking-[0.34em] text-stone-400">
+                    {room.eyebrow}
+                  </p>
+                  <h3 className="mt-6 font-serif text-3xl tracking-[-0.03em] text-stone-950">
+                    {room.title}
+                  </h3>
+                  <p className="mt-5 text-sm leading-7 text-stone-600">
+                    {room.description}
+                  </p>
+                </div>
+                <span className="mt-8 text-[8px] uppercase tracking-[0.28em] text-stone-400 transition group-hover:text-[#a77d3f]">
+                  Entrar →
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-28">
+          <div className="mb-12 border-b border-stone-300/70 pb-7">
+            <p className="text-[8px] uppercase tracking-[0.42em] text-[#a77d3f]">
+              III · La zona íntima
+            </p>
+            <h2 className="mt-4 max-w-4xl font-serif text-5xl tracking-[-0.04em] text-stone-950 sm:text-7xl">
+              La casa también guarda aquello que no debe exponerse.
+            </h2>
+          </div>
+
+          <Link
+            href="/mi-habitacion"
+            className="group relative block overflow-hidden bg-[#050607] px-8 py-12 text-[#f2eadf] shadow-[0_38px_100px_rgba(0,0,0,0.24)] sm:px-12 sm:py-16 lg:px-16"
+          >
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute right-[-120px] top-[-180px] h-[520px] w-[520px] rounded-full border border-[#c7a467]/10"
+            />
+
+            <div className="relative grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+              <div>
+                <p className="text-[8px] uppercase tracking-[0.4em] text-[#c7a467]">
+                  Habitación privada
+                </p>
+                <h3 className="mt-8 font-serif text-6xl tracking-[-0.05em] sm:text-8xl">
+                  Mi Habitación
+                </h3>
+                <p className="mt-8 max-w-2xl text-sm leading-8 text-white/50">
+                  Poemas, cartas, velas, rincones y recuerdos conservados con
+                  cerradura. La casa íntima dentro de la casa pública.
+                </p>
+              </div>
+
+              <div className="lg:text-right">
+                <p className="font-serif text-2xl italic leading-9 text-white/45">
+                  Lo que no debe mostrarse también merece una arquitectura.
+                </p>
+                <span className="mt-10 inline-flex text-[9px] uppercase tracking-[0.3em] text-white/38 transition group-hover:text-[#c7a467]">
+                  Abrir la habitación →
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          <div className="mt-10 overflow-hidden border border-stone-200/90 bg-[#fffaf4]/88">
+            <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="border-b border-stone-200 p-8 lg:border-b-0 lg:border-r lg:p-10">
+                <p className="text-[8px] uppercase tracking-[0.38em] text-[#a77d3f]">
+                  Estado de la casa
+                </p>
+                <h3 className="mt-6 font-serif text-4xl leading-[1.08] tracking-[-0.04em] sm:text-5xl">
+                  Una obra abierta con una habitación privada.
+                </h3>
+              </div>
+
+              <div className="grid sm:grid-cols-3">
+                {houseStates.map((state) => (
+                  <article
+                    key={state.number}
+                    className="border-b border-stone-200 p-7 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0"
+                  >
+                    <p className="font-serif text-sm italic text-[#a77d3f]">
+                      {state.number}
+                    </p>
+                    <h4 className="mt-5 font-serif text-2xl">{state.title}</h4>
+                    <p className="mt-5 text-xs leading-7 text-stone-600">
+                      {state.description}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-28">
+          <div className="mb-12 border-b border-stone-300/70 pb-7">
+            <p className="text-[8px] uppercase tracking-[0.42em] text-[#a77d3f]">
+              IV · Participar
+            </p>
+            <h2 className="mt-4 max-w-4xl font-serif text-5xl tracking-[-0.04em] text-stone-950 sm:text-7xl">
+              La obra continúa fuera de quien escribe.
+            </h2>
+          </div>
+          <HomeSupportGateway />
+        </section>
+
+        <section className="mt-28">
+          <div className="mb-12 border-b border-stone-300/70 pb-7">
+            <p className="text-[8px] uppercase tracking-[0.42em] text-[#a77d3f]">
+              V · Materia
+            </p>
+            <h2 className="mt-4 max-w-4xl font-serif text-5xl tracking-[-0.04em] text-stone-950 sm:text-7xl">
+              La obra adquiere cuerpo.
+            </h2>
+          </div>
+          <HomeStoreGateway />
+        </section>
+
+        <section className="mt-28">
+          <div className="mb-12 border-b border-stone-300/70 pb-7">
+            <p className="text-[8px] uppercase tracking-[0.42em] text-[#a77d3f]">
+              VI · Consecuencia
+            </p>
+            <h2 className="mt-4 max-w-4xl font-serif text-5xl tracking-[-0.04em] text-stone-950 sm:text-7xl">
+              La cultura también puede sostener el mundo.
+            </h2>
+          </div>
+          <HomeObraComunGateway />
+        </section>
+
+        <footer className="mt-28 border-t border-stone-300/70 py-12 text-center">
+          <p className="text-[8px] uppercase tracking-[0.42em] text-stone-400">
+            Poema Universal
+          </p>
+          <p className="mx-auto mt-5 max-w-xl text-xs leading-7 text-stone-500">
+            Primero descubres la obra. Después entras en sus salas. Luego
+            encuentras tu habitación. Finalmente decides participar,
+            sostenerla o llevar una parte contigo.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-5 text-[8px] uppercase tracking-[0.28em] text-stone-400">
+            <Link href="/fundacion" className="transition hover:text-stone-900">
+              Fundación
+            </Link>
+            <Link href="/poema-universal" className="transition hover:text-stone-900">
+              Edición
+            </Link>
+            <Link href="/admin" className="transition hover:text-stone-900">
+              Administración
+            </Link>
+          </div>
+        </footer>
+      </div>
+    </main>
+  );
+}

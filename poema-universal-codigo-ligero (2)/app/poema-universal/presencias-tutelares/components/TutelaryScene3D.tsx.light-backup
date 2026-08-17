@@ -1,0 +1,273 @@
+"use client";
+
+import { Suspense, useMemo, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import {
+  Float,
+  Sparkles,
+  useGLTF,
+} from "@react-three/drei";
+
+import type {
+  Group,
+  Mesh,
+  Object3D,
+} from "three";
+
+type TutelaryScene3DProps = {
+  presenceId: string;
+};
+
+type PresenceWorld = {
+  light: string;
+  secondary: string;
+  fog: string;
+};
+
+const WORLDS: Record<string, PresenceWorld> = {
+  borges: {
+    light: "#d6b96d",
+    secondary: "#53698f",
+    fog: "#080b12",
+  },
+
+  pizarnik: {
+    light: "#b59acb",
+    secondary: "#655078",
+    fog: "#0d0912",
+  },
+
+  camus: {
+    light: "#efc66f",
+    secondary: "#af8250",
+    fog: "#151007",
+  },
+};
+
+function BorgesModel() {
+  const group = useRef<Group>(null);
+
+  const { scene } = useGLTF(
+    "/poema-universal/presencias/borges/borges-tutelar.glb"
+  );
+
+  const clonedScene = useMemo<Object3D>(
+    () => scene.clone(true),
+    [scene]
+  );
+
+  useFrame(({ clock }) => {
+    const time = clock.getElapsedTime();
+
+    if (!group.current) {
+      return;
+    }
+
+    group.current.rotation.y =
+      -0.12 + Math.sin(time * 0.18) * 0.045;
+
+    group.current.position.y =
+      -1.47 + Math.sin(time * 0.42) * 0.018;
+
+    group.current.rotation.z =
+      Math.sin(time * 0.22) * 0.004;
+  });
+
+  return (
+    <group
+      ref={group}
+      position={[0, -1.47, 0]}
+      rotation={[0, -0.12, 0]}
+      scale={2.35}
+    >
+      <primitive object={clonedScene} />
+    </group>
+  );
+}
+
+function SymbolicGuardian({
+  world,
+}: {
+  world: PresenceWorld;
+}) {
+  const group = useRef<Group>(null);
+  const core = useRef<Mesh>(null);
+
+  useFrame(({ clock }) => {
+    const time = clock.getElapsedTime();
+
+    if (group.current) {
+      group.current.rotation.y =
+        Math.sin(time * 0.25) * 0.16;
+
+      group.current.position.y =
+        Math.sin(time * 0.55) * 0.06;
+    }
+
+    if (core.current) {
+      const pulse =
+        1 + Math.sin(time * 0.8) * 0.035;
+
+      core.current.scale.setScalar(pulse);
+    }
+  });
+
+  return (
+    <group ref={group}>
+      <mesh
+        ref={core}
+        position={[0, 0.15, 0]}
+      >
+        <icosahedronGeometry args={[1, 4]} />
+
+        <meshStandardMaterial
+          color={world.light}
+          emissive={world.secondary}
+          emissiveIntensity={0.28}
+          roughness={0.48}
+          metalness={0.15}
+        />
+      </mesh>
+
+      <mesh
+        position={[0, -1.1, 0]}
+        scale={[1.2, 0.16, 1.2]}
+      >
+        <cylinderGeometry
+          args={[0.9, 1.08, 0.28, 64]}
+        />
+
+        <meshStandardMaterial
+          color="#11131a"
+          roughness={0.94}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function TutelaryWorld({
+  presenceId,
+}: {
+  presenceId: string;
+}) {
+  const world =
+    WORLDS[presenceId] ?? WORLDS.borges;
+
+  return (
+    <>
+      <color
+        attach="background"
+        args={[world.fog]}
+      />
+
+      <fog
+        attach="fog"
+        args={[world.fog, 4.5, 10]}
+      />
+
+      <ambientLight intensity={0.72} />
+
+      <directionalLight
+        position={[3.8, 5.2, 4.4]}
+        intensity={2.4}
+        color={world.light}
+      />
+
+      <directionalLight
+        position={[-4, 2.6, 2]}
+        intensity={1.4}
+        color={world.secondary}
+      />
+
+      <pointLight
+        position={[0, 2.1, 1.7]}
+        intensity={2.1}
+        distance={7}
+        color={world.light}
+      />
+
+      <pointLight
+        position={[0, -0.4, 2.3]}
+        intensity={1.1}
+        distance={5}
+        color={world.secondary}
+      />
+
+      <Float
+        speed={0.32}
+        rotationIntensity={0.025}
+        floatIntensity={0.06}
+      >
+        {presenceId === "borges" ? (
+          <BorgesModel />
+        ) : (
+          <SymbolicGuardian world={world} />
+        )}
+      </Float>
+
+      <mesh
+        position={[0, -1.52, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <circleGeometry args={[2.15, 96]} />
+
+        <meshStandardMaterial
+          color="#11131a"
+          roughness={0.9}
+          metalness={0.08}
+        />
+      </mesh>
+
+      <mesh
+        position={[0, -1.505, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <ringGeometry args={[1.34, 1.42, 96]} />
+
+        <meshBasicMaterial
+          color={world.light}
+          transparent
+          opacity={0.32}
+        />
+      </mesh>
+
+      <Sparkles
+        count={54}
+        scale={[5, 5, 4]}
+        size={1.4}
+        speed={0.18}
+        opacity={0.38}
+        color={world.light}
+      />
+    </>
+  );
+}
+
+export default function TutelaryScene3D({
+  presenceId,
+}: TutelaryScene3DProps) {
+  return (
+    <Canvas
+      camera={{
+        position: [0, 0.55, 5],
+        fov: 34,
+      }}
+      dpr={[1, 1.7]}
+      gl={{
+        antialias: true,
+        alpha: false,
+      }}
+    >
+      <Suspense fallback={null}>
+        <TutelaryWorld
+          presenceId={presenceId}
+        />
+      </Suspense>
+    </Canvas>
+  );
+}
+
+useGLTF.preload(
+  "/poema-universal/presencias/borges/borges-tutelar.glb"
+);

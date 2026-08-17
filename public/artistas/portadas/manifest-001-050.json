@@ -1,0 +1,302 @@
+[
+  {
+    "code": "AU-001",
+    "name": "Albert Camus",
+    "filename": "AU-001-albert-camus.webp",
+    "publicPath": "/artistas/portadas/AU-001-albert-camus.webp"
+  },
+  {
+    "code": "AU-002",
+    "name": "Jorge Luis Borges",
+    "filename": "AU-002-jorge-luis-borges.webp",
+    "publicPath": "/artistas/portadas/AU-002-jorge-luis-borges.webp"
+  },
+  {
+    "code": "AU-003",
+    "name": "Franz Kafka",
+    "filename": "AU-003-franz-kafka.webp",
+    "publicPath": "/artistas/portadas/AU-003-franz-kafka.webp"
+  },
+  {
+    "code": "AU-004",
+    "name": "José Saramago",
+    "filename": "AU-004-jose-saramago.webp",
+    "publicPath": "/artistas/portadas/AU-004-jose-saramago.webp"
+  },
+  {
+    "code": "AU-005",
+    "name": "Simone Weil",
+    "filename": "AU-005-simone-weil.webp",
+    "publicPath": "/artistas/portadas/AU-005-simone-weil.webp"
+  },
+  {
+    "code": "AU-006",
+    "name": "María Zambrano",
+    "filename": "AU-006-maria-zambrano.webp",
+    "publicPath": "/artistas/portadas/AU-006-maria-zambrano.webp"
+  },
+  {
+    "code": "AU-007",
+    "name": "Samuel Beckett",
+    "filename": "AU-007-samuel-beckett.webp",
+    "publicPath": "/artistas/portadas/AU-007-samuel-beckett.webp"
+  },
+  {
+    "code": "AU-008",
+    "name": "Clarice Lispector",
+    "filename": "AU-008-clarice-lispector.webp",
+    "publicPath": "/artistas/portadas/AU-008-clarice-lispector.webp"
+  },
+  {
+    "code": "AU-009",
+    "name": "Fernando Pessoa",
+    "filename": "AU-009-fernando-pessoa.webp",
+    "publicPath": "/artistas/portadas/AU-009-fernando-pessoa.webp"
+  },
+  {
+    "code": "AU-010",
+    "name": "Julio Cortázar",
+    "filename": "AU-010-julio-cortazar.webp",
+    "publicPath": "/artistas/portadas/AU-010-julio-cortazar.webp"
+  },
+  {
+    "code": "AU-011",
+    "name": "Olga Tokarczuk",
+    "filename": "AU-011-olga-tokarczuk.webp",
+    "publicPath": "/artistas/portadas/AU-011-olga-tokarczuk.webp"
+  },
+  {
+    "code": "AU-012",
+    "name": "Jon Fosse",
+    "filename": "AU-012-jon-fosse.webp",
+    "publicPath": "/artistas/portadas/AU-012-jon-fosse.webp"
+  },
+  {
+    "code": "AU-013",
+    "name": "Han Kang",
+    "filename": "AU-013-han-kang.webp",
+    "publicPath": "/artistas/portadas/AU-013-han-kang.webp"
+  },
+  {
+    "code": "AU-014",
+    "name": "Ágota Kristóf",
+    "filename": "AU-014-agota-kristof.webp",
+    "publicPath": "/artistas/portadas/AU-014-agota-kristof.webp"
+  },
+  {
+    "code": "AU-015",
+    "name": "László Krasznahorkai",
+    "filename": "AU-015-laszlo-krasznahorkai.webp",
+    "publicPath": "/artistas/portadas/AU-015-laszlo-krasznahorkai.webp"
+  },
+  {
+    "code": "AU-016",
+    "name": "Alejandra Pizarnik",
+    "filename": "AU-016-alejandra-pizarnik.webp",
+    "publicPath": "/artistas/portadas/AU-016-alejandra-pizarnik.webp"
+  },
+  {
+    "code": "AU-017",
+    "name": "Rainer Maria Rilke",
+    "filename": "AU-017-rainer-maria-rilke.webp",
+    "publicPath": "/artistas/portadas/AU-017-rainer-maria-rilke.webp"
+  },
+  {
+    "code": "AU-018",
+    "name": "Georges Bataille",
+    "filename": "AU-018-georges-bataille.webp",
+    "publicPath": "/artistas/portadas/AU-018-georges-bataille.webp"
+  },
+  {
+    "code": "AU-019",
+    "name": "Francisco de Goya",
+    "filename": "AU-019-francisco-de-goya.webp",
+    "publicPath": "/artistas/portadas/AU-019-francisco-de-goya.webp"
+  },
+  {
+    "code": "AU-020",
+    "name": "Alberto Giacometti",
+    "filename": "AU-020-alberto-giacometti.webp",
+    "publicPath": "/artistas/portadas/AU-020-alberto-giacometti.webp"
+  },
+  {
+    "code": "AU-021",
+    "name": "Louise Bourgeois",
+    "filename": "AU-021-louise-bourgeois.webp",
+    "publicPath": "/artistas/portadas/AU-021-louise-bourgeois.webp"
+  },
+  {
+    "code": "AU-022",
+    "name": "Anselm Kiefer",
+    "filename": "AU-022-anselm-kiefer.webp",
+    "publicPath": "/artistas/portadas/AU-022-anselm-kiefer.webp"
+  },
+  {
+    "code": "AU-023",
+    "name": "Mark Rothko",
+    "filename": "AU-023-mark-rothko.webp",
+    "publicPath": "/artistas/portadas/AU-023-mark-rothko.webp"
+  },
+  {
+    "code": "AU-024",
+    "name": "Antoni Tàpies",
+    "filename": "AU-024-antoni-tapies.webp",
+    "publicPath": "/artistas/portadas/AU-024-antoni-tapies.webp"
+  },
+  {
+    "code": "AU-025",
+    "name": "Frida Kahlo",
+    "filename": "AU-025-frida-kahlo.webp",
+    "publicPath": "/artistas/portadas/AU-025-frida-kahlo.webp"
+  },
+  {
+    "code": "AU-026",
+    "name": "Salvador Dalí",
+    "filename": "AU-026-salvador-dali.webp",
+    "publicPath": "/artistas/portadas/AU-026-salvador-dali.webp"
+  },
+  {
+    "code": "AU-027",
+    "name": "Käthe Kollwitz",
+    "filename": "AU-027-kathe-kollwitz.webp",
+    "publicPath": "/artistas/portadas/AU-027-kathe-kollwitz.webp"
+  },
+  {
+    "code": "AU-028",
+    "name": "Chiharu Shiota",
+    "filename": "AU-028-chiharu-shiota.webp",
+    "publicPath": "/artistas/portadas/AU-028-chiharu-shiota.webp"
+  },
+  {
+    "code": "AU-029",
+    "name": "Andrei Tarkovski",
+    "filename": "AU-029-andrei-tarkovski.webp",
+    "publicPath": "/artistas/portadas/AU-029-andrei-tarkovski.webp"
+  },
+  {
+    "code": "AU-030",
+    "name": "Ingmar Bergman",
+    "filename": "AU-030-ingmar-bergman.webp",
+    "publicPath": "/artistas/portadas/AU-030-ingmar-bergman.webp"
+  },
+  {
+    "code": "AU-031",
+    "name": "Béla Tarr",
+    "filename": "AU-031-bela-tarr.webp",
+    "publicPath": "/artistas/portadas/AU-031-bela-tarr.webp"
+  },
+  {
+    "code": "AU-032",
+    "name": "Theo Angelopoulos",
+    "filename": "AU-032-theo-angelopoulos.webp",
+    "publicPath": "/artistas/portadas/AU-032-theo-angelopoulos.webp"
+  },
+  {
+    "code": "AU-033",
+    "name": "Víctor Erice",
+    "filename": "AU-033-victor-erice.webp",
+    "publicPath": "/artistas/portadas/AU-033-victor-erice.webp"
+  },
+  {
+    "code": "AU-034",
+    "name": "Abbas Kiarostami",
+    "filename": "AU-034-abbas-kiarostami.webp",
+    "publicPath": "/artistas/portadas/AU-034-abbas-kiarostami.webp"
+  },
+  {
+    "code": "AU-035",
+    "name": "Luis Buñuel",
+    "filename": "AU-035-luis-bunuel.webp",
+    "publicPath": "/artistas/portadas/AU-035-luis-bunuel.webp"
+  },
+  {
+    "code": "AU-036",
+    "name": "Akira Kurosawa",
+    "filename": "AU-036-akira-kurosawa.webp",
+    "publicPath": "/artistas/portadas/AU-036-akira-kurosawa.webp"
+  },
+  {
+    "code": "AU-037",
+    "name": "Arvo Pärt",
+    "filename": "AU-037-arvo-part.webp",
+    "publicPath": "/artistas/portadas/AU-037-arvo-part.webp"
+  },
+  {
+    "code": "AU-038",
+    "name": "Henryk Górecki",
+    "filename": "AU-038-henryk-gorecki.webp",
+    "publicPath": "/artistas/portadas/AU-038-henryk-gorecki.webp"
+  },
+  {
+    "code": "AU-039",
+    "name": "Johann Sebastian Bach",
+    "filename": "AU-039-johann-sebastian-bach.webp",
+    "publicPath": "/artistas/portadas/AU-039-johann-sebastian-bach.webp"
+  },
+  {
+    "code": "AU-040",
+    "name": "Gustav Mahler",
+    "filename": "AU-040-gustav-mahler.webp",
+    "publicPath": "/artistas/portadas/AU-040-gustav-mahler.webp"
+  },
+  {
+    "code": "AU-041",
+    "name": "Leonard Cohen",
+    "filename": "AU-041-leonard-cohen.webp",
+    "publicPath": "/artistas/portadas/AU-041-leonard-cohen.webp"
+  },
+  {
+    "code": "AU-042",
+    "name": "Claude Debussy",
+    "filename": "AU-042-claude-debussy.webp",
+    "publicPath": "/artistas/portadas/AU-042-claude-debussy.webp"
+  },
+  {
+    "code": "AU-043",
+    "name": "Peter Zumthor",
+    "filename": "AU-043-peter-zumthor.webp",
+    "publicPath": "/artistas/portadas/AU-043-peter-zumthor.webp"
+  },
+  {
+    "code": "AU-044",
+    "name": "Tadao Ando",
+    "filename": "AU-044-tadao-ando.webp",
+    "publicPath": "/artistas/portadas/AU-044-tadao-ando.webp"
+  },
+  {
+    "code": "AU-045",
+    "name": "James Turrell",
+    "filename": "AU-045-james-turrell.webp",
+    "publicPath": "/artistas/portadas/AU-045-james-turrell.webp"
+  },
+  {
+    "code": "AU-046",
+    "name": "Isamu Noguchi",
+    "filename": "AU-046-isamu-noguchi.webp",
+    "publicPath": "/artistas/portadas/AU-046-isamu-noguchi.webp"
+  },
+  {
+    "code": "AU-047",
+    "name": "Bill Viola",
+    "filename": "AU-047-bill-viola.webp",
+    "publicPath": "/artistas/portadas/AU-047-bill-viola.webp"
+  },
+  {
+    "code": "AU-048",
+    "name": "Sebastião Salgado",
+    "filename": "AU-048-sebastiao-salgado.webp",
+    "publicPath": "/artistas/portadas/AU-048-sebastiao-salgado.webp"
+  },
+  {
+    "code": "AU-049",
+    "name": "Francesca Woodman",
+    "filename": "AU-049-francesca-woodman.webp",
+    "publicPath": "/artistas/portadas/AU-049-francesca-woodman.webp"
+  },
+  {
+    "code": "AU-050",
+    "name": "Pina Bausch",
+    "filename": "AU-050-pina-bausch.webp",
+    "publicPath": "/artistas/portadas/AU-050-pina-bausch.webp"
+  }
+]

@@ -1,0 +1,56 @@
+POEMA UNIVERSAL — INSTALADOR DE LAS 60 PRESENCIAS
+=================================================
+
+Este paquete amplía el proyecto existente. No crea otra aplicación y no
+sustituye la home de Poema Universal.
+
+INSTALACIÓN NORMAL
+------------------
+
+El proyecto debe estar en:
+
+  ~/poema-universal
+
+Abre Terminal dentro de esta carpeta y ejecuta:
+
+  bash INSTALAR-LAS-60-PRESENCIAS.sh
+
+Si el proyecto está en otro lugar:
+
+  bash INSTALAR-LAS-60-PRESENCIAS.sh "/ruta/completa/al/proyecto"
+
+DESPUÉS DE INSTALAR
+-------------------
+
+  cd ~/poema-universal
+  npm run dev
+  open http://localhost:3000/poema-universal/presencias
+
+QUÉ HACE
+--------
+
+- Comprueba que la carpeta corresponde a Poema Universal.
+- Añade la ruta /poema-universal/presencias y sus componentes.
+- Añade la ficha dinámica /poema-universal/presencias/[slug].
+- Permite anexar una película a cada presencia desde su ficha.
+- Guarda los vídeos localmente en IndexedDB, sin servicios externos.
+- Muestra la película junto al poema y como microvídeo del retrato.
+- Integra un umbral editorial y un enlace en la navegación existente.
+- Conserva cualquier medio ya existente en public/.
+- Hace backup antes de actualizar cualquier archivo existente.
+- Puede ejecutarse de nuevo sin duplicar enlaces ni bloques.
+
+QUÉ NO TOCA
+-----------
+
+- .env.local ni otras variables de entorno.
+- Supabase ni sus tablas.
+- package.json ni las dependencias.
+- .git ni el historial del proyecto.
+- Componentes y rutas ajenos a Las 60 Presencias.
+
+Los backups quedan dentro de:
+
+  ~/poema-universal/backups/las-60-presencias-FECHA/
+
+No hace falta usar sudo ni cambiar permisos recursivamente.

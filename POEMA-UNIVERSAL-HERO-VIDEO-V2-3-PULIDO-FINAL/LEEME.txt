@@ -1,0 +1,15 @@
+POEMA UNIVERSAL · HERO VIDEO V2.3 · PULIDO FINAL
+
+Requiere V2.2 · Bajada Sutil activa.
+
+Este parche no modifica page.tsx ni el vídeo.
+Solo añade el acabado final a:
+  app/poema-universal/PoemaUniversalPage.module.css
+
+Cambios:
+- un poco más de luminosidad y microcontraste en el vídeo central;
+- máscara lateral más progresiva para eliminar el corte vertical;
+- atmósfera audiovisual lateral algo más cercana al centro;
+- frase fundacional ligeramente menos luminosa para ganar profundidad.
+
+No cambia geometría, título, cuenta atrás, navegación ni manifiesto.

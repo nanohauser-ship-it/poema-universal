@@ -1,0 +1,5 @@
+POEMA UNIVERSAL · HERO VIDEO V2.2 · BAJADA SUTIL
+
+Requiere V2.1 · Atmósfera instalada.
+Desplaza únicamente la película y su atmósfera ligeramente hacia abajo.
+No modifica título, navegación, cuenta atrás, manifiesto ni resto de la web.

@@ -1,0 +1,142 @@
+.threshold {
+  position: relative;
+  z-index: 2;
+  width: min(1380px, calc(100% - 40px));
+  margin: 0 auto 150px;
+}
+
+.threshold a {
+  position: relative;
+  min-height: 480px;
+  overflow: hidden;
+  border: 1px solid rgba(240, 232, 220, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 0.75fr;
+  align-items: end;
+  padding: clamp(34px, 5vw, 74px);
+  color: #f0e8dc;
+  isolation: isolate;
+}
+
+.image {
+  z-index: -3;
+  object-fit: cover;
+  object-position: 50% 45%;
+  filter: saturate(0.78) contrast(1.04) brightness(0.82);
+  transition:
+    transform 1200ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 900ms ease;
+}
+
+.veil {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3) 56%, rgba(0, 0, 0, 0.66)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.84), transparent 60%);
+}
+
+.heading p,
+.heading h2,
+.statement p {
+  margin: 0;
+}
+
+.heading p {
+  font-size: 8px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #c7a467;
+}
+
+.heading h2 {
+  margin-top: 22px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(54px, 7.5vw, 104px);
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+}
+
+.heading h2 em {
+  display: block;
+  font-weight: 400;
+  color: rgba(240, 232, 220, 0.62);
+}
+
+.statement {
+  justify-self: end;
+  width: min(360px, 100%);
+  padding-bottom: 7px;
+}
+
+.statement p {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.45;
+  color: rgba(240, 232, 220, 0.82);
+}
+
+.statement p span {
+  display: block;
+  color: rgba(240, 232, 220, 0.43);
+}
+
+.statement strong {
+  display: inline-block;
+  margin-top: 32px;
+  border-bottom: 1px solid rgba(199, 164, 103, 0.48);
+  padding-bottom: 8px;
+  font-size: 7px;
+  font-weight: 400;
+  letter-spacing: 0.27em;
+  text-transform: uppercase;
+  color: #c7a467;
+}
+
+.threshold a:hover .image,
+.threshold a:focus-visible .image {
+  transform: scale(1.018);
+  filter: saturate(0.9) contrast(1.05) brightness(0.9);
+}
+
+.threshold a:focus-visible {
+  outline: 1px solid #c7a467;
+  outline-offset: 7px;
+}
+
+@media (max-width: 720px) {
+  .threshold {
+    width: min(100% - 28px, 1380px);
+    margin-bottom: 110px;
+  }
+
+  .threshold a {
+    min-height: 620px;
+    grid-template-columns: 1fr;
+    align-content: end;
+    gap: 52px;
+    padding: 34px 24px;
+  }
+
+  .image {
+    object-position: 46% 50%;
+  }
+
+  .veil {
+    background:
+      linear-gradient(0deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.18) 74%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.34), transparent);
+  }
+
+  .statement {
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+}

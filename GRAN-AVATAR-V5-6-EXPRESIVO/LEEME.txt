@@ -1,0 +1,27 @@
+GRAN AVATAR · V5.6 EXPRESIVO
+
+Objetivo:
+que el Gran Avatar no use siempre la misma interpretación corporal.
+
+Perfiles automáticos:
+
+1. NORMAL
+   Conversación, información, respuestas cotidianas.
+   Usa el vídeo de habla natural de 50 fps.
+
+2. INTENSO
+   Reflexiones sobre mundo, memoria, muerte, miedo, pérdida, humanidad,
+   soledad, violencia, conciencia, existencia, tiempo, etc.
+   Usa el nuevo vídeo gestual solo en su tramo más natural.
+   Si el discurso continúa, cruza suavemente al clip normal antes de la
+   zona de sobreactuación.
+
+3. RECITACIÓN
+   Cuando se reproduce un poema.
+   Usa el cuerpo de habla natural con un ritmo más lento y contenido.
+
+La clasificación es local y gratuita: no añade otra llamada a OpenAI.
+La voz TTS sigue siendo la misma y el vídeo solo entra cuando el audio real
+empieza a sonar.
+
+No modifica .env.local, Supabase, package.json ni la API de voz.

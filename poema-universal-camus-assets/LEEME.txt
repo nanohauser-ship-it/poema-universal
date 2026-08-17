@@ -1,0 +1,38 @@
+POEMA UNIVERSAL — ASSETS DE ALBERT CAMUS
+
+Contenido:
+- hero-camus.jpg
+- obra-extranjero.jpg
+- obra-sisifo.jpg
+- obra-peste.jpg
+- obra-rebelde.jpg
+- obra-primer-hombre.jpg
+- archivo-cuaderno.jpg
+- archivo-manuscrito.jpg
+- archivo-foto.jpg
+- archivo-biblioteca.jpg
+- textura-grano.png
+- referencia-atlas-camus.png
+
+INSTALACIÓN AUTOMÁTICA
+1. Descomprime la carpeta.
+2. Abre Terminal dentro de la carpeta.
+3. Ejecuta:
+
+   bash instalar-assets-camus.sh
+
+Los archivos quedarán en:
+~/poema-universal/public/artistas/camus/
+
+RUTAS PARA EL CÓDIGO
+/artistas/camus/hero-camus.jpg
+/artistas/camus/obra-extranjero.jpg
+/artistas/camus/obra-sisifo.jpg
+/artistas/camus/obra-peste.jpg
+/artistas/camus/obra-rebelde.jpg
+/artistas/camus/obra-primer-hombre.jpg
+/artistas/camus/archivo-cuaderno.jpg
+/artistas/camus/archivo-manuscrito.jpg
+/artistas/camus/archivo-foto.jpg
+/artistas/camus/archivo-biblioteca.jpg
+/artistas/camus/textura-grano.png

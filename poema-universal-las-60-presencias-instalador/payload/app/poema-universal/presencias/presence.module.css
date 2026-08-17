@@ -1,0 +1,619 @@
+.presencePage {
+  --black: #050607;
+  --black-soft: #0a0b0c;
+  --ivory: #eee7dc;
+  --muted: rgba(238, 231, 220, 0.5);
+  --faint: rgba(238, 231, 220, 0.13);
+  --gold: #bda06d;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.008) 0,
+      rgba(255, 255, 255, 0.008) 1px,
+      transparent 1px,
+      transparent 8px
+    ),
+    var(--black);
+  color: var(--ivory);
+}
+
+.topbar {
+  width: min(1460px, calc(100% - 56px));
+  min-height: 76px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--faint);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.topbar a {
+  color: var(--ivory);
+  transition: color 220ms ease;
+}
+
+.topbar a:hover {
+  color: var(--gold);
+}
+
+.presenceHero {
+  width: min(1460px, calc(100% - 56px));
+  margin: 0 auto;
+  padding: clamp(64px, 9vw, 132px) 0 76px;
+  display: grid;
+  grid-template-columns: minmax(250px, 0.48fr) minmax(0, 1.52fr);
+  align-items: end;
+  gap: clamp(48px, 7vw, 112px);
+}
+
+.identity {
+  padding-bottom: 16px;
+}
+
+.position,
+.sectionIndex,
+.filmCaption,
+.poemLabel,
+.archiveData dt {
+  font-size: 8px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+.position,
+.sectionIndex {
+  color: var(--gold);
+}
+
+.identity h1 {
+  margin-top: 38px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(58px, 7.6vw, 116px);
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+  overflow-wrap: anywhere;
+}
+
+.territory {
+  margin-top: 34px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  line-height: 1.5;
+  color: rgba(238, 231, 220, 0.72);
+}
+
+.territory span {
+  display: block;
+  color: rgba(238, 231, 220, 0.42);
+}
+
+.heroPoemTitle {
+  margin-top: 58px;
+  padding-top: 18px;
+  border-top: 1px solid var(--faint);
+}
+
+.heroPoemTitle span {
+  display: block;
+  font-size: 7px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.heroPoemTitle strong {
+  display: block;
+  margin-top: 13px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 400;
+  line-height: 1.28;
+  text-transform: uppercase;
+}
+
+.statusLine {
+  margin-top: 34px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.statusLine span:first-child {
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.filmColumn {
+  min-width: 0;
+}
+
+.filmFrame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #090a0b;
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.42);
+}
+
+.filmFrameVertical {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  aspect-ratio: 9 / 16;
+}
+
+.filmPoster,
+.filmVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.7) saturate(0.5) brightness(0.7)
+    contrast(1.06);
+}
+
+.filmPoster {
+  transform: scale(1.45);
+  transform-origin: center 88%;
+}
+
+.filmShade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 40%),
+    linear-gradient(115deg, rgba(189, 160, 109, 0.08), transparent 42%);
+}
+
+.filmPending {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 8px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(238, 231, 220, 0.68);
+}
+
+.filmPending span {
+  color: var(--gold);
+  font-size: 24px;
+}
+
+.filmPlay {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-bottom: 1px solid rgba(238, 231, 220, 0.58);
+  padding: 0 0 11px;
+  background: transparent;
+  color: var(--ivory);
+  font: inherit;
+  font-size: 8px;
+  letter-spacing: 0.31em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.filmPlay span {
+  color: var(--gold);
+}
+
+.filmControls {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 34px 22px 18px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88), transparent);
+  opacity: 1;
+  transition: opacity 500ms ease;
+}
+
+.filmControlsHidden {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.filmControls button,
+.audioPlayer button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--ivory);
+  cursor: pointer;
+}
+
+.filmControls button:focus-visible,
+.audioPlayer button:focus-visible,
+.filmPlay:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.filmControls time,
+.audioPlayer time {
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  color: rgba(238, 231, 220, 0.62);
+  white-space: nowrap;
+}
+
+.filmProgress,
+.audioPlayer label {
+  display: block;
+  min-width: 0;
+}
+
+.filmProgress input,
+.audioPlayer input {
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.filmCaption {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--muted);
+}
+
+.filmCaption span:last-child {
+  color: rgba(238, 231, 220, 0.3);
+}
+
+.poemSection,
+.poemEmpty,
+.audioSection,
+.archiveSection,
+.presenceNavigation {
+  width: min(1180px, calc(100% - 56px));
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.poemSection {
+  padding: 150px 0 140px;
+}
+
+.poemHeading {
+  display: grid;
+  grid-template-columns: 0.4fr 1fr;
+  gap: 50px;
+  align-items: start;
+  padding-bottom: 54px;
+  border-bottom: 1px solid var(--faint);
+}
+
+.poemHeading h2,
+.poemEmpty h2,
+.audioSection h2,
+.archiveSection h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 5vw, 68px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.poemVersions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(56px, 9vw, 130px);
+  padding-top: 76px;
+}
+
+.poemVersions:has(article:only-child) {
+  grid-template-columns: minmax(0, 680px);
+}
+
+.poemLabel {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--faint);
+  color: var(--gold);
+}
+
+.poemLabel span {
+  display: block;
+  margin-top: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.poemText {
+  margin-top: 38px;
+  white-space: pre-wrap;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(19px, 1.75vw, 25px);
+  line-height: 1.9;
+  color: rgba(238, 231, 220, 0.84);
+}
+
+.poemVersions article[lang="ja"] .poemText {
+  line-height: 2.15;
+}
+
+.poemEmpty {
+  padding: 150px 0;
+  border-top: 1px solid var(--faint);
+  border-bottom: 1px solid var(--faint);
+}
+
+.poemEmpty h2 {
+  max-width: 780px;
+  margin-top: 34px;
+}
+
+.poemEmpty > p:last-child {
+  max-width: 560px;
+  margin-top: 28px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.audioSection {
+  padding: 80px 0;
+  border-top: 1px solid var(--faint);
+  display: grid;
+  grid-template-columns: 0.6fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.audioSection h2 {
+  margin-top: 22px;
+  font-size: 34px;
+}
+
+.audioPlayer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.archiveSection {
+  padding: 90px 0 130px;
+  border-top: 1px solid var(--faint);
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: clamp(56px, 9vw, 140px);
+}
+
+.archiveSection h2 {
+  margin-top: 28px;
+  font-size: clamp(34px, 4vw, 54px);
+}
+
+.archiveData {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 54px;
+}
+
+.archiveData div {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--faint);
+}
+
+.archiveData dt {
+  color: var(--gold);
+}
+
+.archiveData dd {
+  margin: 12px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21px;
+  line-height: 1.4;
+  color: rgba(238, 231, 220, 0.72);
+}
+
+.presenceNavigation {
+  padding: 42px 0 54px;
+  border-top: 1px solid var(--faint);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 34px;
+}
+
+.presenceNavigation > div:last-child {
+  text-align: right;
+}
+
+.presenceNavigation a {
+  display: inline-block;
+  color: var(--muted);
+  transition: color 220ms ease;
+}
+
+.presenceNavigation a:hover,
+.presenceNavigation a:focus-visible {
+  color: var(--ivory);
+}
+
+.presenceNavigation a:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 7px;
+}
+
+.presenceNavigation span,
+.archiveReturn {
+  font-size: 7px;
+  letter-spacing: 0.27em;
+  text-transform: uppercase;
+}
+
+.presenceNavigation strong {
+  display: block;
+  margin-top: 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--ivory);
+}
+
+.archiveReturn {
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(189, 160, 109, 0.5);
+  color: var(--gold) !important;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 980px) {
+  .presenceHero {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .identity {
+    width: min(100%, 700px);
+  }
+
+  .filmColumn {
+    grid-row: 1;
+  }
+
+  .poemHeading,
+  .archiveSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .topbar,
+  .presenceHero,
+  .poemSection,
+  .poemEmpty,
+  .audioSection,
+  .archiveSection,
+  .presenceNavigation {
+    width: min(100% - 28px, 1460px);
+  }
+
+  .topbar span {
+    display: none;
+  }
+
+  .presenceHero {
+    padding: 28px 0 60px;
+    gap: 54px;
+  }
+
+  .filmColumn {
+    width: calc(100% + 28px);
+    margin-left: -14px;
+  }
+
+  .filmCaption {
+    padding: 0 14px;
+  }
+
+  .filmControls {
+    grid-template-columns: auto 1fr auto auto;
+    gap: 8px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .filmControls time {
+    display: none;
+  }
+
+  .filmPlay {
+    width: max-content;
+    max-width: calc(100% - 44px);
+    justify-content: center;
+  }
+
+  .identity h1 {
+    font-size: clamp(56px, 20vw, 92px);
+  }
+
+  .poemSection {
+    padding: 100px 0;
+  }
+
+  .poemVersions {
+    grid-template-columns: 1fr;
+    gap: 86px;
+  }
+
+  .poemText {
+    font-size: 19px;
+    line-height: 1.95;
+  }
+
+  .audioSection {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .archiveData {
+    grid-template-columns: 1fr;
+  }
+
+  .presenceNavigation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .archiveReturn {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-self: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presencePage *,
+  .presencePage *::before,
+  .presencePage *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

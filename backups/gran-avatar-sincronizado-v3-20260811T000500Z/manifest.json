@@ -1,0 +1,115 @@
+{
+  "version": "3.0.0-synchronized-experimental",
+  "createdAt": "2026-08-11T00:05:00.719Z",
+  "targetDirectory": "/Users/josebalonaveiro/poema-universal",
+  "files": [
+    {
+      "path": "app/api/poema-universal/gran-avatar/align/route.ts",
+      "existed": false
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/GranAvatarExperience.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/avatarConfig.ts",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/AvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/CinematicAvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/LiveAvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/OrganismAvatarBody.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/PoeticOrganism.tsx",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/components/SynchronizedAvatarBody.tsx",
+      "existed": false
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/gran-avatar.module.css",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/lib/avatarLipSync.ts",
+      "existed": false
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/lib/avatarVoiceSignal.ts",
+      "existed": true
+    },
+    {
+      "path": "app/poema-universal/gran-avatar/types.ts",
+      "existed": true
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/cinematic/avatar-acoge.mp4",
+      "existed": true
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/cinematic/avatar-habla.mp4",
+      "existed": true
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/cinematic/avatar-reposo.webp",
+      "existed": true
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/organism-portrait.webp",
+      "existed": true
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/a.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/breath.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/e.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/fv.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/i.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/l.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/mbp.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/o.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/rest.webp",
+      "existed": false
+    },
+    {
+      "path": "public/poema-universal/gran-avatar/sync/u.webp",
+      "existed": false
+    }
+  ]
+}

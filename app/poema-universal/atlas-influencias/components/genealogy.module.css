@@ -1,0 +1,486 @@
+.genealogy {
+  position: relative;
+  width: 100%;
+  min-height: 700px;
+  padding: 26px 34px 20px;
+  box-sizing: border-box;
+  color: rgba(226, 196, 118, 0.82);
+}
+
+.header {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.header > span,
+.generationLabel {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.21em;
+  text-transform: uppercase;
+  color: rgba(215, 169, 58, 0.54);
+}
+
+.header strong {
+  display: block;
+  margin-top: 7px;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(233, 198, 102, 0.88);
+}
+
+.header p {
+  max-width: 480px;
+  margin: 7px auto 0;
+  font-size: 8px;
+  line-height: 1.5;
+  opacity: 0.36;
+}
+
+.tree {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns:
+    minmax(210px, 1fr)
+    minmax(260px, 0.85fr)
+    minmax(210px, 1fr);
+  gap: 42px;
+  align-items: center;
+  min-height: 440px;
+}
+
+.ancestors,
+.descendants {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 13px;
+}
+
+.ancestors .generationLabel {
+  text-align: right;
+  margin-bottom: 6px;
+}
+
+.descendants .generationLabel {
+  text-align: left;
+  margin-bottom: 6px;
+}
+
+.center {
+  position: relative;
+  text-align: center;
+  min-height: 410px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.verticalLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background:
+    linear-gradient(
+      180deg,
+      transparent,
+      rgba(206, 157, 42, 0.17),
+      rgba(206, 157, 42, 0.32),
+      rgba(206, 157, 42, 0.17),
+      transparent
+    );
+}
+
+.centralHalo {
+  position: relative;
+  width: 134px;
+  height: 134px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(212, 164, 46, 0.18);
+  border-radius: 50%;
+  box-shadow:
+    0 0 80px rgba(190, 132, 22, 0.09);
+}
+
+.centralHalo::before,
+.centralHalo::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(207, 157, 41, 0.08);
+}
+
+.centralHalo::before {
+  inset: -35px;
+}
+
+.centralHalo::after {
+  inset: -72px;
+}
+
+.centralPortrait {
+  position: relative;
+  z-index: 3;
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(227, 178, 51, 0.72);
+  background:
+    radial-gradient(
+      circle,
+      rgba(177, 119, 17, 0.17),
+      rgba(0, 0, 0, 0.92) 70%
+    );
+  font-family: Georgia, serif;
+  font-size: 23px;
+  color: rgba(239, 198, 86, 0.93);
+}
+
+.centralEyebrow {
+  margin-top: 27px;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.38;
+}
+
+.center h2 {
+  margin: 8px 0 0;
+  font-family: Georgia, serif;
+  font-size: 27px;
+  font-weight: 400;
+  color: rgba(236, 198, 91, 0.95);
+}
+
+.center > p {
+  margin: 5px 0 0;
+  font-size: 8px;
+  opacity: 0.45;
+}
+
+.center > em {
+  margin-top: 4px;
+  font-size: 8px;
+  font-style: normal;
+  opacity: 0.45;
+}
+
+.centralConcepts {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 13px;
+}
+
+.centralConcepts span {
+  padding: 3px 7px;
+  border: 1px solid rgba(207, 158, 41, 0.12);
+  border-radius: 999px;
+  font-size: 7px;
+  opacity: 0.5;
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.balance div {
+  display: flex;
+  flex-direction: column;
+}
+
+.balance strong {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.balance span {
+  margin-top: 2px;
+  font-size: 6px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.34;
+}
+
+.balance > i {
+  width: 42px;
+  height: 1px;
+  background: rgba(208, 160, 43, 0.22);
+}
+
+.relationCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(205, 157, 40, 0.12);
+  color: rgba(222, 195, 123, 0.72);
+  background: rgba(0, 0, 0, 0.42);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.relationCard:hover {
+  border-color: rgba(220, 172, 48, 0.44);
+  background: rgba(96, 68, 13, 0.08);
+  transform: translateY(-2px);
+}
+
+.nodePortrait {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(212, 164, 45, 0.35);
+  border-radius: 50%;
+  font-family: Georgia, serif;
+  font-size: 11px;
+}
+
+.nodeBody {
+  min-width: 0;
+}
+
+.nodeDirection {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 6px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.3;
+}
+
+.nodeBody > strong {
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(235, 198, 98, 0.88);
+}
+
+.nodeBody > small {
+  display: block;
+  margin-top: 3px;
+  font-size: 7px;
+  opacity: 0.42;
+}
+
+.relationType {
+  margin-top: 8px;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.54;
+}
+
+.nodeBody p {
+  margin: 5px 0 0;
+  font-family: Georgia, serif;
+  font-size: 8px;
+  line-height: 1.45;
+  font-style: italic;
+  opacity: 0.5;
+}
+
+.evidence {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 7px;
+  font-size: 6px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  opacity: 0.48;
+}
+
+.evidence i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.nodeBody blockquote {
+  margin: 9px 0 0;
+  padding-top: 7px;
+  border-top: 1px solid rgba(207, 158, 41, 0.08);
+  font-family: Georgia, serif;
+  font-size: 8px;
+  line-height: 1.45;
+  font-style: normal;
+  opacity: 0.42;
+}
+
+.branch {
+  position: absolute;
+  top: 50%;
+  width: 34px;
+  height: 1px;
+  background: rgba(205, 157, 40, 0.2);
+  pointer-events: none;
+}
+
+.ancestors .branch {
+  right: -35px;
+}
+
+.descendants .branch {
+  left: -35px;
+}
+
+.evidence_documented {
+  border-color: rgba(221, 169, 42, 0.3);
+}
+
+.evidence_declared {
+  border-color: rgba(201, 153, 43, 0.21);
+}
+
+.evidence_critical {
+  border-color: rgba(83, 153, 161, 0.24);
+}
+
+.evidence_interpretive {
+  border-color: rgba(178, 178, 178, 0.12);
+}
+
+.empty {
+  padding: 25px 14px;
+  border: 1px dashed rgba(206, 158, 41, 0.11);
+  font-family: Georgia, serif;
+  font-size: 9px;
+  line-height: 1.5;
+  text-align: center;
+  opacity: 0.35;
+}
+
+.remoteGeneration {
+  position: relative;
+  z-index: 4;
+  margin: 10px 8% 18px;
+  text-align: center;
+}
+
+.remoteNodes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.remoteNodes button {
+  min-width: 115px;
+  padding: 8px 10px;
+  border: 1px solid rgba(204, 157, 40, 0.1);
+  color: rgba(220, 193, 119, 0.58);
+  background: rgba(0, 0, 0, 0.34);
+  cursor: pointer;
+}
+
+.remoteNodes button:hover {
+  border-color: rgba(220, 171, 47, 0.32);
+  color: rgba(236, 199, 99, 0.9);
+}
+
+.remoteNodes i {
+  display: block;
+  font-size: 8px;
+  font-style: normal;
+  opacity: 0.42;
+}
+
+.remoteNodes strong {
+  display: block;
+  margin-top: 4px;
+  font-family: Georgia, serif;
+  font-size: 9px;
+  font-weight: 400;
+}
+
+.remoteNodes small {
+  display: block;
+  margin-top: 2px;
+  font-size: 6px;
+  opacity: 0.38;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(204, 157, 40, 0.08);
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 6px;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.legend i {
+  width: 18px;
+  height: 1px;
+}
+
+.documented {
+  background: #d5a52e;
+}
+
+.declared {
+  background: #9f7e31;
+}
+
+.critical {
+  background: #467f85;
+}
+
+.interpretive {
+  background: #686868;
+}
+
+@media (max-width: 950px) {
+  .tree {
+    grid-template-columns: 1fr;
+  }
+
+  .center {
+    order: -1;
+  }
+
+  .ancestors .generationLabel,
+  .descendants .generationLabel {
+    text-align: center;
+  }
+
+  .branch {
+    display: none;
+  }
+}

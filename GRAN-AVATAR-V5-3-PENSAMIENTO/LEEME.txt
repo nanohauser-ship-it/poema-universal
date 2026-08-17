@@ -1,0 +1,5 @@
+GRAN AVATAR V5.3 · PENSAMIENTO INICIAL
+
+Añade un disparador real para la reflexión inicial y restaura una ruta TTS segura con Cedar.
+
+IMPORTANTE: los navegadores modernos restringen el audio con sonido que intenta arrancar automáticamente al cargar una página. Por eso la reflexión se inicia mediante el botón "Pensamiento inicial". Una vez pulsado, el avatar habla con la misma arquitectura de voz del resto de la sala.

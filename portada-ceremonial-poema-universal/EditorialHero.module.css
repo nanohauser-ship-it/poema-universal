@@ -1,0 +1,306 @@
+.hero {
+  --ink: #17130f;
+  --gold: #a77d3f;
+  --paper: #eee5d5;
+  position: relative;
+  min-height: min(920px, 100svh);
+  overflow: hidden;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% 33%, rgba(255,255,255,.76), transparent 34%),
+    linear-gradient(115deg, rgba(169,125,63,.035), transparent 24%, rgba(91,72,51,.025) 73%, transparent),
+    var(--paper);
+}
+
+.paper {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .42;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(48,38,28,.024) 0, rgba(48,38,28,.024) 1px, transparent 1px, transparent 4px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.1) 0, rgba(255,255,255,.1) 1px, transparent 1px, transparent 7px);
+  mix-blend-mode: multiply;
+}
+
+.axis {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 172px;
+  background: linear-gradient(to bottom, rgba(104,83,57,.14), rgba(104,83,57,.03));
+}
+
+.constellation {
+  position: absolute;
+  right: 8%;
+  top: 24%;
+  width: 190px;
+  height: 190px;
+  opacity: .38;
+  animation: constellationDrift 18s ease-in-out infinite alternate;
+}
+
+.constellation::before,
+.constellation::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(151,111,55,.17);
+  border-radius: 999px;
+}
+
+.constellation::before { inset: 20px; }
+.constellation::after { inset: 54px; }
+
+.constellation span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(151,111,55,.62);
+  box-shadow: 0 0 22px rgba(151,111,55,.38);
+}
+
+.constellation span:nth-child(1) { left: 18px; top: 80px; }
+.constellation span:nth-child(2) { right: 28px; top: 24px; }
+.constellation span:nth-child(3) { right: 8px; bottom: 55px; }
+.constellation span:nth-child(4) { left: 74px; bottom: 8px; }
+.constellation span:nth-child(5) { left: 88px; top: 83px; }
+
+.frame {
+  position: relative;
+  z-index: 2;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 46px 0 30px;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid rgba(65,51,39,.08);
+  color: rgba(43,35,28,.45);
+  font-size: 8px;
+  letter-spacing: .38em;
+  text-transform: uppercase;
+}
+
+.stage {
+  display: flex;
+  min-height: 530px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.kicker {
+  margin-bottom: 24px;
+  color: var(--gold);
+  font-size: 9px;
+  letter-spacing: .48em;
+  text-transform: uppercase;
+}
+
+.titleWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.orbit {
+  position: absolute;
+  width: min(540px, 72vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(151,111,55,.1);
+  border-radius: 999px;
+  transform: scaleY(.42) rotate(-7deg);
+  animation: orbitBreath 10s ease-in-out infinite;
+}
+
+.title {
+  position: relative;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: .75;
+  letter-spacing: -.07em;
+}
+
+.poema,
+.universal {
+  display: block;
+}
+
+.poema {
+  font-size: clamp(76px, 9vw, 142px);
+  font-weight: 500;
+  color: #090806;
+  animation: titleReveal 1.4s cubic-bezier(.2,.7,.1,1) both;
+}
+
+.universal {
+  margin-top: .09em;
+  margin-left: .12em;
+  font-size: clamp(78px, 9.7vw, 154px);
+  font-style: italic;
+  font-weight: 400;
+  color: rgba(77,67,59,.82);
+  animation: titleReveal 1.7s .08s cubic-bezier(.2,.7,.1,1) both;
+}
+
+.lead {
+  max-width: 720px;
+  margin: 58px auto 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 2.2vw, 34px);
+  font-style: italic;
+  line-height: 1.42;
+  color: rgba(56,47,40,.9);
+}
+
+.lead span { display: block; }
+
+.mantra {
+  margin-top: 22px;
+  color: rgba(52,43,36,.45);
+  font-size: 8px;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+}
+
+.manifestoLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 36px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(90,69,43,.25);
+  color: rgba(55,45,37,.5);
+  font-size: 8px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  transition: color 240ms ease, border-color 240ms ease, transform 240ms ease;
+}
+
+.manifestoLink:hover {
+  color: var(--gold);
+  border-color: rgba(167,125,63,.62);
+  transform: translateY(-2px);
+}
+
+.countdownHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 0 20px;
+  border-top: 1px solid rgba(65,51,39,.13);
+  color: rgba(43,35,28,.42);
+  font-size: 8px;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+}
+
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  border-top: 1px solid rgba(65,51,39,.16);
+  border-left: 1px solid rgba(65,51,39,.16);
+}
+
+.countdownItem {
+  position: relative;
+  min-height: 132px;
+  padding: 30px 26px 24px;
+  border-right: 1px solid rgba(65,51,39,.16);
+  border-bottom: 1px solid rgba(65,51,39,.16);
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(96,74,49,.018));
+  overflow: hidden;
+}
+
+.countdownItem::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: rgba(167,125,63,.52);
+  transition: width 500ms ease;
+}
+
+.countdownItem:hover::after { width: 100%; }
+
+.countdownValue {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 4vw, 60px);
+  letter-spacing: -.055em;
+  color: #080706;
+}
+
+.countdownLabel {
+  display: block;
+  margin-top: 12px;
+  color: rgba(43,35,28,.38);
+  font-size: 7px;
+  letter-spacing: .36em;
+  text-transform: uppercase;
+}
+
+.footerLine {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 22px;
+  color: rgba(43,35,28,.32);
+  font-size: 7px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+@keyframes titleReveal {
+  from { opacity: 0; transform: translateY(28px); filter: blur(7px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes orbitBreath {
+  0%, 100% { opacity: .22; transform: scaleY(.42) rotate(-7deg) scale(.96); }
+  50% { opacity: .6; transform: scaleY(.42) rotate(-7deg) scale(1.04); }
+}
+
+@keyframes constellationDrift {
+  from { transform: translate3d(0,0,0) rotate(-4deg); }
+  to { transform: translate3d(-18px,16px,0) rotate(6deg); }
+}
+
+@media (max-width: 800px) {
+  .hero { min-height: auto; }
+  .frame { width: min(100% - 28px, 1180px); padding-top: 26px; }
+  .meta { gap: 16px; padding-bottom: 28px; font-size: 6px; letter-spacing: .22em; }
+  .stage { min-height: 520px; }
+  .constellation { right: -70px; top: 25%; }
+  .mantra { max-width: 320px; line-height: 1.8; }
+  .countdownHeader, .footerLine { font-size: 6px; letter-spacing: .2em; }
+  .countdownItem { min-height: 106px; padding: 22px 16px; }
+}
+
+@media (max-width: 560px) {
+  .meta p:last-child,
+  .countdownHeader p:last-child,
+  .footerLine span:first-child { display: none; }
+
+  .stage { min-height: 490px; padding: 34px 0; }
+  .lead { margin-top: 46px; }
+  .countdown { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .countdownItem { min-height: 112px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poema,
+  .universal,
+  .orbit,
+  .constellation { animation: none; }
+}

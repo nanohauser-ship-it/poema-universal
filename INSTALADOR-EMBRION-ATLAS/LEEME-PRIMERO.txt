@@ -1,0 +1,29 @@
+EMBRIÓN · ATLAS HISTÓRICO
+INSTALADOR PARA POEMA UNIVERSAL
+
+Este paquete sí contiene un instalador visible:
+
+    INSTALAR-EMBRION-ATLAS.command
+
+PASOS
+
+1. Descomprime el ZIP.
+2. Mueve la carpeta completa «INSTALADOR-EMBRION-ATLAS» dentro de:
+
+       /Users/josebalonaveiro/poema-universal
+
+3. Abre Terminal y ejecuta:
+
+       cd "$HOME/poema-universal"
+       bash "INSTALADOR-EMBRION-ATLAS/INSTALAR-EMBRION-ATLAS.command"
+
+El instalador:
+
+- comprueba que está actuando sobre Poema Universal;
+- crea una copia de seguridad;
+- instala únicamente la nueva ruta y servicios de Embrión;
+- conserva la antigua ruta musical;
+- reinicia el servidor en el puerto 3000;
+- abre http://localhost:3000/embrion
+
+No arrastres manualmente las carpetas app, lib o supabase sobre el proyecto.

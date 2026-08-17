@@ -1,0 +1,4 @@
+GRAN AVATAR V5.1 · ENCUADRE SEGURO
+
+Parche sobre V5. Corrige el recorte de frente/barbilla sin modificar el motor continuo.
+El vídeo vertical se muestra completo (contain) y los zooms de cámara quedan limitados a una zona segura.

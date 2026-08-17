@@ -1,0 +1,21 @@
+COLUMNA DE LAS VOCES — POEMA UNIVERSAL
+
+INSTALACIÓN
+
+1. Descomprime este ZIP.
+2. Copia dentro de ~/poema-universal:
+   - instalar-columna-voces.sh
+   - columna-de-las-voces-files
+3. Ejecuta:
+
+   cd ~/poema-universal
+   bash instalar-columna-voces.sh
+
+El instalador:
+- crea /poema-universal/encadenamiento
+- añade “Columna de las voces” a navigationLinks
+- realiza copias de seguridad
+- comprueba TypeScript
+- abre la ruta en localhost:3000
+
+Las nuevas vértebras se guardan en localStorage del navegador.

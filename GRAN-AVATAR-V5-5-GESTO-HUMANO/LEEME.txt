@@ -1,0 +1,12 @@
+GRAN AVATAR · V5.5 GESTO HUMANO
+
+Este parche añade la mejor generación de habla recibida como capa de interpretación.
+
+- Reposo/escucha/piensa: sigue usando el cuerpo maestro continuo V5.
+- Habla/recita: cuando el audio TTS empieza realmente a sonar, el nuevo clip entra mediante crossfade.
+- Silencios reales: vuelve suavemente al cuerpo maestro.
+- Final del clip: nunca hace loop; funde al cuerpo continuo para evitar saltos.
+- La iluminación facial V5.4 queda integrada en el componente.
+- El vídeo de habla ha sido optimizado para web, sin audio y sin la marca inferior.
+
+No modifica la API de voz, Supabase, .env.local ni package.json.

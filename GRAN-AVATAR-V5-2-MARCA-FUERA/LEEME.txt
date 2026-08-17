@@ -1,0 +1,5 @@
+GRAN AVATAR V5.2 · REENCUADRE SUPERIOR
+
+Parche sobre V5.1. Sube el vídeo maestro aproximadamente un 6% dentro del marco
+para ocultar la franja superior de exportación de Pippit AI, conservando la cabeza completa.
+No modifica el motor continuo, la voz ni los estados del avatar.

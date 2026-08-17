@@ -10,31 +10,36 @@ export const metadata: Metadata = {
 const futureRooms = [
   {
     number: "01",
-    title: "Los libros",
+    title: "Libros",
+    subtitle: "Memorias que perduran",
     description:
-      "Las obras de José Naveiro y las futuras ediciones que nazcan dentro de este universo.",
+      "Las obras de José Naveiro y las futuras ediciones nacidas dentro de este universo.",
   },
   {
     number: "02",
-    title: "Poema Universal",
-    description:
-      "La edición fundacional de 2026 y los archivos materiales de cada año de escritura.",
-  },
-  {
-    number: "03",
-    title: "Obra gráfica",
+    title: "Imágenes",
+    subtitle: "Ecos de lo vivido",
     description:
       "Láminas, cartografías, símbolos, retratos y escenas nacidas de las obras.",
   },
   {
-    number: "04",
-    title: "Objetos del archivo",
+    number: "03",
+    title: "Objetos",
+    subtitle: "Huellas de lo cotidiano",
     description:
-      "Cuadernos, postales, marcapáginas, estuches y piezas concebidas para conservar memoria.",
+      "Cuadernos, postales, marcapáginas y piezas concebidas para conservar memoria.",
+  },
+  {
+    number: "04",
+    title: "Ediciones",
+    subtitle: "Piezas irrepetibles",
+    description:
+      "Ediciones especiales y futuras formas materiales vinculadas a Poema Universal.",
   },
   {
     number: "05",
     title: "Imagen y sonido",
+    subtitle: "Presencias en tránsito",
     description:
       "Lecturas, archivos sonoros, piezas audiovisuales y futuras ediciones digitales.",
   },
@@ -42,271 +47,836 @@ const futureRooms = [
 
 export default function StorePage() {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#f0e8dc] text-[#171411]">
-      {/* NAVEGACIÓN */}
+    <main
+      style={{
+        minHeight: "100vh",
+        overflowX: "hidden",
+        background: "#071017",
+        color: "#f1e7d7",
+      }}
+    >
+      <style>{`
+        @keyframes tiendaRespira {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+            filter: brightness(1);
+          }
 
-      <header className="sticky top-0 z-50 border-b border-stone-900/10 bg-[#f0e8dc]/94 backdrop-blur-xl">
-        <div className="mx-auto flex min-h-[72px] max-w-[1380px] items-center justify-between gap-6 px-5 sm:px-8 lg:px-12">
+          50% {
+            transform: translateY(-3px) scale(1.008);
+            filter: brightness(1.035);
+          }
+        }
+
+        @keyframes haloRespira {
+          0%, 100% {
+            opacity: .25;
+            transform: scale(1);
+          }
+
+          50% {
+            opacity: .42;
+            transform: scale(1.04);
+          }
+        }
+
+        .tienda-video-vivo {
+          animation: tiendaRespira 9s ease-in-out infinite;
+          transform-origin: center;
+        }
+
+        .tienda-video-halo {
+          animation: haloRespira 9s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .tienda-video-vivo,
+          .tienda-video-halo {
+            animation: none;
+          }
+        }
+
+        @media (max-width: 900px) {
+          .tienda-hero {
+            aspect-ratio: 4 / 5 !important;
+            min-height: 760px !important;
+          }
+
+          .tienda-living-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .tienda-video-oval {
+            width: 320px !important;
+            height: 205px !important;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .tienda-video-oval {
+            width: 270px !important;
+            height: 175px !important;
+          }
+        }
+      `}</style>
+
+      {/* =========================================================
+          NAVEGACIÓN
+      ========================================================= */}
+
+      <header
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 50,
+          background: "rgba(5,12,17,0.91)",
+          borderBottom: "1px solid rgba(210,165,87,0.20)",
+          backdropFilter: "blur(18px)",
+        }}
+      >
+        <div className="mx-auto flex min-h-[68px] max-w-[1440px] items-center justify-between gap-6 px-5 sm:px-8 lg:px-12">
           <Link
             href="/"
-            className="font-serif text-xl tracking-[-0.025em] transition hover:opacity-55"
+            className="font-serif text-xl"
+            style={{
+              color: "#d5ad66",
+              textDecoration: "none",
+            }}
           >
             Poema Universal
           </Link>
 
-          <p className="hidden text-[8px] uppercase tracking-[0.38em] text-stone-400 sm:block">
+          <span
+            className="hidden sm:block"
+            style={{
+              fontSize: "8px",
+              letterSpacing: ".42em",
+              textTransform: "uppercase",
+              color: "rgba(213,173,102,.55)",
+            }}
+          >
             Tienda
-          </p>
+          </span>
 
           <Link
             href="/"
-            className="border border-stone-900/20 px-5 py-2.5 text-[8px] uppercase tracking-[0.3em] transition hover:bg-[#171411] hover:text-white"
+            style={{
+              border: "1px solid rgba(213,173,102,.36)",
+              padding: "10px 20px",
+              fontSize: "8px",
+              letterSpacing: ".28em",
+              textTransform: "uppercase",
+              color: "#e1c58f",
+              textDecoration: "none",
+            }}
           >
             Volver a la casa
           </Link>
         </div>
       </header>
 
-      {/* VESTÍBULO */}
+      {/* =========================================================
+          HERO
+          GATO2.PNG = ARQUITECTURA
+      ========================================================= */}
 
-      <section className="relative overflow-hidden">
+      <section
+        className="tienda-hero"
+        style={{
+          position: "relative",
+          width: "100%",
+          aspectRatio: "16 / 9",
+          minHeight: "680px",
+          maxHeight: "900px",
+          overflow: "hidden",
+          background: "#071017",
+        }}
+      >
+        {/* FONDO AMBIENTAL */}
+
+        <img
+          src="/gato2.PNG"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            display: "block",
+            objectFit: "cover",
+            objectPosition: "center center",
+            filter: "blur(18px) brightness(0.55)",
+            transform: "scale(1.06)",
+            opacity: 0.65,
+          }}
+        />
+
+        {/* FOTOGRAFÍA PRINCIPAL */}
+
+        <img
+          src="/gato2.PNG"
+          alt="Una mujer mayor en una habitación azul junto a un gato, una lámpara y un antiguo televisor."
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            width: "94%",
+            height: "94%",
+            display: "block",
+            objectFit: "contain",
+            objectPosition: "center center",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+
+        {/* SOMBRA LOCALIZADA PARA EL TEXTO */}
+
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
           style={{
+            position: "absolute",
+            inset: 0,
             background:
-              "radial-gradient(circle at 50% 18%, rgba(255,255,255,0.96), transparent 32%), radial-gradient(circle at 14% 78%, rgba(199,164,103,0.15), transparent 30%), linear-gradient(180deg, #f5eee5 0%, #eadfD1 100%)",
+              "linear-gradient(90deg, rgba(3,10,15,.91) 0%, rgba(3,10,15,.79) 15%, rgba(3,10,15,.56) 29%, rgba(3,10,15,.24) 43%, rgba(3,10,15,.04) 58%, transparent 70%)",
           }}
         />
+
+        {/* OSCURECIMIENTO SUPERIOR */}
 
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.065]"
           style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(70,48,29,0.58) 0.5px, transparent 0.7px)",
-            backgroundSize: "19px 19px",
+            position: "absolute",
+            inset: "0 0 auto",
+            height: "150px",
+            background:
+              "linear-gradient(to bottom,rgba(2,7,10,.32),transparent)",
           }}
         />
 
-        <div className="relative mx-auto max-w-[1380px] px-5 pb-24 pt-20 sm:px-8 sm:pb-32 sm:pt-28 lg:px-12 lg:pb-40">
-          <div className="flex items-center gap-5">
-            <span className="text-[9px] uppercase tracking-[0.48em] text-[#9a743e]">
-              Tienda de Poema Universal
-            </span>
+        {/* FUNDIDO INFERIOR */}
 
-            <span
-              aria-hidden="true"
-              className="h-px w-20"
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: "auto 0 0",
+            height: "150px",
+            background:
+              "linear-gradient(to bottom,transparent,#071017)",
+          }}
+        />
+
+        {/* CONTENIDO HERO */}
+
+        <div
+          className="mx-auto flex h-full max-w-[1440px] flex-col justify-between px-5 py-14 sm:px-8 sm:py-16 lg:px-12 lg:py-20"
+          style={{
+            position: "relative",
+            zIndex: 3,
+          }}
+        >
+          <div
+            style={{
+              maxWidth: "670px",
+            }}
+          >
+            <div className="flex items-center gap-5">
+              <span
+                style={{
+                  fontSize: "8px",
+                  letterSpacing: ".52em",
+                  textTransform: "uppercase",
+                  color: "#d7ad62",
+                }}
+              >
+                Tienda · Poema Universal
+              </span>
+
+              <span
+                style={{
+                  width: "78px",
+                  height: "1px",
+                  background:
+                    "linear-gradient(to right,#d7ad62,transparent)",
+                }}
+              />
+            </div>
+
+            {/* TÍTULO DORADO */}
+
+            <h1
+              className="font-serif"
               style={{
-                background:
-                  "linear-gradient(to right, rgba(154,116,62,0.62), transparent)",
+                marginTop: "30px",
+                marginBottom: 0,
+                fontSize: "clamp(64px,7vw,116px)",
+                lineHeight: 0.88,
+                letterSpacing: "-0.055em",
+                color: "#d5a54f",
+                textShadow: "0 3px 26px rgba(0,0,0,.36)",
               }}
-            />
-          </div>
+            >
+              Tienda
+              <span
+                style={{
+                  display: "block",
+                  color: "#d5a54f",
+                }}
+              >
+                Poema Universal.
+              </span>
+            </h1>
 
-          <h1 className="mt-12 max-w-6xl font-serif text-[4.7rem] leading-[0.84] tracking-[-0.065em] sm:text-[7.8rem] lg:text-[156px]">
-            Tienda
-            <span className="block italic text-stone-500">
-              Poema Universal.
-            </span>
-          </h1>
+            {/* ORNAMENTO */}
 
-          <div className="mt-14 grid gap-10 border-t border-stone-900/15 pt-10 md:grid-cols-[1fr_0.7fr] md:items-end">
-            <p className="max-w-3xl font-serif text-2xl leading-[1.45] text-stone-700 sm:text-3xl">
-              Libros, imágenes y objetos nacidos de una
-              misma memoria.
+            <div
+              className="flex items-center gap-4"
+              style={{
+                marginTop: "35px",
+              }}
+            >
+              <span
+                style={{
+                  width: "95px",
+                  height: "1px",
+                  background:
+                    "linear-gradient(to right,#d5a54f,rgba(213,165,79,.1))",
+                }}
+              />
+
+              <span
+                style={{
+                  color: "#d5a54f",
+                  fontSize: "15px",
+                }}
+              >
+                ✦
+              </span>
+
+              <span
+                style={{
+                  width: "60px",
+                  height: "1px",
+                  background:
+                    "linear-gradient(to left,#d5a54f,transparent)",
+                }}
+              />
+            </div>
+
+            <p
+              className="font-serif"
+              style={{
+                maxWidth: "520px",
+                marginTop: "30px",
+                marginBottom: 0,
+                fontSize: "clamp(23px,2vw,32px)",
+                lineHeight: 1.42,
+                color: "#f5ead9",
+              }}
+            >
+              Libros, imágenes y objetos nacidos de una misma memoria.
             </p>
 
-            <p className="max-w-md text-sm leading-8 text-stone-500 md:justify-self-end">
-              La tienda está construida. Cada pieza
-              aparecerá cuando haya sido concebida,
-              producida y preparada con honestidad.
+            <p
+              style={{
+                maxWidth: "470px",
+                marginTop: "21px",
+                fontSize: "14px",
+                lineHeight: 2,
+                color: "rgba(245,234,217,.70)",
+              }}
+            >
+              Una tienda construida como extensión material de la obra. Nada
+              aparece aquí antes de encontrar una razón para permanecer.
+            </p>
+          </div>
+
+          {/* PIE HERO */}
+
+          <div
+            className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
+            style={{
+              borderTop: "1px solid rgba(213,165,79,.27)",
+              paddingTop: "20px",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "7px",
+                  letterSpacing: ".48em",
+                  textTransform: "uppercase",
+                  color: "#d5a54f",
+                }}
+              >
+                Archivo doméstico · 001
+              </p>
+
+              <p
+                className="font-serif"
+                style={{
+                  maxWidth: "520px",
+                  margin: "12px 0 0",
+                  fontSize: "19px",
+                  fontStyle: "italic",
+                  lineHeight: 1.55,
+                  color: "rgba(245,234,217,.76)",
+                }}
+              >
+                Las cosas permanecen donde alguien aprendió a esperarlas.
+              </p>
+            </div>
+
+            <p
+              style={{
+                margin: 0,
+                fontSize: "8px",
+                letterSpacing: ".22em",
+                textTransform: "uppercase",
+                color: "rgba(245,234,217,.34)",
+              }}
+            >
+              Cuarto azul · memoria doméstica
             </p>
           </div>
         </div>
       </section>
 
-      {/* GRAN SALA VACÍA */}
+      {/* =========================================================
+          SALA PRINCIPAL
+      ========================================================= */}
 
-      <section className="relative overflow-hidden bg-[#080b0e] text-[#f0e8dc]">
+      <section
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          background:
+            "linear-gradient(180deg,#071017 0%,#07131b 55%,#071017 100%)",
+          color: "#f4ead9",
+          borderTop: "1px solid rgba(213,165,79,.15)",
+        }}
+      >
+        {/* TEXTURA SUAVE */}
+
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
           style={{
-            background:
-              "radial-gradient(circle at 50% 30%, rgba(199,164,103,0.14), transparent 25%), radial-gradient(circle at 12% 82%, rgba(100,122,139,0.1), transparent 32%), linear-gradient(145deg, #070a0d 0%, #0d1217 52%, #07090b 100%)",
-          }}
-        />
-
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
-          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.035,
             backgroundImage:
-              "radial-gradient(circle, rgba(240,232,220,0.75) 0.5px, transparent 0.7px)",
-            backgroundSize: "22px 22px",
+              "radial-gradient(circle, rgba(213,165,79,.40) 0.5px, transparent 0.7px)",
+            backgroundSize: "30px 30px",
           }}
         />
 
-        <div className="relative mx-auto max-w-[1380px] px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44">
-          <div className="grid gap-16 lg:grid-cols-[0.72fr_1.28fr] lg:gap-24">
+        <div
+          className="mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12"
+          style={{
+            position: "relative",
+            paddingTop: "64px",
+            paddingBottom: "0px",
+          }}
+        >
+          <div
+            className="tienda-living-grid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "0.9fr 1.05fr 0.82fr",
+              gap: "54px",
+              alignItems: "center",
+            }}
+          >
+            {/* IZQUIERDA */}
+
             <div>
-              <p className="text-[9px] uppercase tracking-[0.46em] text-[#c7a467]">
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "8px",
+                  letterSpacing: ".48em",
+                  textTransform: "uppercase",
+                  color: "#d5a54f",
+                }}
+              >
                 Sala principal
               </p>
 
-              <h2 className="mt-9 font-serif text-5xl leading-[0.98] tracking-[-0.05em] sm:text-7xl lg:text-[82px]">
+              <h2
+                className="font-serif"
+                style={{
+                  margin: "22px 0 0",
+                  fontSize: "clamp(45px,4.5vw,68px)",
+                  lineHeight: 1,
+                  letterSpacing: "-.045em",
+                  color: "#d5a54f",
+                }}
+              >
                 Todo está
-                <span className="block italic text-white/42">
+                <span
+                  style={{
+                    display: "block",
+                    color: "#d5a54f",
+                  }}
+                >
                   todavía por llegar.
                 </span>
               </h2>
 
-              <p className="mt-9 max-w-xl text-sm leading-8 text-white/46 sm:text-base">
-                No mostraremos productos provisionales ni
-                promesas vacías. Esta sala se irá ocupando
-                únicamente con objetos reales vinculados a
-                la obra.
+              <p
+                style={{
+                  maxWidth: "400px",
+                  margin: "22px 0 0",
+                  fontSize: "14px",
+                  lineHeight: 1.9,
+                  color: "rgba(244,234,217,.60)",
+                }}
+              >
+                Cada pieza de esta tienda será una extensión de una historia.
+                Nada aquí existe por prisa.
               </p>
             </div>
 
-            <div className="relative flex min-h-[520px] items-center justify-center border border-white/[0.13] px-7 py-16 sm:min-h-[620px]">
+            {/* =================================================
+                CENTRO
+                VIDEO OVAL HORIZONTAL
+            ================================================= */}
+
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <div
+                className="tienda-video-halo"
                 aria-hidden="true"
-                className="absolute left-1/2 top-[22%] h-[250px] w-[250px] -translate-x-1/2 rounded-full blur-[90px]"
                 style={{
-                  backgroundColor:
-                    "rgba(199,164,103,0.12)",
+                  position: "absolute",
+                  width: "460px",
+                  height: "295px",
+                  borderRadius: "50%",
+                  background:
+                    "radial-gradient(ellipse,rgba(71,130,167,.20),rgba(213,165,79,.05) 54%,transparent 76%)",
+                  filter: "blur(38px)",
                 }}
               />
 
-              <div className="relative flex flex-col items-center text-center">
-                <div className="relative flex h-52 w-40 items-center justify-center border border-white/[0.15] sm:h-64 sm:w-48">
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-5 border border-white/[0.07]"
-                  />
-
-                  <span
-                    aria-hidden="true"
-                    className="h-2 w-2 rounded-full bg-[#c7a467]"
-                    style={{
-                      boxShadow:
-                        "0 0 26px rgba(199,164,103,0.66)",
-                    }}
-                  />
-                </div>
-
-                <span
-                  aria-hidden="true"
-                  className="h-16 w-px"
+              <div
+                className="tienda-video-vivo tienda-video-oval"
+                style={{
+                  position: "relative",
+                  width: "420px",
+                  height: "265px",
+                  overflow: "hidden",
+                  borderRadius: "50%",
+                  background: "#071017",
+                  boxShadow:
+                    "0 28px 75px rgba(0,0,0,.48), 0 0 0 1px rgba(213,165,79,.18)",
+                }}
+              >
+                <video
+                  src="/gatos.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  aria-label="Presencia viva integrada en la tienda"
                   style={{
-                    background:
-                      "linear-gradient(to bottom, rgba(199,164,103,0.64), transparent)",
+                    position: "absolute",
+                    inset: 0,
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+
+                    /* AJUSTE FINAL */
+                    objectPosition: "center 56%",
+
+                    filter: "brightness(1.08) contrast(1.02)",
                   }}
                 />
 
-                <p className="text-[8px] uppercase tracking-[0.38em] text-white/38">
-                  Primera pieza pendiente
-                </p>
+                {/* VIGNETTE */}
 
-                <p className="mt-5 max-w-sm font-serif text-xl italic leading-8 text-white/62">
-                  La tienda espera aquello que merezca
-                  permanecer en ella.
-                </p>
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "50%",
+                    boxShadow:
+                      "inset 0 0 45px rgba(2,8,12,.18)",
+                    pointerEvents: "none",
+                  }}
+                />
+
+                {/* CRISTAL */}
+
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: "12%",
+                    top: "5%",
+                    width: "34%",
+                    height: "18%",
+                    borderRadius: "50%",
+                    background:
+                      "linear-gradient(135deg,rgba(255,255,255,.13),transparent)",
+                    filter: "blur(10px)",
+                    pointerEvents: "none",
+                  }}
+                />
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* FUTURAS ESTANCIAS */}
+            {/* DERECHA */}
 
-      <section className="border-b border-stone-900/15">
-        <div className="mx-auto max-w-[1380px] px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44">
-          <div className="flex flex-col gap-8 border-b border-stone-900/15 pb-12 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-[9px] uppercase tracking-[0.46em] text-[#9a743e]">
-                Colecciones futuras
+              <div className="flex items-center gap-4">
+                <span
+                  style={{
+                    width: "6px",
+                    height: "6px",
+                    borderRadius: "50%",
+                    background: "#d5a54f",
+                    boxShadow:
+                      "0 0 14px rgba(213,165,79,.40)",
+                  }}
+                />
+
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "8px",
+                    letterSpacing: ".46em",
+                    textTransform: "uppercase",
+                    color: "#d5a54f",
+                  }}
+                >
+                  Presencia en tránsito
+                </p>
+              </div>
+
+              <p
+                className="font-serif"
+                style={{
+                  maxWidth: "330px",
+                  margin: "22px 0 0",
+                  fontSize: "23px",
+                  fontStyle: "italic",
+                  lineHeight: 1.5,
+                  color: "rgba(244,234,217,.84)",
+                }}
+              >
+                Algunas cosas llegan antes de convertirse en objeto.
               </p>
 
-              <h2 className="mt-8 max-w-4xl font-serif text-5xl leading-[1] tracking-[-0.05em] sm:text-7xl">
-                Cinco estancias.
-                <span className="block italic text-stone-500">
-                  Una misma arquitectura.
-                </span>
-              </h2>
+              <p
+                className="font-serif"
+                style={{
+                  margin: "18px 0 0",
+                  fontSize: "17px",
+                  fontStyle: "italic",
+                  color: "rgba(213,165,79,.76)",
+                }}
+              >
+                La tienda también aprende a respirar.
+              </p>
             </div>
-
-            <p className="max-w-sm text-sm leading-7 text-stone-500">
-              Las colecciones se abrirán progresivamente.
-              Ninguna necesita ser llenada antes de estar
-              preparada.
-            </p>
           </div>
 
-          <ol className="grid border-l border-t border-stone-900/15 md:grid-cols-2 xl:grid-cols-5">
-            {futureRooms.map((room) => (
-              <li
-                key={room.number}
-                className="flex min-h-[340px] flex-col justify-between border-b border-r border-stone-900/15 p-7 sm:p-8"
-              >
-                <div>
-                  <div className="flex items-start justify-between">
-                    <span className="font-serif text-xl italic text-[#9a743e]">
-                      {room.number}
-                    </span>
+          {/* =====================================================
+              COLECCIONES
+          ===================================================== */}
 
-                    <span className="h-2 w-2 rounded-full border border-stone-900/20" />
-                  </div>
+          <div
+            style={{
+              marginTop: "54px",
+              borderTop: "1px solid rgba(213,165,79,.20)",
+            }}
+          >
+            <ol className="grid md:grid-cols-2 xl:grid-cols-5">
+              {futureRooms.map((room, index) => (
+                <li
+                  key={room.number}
+                  style={{
+                    minHeight: "184px",
+                    padding: "24px 20px 25px",
+                    borderRight:
+                      index < futureRooms.length - 1
+                        ? "1px solid rgba(213,165,79,.12)"
+                        : "none",
+                  }}
+                >
+                  <p
+                    className="font-serif"
+                    style={{
+                      margin: 0,
+                      fontSize: "14px",
+                      fontStyle: "italic",
+                      color: "rgba(213,165,79,.62)",
+                    }}
+                  >
+                    {room.number}
+                  </p>
 
-                  <h3 className="mt-12 font-serif text-3xl leading-tight tracking-[-0.035em]">
+                  <h3
+                    className="font-serif"
+                    style={{
+                      margin: "15px 0 0",
+                      fontSize: "25px",
+                      fontWeight: 400,
+                      color: "#d7ae65",
+                    }}
+                  >
                     {room.title}
                   </h3>
 
-                  <p className="mt-7 text-sm leading-7 text-stone-500">
+                  <p
+                    style={{
+                      margin: "7px 0 0",
+                      fontSize: "8px",
+                      letterSpacing: ".22em",
+                      textTransform: "uppercase",
+
+                      /* MÁS LEGIBLE */
+                      color: "rgba(244,234,217,.50)",
+                    }}
+                  >
+                    {room.subtitle}
+                  </p>
+
+                  <p
+                    style={{
+                      margin: "13px 0 0",
+                      fontSize: "12px",
+                      lineHeight: 1.75,
+
+                      /* MÁS LEGIBLE */
+                      color: "rgba(244,234,217,.60)",
+                    }}
+                  >
                     {room.description}
                   </p>
-                </div>
-
-                <p className="mt-12 text-[7px] uppercase tracking-[0.3em] text-stone-400">
-                  Estancia por abrir
-                </p>
-              </li>
-            ))}
-          </ol>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </section>
 
-      {/* PRINCIPIO ÉTICO */}
+      {/* =========================================================
+          PRINCIPIO
+      ========================================================= */}
 
-      <section className="bg-[#e7dccd]">
-        <div className="mx-auto max-w-[1380px] px-5 py-24 sm:px-8 sm:py-32 lg:px-12">
-          <div className="grid gap-12 border-y border-stone-900/15 py-14 lg:grid-cols-[1fr_auto] lg:items-end">
+      <section
+        style={{
+          position: "relative",
+          backgroundColor: "#eadfce",
+          color: "#1b1712",
+          borderTop: "1px solid rgba(73,52,30,.16)",
+        }}
+      >
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.045,
+            backgroundImage:
+              "radial-gradient(circle,rgba(71,48,28,.55) .5px,transparent .7px)",
+            backgroundSize: "21px 21px",
+          }}
+        />
+
+        <div
+          className="mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12"
+          style={{
+            position: "relative",
+            paddingTop: "64px",
+            paddingBottom: "64px",
+          }}
+        >
+          <div
+            className="grid gap-10 lg:grid-cols-[1fr_0.5fr] lg:items-end"
+            style={{
+              borderTop: "1px solid rgba(72,51,29,.15)",
+              borderBottom: "1px solid rgba(72,51,29,.15)",
+              padding: "42px 0",
+            }}
+          >
             <div>
-              <p className="text-[8px] uppercase tracking-[0.42em] text-[#9a743e]">
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "8px",
+                  letterSpacing: ".44em",
+                  textTransform: "uppercase",
+                  color: "#95703d",
+                }}
+              >
                 Principio de la tienda
               </p>
 
-              <p className="mt-8 max-w-4xl font-serif text-4xl leading-[1.12] tracking-[-0.04em] text-stone-800 sm:text-6xl">
+              <p
+                className="font-serif"
+                style={{
+                  maxWidth: "900px",
+                  margin: "22px 0 0",
+                  fontSize: "clamp(40px,5vw,70px)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-.04em",
+                  color: "#272019",
+                }}
+              >
                 Cada objeto deberá pertenecer
-                <span className="block italic text-stone-500">
+                <span
+                  style={{
+                    display: "block",
+                    fontStyle: "italic",
+                    color: "#8b7153",
+                  }}
+                >
                   verdaderamente a la obra.
                 </span>
               </p>
             </div>
 
-            <div className="max-w-md lg:text-right">
-              <p className="text-sm leading-7 text-stone-600">
-                Ninguna compra concederá una voz, una plaza
-                o una decisión editorial dentro de Poema
-                Universal.
+            <div className="lg:text-right">
+              <p
+                style={{
+                  maxWidth: "390px",
+                  margin: "0 0 0 auto",
+                  fontSize: "14px",
+                  lineHeight: 1.9,
+                  color: "#66594c",
+                }}
+              >
+                Ninguna compra concederá una voz, una plaza o una decisión
+                editorial dentro de Poema Universal.
               </p>
 
               <Link
                 href="/poema-universal"
-                className="mt-8 inline-flex border-b border-stone-900/25 pb-2 text-[8px] uppercase tracking-[0.3em] text-stone-700 transition hover:border-stone-950 hover:text-stone-950"
+                style={{
+                  display: "inline-block",
+                  marginTop: "24px",
+                  paddingBottom: "7px",
+                  borderBottom: "1px solid rgba(123,90,49,.40)",
+                  fontSize: "8px",
+                  letterSpacing: ".28em",
+                  textTransform: "uppercase",
+                  color: "#79572f",
+                  textDecoration: "none",
+                }}
               >
                 Volver a la sala universal →
               </Link>
@@ -315,14 +885,39 @@ export default function StorePage() {
         </div>
       </section>
 
-      <footer className="bg-[#080b0e] px-5 py-10 text-[#f0e8dc] sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[1380px] flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-serif text-lg">
+      {/* =========================================================
+          FOOTER
+      ========================================================= */}
+
+      <footer
+        style={{
+          background: "#061019",
+          borderTop: "1px solid rgba(213,165,79,.18)",
+          color: "#eee3d2",
+        }}
+      >
+        <div className="mx-auto flex max-w-[1380px] flex-col gap-4 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
+          <p
+            className="font-serif"
+            style={{
+              margin: 0,
+              fontSize: "18px",
+              color: "#d5a54f",
+            }}
+          >
             Tienda de Poema Universal
           </p>
 
-          <p className="text-[7px] uppercase tracking-[0.32em] text-white/34">
-            La tienda está preparada
+          <p
+            style={{
+              margin: 0,
+              fontSize: "7px",
+              letterSpacing: ".34em",
+              textTransform: "uppercase",
+              color: "rgba(238,227,210,.30)",
+            }}
+          >
+            Memoria · materia · presencia
           </p>
         </div>
       </footer>

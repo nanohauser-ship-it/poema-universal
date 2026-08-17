@@ -1,0 +1,39 @@
+EMBRIÓN V6.1 · MEMBRANA DE LAS PALABRAS
+========================================
+
+Esta actualización se instala encima de Embrión V6.
+
+MODIFICACIONES
+--------------
+
+- El universo verde ocupa ahora el marco completo de la cámara.
+- El Embrión 3D queda centrado en el espacio total.
+- Desaparece el antiguo bloque POEMA / PARTITURA VIVA.
+- Desaparecen las barras sonoras verticales de esa zona.
+- Nace la MEMBRANA DE LAS PALABRAS debajo del Embrión.
+- Toda aparición se archiva automáticamente, aunque no pulses «Conservar».
+- Las repeticiones no crean basura: incrementan el número de apariciones.
+- El archivo se divide en palabra, símbolo, imagen, materia, verbo y tensión.
+- Al tocar una forma archivada, vuelve al campo de gravedad.
+- Las elegidas con «Conservar» reciben una marca luminosa propia.
+- Todo permanece en localStorage dentro de este navegador.
+
+INSTALACIÓN SI EL ZIP ESTÁ EN POEMA UNIVERSAL
+----------------------------------------------
+
+Pega en Terminal:
+
+  cd "$HOME/poema-universal" || exit 1
+  unzip -o EMBRION-V6-1-MEMBRANA-PALABRAS.zip
+  xattr -dr com.apple.quarantine EMBRION-V6-1-MEMBRANA-PALABRAS 2>/dev/null || true
+  bash "./EMBRION-V6-1-MEMBRANA-PALABRAS/INSTALAR-EMBRION-V6-1.command" "$HOME/poema-universal"
+  lsof -ti tcp:3000 | xargs kill 2>/dev/null || true
+  npm run dev -- --webpack -p 3000
+
+Después abre:
+
+  http://localhost:3000/embrion
+
+El instalador guarda automáticamente una copia de seguridad de cada archivo existente
+que sustituye. No modifica Supabase, variables de entorno ni el índice de las diez fuentes.
+

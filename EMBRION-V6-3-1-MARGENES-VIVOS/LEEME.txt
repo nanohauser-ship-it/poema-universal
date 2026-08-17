@@ -1,0 +1,22 @@
+EMBRIÓN V6.3.1 · MÁRGENES VIVOS
+
+Refina la Libreta Literaria V6.3 sin cambiar su arquitectura.
+
+CAMBIOS
+- El Espejo de la Membrana ocupa menos altura para devolver protagonismo al folio.
+- Al pulsar una forma, aparece un microdestello y la palabra viaja visualmente hasta el punto del cursor.
+- El margen derecho del papel conserva hasta 7 sedimentos recientes.
+- Los sedimentos parecen anotaciones de lápiz y pueden pulsarse para volver a insertarlos.
+- Las secuencias de la Mesa de Montaje también dejan sedimentos.
+- Respeta reduced-motion: la animación se desactiva si el sistema lo solicita.
+
+PERSISTENCIA
+No cambia la clave embrion-libreta-literaria-v1, por lo que conserva las páginas existentes.
+
+NO MODIFICA
+- corpus
+- motor simbólico
+- Membrana
+- vivero
+- controles de la consola
+- alimentación verbal

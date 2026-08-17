@@ -1,0 +1,33 @@
+.page{min-height:100vh;background:#090806;color:#eee8dc}
+.chamber{position:relative;min-height:100vh;padding:1.25rem;background:radial-gradient(circle at 50% 40%,rgba(121,94,57,.2),transparent 36rem),#090806}
+.topbar{position:relative;z-index:4;display:flex;justify-content:space-between;gap:1rem}
+.topbar>p{margin:0;color:#a58b64;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase}
+.topbar>div{display:flex;gap:.35rem;padding:.25rem;border:1px solid #ffffff20;border-radius:999px;background:#0005}
+.topbar button{border:0;border-radius:999px;background:transparent;color:#9b9388;padding:.55rem .85rem;cursor:pointer}
+.topbar button[data-active="true"]{background:#d4c09a;color:#17130e}
+.viewport{position:absolute;inset:0}
+.loading{display:grid;min-height:100%;place-items:center;color:#9f917e;font-family:Georgia,serif}
+.plateImage{object-fit:contain;padding:clamp(4rem,10vw,8rem)}
+.title{position:absolute;z-index:3;left:clamp(1.25rem,5vw,5rem);bottom:clamp(10rem,18vh,13rem);max-width:38rem;pointer-events:none}
+.title span{color:#aa8b5d;font-size:.72rem;letter-spacing:.18em}
+.title h2{margin:.8rem 0 0;font:400 clamp(2.6rem,6vw,6.6rem)/.95 Georgia,serif;text-shadow:0 0 2rem #000}
+.voice{position:absolute;z-index:4;right:clamp(1.25rem,4vw,4rem);bottom:clamp(1.25rem,4vw,3rem);display:grid;grid-template-columns:1fr auto;align-items:end;gap:1.5rem;max-width:min(48rem,calc(100% - 2.5rem));padding:1.25rem;border:1px solid #ffffff20;background:#080705d9;backdrop-filter:blur(14px)}
+.voice p{margin:0 0 .55rem;color:#a58b64;font-size:.67rem;letter-spacing:.16em;text-transform:uppercase}
+.voice blockquote{margin:0;font:400 clamp(1rem,2vw,1.25rem)/1.55 Georgia,serif}
+.voice span{display:block;margin-top:.7rem;color:#8f877b;font-size:.74rem}
+.voice button{min-width:12rem;border:1px solid #b29367;background:transparent;color:#dfcfb5;padding:.8rem 1rem;cursor:pointer}
+.voiceError{position:absolute;z-index:6;right:2rem;bottom:.2rem;color:#d89c91;font-size:.75rem}
+.sheet{max-width:76rem;margin:auto;padding:clamp(5rem,10vw,9rem) clamp(1.25rem,4vw,3rem)}
+.archive{color:#a58b64;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}
+.sheet h1{max-width:60rem;margin:1rem 0;font:400 clamp(3rem,7vw,7rem)/.96 Georgia,serif}
+.lineage{color:#9f978b}
+.core{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,6vw,7rem);margin:7rem 0;padding:3rem 0;border-block:1px solid #ffffff20}
+.core p,.core blockquote{margin:0;font:400 clamp(1.2rem,2vw,1.7rem)/1.7 Georgia,serif}
+.core blockquote{color:#c7b898;font-style:italic}
+.data{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid #ffffff20}
+.data>div{padding:1.5rem 0;border-bottom:1px solid #ffffff20}
+.data>div:nth-child(odd){padding-right:2rem;border-right:1px solid #ffffff20}
+.data>div:nth-child(even){padding-left:2rem}
+.data dt{margin-bottom:.6rem;color:#a58b64;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase}
+.data dd{margin:0;color:#c5beb2;font:400 1rem/1.65 Georgia,serif}
+@media(max-width:760px){.chamber{min-height:48rem}.topbar{align-items:flex-start;flex-direction:column}.title{bottom:16rem}.voice{left:1rem;right:1rem;bottom:1rem;grid-template-columns:1fr}.voice button{width:100%}.core,.data{grid-template-columns:1fr}.data>div:nth-child(odd),.data>div:nth-child(even){padding-left:0;padding-right:0;border-right:0}}

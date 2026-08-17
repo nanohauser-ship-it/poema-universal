@@ -1,0 +1,34 @@
+GRAN AVATAR · V3 SINCRONIZADA
+Poema Universal
+
+QUÉ HACE ESTA VERSIÓN
+
+La V3 conserva el personaje y la sala que ya funcionan, pero cambia la lectura y
+la respuesta oral: el vídeo parlante fijo deja de gobernar la boca.
+
+Flujo:
+1. Poema Universal genera la voz con la API ya existente.
+2. El audio generado se envía a /api/poema-universal/gran-avatar/align.
+3. Whisper-1 devuelve marcas temporales por palabra.
+4. El navegador convierte cada palabra en una secuencia de visemas.
+5. Las poses faciales del personaje siguen la posición real del audio.
+6. Si la alineación precisa falla, se usa una línea temporal aproximada local.
+
+IMPORTANTE
+
+- Es una V3 experimental para probar sincronización dentro de la sala real.
+- No modifica .env.local, Supabase ni package.json.
+- Requiere la misma OPENAI_API_KEY que ya usa la voz del Gran Avatar.
+- La alineación añade una llamada de transcripción por fragmento hablado.
+- Las poses de boca se han extraído del vídeo Pippit aportado para esta prueba.
+  La marca Pippit puede seguir apareciendo en formatos donde el encuadre la deje
+  visible. Para producción se debe sustituir por una exportación limpia propia.
+- V2 Cinemática, Organism V1 y LiveAvatar no se eliminan.
+
+INSTALACIÓN
+
+cd "$HOME/poema-universal"
+unzip -o "GRAN-AVATAR-V3-SINCRONIZADO.zip"
+bash "GRAN-AVATAR-V3-SINCRONIZADO/INSTALAR-GRAN-AVATAR-V3.sh" "$HOME/poema-universal"
+
+Después reinicia Next.js.

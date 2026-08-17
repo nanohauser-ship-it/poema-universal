@@ -1,0 +1,11 @@
+POEMA UNIVERSAL · HERO VIDEO V2.1 · ATMÓSFERA
+
+Requiere HERO VIDEO V2 ya instalado.
+
+Refina únicamente la apertura:
+- reutiliza el mismo MP4 como atmósfera audiovisual desenfocada en los laterales;
+- funde los bordes del vídeo central mediante máscara progresiva;
+- reduce “Universal” aproximadamente un 8 %.
+
+No toca navegación, cuenta atrás, manifiesto, voces, mundo ni otras salas.
+Crea backups antes de modificar page.tsx y PoemaUniversalPage.module.css.

@@ -1,0 +1,26 @@
+EMBRIÓN · RESTAURACIÓN TECHNO
+
+Este paquete devuelve Embrión a su dirección original:
+
+    POEMA → ORGANISMO → MÚSICA ELECTRÓNICA
+
+No borra el organismo, el motor musical ni tus trabajos anteriores.
+Solo restaura el acceso Verso → Techno y desactiva la ruta del atlas.
+
+PASOS
+
+1. Descomprime el ZIP.
+
+2. Mueve la carpeta completa «RESTAURAR-EMBRION-TECHNO» dentro de:
+
+       /Users/josebalonaveiro/poema-universal
+
+3. Abre Terminal y ejecuta:
+
+       cd "$HOME/poema-universal"
+       xattr -dr com.apple.quarantine "RESTAURAR-EMBRION-TECHNO"
+       bash "RESTAURAR-EMBRION-TECHNO/RESTAURAR-EMBRION-TECHNO.command"
+
+La restauración crea una copia de seguridad, reinicia Poema Universal y abre:
+
+       http://localhost:3000/laboratorio/verso-tecno

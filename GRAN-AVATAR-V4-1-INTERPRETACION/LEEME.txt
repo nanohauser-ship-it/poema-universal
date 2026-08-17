@@ -1,0 +1,37 @@
+GRAN AVATAR V4.1 · INTERPRETACIÓN POR VÍDEO + SINCRONIZACIÓN SUAVE
+
+OBJETIVO
+Quitar el aspecto forzado de la sincronización por poses sin renunciar a que
+la voz gobierne el comportamiento del avatar.
+
+CAMBIO CENTRAL
+La cara ya no se reconstruye por visemas. El nuevo vídeo animado aporta de
+forma natural labios, mandíbula, ojos, cuello y giros de cabeza. El audio TTS
+gobierna cuándo avanza el vídeo, cuándo se detiene y a qué velocidad.
+
+ESTADOS
+- REPOSO: microvídeo silencioso del vídeo maestro.
+- ESCUCHA: microvídeo con inclinación y atención.
+- PIENSA: microvídeo contemplativo.
+- PAUSA: microvídeo de silencio.
+- HABLA/RESPONDE: nuevo clip de interpretación, entrada desde 3/4.
+- RECITA: el mismo actor entra más frontal y cambia lentamente de encuadre.
+
+SINCRONIZACIÓN SUAVE
+- Energía alta de voz -> el actor avanza.
+- Pausa real -> se detiene y cruza a una pose cerrada.
+- Volumen -> modifica ligeramente la velocidad.
+- Visema -> solo aporta una pequeña corrección de ritmo; nunca sustituye la cara.
+- Final del clip -> reinicio oculto durante una pausa visual.
+
+IMPORTANTE
+Los vídeos Pippit aportados para esta fase pueden conservar una marca de agua.
+Sirven para prueba local. Para la versión pública conviene sustituirlos por una
+exportación limpia del mismo material.
+
+INSTALACIÓN
+cd "$HOME/poema-universal"
+unzip -o "GRAN-AVATAR-V4-1-INTERPRETACION.zip"
+bash "GRAN-AVATAR-V4-1-INTERPRETACION/INSTALAR-GRAN-AVATAR-V4-1.sh" "$HOME/poema-universal"
+
+Después reinicia Next.js.

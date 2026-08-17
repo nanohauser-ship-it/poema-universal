@@ -1,0 +1,62 @@
+.wrapper {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 0.85rem;
+}
+
+.button,
+.savedButton {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  border: 1px solid
+    rgba(194, 154, 76, 0.36);
+  padding: 0.85rem 1rem;
+  color: rgba(
+    224,
+    207,
+    164,
+    0.82
+  );
+  background:
+    rgba(8, 7, 5, 0.72);
+  font: inherit;
+  font-size: 0.61rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    background 180ms ease;
+}
+
+.button:hover {
+  border-color:
+    rgba(221, 183, 96, 0.76);
+  color: #e2c781;
+  background:
+    rgba(39, 30, 15, 0.76);
+}
+
+.savedButton {
+  border-color:
+    rgba(198, 163, 82, 0.54);
+  color: #d2b66f;
+  cursor: default;
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.wrapper p {
+  margin: 0;
+  color: #b78675;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-align: center;
+}

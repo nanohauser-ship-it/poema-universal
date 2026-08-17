@@ -1,0 +1,12 @@
+POEMA UNIVERSAL · HERO VIDEO V1.2
+
+Diagnóstico confirmado:
+- el MP4 funciona en el navegador;
+- Next lo sirve correctamente;
+- el fallo estaba en la integración visual del EditorialHero.
+
+V1.2 modifica únicamente EditorialHero.tsx.
+No toca page.tsx, APIs, voces, globo, manifiesto ni el vídeo.
+
+La capa de vídeo y sus posiciones críticas usan estilos inline para evitar que
+un CSS Module antiguo, cacheado o sobreescrito pueda ocultarlas.

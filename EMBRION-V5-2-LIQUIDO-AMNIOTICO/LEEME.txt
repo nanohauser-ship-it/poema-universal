@@ -1,0 +1,26 @@
+EMBRIÓN V5.2 · LÍQUIDO AMNIÓTICO VERBAL
+
+La cámara contiene ahora un depósito vivo debajo del Embrión.
+
+Cuando escribes:
+
+- Cada palabra completada cae desde la parte superior de la cámara.
+- Cruza la superficie del líquido.
+- Rebota suavemente y queda suspendida a distinta profundidad.
+- La palabra elegida como núcleo se ilumina dentro del agua.
+- Las palabras entregadas permanecen como sedimento verbal.
+- El líquido respira, produce ondas, reflejos y pequeñas burbujas.
+
+Esta versión también mantiene retirados la línea de evolución, el reproductor,
+ACE-Step y todo el antiguo módulo musical inferior.
+
+INSTALACIÓN
+
+1. Descomprime el ZIP.
+2. Abre la carpeta EMBRION-V5-2-LIQUIDO-AMNIOTICO.
+3. Haz clic derecho sobre INSTALAR-EMBRION-V5-2.command y elige Abrir.
+4. Si macOS no permite abrirlo, ejecútalo desde Terminal con bash.
+5. Reinicia el servidor y abre http://localhost:3000/embrion.
+6. Recarga con Comando + Mayúsculas + R.
+
+El instalador modifica solamente dos archivos y crea una copia de seguridad.

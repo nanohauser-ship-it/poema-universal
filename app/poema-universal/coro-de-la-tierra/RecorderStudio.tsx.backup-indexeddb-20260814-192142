@@ -1,0 +1,525 @@
+"use client";
+
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+type RecorderStudioProps = {
+  open: boolean;
+  onClose: () => void;
+  onUploaded: () => Promise<void>;
+};
+
+function formatTime(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+
+  return `${minutes}:${Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, "0")}`;
+}
+
+export default function RecorderStudio({
+  open,
+  onClose,
+  onUploaded,
+}: RecorderStudioProps) {
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<number | null>(null);
+
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const [deviceId, setDeviceId] = useState("");
+
+  const [recording, setRecording] = useState(false);
+  const [seconds, setSeconds] = useState(0);
+
+  const [blob, setBlob] = useState<Blob | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const [name, setName] = useState("");
+  const [place, setPlace] = useState("");
+  const [language, setLanguage] = useState("");
+  const [excerpt, setExcerpt] = useState("");
+
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const stopTracks = () => {
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+  };
+
+  const stopTimer = () => {
+    if (timerRef.current !== null) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const readDevices = useCallback(async () => {
+    if (!navigator.mediaDevices?.enumerateDevices) return;
+
+    const list = await navigator.mediaDevices.enumerateDevices();
+
+    const inputs = list.filter(
+      (device) => device.kind === "audioinput"
+    );
+
+    setDevices(inputs);
+
+    setDeviceId((current) => {
+      if (
+        current &&
+        inputs.some((device) => device.deviceId === current)
+      ) {
+        return current;
+      }
+
+      return inputs[0]?.deviceId ?? "";
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    let cancelled = false;
+
+    const initialise = async () => {
+      try {
+        setError(null);
+
+        const permission =
+          await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+
+        permission
+          .getTracks()
+          .forEach((track) => track.stop());
+
+        if (!cancelled) {
+          await readDevices();
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "No se pudo acceder a la entrada de audio."
+          );
+        }
+      }
+    };
+
+    void initialise();
+
+    const deviceChange = () => {
+      void readDevices();
+    };
+
+    navigator.mediaDevices?.addEventListener(
+      "devicechange",
+      deviceChange
+    );
+
+    return () => {
+      cancelled = true;
+
+      navigator.mediaDevices?.removeEventListener(
+        "devicechange",
+        deviceChange
+      );
+
+      stopTimer();
+      stopTracks();
+    };
+  }, [open, readDevices]);
+
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
+  const start = async () => {
+    try {
+      setError(null);
+
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+
+      setPreview(null);
+      setBlob(null);
+      setSeconds(0);
+
+      chunksRef.current = [];
+
+      const audio:
+        | boolean
+        | MediaTrackConstraints = deviceId
+        ? {
+            deviceId: {
+              exact: deviceId,
+            },
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false,
+          }
+        : true;
+
+      const stream =
+        await navigator.mediaDevices.getUserMedia({
+          audio,
+        });
+
+      streamRef.current = stream;
+
+      const preferred = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/mp4",
+      ].find((type) =>
+        MediaRecorder.isTypeSupported(type)
+      );
+
+      const recorder = preferred
+        ? new MediaRecorder(stream, {
+            mimeType: preferred,
+          })
+        : new MediaRecorder(stream);
+
+      recorderRef.current = recorder;
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size) {
+          chunksRef.current.push(event.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        stopTimer();
+        stopTracks();
+
+        const result = new Blob(
+          chunksRef.current,
+          {
+            type:
+              recorder.mimeType ||
+              "audio/webm",
+          }
+        );
+
+        const url =
+          URL.createObjectURL(result);
+
+        setBlob(result);
+        setPreview(url);
+        setRecording(false);
+      };
+
+      recorder.start(250);
+
+      setRecording(true);
+
+      timerRef.current =
+        window.setInterval(() => {
+          setSeconds((value) => value + 1);
+        }, 1000);
+    } catch (err) {
+      stopTracks();
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "No se pudo iniciar la grabación."
+      );
+    }
+  };
+
+  const stop = () => {
+    if (
+      recorderRef.current?.state ===
+      "recording"
+    ) {
+      recorderRef.current.stop();
+    }
+  };
+
+  const discard = () => {
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+
+    setPreview(null);
+    setBlob(null);
+    setSeconds(0);
+  };
+
+  const save = async () => {
+    if (!blob) return;
+
+    try {
+      setSaving(true);
+      setError(null);
+
+      const mime =
+        blob.type || "audio/webm";
+
+      const extension =
+        mime.includes("mp4")
+          ? "m4a"
+          : "webm";
+
+      const file = new File(
+        [blob],
+        `voz-${Date.now()}.${extension}`,
+        {
+          type: mime,
+        }
+      );
+
+      const data = new FormData();
+
+      data.set("audio", file);
+      data.set(
+        "name",
+        name.trim() || "Nueva grabación"
+      );
+      data.set("place", place.trim());
+      data.set("language", language.trim());
+      data.set("excerpt", excerpt.trim());
+
+      const response = await fetch(
+        "/api/voices",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result?.error ||
+            "No se pudo guardar la voz."
+        );
+      }
+
+      await onUploaded();
+
+      discard();
+
+      setName("");
+      setPlace("");
+      setLanguage("");
+      setExcerpt("");
+
+      onClose();
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "No se pudo incorporar la voz."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (!open) return null;
+
+  return (
+    <div className="recorder-backdrop">
+      <section
+        className="recorder-studio"
+        role="dialog"
+        aria-modal="true"
+      >
+        <header className="recorder-header">
+          <div>
+            <p>ESTACIÓN DE CAPTURA</p>
+
+            <h2>Grabar una voz</h2>
+
+            <span>
+              La voz se convertirá en una nueva luz de la Tierra.
+            </span>
+          </div>
+
+          <button
+            type="button"
+            className="recorder-close"
+            onClick={onClose}
+          >
+            ×
+          </button>
+        </header>
+
+        <div className="recorder-device">
+          <label htmlFor="coro-audio-device">
+            ENTRADA DE AUDIO
+          </label>
+
+          <select
+            id="coro-audio-device"
+            value={deviceId}
+            disabled={recording}
+            onChange={(event) =>
+              setDeviceId(event.target.value)
+            }
+          >
+            {!devices.length && (
+              <option value="">
+                Micrófono predeterminado
+              </option>
+            )}
+
+            {devices.map((device, index) => (
+              <option
+                key={device.deviceId}
+                value={device.deviceId}
+              >
+                {device.label ||
+                  `Entrada ${index + 1}`}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div
+          className={`recorder-orb ${
+            recording ? "is-recording" : ""
+          }`}
+        >
+          <i />
+          <i />
+          <i />
+
+          <div className="recorder-core">
+            <span />
+          </div>
+        </div>
+
+        <div className="recorder-time">
+          {formatTime(seconds)}
+        </div>
+
+        {!recording && !blob && (
+          <button
+            type="button"
+            className="recorder-main"
+            onClick={() => void start()}
+          >
+            ● INICIAR GRABACIÓN
+          </button>
+        )}
+
+        {recording && (
+          <button
+            type="button"
+            className="recorder-main is-stop"
+            onClick={stop}
+          >
+            ■ DETENER GRABACIÓN
+          </button>
+        )}
+
+        {blob && preview && (
+          <div className="recorder-preview">
+            <p>GRABACIÓN CAPTURADA</p>
+
+            <audio
+              controls
+              src={preview}
+            />
+
+            <button
+              type="button"
+              onClick={discard}
+            >
+              REPETIR GRABACIÓN
+            </button>
+          </div>
+        )}
+
+        <div className="recorder-fields">
+          <label>
+            NOMBRE
+            <input
+              value={name}
+              onChange={(event) =>
+                setName(event.target.value)
+              }
+              placeholder="Nombre"
+            />
+          </label>
+
+          <label>
+            LUGAR
+            <input
+              value={place}
+              onChange={(event) =>
+                setPlace(event.target.value)
+              }
+              placeholder="Santiago · Galicia"
+            />
+          </label>
+
+          <label>
+            IDIOMA
+            <input
+              value={language}
+              onChange={(event) =>
+                setLanguage(event.target.value)
+              }
+              placeholder="Galego"
+            />
+          </label>
+
+          <label className="recorder-wide">
+            VERSO / MENSAJE
+            <textarea
+              rows={2}
+              value={excerpt}
+              onChange={(event) =>
+                setExcerpt(event.target.value)
+              }
+              placeholder="La frase que acompañará esta voz…"
+            />
+          </label>
+        </div>
+
+        {error && (
+          <p className="recorder-error">
+            {error}
+          </p>
+        )}
+
+        <footer className="recorder-footer">
+          <span>
+            MICRÓFONO · USB · INTERFAZ EXTERNA
+          </span>
+
+          <button
+            type="button"
+            className="recorder-save"
+            disabled={!blob || saving}
+            onClick={() => void save()}
+          >
+            {saving
+              ? "INCORPORANDO…"
+              : "INCORPORAR AL PLANETA"}
+          </button>
+        </footer>
+      </section>
+    </div>
+  );
+}

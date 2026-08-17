@@ -1,0 +1,12 @@
+POEMA UNIVERSAL · V5 · FIGURAS ESCULTÓRICAS HUMANAS
+
+Esta versión reemplaza el componente Poet de MundoPoema.tsx
+por figuras más humanas, manteniendo el tono escultórico y ritual.
+
+Incluye:
+- cabeza y cuello más reales
+- torso con hombros y volumen
+- brazos y piernas separados
+- anatomía más creíble
+- variación por oficio
+- microanimación preservada

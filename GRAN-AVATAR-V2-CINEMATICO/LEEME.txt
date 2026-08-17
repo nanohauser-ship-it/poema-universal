@@ -1,0 +1,33 @@
+EL GRAN AVATAR · V2 CINEMATOGRÁFICA
+===================================
+
+Esta versión sustituye el cuerpo visual predeterminado del avatar por una
+presencia cinematográfica experimental para poder probar YA el personaje nuevo
+dentro de Poema Universal.
+
+ESTADOS INTEGRADOS
+- REPOSO: retrato maestro limpio y respiración visual mínima.
+- ESCUCHA: película experimental Pippit.
+- LECTURA / RESPUESTA: película parlante Pippit, reproducida SIN audio.
+- PENSAMIENTO / PAUSA: vuelve al retrato maestro con variaciones muy sutiles.
+
+IMPORTANTE
+- La voz sigue siendo la voz real de Poema Universal/OpenAI.
+- El vídeo de boca todavía NO tiene sincronización fonética con esa voz.
+- Los vídeos Pippit actuales son material de prueba y conservan su marca.
+- No se toca .env.local, Supabase, package.json ni las APIs existentes.
+- El organismo V1 y LiveAvatar continúan en el código como respaldo.
+
+INSTALACIÓN
+Desde la carpeta del instalador:
+
+  bash ./INSTALAR-GRAN-AVATAR-V2.sh "$HOME/poema-universal"
+
+Después reinicia:
+
+  cd "$HOME/poema-universal"
+  lsof -ti :3000 | xargs kill -9 2>/dev/null || true
+  npm run dev -- --webpack -p 3000
+
+Abre:
+  http://localhost:3000/poema-universal/gran-avatar

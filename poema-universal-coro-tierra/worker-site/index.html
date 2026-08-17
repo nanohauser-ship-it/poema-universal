@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>El Coro de la Tierra · Poema Universal</title>
+  <meta name="description" content="Un archivo vivo de voces humanas." />
+  <style>__SITE_CSS__</style>
+</head>
+<body>
+  <main class="coro-room">
+    <div class="architectural-light" aria-hidden="true"></div>
+    <div class="ceiling-rings" aria-hidden="true"></div>
+    <div class="distant-archive left" aria-hidden="true"></div>
+    <div class="distant-archive right" aria-hidden="true"></div>
+    <div class="floor-reflection" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a href="/" class="brand">POEMA UNIVERSAL</a>
+      <div class="room-label"><span></span>SALA INDEPENDIENTE<span></span></div>
+      <button class="add-top" data-open-studio type="button">＋ AÑADIR VOCES</button>
+    </header>
+
+    <section class="title-block">
+      <p>ARCHIVO SONORO UNIVERSAL</p>
+      <h1>EL CORO DE LA TIERRA</h1>
+      <span>Un archivo vivo de voces humanas</span>
+    </section>
+
+    <div class="sphere-stage">
+      <canvas id="voiceSphere" class="voice-sphere" aria-label="Esfera de voces. Arrastra para girarla y pulsa una luz para seleccionar una voz."></canvas>
+      <div class="sphere-shadow" aria-hidden="true"></div>
+      <div class="drag-hint" aria-hidden="true"><span>↔</span> ARRASTRA PARA GIRAR</div>
+    </div>
+
+    <aside id="voiceCard" class="voice-card is-empty" aria-live="polite"></aside>
+    <div class="voice-count"><strong id="voiceCount">0</strong><span id="voiceCountLabel">VOCES CONSERVADAS</span></div>
+    <button id="humanityButton" type="button" class="humanity-button"><span class="button-light"></span>DARLE UNA VOZ A LA TIERRA</button>
+    <div id="errorToast" class="error-toast" role="alert" hidden></div>
+
+    <div id="studio" class="studio-backdrop" role="dialog" aria-modal="true" aria-labelledby="studioTitle" hidden>
+      <section class="upload-studio">
+        <header class="studio-header">
+          <div>
+            <p class="eyebrow">ARCHIVO SONORO</p>
+            <h2 id="studioTitle">Añadir voces a la Tierra</h2>
+            <p>Selecciona varias grabaciones y completa la identidad de cada voz.</p>
+          </div>
+          <button type="button" id="closeStudio" class="close-button" aria-label="Cerrar">×</button>
+        </header>
+        <form id="uploadForm">
+          <div id="dropZone" class="drop-zone">
+            <input id="audioInput" type="file" multiple accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.webm" hidden />
+            <span class="drop-icon" aria-hidden="true">＋</span>
+            <strong>Arrastra aquí tus audios</strong>
+            <span>o selecciona varios archivos MP3, WAV, M4A, AAC, OGG o WebM</span>
+            <button id="chooseAudio" type="button" class="secondary-button">Elegir audios</button>
+          </div>
+          <div id="draftList" class="draft-list"></div>
+          <footer class="studio-footer">
+            <p id="draftSummary">Puedes incorporar tantas voces como necesites</p>
+            <button id="uploadButton" class="primary-button" type="submit" disabled>INCORPORAR A LA ESFERA</button>
+          </footer>
+        </form>
+      </section>
+    </div>
+  </main>
+  <script>__SITE_JS__</script>
+</body>
+</html>

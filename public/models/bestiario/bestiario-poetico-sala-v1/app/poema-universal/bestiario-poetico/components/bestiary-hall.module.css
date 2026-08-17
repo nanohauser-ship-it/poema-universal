@@ -1,0 +1,534 @@
+.page {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #050403;
+  color: #e7ddcc;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(4, 3, 2, 0.96) 0%, rgba(4, 3, 2, 0.62) 21%, transparent 42%),
+    linear-gradient(270deg, rgba(4, 3, 2, 0.88) 0%, transparent 22%),
+    linear-gradient(0deg, rgba(4, 3, 2, 0.78) 0%, transparent 29%),
+    radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.58) 100%);
+}
+
+.topbar {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 5rem;
+  padding: 0 clamp(1.25rem, 3vw, 3.5rem);
+  border-bottom: 1px solid rgba(201, 164, 101, 0.16);
+  background: linear-gradient(180deg, rgba(4, 3, 2, 0.92), rgba(4, 3, 2, 0));
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.brandMark {
+  color: #b58a49;
+  font-size: 1.8rem;
+}
+
+.brand strong,
+.brand small {
+  display: block;
+}
+
+.brand strong {
+  color: #c8a66b;
+  font: 400 1rem Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brand small {
+  margin-top: 0.15rem;
+  color: #766346;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.topbar nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2.8rem);
+}
+
+.topbar a,
+.topbar button {
+  border: 0;
+  background: none;
+  color: #a5885d;
+  cursor: pointer;
+  font: 400 0.76rem Georgia, serif;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.guardianRail {
+  position: absolute;
+  z-index: 8;
+  top: 7rem;
+  left: 1.5rem;
+  width: 11rem;
+}
+
+.guardianRail > p,
+.guardianRail > span {
+  margin: 0;
+  color: #8d7045;
+  font-size: 0.66rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.guardianRail > span {
+  display: block;
+  margin-top: 0.35rem;
+  color: #5c4a31;
+}
+
+.guardianList {
+  display: grid;
+  gap: 0.55rem;
+  margin: 1.2rem 0;
+}
+
+.guardianList button {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 3rem;
+  border: 1px solid rgba(176, 139, 79, 0.15);
+  background: rgba(7, 5, 3, 0.6);
+  color: #846d4d;
+  cursor: pointer;
+  padding: 0.55rem;
+  text-align: left;
+}
+
+.guardianList button span {
+  color: #5d4d36;
+  font-size: 0.62rem;
+}
+
+.guardianList button strong {
+  font: 400 0.67rem / 1.35 Georgia, serif;
+  text-transform: uppercase;
+}
+
+.guardianList .activeGuardian {
+  border-color: #9f7b44;
+  color: #d0b27e;
+  background: rgba(91, 61, 27, 0.22);
+}
+
+.guardianRail > a {
+  color: #9c7d4e;
+  font-size: 0.7rem;
+  letter-spacing: 0.11em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.hero {
+  position: absolute;
+  z-index: 6;
+  left: clamp(2rem, 14vw, 14rem);
+  top: 50%;
+  width: min(34rem, 35vw);
+  transform: translateY(-46%);
+}
+
+.eyebrow,
+.label {
+  margin: 0 0 1rem;
+  color: #9b7745;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0;
+  font: 400 clamp(4rem, 7vw, 7rem) / 0.88 Georgia, serif;
+  letter-spacing: -0.055em;
+  text-shadow: 0 0 2.5rem #000;
+}
+
+.lead {
+  max-width: 29rem;
+  margin: 2rem 0 0;
+  color: #b1a28d;
+  font: 400 1.08rem / 1.72 Georgia, serif;
+}
+
+.primaryButton {
+  margin-top: 2rem;
+  border: 1px solid #a98245;
+  background: linear-gradient(180deg, #7d5b2f, #3e2814);
+  color: #f2dfbd;
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  font: 400 0.83rem Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ritualState {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.3rem;
+}
+
+.ritualState span {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #b68d50;
+  box-shadow: 0 0 1rem #b68d50;
+}
+
+.ritualState p {
+  margin: 0;
+  color: #72634f;
+  font: italic 400 0.78rem Georgia, serif;
+}
+
+.manifesto {
+  position: absolute;
+  z-index: 7;
+  right: 2rem;
+  top: 50%;
+  width: 14.5rem;
+  transform: translateY(-44%);
+  border: 1px solid rgba(167, 126, 63, 0.34);
+  background: rgba(7, 5, 3, 0.78);
+  padding: 1.7rem;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.manifesto > p:not(.eyebrow) {
+  color: #9d8d75;
+  font: 400 0.93rem / 1.65 Georgia, serif;
+}
+
+.manifesto strong,
+.manifesto small,
+.manifesto span {
+  display: block;
+}
+
+.manifesto strong {
+  margin-top: 1.2rem;
+  color: #b89863;
+  font: 400 0.82rem / 1.55 Georgia, serif;
+}
+
+.manifesto span {
+  margin: 1.15rem 0;
+  color: #79613e;
+}
+
+.manifesto small {
+  color: #806b4c;
+  font: 400 0.68rem / 1.6 Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 1.4rem;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.footer p,
+.footer span {
+  margin: 0;
+}
+
+.footer p {
+  color: #a88752;
+  font: 400 0.78rem Georgia, serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.footer span {
+  display: block;
+  margin-top: 0.4rem;
+  color: #59472f;
+  font-size: 0.61rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ritualOverlay,
+.revelation {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(105, 75, 34, 0.16), transparent 35rem),
+    rgba(5, 4, 3, 0.96);
+  backdrop-filter: blur(12px);
+}
+
+.closeButton {
+  position: fixed;
+  z-index: 35;
+  top: 1.4rem;
+  right: 1.8rem;
+  border: 1px solid rgba(181, 138, 73, 0.34);
+  background: rgba(5, 4, 3, 0.8);
+  color: #b4925d;
+  cursor: pointer;
+  width: 2.8rem;
+  height: 2.8rem;
+  font-size: 1.5rem;
+}
+
+.ritualPanel {
+  width: min(52rem, calc(100% - 2.5rem));
+  margin: 6rem auto;
+  border: 1px solid rgba(190, 148, 83, 0.25);
+  background: #0b0805;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.ritualPanel h2,
+.revelationHeader h2 {
+  margin: 0;
+  font: 400 clamp(2.8rem, 6vw, 5.4rem) / 0.96 Georgia, serif;
+}
+
+.ritualIntro {
+  max-width: 42rem;
+  color: #8f806c;
+  font: 400 1rem / 1.7 Georgia, serif;
+}
+
+.ritualPanel label {
+  display: block;
+  margin-top: 1.5rem;
+  color: #9b7b4e;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ritualPanel input,
+.ritualPanel textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.65rem;
+  border: 1px solid rgba(182, 141, 79, 0.22);
+  outline: 0;
+  background: #070503;
+  color: #e4dacb;
+  padding: 1rem;
+  font: 400 1rem / 1.65 Georgia, serif;
+}
+
+.ritualPanel textarea {
+  min-height: 18rem;
+  resize: vertical;
+}
+
+.ritualPanel input:focus,
+.ritualPanel textarea:focus {
+  border-color: #9a753f;
+}
+
+.ritualActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.3rem;
+}
+
+.ritualActions span {
+  color: #645640;
+  font-size: 0.72rem;
+}
+
+.ritualActions button,
+.revelationActions button {
+  border: 1px solid #9a753f;
+  background: #6e4e27;
+  color: #f0ddba;
+  cursor: pointer;
+  padding: 0.9rem 1.2rem;
+  font: 400 0.75rem Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ritualActions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.readingPulse {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(182, 141, 79, 0.15);
+  padding-top: 1.4rem;
+}
+
+.readingPulse span {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: #bd8c48;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.readingPulse p {
+  margin: 0;
+  color: #8a775d;
+  font: italic 400 0.9rem Georgia, serif;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.3;
+    box-shadow: 0 0 2.2rem #bd8c48;
+  }
+}
+
+.revelation {
+  padding: 6rem clamp(1.25rem, 6vw, 6rem);
+}
+
+.revelationHeader {
+  max-width: 70rem;
+}
+
+.revelationHeader span {
+  display: block;
+  margin-top: 1rem;
+  color: #816d50;
+}
+
+.revelationGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 4rem;
+  background: rgba(190, 148, 83, 0.18);
+}
+
+.revelationGrid article {
+  min-height: 13rem;
+  background: #0a0705;
+  padding: clamp(1.5rem, 3vw, 2.8rem);
+}
+
+.revelationGrid blockquote,
+.revelationGrid h3,
+.revelationGrid article > p:last-child {
+  margin: 0;
+  color: #d7c9b4;
+  font: 400 clamp(1.18rem, 2vw, 1.75rem) / 1.55 Georgia, serif;
+}
+
+.voice {
+  grid-column: 1 / -1;
+}
+
+.voice blockquote {
+  font-style: italic;
+}
+
+.revelationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 1100px) {
+  .guardianRail,
+  .manifesto {
+    display: none;
+  }
+
+  .hero {
+    left: 2rem;
+    width: min(31rem, calc(100% - 4rem));
+  }
+
+  .vignette {
+    background:
+      linear-gradient(90deg, rgba(4, 3, 2, 0.94), rgba(4, 3, 2, 0.32) 65%, transparent),
+      linear-gradient(0deg, rgba(4, 3, 2, 0.72), transparent 35%);
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar nav a {
+    display: none;
+  }
+
+  .hero {
+    top: auto;
+    bottom: 6rem;
+    transform: none;
+  }
+
+  .hero h1 {
+    font-size: clamp(3.6rem, 17vw, 6rem);
+  }
+
+  .lead {
+    font-size: 0.95rem;
+  }
+
+  .footer {
+    display: none;
+  }
+
+  .revelationGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .voice {
+    grid-column: auto;
+  }
+
+  .ritualActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

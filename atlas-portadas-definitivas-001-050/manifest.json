@@ -1,0 +1,302 @@
+[
+  {
+    "code": "AU-001",
+    "filename": "AU-001-albert-camus.webp",
+    "width": 462,
+    "height": 642
+  },
+  {
+    "code": "AU-002",
+    "filename": "AU-002-jorge-luis-borges.webp",
+    "width": 462,
+    "height": 642
+  },
+  {
+    "code": "AU-003",
+    "filename": "AU-003-franz-kafka.webp",
+    "width": 461,
+    "height": 642
+  },
+  {
+    "code": "AU-004",
+    "filename": "AU-004-jose-saramago.webp",
+    "width": 535,
+    "height": 466
+  },
+  {
+    "code": "AU-005",
+    "filename": "AU-005-simone-weil.webp",
+    "width": 535,
+    "height": 466
+  },
+  {
+    "code": "AU-006",
+    "filename": "AU-006-maria-zambrano.webp",
+    "width": 510,
+    "height": 531
+  },
+  {
+    "code": "AU-007",
+    "filename": "AU-007-samuel-beckett.webp",
+    "width": 505,
+    "height": 531
+  },
+  {
+    "code": "AU-008",
+    "filename": "AU-008-clarice-lispector.webp",
+    "width": 510,
+    "height": 531
+  },
+  {
+    "code": "AU-009",
+    "filename": "AU-009-fernando-pessoa.webp",
+    "width": 541,
+    "height": 486
+  },
+  {
+    "code": "AU-010",
+    "filename": "AU-010-julio-cortazar.webp",
+    "width": 516,
+    "height": 486
+  },
+  {
+    "code": "AU-011",
+    "filename": "AU-011-olga-tokarczuk.webp",
+    "width": 499,
+    "height": 554
+  },
+  {
+    "code": "AU-012",
+    "filename": "AU-012-jon-fosse.webp",
+    "width": 479,
+    "height": 554
+  },
+  {
+    "code": "AU-013",
+    "filename": "AU-013-han-kang.webp",
+    "width": 532,
+    "height": 554
+  },
+  {
+    "code": "AU-014",
+    "filename": "AU-014-agota-kristof.webp",
+    "width": 605,
+    "height": 459
+  },
+  {
+    "code": "AU-015",
+    "filename": "AU-015-laszlo-krasznahorkai.webp",
+    "width": 595,
+    "height": 459
+  },
+  {
+    "code": "AU-016",
+    "filename": "AU-016-alejandra-pizarnik.webp",
+    "width": 503,
+    "height": 549
+  },
+  {
+    "code": "AU-017",
+    "filename": "AU-017-rainer-maria-rilke.webp",
+    "width": 505,
+    "height": 549
+  },
+  {
+    "code": "AU-018",
+    "filename": "AU-018-georges-bataille.webp",
+    "width": 515,
+    "height": 549
+  },
+  {
+    "code": "AU-019",
+    "filename": "AU-019-francisco-de-goya.webp",
+    "width": 562,
+    "height": 465
+  },
+  {
+    "code": "AU-020",
+    "filename": "AU-020-alberto-giacometti.webp",
+    "width": 556,
+    "height": 465
+  },
+  {
+    "code": "AU-021",
+    "filename": "AU-021-louise-bourgeois.webp",
+    "width": 503,
+    "height": 535
+  },
+  {
+    "code": "AU-022",
+    "filename": "AU-022-anselm-kiefer.webp",
+    "width": 533,
+    "height": 535
+  },
+  {
+    "code": "AU-023",
+    "filename": "AU-023-mark-rothko.webp",
+    "width": 481,
+    "height": 535
+  },
+  {
+    "code": "AU-024",
+    "filename": "AU-024-antoni-tapies.webp",
+    "width": 547,
+    "height": 478
+  },
+  {
+    "code": "AU-025",
+    "filename": "AU-025-frida-kahlo.webp",
+    "width": 598,
+    "height": 478
+  },
+  {
+    "code": "AU-026",
+    "filename": "AU-026-salvador-dali.webp",
+    "width": 510,
+    "height": 544
+  },
+  {
+    "code": "AU-027",
+    "filename": "AU-027-kathe-kollwitz.webp",
+    "width": 509,
+    "height": 540
+  },
+  {
+    "code": "AU-028",
+    "filename": "AU-028-chiharu-shiota.webp",
+    "width": 508,
+    "height": 541
+  },
+  {
+    "code": "AU-029",
+    "filename": "AU-029-andrei-tarkovski.webp",
+    "width": 622,
+    "height": 475
+  },
+  {
+    "code": "AU-030",
+    "filename": "AU-030-ingmar-bergman.webp",
+    "width": 630,
+    "height": 475
+  },
+  {
+    "code": "AU-031",
+    "filename": "AU-031-bela-tarr.webp",
+    "width": 509,
+    "height": 525
+  },
+  {
+    "code": "AU-032",
+    "filename": "AU-032-theo-angelopoulos.webp",
+    "width": 505,
+    "height": 525
+  },
+  {
+    "code": "AU-033",
+    "filename": "AU-033-victor-erice.webp",
+    "width": 502,
+    "height": 523
+  },
+  {
+    "code": "AU-034",
+    "filename": "AU-034-abbas-kiarostami.webp",
+    "width": 583,
+    "height": 496
+  },
+  {
+    "code": "AU-035",
+    "filename": "AU-035-luis-bunuel.webp",
+    "width": 579,
+    "height": 494
+  },
+  {
+    "code": "AU-036",
+    "filename": "AU-036-akira-kurosawa.webp",
+    "width": 504,
+    "height": 519
+  },
+  {
+    "code": "AU-037",
+    "filename": "AU-037-arvo-part.webp",
+    "width": 512,
+    "height": 518
+  },
+  {
+    "code": "AU-038",
+    "filename": "AU-038-henryk-gorecki.webp",
+    "width": 501,
+    "height": 518
+  },
+  {
+    "code": "AU-039",
+    "filename": "AU-039-johann-sebastian-bach.webp",
+    "width": 611,
+    "height": 495
+  },
+  {
+    "code": "AU-040",
+    "filename": "AU-040-gustav-mahler.webp",
+    "width": 570,
+    "height": 494
+  },
+  {
+    "code": "AU-041",
+    "filename": "AU-041-leonard-cohen.webp",
+    "width": 299,
+    "height": 506
+  },
+  {
+    "code": "AU-042",
+    "filename": "AU-042-claude-debussy.webp",
+    "width": 299,
+    "height": 506
+  },
+  {
+    "code": "AU-043",
+    "filename": "AU-043-peter-zumthor.webp",
+    "width": 300,
+    "height": 505
+  },
+  {
+    "code": "AU-044",
+    "filename": "AU-044-tadao-ando.webp",
+    "width": 306,
+    "height": 506
+  },
+  {
+    "code": "AU-045",
+    "filename": "AU-045-james-turrell.webp",
+    "width": 316,
+    "height": 506
+  },
+  {
+    "code": "AU-046",
+    "filename": "AU-046-isamu-noguchi.webp",
+    "width": 299,
+    "height": 508
+  },
+  {
+    "code": "AU-047",
+    "filename": "AU-047-bill-viola.webp",
+    "width": 301,
+    "height": 508
+  },
+  {
+    "code": "AU-048",
+    "filename": "AU-048-sebastiao-salgado.webp",
+    "width": 298,
+    "height": 508
+  },
+  {
+    "code": "AU-049",
+    "filename": "AU-049-francesca-woodman.webp",
+    "width": 306,
+    "height": 508
+  },
+  {
+    "code": "AU-050",
+    "filename": "AU-050-pina-bausch.webp",
+    "width": 317,
+    "height": 508
+  }
+]

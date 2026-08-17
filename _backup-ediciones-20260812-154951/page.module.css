@@ -1,0 +1,347 @@
+.page {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #050403;
+  color: #eee7dc;
+  isolation: isolate;
+}
+
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+  background: #050403;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  filter: brightness(0.9) contrast(1.04) saturate(0.9);
+  transform: scale(1.015);
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 3, 2, 0.04) 0%,
+      rgba(3, 3, 2, 0.08) 37%,
+      rgba(3, 3, 2, 0.48) 58%,
+      rgba(3, 3, 2, 0.9) 78%,
+      rgba(3, 3, 2, 0.97) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.12) 0%,
+      transparent 28%,
+      transparent 72%,
+      rgba(0, 0, 0, 0.52) 100%
+    );
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 180px 40px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px clamp(22px, 4vw, 72px);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.backLink,
+.roomLabel {
+  color: rgba(236, 229, 216, 0.7);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: color 220ms ease, transform 220ms ease;
+}
+
+.backLink:hover {
+  color: #d4ad70;
+  transform: translateX(-2px);
+}
+
+.roomLabel {
+  text-align: right;
+}
+
+.content {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(390px, 0.65fr);
+  align-items: center;
+  padding: 110px clamp(28px, 6vw, 110px) 90px;
+}
+
+.copy {
+  grid-column: 2;
+  width: min(100%, 580px);
+  justify-self: end;
+  animation: reveal 1200ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.eyebrow,
+.manifestoLabel {
+  margin: 0;
+  color: #c89d5b;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+}
+
+.rule {
+  width: 80px;
+  height: 1px;
+  margin: 26px 0 36px;
+  background: rgba(200, 157, 91, 0.78);
+}
+
+.title {
+  margin: 0;
+  color: #f0e9de;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(58px, 6.1vw, 116px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
+  text-shadow: 0 6px 34px rgba(0, 0, 0, 0.45);
+}
+
+.subtitle {
+  margin: 27px 0 0;
+  color: #cda567;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(16px, 1.3vw, 22px);
+  line-height: 1.5;
+}
+
+.intro {
+  max-width: 520px;
+  margin: 34px 0 0;
+  color: rgba(238, 231, 220, 0.8);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(17px, 1.18vw, 21px);
+  line-height: 1.75;
+}
+
+.manifesto {
+  margin-top: 60px;
+  color: rgba(239, 232, 221, 0.9);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(17px, 1.15vw, 20px);
+  font-style: italic;
+  line-height: 1.9;
+}
+
+.manifestoLabel {
+  font-style: normal;
+}
+
+.manifestoRule {
+  width: 80px;
+  height: 1px;
+  margin: 20px 0 20px;
+  background: rgba(200, 157, 91, 0.54);
+}
+
+.manifesto p:not(.manifestoLabel) {
+  margin: 0;
+}
+
+.footer {
+  position: fixed;
+  left: clamp(22px, 4vw, 72px);
+  right: clamp(22px, 4vw, 72px);
+  bottom: 25px;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: rgba(238, 231, 220, 0.42);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1050px) {
+  .content {
+    grid-template-columns: 1fr;
+    align-items: end;
+    padding-bottom: 110px;
+  }
+
+  .copy {
+    grid-column: 1;
+    width: min(100%, 650px);
+    justify-self: end;
+    padding: 34px;
+    border: 1px solid rgba(214, 181, 125, 0.12);
+    background: linear-gradient(
+      135deg,
+      rgba(8, 7, 5, 0.68),
+      rgba(8, 7, 5, 0.86)
+    );
+    backdrop-filter: blur(7px);
+  }
+
+  .veil {
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.62)),
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.32) 100%);
+  }
+}
+
+@media (max-width: 680px) {
+  .page {
+    overflow-y: auto;
+  }
+
+  .header {
+    padding: 20px 18px;
+  }
+
+  .roomLabel {
+    display: none;
+  }
+
+  .content {
+    min-height: 100svh;
+    align-items: end;
+    padding: 110px 16px 92px;
+  }
+
+  .copy {
+    padding: 26px 22px 28px;
+  }
+
+  .title {
+    font-size: clamp(44px, 14vw, 72px);
+    letter-spacing: 0.08em;
+    text-indent: 0.08em;
+  }
+
+  .subtitle {
+    margin-top: 20px;
+  }
+
+  .intro {
+    margin-top: 24px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .manifesto {
+    margin-top: 36px;
+    font-size: 16px;
+  }
+
+  .footer {
+    left: 18px;
+    right: 18px;
+    bottom: 16px;
+    display: block;
+  }
+
+  .footer span:last-child {
+    display: none;
+  }
+
+  .video {
+    object-position: 42% center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy {
+    animation: none;
+  }
+
+  .backLink {
+    transition: none;
+  }
+}
+
+
+/* === PULIDO EDICIONES V2 === */
+
+/*
+  La Polilla y el vídeo permanecen EXACTAMENTE
+  con el tamaño y encuadre actuales.
+*/
+
+@media (min-width: 1051px) {
+  .content {
+    grid-template-columns:
+      minmax(0, 1.16fr)
+      minmax(520px, 0.84fr);
+
+    padding-left: clamp(28px, 4vw, 72px);
+    padding-right: clamp(32px, 3.6vw, 68px);
+  }
+
+  .copy {
+    grid-column: 2;
+    width: min(100%, 620px);
+    justify-self: start;
+  }
+
+  .title {
+    font-size: clamp(60px, 4.35vw, 84px);
+    line-height: 0.94;
+    letter-spacing: 0.08em;
+    text-indent: 0;
+    white-space: nowrap;
+  }
+
+  .subtitle {
+    max-width: 590px;
+  }
+
+  .intro {
+    max-width: 545px;
+    margin-top: 28px;
+  }
+
+  .manifesto {
+    margin-top: 44px;
+  }
+}

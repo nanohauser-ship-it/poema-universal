@@ -1,0 +1,61 @@
+EMBRIÓN V6.2 · CONSOLA DE OPERADORES
+====================================
+
+Esta actualización se instala ENCIMA de Embrión V6.1.
+No sustituye el corpus, no borra la membrana y no toca Supabase.
+
+QUÉ CAMBIA
+----------
+
+1. La columna derecha deja de ser decorativa.
+2. Desaparecen de la vista:
+   - HÁBITATS / 6 CANALES
+   - CAPAS ACTIVAS
+   - MUTACIÓN Y VIGILIA
+3. Nacen siete módulos funcionales:
+   01 NÚCLEO DE GRAVEDAD
+   02 FAMILIA DE IMPULSO
+   03 DISTANCIA SIMBÓLICA
+   04 OPERADOR POÉTICO
+   05 DOBLE NÚCLEO
+   06 FUENTES
+   07 GRADO DE EVIDENCIA
+4. Los ocho operadores son:
+   CONSTELAR · MATERIALIZAR · VERBALIZAR · INVERTIR
+   FRACTURAR · DESPLAZAR · METAMORFOSEAR · COLISIONAR
+5. El doble núcleo busca puentes y separa las colisiones experimentales.
+6. Los filtros de fuentes distinguen:
+   NOVELAS · POEMA UNIVERSAL · DICCIONARIOS
+   IMAGINACIÓN MATERIAL · MITOLOGÍA
+7. La configuración de la consola persiste en localStorage.
+8. La membrana incorpora búsqueda real.
+9. El archivo visible puede exportarse a CSV con:
+   forma, tipo, hábitat, evidencia, fuerza, apariciones, núcleos y fuentes.
+10. Nace la MESA DE MONTAJE:
+    - añade formas con ＋
+    - cambia su orden con ← →
+    - retira formas con ×
+    - devuelve la secuencia al campo de escritura sin borrar el archivo.
+
+INSTALACIÓN RECOMENDADA
+-----------------------
+
+Si el ZIP está en Descargas:
+
+  cd "$HOME/poema-universal" || exit 1
+  unzip -o "$HOME/Downloads/EMBRION-V6-2-CONSOLA-OPERADORES.zip" -d "$HOME/poema-universal"
+  xattr -dr com.apple.quarantine "$HOME/poema-universal/EMBRION-V6-2-CONSOLA-OPERADORES" 2>/dev/null || true
+  bash "$HOME/poema-universal/EMBRION-V6-2-CONSOLA-OPERADORES/INSTALAR-EMBRION-V6-2.command" "$HOME/poema-universal"
+  lsof -ti tcp:3000 | xargs kill 2>/dev/null || true
+  npm run dev -- --webpack -p 3000
+
+Después abre:
+
+  http://localhost:3000/embrion
+
+SEGURIDAD
+---------
+
+El instalador crea una copia de seguridad con fecha y hora antes de sustituir
+cada archivo. La membrana existente utiliza la misma clave de almacenamiento,
+por lo que las palabras ya archivadas permanecen intactas.

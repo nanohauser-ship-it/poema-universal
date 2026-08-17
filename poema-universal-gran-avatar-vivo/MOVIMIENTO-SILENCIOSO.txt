@@ -1,0 +1,41 @@
+PELÍCULAS DE VIDA SILENCIOSA
+============================
+
+Estas piezas evitan pagar una emisión en tiempo real mientras nadie conversa.
+No deben simularse con CSS sobre la cara: deben ser vídeo real.
+
+REPOSO · idle
+Duración 10–14 s, bucle invisible, 16:9. Respiración torácica casi imperceptible,
+uno o dos parpadeos no regulares, pequeños cambios de foco ocular, microajuste de
+hombros y cabeza. Boca cerrada. La cámara y la luz permanecen inmóviles.
+
+ESCUCHA · listening
+Duración 7–10 s. Mira a cámara, respira, inclina apenas la atención, un parpadeo,
+ningún asentimiento repetitivo. No mueve los labios.
+
+PENSAMIENTO · thinking
+Duración 7–10 s. La mirada se separa un instante y regresa, respiración natural,
+microgesto contenido, sin teatralidad.
+
+EVITAR
+Morphing del rostro, respiración exagerada, sonrisa cíclica, ojos vidriosos,
+movimiento de cámara, manos deformadas, gestos en bucle evidente, labios que se
+mueven sin voz, zoom y parallax artificial.
+
+Cuando existan los archivos, colócalos en:
+
+  public/poema-universal/gran-avatar/motion/idle.mp4
+  public/poema-universal/gran-avatar/motion/listening.mp4
+  public/poema-universal/gran-avatar/motion/thinking.mp4
+
+Y añade sus rutas en:
+
+  app/poema-universal/gran-avatar/avatarConfig.ts
+
+Ejemplo:
+
+  idleVideoUrl: "/poema-universal/gran-avatar/motion/idle.mp4",
+  listeningVideoUrl: "/poema-universal/gran-avatar/motion/listening.mp4",
+
+Los vídeos deben llevar muted, playsInline, loop y preload="metadata". La
+arquitectura instalada ya aplica esas reglas.

@@ -1,0 +1,35 @@
+ORGANISMO V4.7 · ALIMENTACIÓN VERBAL
+
+Esta versión parte de la V4.6 real entregada por José y conserva su Cámara de
+Evolución, el embrión GLB, la Partitura Viva, los seis hábitats y Strudel.
+
+NUEVO
+
+1. Cada tecla produce un pulso físico en el embrión.
+2. Espacio y puntuación cierran una palabra y la envían visualmente al cuerpo.
+3. La materia todavía no entregada crea biomasa provisional.
+4. Backspace repliega la membrana y reduce el crecimiento provisional.
+5. Enter genera una respiración más profunda.
+6. Las palabras activan Deriva, Pulso, Fractura, Espectral, Máquina o Memoria.
+7. ENTREGAR MATERIA integra las palabras en localStorage, la anatomía y el motor.
+8. La alimentación recalcula reliquia, notas, BPM, complejidad y hábitats.
+9. El modelo Three.js no se reconstruye con cada tecla: recibe los impulsos por refs.
+
+INSTALACIÓN
+
+1. Descomprime el ZIP.
+2. Mueve la carpeta completa o mantenla en Descargas.
+3. Detén Next con Control + C.
+4. Ejecuta:
+
+   cd ~/poema-universal
+   bash ~/Downloads/organismo-v47-alimentacion-verbal/instalar-organismo-v47-alimentacion-verbal.sh
+
+Adapta la ruta de Descargas si la carpeta está en otro lugar.
+
+Después:
+
+   npm run dev -- --webpack
+
+La instalación crea una copia en backups/ y restaura automáticamente la versión
+anterior si la validación TypeScript falla.

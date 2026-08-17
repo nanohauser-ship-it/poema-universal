@@ -3,24 +3,24 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import WorldGlobeLive from "./components/WorldGlobeLive";
-import SupportersSection from "./components/SupportersSection";
+import AvatarRelicStudio from "./components/AvatarRelicStudio";
+import GrandAvatarThreshold from "./components/GrandAvatarThreshold";
+import PresenceThreshold from "./presencias/components/PresenceThreshold";
+import PoetPresence from "./components/PoetPresence";
 import PoetProfilePanel, {
   type PoetProfile,
 } from "./components/PoetProfilePanel";
-import PoetPresence from "./components/PoetPresence";
-import AvatarRelicStudio from "./components/AvatarRelicStudio";
+import WorldGlobeLive from "./components/WorldGlobeLive";
+import { CURATED_VOICES_BY_POSITION } from "./data/curatedVoices";
 
-import WorldEntrance from "./components/WorldEntrance";
-import MatrizEntrance from "./components/MatrizEntrance";
-import BorgesEntrance from "./components/BorgesEntrance";
-import AtlasInteriorEntrance from "./components/AtlasInteriorEntrance";
+import styles from "./PoemaUniversalPage.module.css";
+
 const PRESENTATION_DATE = new Date(
   "2027-01-01T00:00:00+01:00"
 ).getTime();
 
 const TOTAL_VOICES = 60;
-const INCORPORATION_VOICES = 4;
+const INCORPORATION_VOICES = 58;
 
 type CountdownTime = {
   dias: number;
@@ -33,20 +33,6 @@ type VoiceSlot = {
   position: number;
   status: "incorporation" | "available";
 };
-
-const voiceSlots: VoiceSlot[] = Array.from(
-  { length: TOTAL_VOICES },
-  (_, index) => ({
-    position: index + 1,
-    status:
-      index < INCORPORATION_VOICES
-        ? "incorporation"
-        : "available",
-  })
-);
-
-
-
 
 type PublicPoetApi = {
   id: string;
@@ -65,6 +51,17 @@ type PublicPoetsResponse = {
   editionYear: number;
   poets: PublicPoetApi[];
 };
+
+const voiceSlots: VoiceSlot[] = Array.from(
+  { length: TOTAL_VOICES },
+  (_, index) => ({
+    position: index + 1,
+    status:
+      index < INCORPORATION_VOICES
+        ? "incorporation"
+        : "available",
+  })
+);
 
 const manifestoPrinciples = [
   {
@@ -89,6 +86,38 @@ const manifestoPrinciples = [
   },
 ];
 
+const collaborationAreas = [
+  "Traducción",
+  "Corrección",
+  "Investigación",
+  "Diseño",
+  "Tecnología",
+  "Producción audiovisual",
+];
+
+const ethicalPrinciples = [
+  {
+    number: "I",
+    title: "Independencia editorial",
+    text: "Ninguna aportación concede influencia sobre la selección de poetas, poemas, territorios o decisiones editoriales.",
+  },
+  {
+    number: "II",
+    title: "Una misma dignidad",
+    text: "No existirán categorías comerciales de prestigio. Los apoyos públicos serán reconocidos sin jerarquías económicas.",
+  },
+  {
+    number: "III",
+    title: "Transparencia",
+    text: "La edición explicará qué recursos recibe y a qué necesidades concretas de la obra han sido destinados.",
+  },
+  {
+    number: "IV",
+    title: "Derecho al anonimato",
+    text: "Toda persona podrá colaborar públicamente o permanecer en silencio, siempre que el origen del apoyo sea legítimo y verificable.",
+  },
+];
+
 const navigationLinks = [
   {
     label: "Manifiesto",
@@ -99,12 +128,46 @@ const navigationLinks = [
     href: "#voces",
   },
   {
+    label: "El avatar",
+    href: "/poema-universal/gran-avatar",
+  },
+  {
+    label: "Las presencias",
+    href: "/poema-universal/presencias",
+  },
+  {
     label: "El mundo",
     href: "#mundo",
   },
   {
+    label: "Hacer posible",
+    href: "#hacer-posible",
+  },
+  {
+    label: "Herramientas",
+    href: "/poema-universal/herramientas-literarias",
+  },
+  {
+    label: "El coro",
+    href: "/poema-universal/coro-de-la-tierra",
+  },
+  {
+    label: "La columna",
+    href: "/poema-universal/encadenamiento",
+  },
+  {
     label: "Convocatoria",
     href: "/poema-universal/convocatoria",
+  },
+
+  {
+    href: "/poema-universal/ediciones",
+    label: "Ediciones",
+  },
+
+  {
+    label: "Corazón Vivo",
+    href: "/poema-universal/sala-corazon-vivo",
   },
 ];
 
@@ -135,6 +198,10 @@ function calculateCountdown(): CountdownTime {
       (difference / 1000) % 60
     ),
   };
+}
+
+function pad(value: number) {
+  return String(Math.max(0, value)).padStart(2, "0");
 }
 
 export default function PoemaUniversalPage() {
@@ -228,299 +295,224 @@ export default function PoemaUniversalPage() {
     };
   }, []);
 
-  const countdownItems = [
+  const countdown = [
     {
-      value: time.dias,
+      value: String(time.dias),
       label: "Días",
     },
     {
-      value: time.horas,
+      value: pad(time.horas),
       label: "Horas",
     },
     {
-      value: time.minutos,
+      value: pad(time.minutos),
       label: "Minutos",
     },
     {
-      value: time.segundos,
+      value: pad(time.segundos),
       label: "Segundos",
     },
   ];
 
-  const availableVoices =
-    TOTAL_VOICES - INCORPORATION_VOICES;
-
   return (
     <main
       id="top"
-      className="min-h-screen overflow-x-hidden"
-      style={{
-        backgroundColor: "#f0e8dc",
-        color: "#171411",
-      }}
+      className={styles.page}
     >
-      {/* NAVEGACIÓN */}
-
-      <header
-        className="sticky top-0 z-50 border-b backdrop-blur-xl"
-        style={{
-          borderColor: "rgba(23,20,17,0.12)",
-          backgroundColor:
-            "rgba(240,232,220,0.94)",
-        }}
-      >
-        <div className="mx-auto flex min-h-[70px] max-w-[1380px] items-center justify-between gap-8 px-5 sm:px-8 lg:px-12">
+      <header className={styles.navigation}>
+        <div className={styles.navigationInner}>
           <Link
             href="/poema-universal"
-            className="font-serif text-xl tracking-[-0.025em] transition hover:opacity-55"
+            className={styles.wordmark}
           >
             Poema Universal
           </Link>
 
           <nav
             aria-label="Navegación de Poema Universal"
-            className="hidden items-center gap-10 md:flex"
+            className={styles.navigationLinks}
           >
             {navigationLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[9px] uppercase tracking-[0.31em] text-stone-500 transition hover:text-stone-950"
+                className={styles.navigationLink}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-5">
-            <span className="hidden text-[8px] uppercase tracking-[0.3em] text-stone-400 lg:block">
+          <div className={styles.navigationMeta}>
+            <span>
               Edición fundacional · 2026
             </span>
 
             <Link
               href="/"
-              className="border border-stone-900/20 px-5 py-2.5 text-[8px] uppercase tracking-[0.3em] transition hover:bg-[#171411] hover:text-white"
+              className={styles.homeLink}
             >
-              Inicio
+              La casa
             </Link>
           </div>
         </div>
       </header>
 
-      {/* PASO DESDE LA HOME */}
-
       <section
         id="entrada"
-        aria-label="Entrada a la sala universal"
-        className="relative scroll-mt-[70px] overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(180deg, #f0e8dc 0%, #f3ece2 58%, #f0e8dc 100%)",
-        }}
+        className={styles.hero}
+        aria-labelledby="poema-universal-title"
       >
+
+    <div aria-hidden="true" className={styles.heroVideoLayer}>
+      <div className={styles.heroVideoAmbient} />
+      <video
+        aria-hidden="true"
+        className={styles.heroVideoAmbientMotion}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        tabIndex={-1}
+      >
+        <source
+          src="/poema-universal/media/poema-universal-opening.mp4"
+          type="video/mp4"
+        />
+      </video>
+      <video
+        className={styles.heroVideoMain}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster="/poema-universal/media/poema-universal-opening-poster.jpg"
+      >
+        <source
+          src="/poema-universal/media/poema-universal-opening.mp4"
+          type="video/mp4"
+        />
+      </video>
+    </div>
+
+    <div aria-hidden="true" className={styles.heroVideoVeil} />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-0 h-full w-[720px] -translate-x-1/2"
-          style={{
-            background:
-              "radial-gradient(circle at 50% 42%, rgba(255,255,255,0.72), transparent 54%)",
-          }}
+          className={styles.heroPaper}
         />
 
-        <div className="relative mx-auto grid min-h-[116px] max-w-[1380px] items-center gap-6 px-5 pb-12 pt-6 sm:px-8 md:grid-cols-[1fr_auto_1fr] lg:px-12">
-          <Link
-            href="/"
-            className="justify-self-center text-[8px] uppercase tracking-[0.3em] text-stone-500 transition hover:text-stone-950 md:justify-self-start"
-          >
-            ← Volver a la casa
-          </Link>
-
-          <div className="flex items-center justify-center gap-4">
-            <span
-              aria-hidden="true"
-              className="hidden h-px w-20 sm:block"
-              style={{
-                background:
-                  "linear-gradient(to right, transparent, rgba(199,164,103,0.62))",
-              }}
-            />
-
-            <span
-              aria-hidden="true"
-              className="h-2 w-2 rounded-full"
-              style={{
-                backgroundColor: "#c7a467",
-                boxShadow:
-                  "0 0 20px rgba(199,164,103,0.5)",
-              }}
-            />
-
-            <p
-              className="font-serif text-base italic sm:text-lg"
-              style={{
-                color: "rgba(23,20,17,0.66)",
-              }}
-            >
-              Has cruzado el umbral.
-            </p>
-
-            <span
-              aria-hidden="true"
-              className="hidden h-px w-20 sm:block"
-              style={{
-                background:
-                  "linear-gradient(to left, transparent, rgba(199,164,103,0.62))",
-              }}
-            />
-          </div>
-
-          <p className="justify-self-center text-[8px] uppercase tracking-[0.3em] text-stone-400 md:justify-self-end">
-            60 voces · un solo libro
-          </p>
-        </div>
-
-        <span
-          aria-hidden="true"
-          className="absolute bottom-0 left-1/2 h-12 w-px -translate-x-1/2"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(199,164,103,0.72), rgba(199,164,103,0.08))",
-          }}
-        />
-      </section>
-
-      {/* 01 · UMBRAL */}
-
-      <section className="relative -mt-px overflow-hidden">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-[-360px] h-[900px] w-[1100px] -translate-x-1/2 rounded-full blur-[170px]"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.42) 46%, transparent 72%)",
-          }}
+          className={styles.heroAxis}
         />
 
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-0 h-24 w-px -translate-x-1/2"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(199,164,103,0.42), transparent)",
-          }}
-        />
+        <div className={styles.heroFrame}>
+          <div className={styles.heroMeta}>
+            <Link href="/">
+              ← Volver a la casa
+            </Link>
 
-        <div className="relative mx-auto max-w-[1380px] px-5 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-between pt-12">
-            <p className="text-[8px] uppercase tracking-[0.4em] text-stone-500">
+            <span>
               Institución literaria internacional
-            </p>
+            </span>
 
-            <p className="text-[8px] uppercase tracking-[0.3em] text-stone-400">
+            <span>
               Presentación · 01.01.2027
-            </p>
+            </span>
           </div>
 
-          <div className="flex min-h-[620px] flex-col items-center justify-center pb-24 pt-16 text-center sm:min-h-[690px] sm:pb-28 sm:pt-20">
-            <p
-              className="text-[9px] uppercase tracking-[0.52em]"
-              style={{
-                color: "#9a743e",
-              }}
-            >
+          <div className={styles.heroStage}>
+            <p className={styles.eyebrow}>
               Edición fundacional
             </p>
 
-            <h1 className="mt-9 font-serif text-7xl leading-[0.84] tracking-[-0.065em] sm:text-9xl lg:text-[142px]">
-              Poema
-              <span className="block italic text-stone-500">
-                Universal
-              </span>
+            <h1
+              id="poema-universal-title"
+              className={styles.heroTitle}
+            >
+              <span>Poema</span>
+              <em>Universal</em>
             </h1>
 
-            <p className="mx-auto mt-12 max-w-3xl font-serif text-2xl italic leading-[1.5] text-stone-600 sm:text-3xl lg:text-[38px]">
+            <p className={styles.heroLead}>
               Una única obra escrita durante un año
-              por sesenta voces del mundo.
+              <span>
+                por sesenta voces del mundo.
+              </span>
+            </p>
+
+            <p className={styles.heroMantra}>
+              Sesenta voces · un solo año · una misma dignidad
             </p>
 
             <Link
               href="#manifiesto"
-              className="mt-14 border-b border-stone-900/25 pb-2 text-[8px] uppercase tracking-[0.35em] text-stone-500 transition hover:border-stone-950 hover:text-stone-950"
+              className={styles.heroLink}
             >
-              Leer la declaración fundacional ↓
+              Leer la declaración fundacional
+              <span aria-hidden="true">↓</span>
             </Link>
           </div>
 
-          {/* CUENTA ATRÁS */}
+          <div className={styles.countdownHead}>
+            <span>Tiempo restante</span>
+            <span>Apertura del primer libro</span>
+          </div>
 
-          <div className="border-t border-stone-900/15 pb-16 pt-8">
-            <div className="mb-7 flex items-center justify-between">
-              <p className="text-[8px] uppercase tracking-[0.36em] text-stone-500">
-                Tiempo restante
-              </p>
+          <div
+            className={styles.countdown}
+            aria-label="Cuenta atrás para la presentación"
+          >
+            {countdown.map((item) => (
+              <div
+                key={item.label}
+                className={styles.countdownItem}
+              >
+                <span className={styles.countdownValue}>
+                  {item.value}
+                </span>
 
-              <p className="text-[8px] uppercase tracking-[0.3em] text-stone-400">
-                Apertura del primer libro
-              </p>
-            </div>
+                <span className={styles.countdownLabel}>
+                  {item.label}
+                </span>
+              </div>
+            ))}
+          </div>
 
-            <div className="grid grid-cols-2 border-l border-t border-stone-900/15 sm:grid-cols-4">
-              {countdownItems.map((item) => (
-                <div
-                  key={item.label}
-                  className="border-b border-r border-stone-900/15 px-6 py-7 sm:px-8 sm:py-9"
-                >
-                  <span className="block font-serif text-5xl tracking-[-0.055em] sm:text-6xl lg:text-7xl">
-                    {String(item.value).padStart(
-                      2,
-                      "0"
-                    )}
-                  </span>
-
-                  <span className="mt-4 block text-[8px] uppercase tracking-[0.32em] text-stone-500">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+          <div className={styles.heroFooter}>
+            <span>Poema Universal · 2026</span>
+            <span>60 voces · un solo libro</span>
           </div>
         </div>
       </section>
 
-      {/* 02 · MANIFIESTO */}
-
       <section
         id="manifiesto"
-        className="border-t border-stone-900/15"
+        className={styles.paperChapter}
       >
-        <div className="mx-auto max-w-[1380px] px-5 py-28 sm:px-8 sm:py-36 lg:px-12 lg:py-44">
-          <div className="grid gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-28">
+        <div className={styles.paperInner}>
+          <div className={styles.chapterIntro}>
             <div>
-              <p
-                className="text-[9px] uppercase tracking-[0.48em]"
-                style={{
-                  color: "#9a743e",
-                }}
-              >
-                Manifiesto universal
+              <p className={styles.chapterIndex}>
+                01 · Declaración
               </p>
 
-              <h2 className="mt-9 max-w-4xl font-serif text-5xl leading-[1.02] tracking-[-0.048em] sm:text-7xl lg:text-[88px]">
+              <h2 className={styles.paperTitle}>
                 No reunimos poemas.
-                <span className="mt-2 block italic text-stone-500">
-                  Escribimos un año.
-                </span>
+                <em>Escribimos un año.</em>
               </h2>
             </div>
 
-            <div className="flex flex-col justify-end">
-              <p className="font-serif text-2xl italic leading-[1.55] text-stone-700 sm:text-3xl">
+            <div className={styles.chapterText}>
+              <p className={styles.chapterLead}>
                 Poema Universal nace para reunir
                 sensibilidades distintas dentro de una
                 misma construcción literaria.
               </p>
 
-              <p className="mt-8 max-w-xl text-base leading-8 text-stone-600">
+              <p>
                 No será una antología ni una colección
                 de nombres. Será una única obra,
                 construida lentamente durante todo un
@@ -530,328 +522,514 @@ export default function PoemaUniversalPage() {
             </div>
           </div>
 
-          <div className="mt-24 border-t border-stone-900/15">
+          <ol className={styles.principles}>
             {manifestoPrinciples.map(
               (principle) => (
-                <article
+                <li
                   key={principle.number}
-                  className="grid gap-5 border-b border-stone-900/15 py-8 md:grid-cols-[80px_250px_1fr] md:items-start"
+                  className={styles.principle}
                 >
-                  <span
-                    className="font-serif text-lg italic"
-                    style={{
-                      color: "#a37c44",
-                    }}
-                  >
+                  <span>
                     {principle.number}
                   </span>
 
-                  <h3 className="font-serif text-2xl">
+                  <h3>
                     {principle.title}
                   </h3>
 
-                  <p className="max-w-2xl text-sm leading-7 text-stone-600 sm:text-base sm:leading-8">
+                  <p>
                     {principle.text}
                   </p>
-                </article>
+                </li>
               )
             )}
-          </div>
+          </ol>
 
-          <blockquote className="mx-auto mt-24 max-w-5xl text-center">
-            <p className="font-serif text-3xl italic leading-[1.5] text-stone-700 sm:text-5xl">
+          <blockquote className={styles.manifestoQuote}>
+            <p>
               “Mientras exista una voz que todavía no
               haya encontrado su lugar, el poema no
               estará terminado.”
             </p>
 
-            <footer className="mt-9 text-[8px] uppercase tracking-[0.4em] text-stone-400">
+            <footer>
               Declaración fundacional
             </footer>
           </blockquote>
         </div>
       </section>
 
-      {/* NOCHE INSTITUCIONAL */}
-
-      <section
-        style={{
-          backgroundColor: "#060a0e",
-          color: "#f0e8dc",
-        }}
+      <div
+        aria-hidden="true"
+        className={styles.descent}
       >
-        {/* 03 · LAS VOCES */}
+        <span />
+        <p>Del papel a la noche</p>
+        <span />
+      </div>
 
+      <section className={styles.night}>
         <div
+          aria-hidden="true"
+          className={styles.nightAtmosphere}
+        />
+
+        <section
           id="voces"
-          className="mx-auto max-w-[1380px] px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28"
+          className={styles.nightChapter}
+          aria-labelledby="voices-title"
         >
-          <div className="grid gap-14 lg:grid-cols-[1fr_0.8fr] lg:gap-24">
-            <div>
-              <p
-                className="text-[9px] uppercase tracking-[0.46em]"
-                style={{
-                  color: "#c7a467",
-                }}
-              >
-                Registro de la edición
-              </p>
+          <div className={styles.nightInner}>
+            <div className={styles.chapterIntro}>
+              <div>
+                <p className={styles.nightIndex}>
+                  02 · Registro de la edición
+                </p>
 
-              <h2
-                className="mt-8 font-serif text-5xl leading-[0.98] tracking-[-0.05em] sm:text-7xl lg:text-[88px]"
-                style={{
-                  color: "#f0e8dc",
-                }}
-              >
-                Sesenta voces.
-                <span
-                  className="block italic"
-                  style={{
-                    color:
-                      "rgba(240,232,220,0.58)",
-                  }}
+                <h2
+                  id="voices-title"
+                  className={styles.nightTitle}
                 >
-                  Un mismo lugar.
-                </span>
-              </h2>
-            </div>
+                  Sesenta voces.
+                  <em>Un mismo lugar.</em>
+                </h2>
+              </div>
 
-            <div className="flex flex-col justify-end">
-              <p
-                className="font-serif text-2xl italic leading-[1.55] sm:text-3xl"
-                style={{
-                  color:
-                    "rgba(240,232,220,0.78)",
-                }}
-              >
-                Las identidades aparecerán cuando su
-                participación haya sido confirmada.
-              </p>
+              <div className={styles.nightText}>
+                <p className={styles.nightLead}>
+                  Ocho presencias reales conviven con
+                  cincuenta identidades literarias de
+                  <em> Mariposas de polvo</em>.
+                </p>
 
-              <div className="mt-10 flex gap-12">
-                <div>
-                  <span className="block font-serif text-4xl">
-                    {INCORPORATION_VOICES}
-                  </span>
+                <div className={styles.voiceStats}>
+                  <div>
+                    <strong>
+                      {INCORPORATION_VOICES}
+                    </strong>
+                    <span>
+                      Presencias integradas
+                    </span>
+                  </div>
 
-                  <span
-                    className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
-                    style={{
-                      color:
-                        "rgba(240,232,220,0.58)",
-                    }}
-                  >
-                    En incorporación
-                  </span>
-                </div>
-
-                <div>
-                  <span className="block font-serif text-4xl">
-                    {availableVoices}
-                  </span>
-
-                  <span
-                    className="mt-2 block text-[8px] uppercase tracking-[0.28em]"
-                    style={{
-                      color:
-                        "rgba(240,232,220,0.58)",
-                    }}
-                  >
-                    Disponibles
-                  </span>
+                  <div>
+                    <strong>
+                      {TOTAL_VOICES -
+                        INCORPORATION_VOICES}
+                    </strong>
+                    <span>
+                      Plazas abiertas
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* RETÍCULA */}
+            <div className={styles.voiceDeclaration}>
+              <p>
+                Aquí nadie entra por su nombre.
+                <em>Entra por su voz.</em>
+              </p>
 
-          <div className="mt-20 flex flex-col gap-8 border-y border-white/[0.12] py-9 sm:flex-row sm:items-end sm:justify-between">
-            <p
-              className="max-w-2xl font-serif text-2xl leading-[1.12] tracking-[-0.025em] sm:text-3xl"
-              style={{ color: "#f0e8dc" }}
-            >
-              Aquí nadie entra por su nombre.
-              <span
-                className="block italic"
-                style={{
-                  color: "rgba(240,232,220,0.54)",
-                }}
-              >
-                Entra por su voz.
+              <span>
+                60 voces · una misma dignidad
               </span>
-            </p>
+            </div>
 
-            <p
-              className="text-[8px] uppercase tracking-[0.34em]"
-              style={{
-                color: "rgba(240,232,220,0.46)",
-              }}
-            >
-              60 voces · una misma dignidad
-            </p>
+            <ol className={styles.voiceGrid}>
+              {voiceSlots.map((slot) => {
+                const poetProfile =
+                  poetProfiles[slot.position] ?? null;
+
+                const curatedVoice =
+                  CURATED_VOICES_BY_POSITION[
+                    slot.position
+                  ] ?? null;
+
+                const isPublicVoice =
+                  Boolean(poetProfile || curatedVoice);
+
+                const isOpenSlot =
+                  slot.position >
+                  INCORPORATION_VOICES;
+
+                const voiceLabel =
+                  poetProfile?.name ??
+                  curatedVoice?.name ??
+                  (isOpenSlot
+                    ? "Voz por llegar"
+                    : "Voz en incorporación");
+
+                const territoryLabel = poetProfile
+                  ? [
+                      poetProfile.country,
+                      poetProfile.city,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")
+                  : curatedVoice?.territory ??
+                    (isOpenSlot
+                      ? "Plaza abierta"
+                      : "Identidad protegida");
+
+                const footerLabel = poetProfile
+                  ? "Abrir ficha →"
+                  : curatedVoice
+                    ? curatedVoice.poemTitle ||
+                      curatedVoice.treasure ||
+                      "Presencia integrada"
+                    : isOpenSlot
+                      ? "Poema Universal 2026"
+                      : "Edición fundacional 2026";
+
+                return (
+                  <PoetPresence
+                    key={slot.position}
+                    position={slot.position}
+                    state={
+                      isPublicVoice
+                        ? "public"
+                        : isOpenSlot
+                          ? "open"
+                          : "incorporation"
+                    }
+                    name={voiceLabel}
+                    territory={territoryLabel}
+                    footer={footerLabel}
+                    onOpen={
+                      poetProfile
+                        ? () =>
+                            setSelectedPoet(
+                              poetProfile
+                            )
+                        : undefined
+                    }
+                  />
+                );
+              })}
+            </ol>
+
+            <PoetProfilePanel
+              poet={selectedPoet}
+              onClose={() => setSelectedPoet(null)}
+            />
+
+            <AvatarRelicStudio />
           </div>
+        </section>
 
-          <ol className="mt-10 grid grid-cols-2 border-l border-t border-white/[0.16] sm:grid-cols-3 lg:grid-cols-6">
-            {voiceSlots.map((slot) => {
-              const isIncorporation =
-                slot.status === "incorporation";
+        <PresenceThreshold />
 
-              const poetProfile =
-                poetProfiles[slot.position] ?? null;
+        <GrandAvatarThreshold />
 
-              const isPublicVoice =
-                Boolean(poetProfile);
-
-              const voiceLabel = poetProfile
-                ? poetProfile.name
-                : isIncorporation
-                  ? "Voz en incorporación"
-                  : "Voz por llegar";
-
-              const territoryLabel = poetProfile
-                ? [
-                    poetProfile.country,
-                    poetProfile.city,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")
-                : isIncorporation
-                  ? "Identidad protegida"
-                  : "Plaza abierta";
-
-              const footerLabel = poetProfile
-                ? "Abrir ficha →"
-                : isIncorporation
-                  ? "Edición fundacional 2026"
-                  : "Poema Universal 2026";
-              return (
-                <PoetPresence
-                  key={slot.position}
-                  position={slot.position}
-                  state={
-                    isPublicVoice
-                      ? "public"
-                      : isIncorporation
-                        ? "incorporation"
-                        : "open"
-                  }
-                  name={voiceLabel}
-                  territory={territoryLabel}
-                  footer={footerLabel}
-                  onOpen={
-                    poetProfile
-                      ? () =>
-                          setSelectedPoet(
-                            poetProfile
-                          )
-                      : undefined
-                  }
-                />
-              );
-
-            })}
-          </ol>
-
-          <PoetProfilePanel
-            poet={selectedPoet}
-            onClose={() => setSelectedPoet(null)}
-          />
-
-          <AvatarRelicStudio />
+        <div
+          aria-hidden="true"
+          className={styles.nightThread}
+        >
+          <span />
+          <i />
+          <p>
+            Cada voz enciende un territorio
+          </p>
+          <i />
+          <span />
         </div>
 
-        {/* 04 · EL MUNDO */}
+        <section
+          id="mundo"
+          className={styles.nightChapter}
+          aria-labelledby="world-title"
+        >
+          <div className={styles.nightInner}>
+            <div className={styles.worldHeading}>
+              <p className={styles.nightIndex}>
+                03 · Cartografía de una voz común
+              </p>
 
-        <div className="border-t border-white/10">
-          <div className="mx-auto max-w-[1380px] px-5 pt-16 text-center sm:px-8 sm:pt-20 lg:px-12">
-            <p
-              className="text-[9px] uppercase tracking-[0.46em]"
-              style={{
-                color: "#c7a467",
-              }}
-            >
-              Cartografía de una voz común
-            </p>
-
-            <h2
-              className="mx-auto mt-8 max-w-5xl font-serif text-5xl leading-[0.98] tracking-[-0.05em] sm:text-7xl lg:text-[88px]"
-              style={{
-                color: "#f0e8dc",
-              }}
-            >
-              El mundo comienza
-              <span
-                className="block italic"
-                style={{
-                  color:
-                    "rgba(240,232,220,0.58)",
-                }}
+              <h2
+                id="world-title"
+                className={styles.nightTitle}
               >
-                a escribir junto.
-              </span>
-            </h2>
+                El mundo comienza
+                <em>a escribir junto.</em>
+              </h2>
 
-            <p
-              className="mx-auto mt-9 max-w-2xl text-sm leading-7 sm:text-base sm:leading-8"
-              style={{
-                color:
-                  "rgba(240,232,220,0.58)",
-              }}
-            >
-              Cada territorio iluminado representa una
-              presencia que comienza a formar parte de
-              la edición fundacional.
-            </p>
+              <p>
+                Cada territorio iluminado representa una
+                presencia que comienza a formar parte de
+                la edición fundacional.
+              </p>
+            </div>
+
+            <div className={styles.globeStage}>
+              <WorldGlobeLive />
+            </div>
           </div>
+        </section>
 
-          <WorldGlobeLive />
+        <div
+          aria-hidden="true"
+          className={styles.nightThread}
+        >
+          <span />
+          <i />
+          <p>
+            La obra necesita otras manos
+          </p>
+          <i />
+          <span />
         </div>
 
-        {/* CIERRE MÍNIMO */}
+        <section
+          id="hacer-posible"
+          className={styles.nightChapter}
+          aria-labelledby="support-title"
+        >
+          <div className={styles.nightInner}>
+            <div className={styles.chapterIntro}>
+              <div>
+                <p className={styles.nightIndex}>
+                  04 · Quienes hacen posible la obra
+                </p>
 
-        <footer className="mx-auto max-w-[1380px] border-t border-white/10 px-5 py-10 sm:px-8 lg:px-12">
-          <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
-            <p
-              className="text-[8px] uppercase tracking-[0.3em]"
-              style={{
-                color:
-                  "rgba(240,232,220,0.25)",
-              }}
-            >
-              © 2026 Poema Universal
-            </p>
+                <h2
+                  id="support-title"
+                  className={styles.nightTitle}
+                >
+                  Sesenta poetas
+                  <em>escribirán el libro.</em>
+                </h2>
 
-            <p
-              className="text-[8px] uppercase tracking-[0.3em]"
-              style={{
-                color: "#c7a467",
-              }}
-            >
-              Fundador y poeta · José Naveiro
-            </p>
+                <p className={styles.supportLead}>
+                  Otras manos harán posible que esos
+                  versos crucen el mundo.
+                </p>
+              </div>
 
-            <Link
-              href="#top"
-              className="text-[8px] uppercase tracking-[0.3em] transition hover:opacity-60"
-              style={{
-                color:
-                  "rgba(240,232,220,0.34)",
-              }}
-            >
-              Volver al inicio ↑
-            </Link>
+              <div className={styles.supportActions}>
+                <article>
+                  <span>01</span>
+
+                  <h3>Colaborar</h3>
+
+                  <p>
+                    Personas que aporten conocimiento,
+                    oficio, tiempo o vínculos culturales a
+                    la edición fundacional.
+                  </p>
+
+                  <div className={styles.supportTags}>
+                    {collaborationAreas.map((area) => (
+                      <span key={area}>
+                        {area}
+                      </span>
+                    ))}
+                  </div>
+
+                  <Link href="/colaborar#colaborar">
+                    Ofrecer una colaboración →
+                  </Link>
+                </article>
+
+                <article>
+                  <span>02</span>
+
+                  <h3>Sostener</h3>
+
+                  <p>
+                    Personas e instituciones que ayuden a
+                    financiar traducciones, edición,
+                    infraestructura, impresión y
+                    presentación pública.
+                  </p>
+
+                  <blockquote>
+                    El apoyo sostiene la obra.
+                    <em>Nunca compra una voz.</em>
+                  </blockquote>
+
+                  <Link href="/colaborar#sostener">
+                    Sostener la edición →
+                  </Link>
+                </article>
+              </div>
+            </div>
+
+            <div className={styles.ethics}>
+              <div className={styles.ethicsIntro}>
+                <div>
+                  <p className={styles.nightIndex}>
+                    Carta de independencia
+                  </p>
+
+                  <h3>
+                    La obra podrá recibir apoyo.
+                    <em>
+                      Su criterio no estará en venta.
+                    </em>
+                  </h3>
+                </div>
+
+                <p>
+                  Esta norma protegerá la selección de las
+                  sesenta voces durante toda la vida de la
+                  edición fundacional.
+                </p>
+              </div>
+
+              <ol className={styles.ethicsGrid}>
+                {ethicalPrinciples.map((principle) => (
+                  <li key={principle.number}>
+                    <span>
+                      {principle.number}
+                    </span>
+
+                    <h4>
+                      {principle.title}
+                    </h4>
+
+                    <p>
+                      {principle.text}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+
+              <div className={styles.ethicsFooter}>
+                <p>
+                  Ninguna persona ocupará más espacio por
+                  haber aportado más dinero.
+                </p>
+
+                <Link href="/colaborar">
+                  Conocer la carta completa
+                </Link>
+              </div>
+            </div>
           </div>
+        </section>
+
+        <section
+          id="encadenamiento"
+          className={styles.columnPortal}
+          aria-labelledby="column-portal-title"
+        >
+          <div className={styles.columnPortalInner}>
+            <div className={styles.columnPortalHeading}>
+              <p className={styles.nightIndex}>
+                05 · Arquitectura colectiva
+              </p>
+
+              <h2 id="column-portal-title">
+                Cada voz entrega
+                <em>una vértebra.</em>
+              </h2>
+            </div>
+
+            <div className={styles.columnPortalSpine} aria-hidden="true">
+              {Array.from({ length: 7 }).map((_, index) => (
+                <span key={index}>
+                  <i />
+                  <b />
+                  <i />
+                </span>
+              ))}
+            </div>
+
+            <div className={styles.columnPortalText}>
+              <p>
+                Ninguna voz sostiene sola el libro. La Columna de las
+                Voces conserva cada incorporación y convierte el poema
+                colectivo en un cuerpo capaz de crecer.
+              </p>
+
+              <Link href="/poema-universal/encadenamiento">
+                Entrar en la Columna de las Voces
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className={styles.coda}
+          aria-labelledby="living-world-title"
+        >
+          <div className={styles.codaInner}>
+            <div
+              aria-hidden="true"
+              className={styles.codaNumber}
+            >
+              60
+            </div>
+
+            <div className={styles.codaContent}>
+              <p className={styles.nightIndex}>
+                06 · La obra viva
+              </p>
+
+              <h2
+                id="living-world-title"
+                className={styles.codaTitle}
+              >
+                El mundo de las sesenta voces
+              </h2>
+
+              <p>
+                Una tierra incompleta recibe sesenta
+                poemas. Cada voz entrega una parte de sí
+                al Libro Fundacional, hasta que el Árbol
+                Blanco recuerda cómo florecer.
+              </p>
+
+              <Link
+                href="/poema-universal/mundo"
+                className={styles.codaLink}
+              >
+                Entrar en el Mundo Vivo
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+
+            <div
+              className={styles.tree}
+              aria-hidden="true"
+            >
+              <span className={styles.trunk} />
+
+              {Array.from({ length: 7 }).map(
+                (_, index) => (
+                  <span
+                    key={index}
+                    className={styles.branch}
+                    style={{
+                      transform: `rotate(${
+                        -72 + index * 24
+                      }deg)`,
+                    }}
+                  />
+                )
+              )}
+
+              <span className={styles.treeLight} />
+            </div>
+          </div>
+        </section>
+
+        <footer className={styles.footer}>
+          <span>
+            © 2026 Poema Universal
+          </span>
+
+          <span>
+            Fundador y poeta · José Naveiro
+          </span>
+
+          <Link href="#top">
+            Volver al inicio ↑
+          </Link>
         </footer>
       </section>
-      <SupportersSection />
-          <WorldEntrance />
-
-          <MatrizEntrance />
-
-      <BorgesEntrance />
-
-      <AtlasInteriorEntrance />
-</main>
+    </main>
   );
 }

@@ -1,0 +1,120 @@
+export type AlchemicalPlate = {
+  id: `LA-${string}`;
+  slug: string;
+  title: string;
+  family: string;
+  matter: readonly string[];
+  operation: string;
+  symbols: readonly string[];
+  origin: string;
+  relation: string;
+  date: string;
+  sigil: string;
+  image?: string;
+};
+
+export const ALQUIMIC_PLATES =
+  [
+    {
+      id: "LA-001",
+      slug: "angel-alas-atadas",
+      title: "El ángel de las alas atadas",
+      family: "Criaturas del duelo",
+      matter: [
+        "Pluma",
+        "Cuerda",
+        "Espina",
+      ],
+      operation:
+        "Transformar la imposibilidad de huir en una forma de permanencia.",
+      symbols: [
+        "El ala",
+        "El nudo",
+        "El erizo",
+        "La vigilia",
+      ],
+      origin:
+        "Nacido de un escrito sobre aquello que desea marcharse, pero permanece para cuidar una última luz.",
+      relation:
+        "Criatura del Bestiario Poético BP-014",
+      date: "2026",
+      sigil: "✦",
+    },
+    {
+      id: "LA-002",
+      slug: "arana-cartas-no-enviadas",
+      title:
+        "La araña de las cartas no enviadas",
+      family: "Animales de la palabra retenida",
+      matter: [
+        "Hilo",
+        "Tinta",
+        "Papel",
+      ],
+      operation:
+        "Tejer una morada con las palabras que nunca encontraron destinatario.",
+      symbols: [
+        "La red",
+        "El sobre",
+        "La espera",
+        "La tinta seca",
+      ],
+      origin:
+        "Aparece cuando una confesión permanece tanto tiempo guardada que aprende a caminar por sí sola.",
+      relation:
+        "Criatura del Bestiario Poético BP-021",
+      date: "2026",
+      sigil: "⌁",
+    },
+    {
+      id: "LA-003",
+      slug: "nino-rostro-casa",
+      title: "El niño con rostro de casa",
+      family: "Arquitecturas vivas",
+      matter: [
+        "Cal",
+        "Madera",
+        "Memoria",
+      ],
+      operation:
+        "Convertir el abandono en una habitación capaz de conservar calor.",
+      symbols: [
+        "La ventana",
+        "La puerta",
+        "El tejado",
+        "La infancia",
+      ],
+      origin:
+        "Nacido de quienes aprendieron a convertirse en refugio porque nunca encontraron uno.",
+      relation:
+        "Criatura del Bestiario Poético BP-032",
+      date: "2026",
+      sigil: "⌂",
+    },
+    {
+      id: "LA-004",
+      slug: "mineral-que-recuerda-la-lluvia",
+      title:
+        "El mineral que recuerda la lluvia",
+      family: "Minerales de la memoria",
+      matter: [
+        "Piedra",
+        "Agua",
+        "Sal",
+      ],
+      operation:
+        "Guardar dentro de una materia inmóvil aquello que una vez cayó del cielo.",
+      symbols: [
+        "La gota",
+        "La grieta",
+        "La sedimentación",
+        "El regreso",
+      ],
+      origin:
+        "Hallado simbólicamente en el lugar donde la sequía conserva el recuerdo exacto del agua.",
+      relation:
+        "Materia tutelar del Bestiario Poético",
+      date: "2026",
+      sigil: "◇",
+    },
+  ] as const satisfies readonly AlchemicalPlate[];

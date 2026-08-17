@@ -1,0 +1,857 @@
+"use client";
+
+import Link from "next/link";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Sparkles } from "@react-three/drei";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
+import styles from "./MundoPoema.module.css";
+import NarrativeOverlay from "./NarrativeOverlay";
+import WorldStory from "./WorldStory";
+import FirstVoiceRitual from "./FirstVoiceRitual";
+import PoemBook, { type PoemEntry } from "./PoemBook";
+
+const CYCLE_DURATION = 32;
+
+const BOOK_POEMS: PoemEntry[] = [
+  {
+    id: "asataka-01",
+    poetName: "ASATAKA",
+    country: "Japón · 日本",
+    title: "Sin título",
+    poem: `いい意味で死にそうになる景色だね。
+そう貴方は言う。
+硬い線路の上を浮遊する貴方は
+惑星の内部に詩の誕生を告げて
+ページとページのあいだで材質をつくり
+背表紙に触知する花弁に真実在を眠らせる。
+そうして貴方の中扉と景色との創造は
+丁度層で止まる空気のような
+振動をつづる形で
+私のめくれかけた表紙に留まりながら
+名を閉じない。
+光は光から返ってくる素足の
+残像。`,
+    translation: `«Es un paisaje que casi podría matarte,
+en el mejor de los sentidos».
+Eso dices.
+
+Tú, que flotas sobre las vías rígidas,
+anuncias el nacimiento de un poema
+en el interior del planeta;
+creas materia entre página y página
+y dejas dormir la existencia verdadera
+en pétalos palpables sobre el lomo.
+
+Así, la creación de tu portadilla
+y del paisaje
+traza una vibración,
+como el aire detenido
+justo en una capa;
+permanece sobre mi cubierta
+a punto de abrirse,
+sin cerrar el nombre.
+
+La luz es la imagen residual
+de unos pies descalzos
+que regresan de la luz.`,
+  },
+];
+
+
+type PoetTask =
+  | "stone"
+  | "pages"
+  | "light"
+  | "water"
+  | "rope"
+  | "seed";
+
+type PoetData = {
+  position: [number, number, number];
+  rotation: number;
+  color: string;
+  task: PoetTask;
+  phase: number;
+  scale: number;
+};
+
+const POET_COLORS = [
+  "#786352",
+  "#594f49",
+  "#6e6971",
+  "#82715d",
+  "#6f5d4e",
+  "#565c66",
+  "#7a674d",
+  "#655b58",
+  "#66706b",
+  "#74695c",
+  "#82715f",
+  "#5f6268",
+  "#8a7059",
+  "#56504e",
+  "#756d76",
+  "#927e66",
+  "#735f55",
+  "#626975",
+  "#806d52",
+  "#71635e",
+];
+
+const WORKSHOPS: Array<{
+  position: [number, number, number];
+  rotation: number;
+  task: PoetTask;
+}> = [
+  {
+    position: [-8.2, 0.72, 3.8],
+    rotation: -0.9,
+    task: "stone",
+  },
+  {
+    position: [-5.6, 0.72, 5.2],
+    rotation: -0.4,
+    task: "stone",
+  },
+  {
+    position: [-5.4, 1.95, 0.5],
+    rotation: 0.4,
+    task: "pages",
+  },
+  {
+    position: [-2.4, 1.95, 1.3],
+    rotation: -0.2,
+    task: "pages",
+  },
+  {
+    position: [1.2, 1.95, 2.1],
+    rotation: 0.7,
+    task: "rope",
+  },
+  {
+    position: [4.4, 1.95, 2.3],
+    rotation: 1.1,
+    task: "rope",
+  },
+  {
+    position: [-1.2, 3.3, -2.4],
+    rotation: -0.4,
+    task: "light",
+  },
+  {
+    position: [2.2, 3.3, -1.8],
+    rotation: 0.5,
+    task: "light",
+  },
+  {
+    position: [5.8, 3.3, -2.4],
+    rotation: 1,
+    task: "water",
+  },
+  {
+    position: [7.4, 3.3, -4.1],
+    rotation: 1.5,
+    task: "water",
+  },
+  {
+    position: [2.5, 4.85, -5.8],
+    rotation: -0.2,
+    task: "seed",
+  },
+  {
+    position: [5.2, 4.85, -6.1],
+    rotation: 0.5,
+    task: "seed",
+  },
+];
+
+const FORMATION_OFFSETS: Array<[number, number]> = [
+  [-0.82, 0.34],
+  [-0.4, -0.26],
+  [0, 0.18],
+  [0.4, -0.24],
+  [0.82, 0.32],
+];
+
+const POETS: PoetData[] = WORKSHOPS.flatMap(
+  (workshop, workshopIndex) =>
+    FORMATION_OFFSETS.map(([side, depth], memberIndex) => {
+      const cos = Math.cos(workshop.rotation);
+      const sin = Math.sin(workshop.rotation);
+
+      const x =
+        workshop.position[0] +
+        side * cos -
+        depth * sin;
+
+      const z =
+        workshop.position[2] +
+        side * sin +
+        depth * cos;
+
+      const poetIndex =
+        workshopIndex * FORMATION_OFFSETS.length +
+        memberIndex;
+
+      return {
+        position: [
+          x,
+          workshop.position[1],
+          z,
+        ],
+        rotation:
+          workshop.rotation +
+          (memberIndex - 2) * 0.13,
+        color:
+          POET_COLORS[
+            poetIndex % POET_COLORS.length
+          ],
+        task: workshop.task,
+        phase:
+          poetIndex * 0.39 +
+          workshopIndex * 0.17,
+        scale:
+          0.76 +
+          ((poetIndex * 7) % 8) * 0.018,
+      };
+    })
+);
+
+function AutonomousCamera() {
+  const { camera } = useThree();
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime() * 0.045;
+
+    const targetPosition = new THREE.Vector3(
+      8 + Math.sin(t) * 2.6,
+      10.8 + Math.sin(t * 0.8) * 0.7,
+      22 + Math.cos(t) * 2.8
+    );
+
+    camera.position.lerp(targetPosition, 0.02);
+    camera.lookAt(1.8, 3.1, -2.4);
+  });
+
+  return null;
+}
+
+function PoetTool({ task }: { task: PoetTask }) {
+  if (task === "stone") {
+    return (
+      <mesh position={[0, 0.28, -0.62]} castShadow>
+        <dodecahedronGeometry args={[0.34, 0]} />
+        <meshStandardMaterial color="#4f4942" roughness={1} />
+      </mesh>
+    );
+  }
+
+  if (task === "pages") {
+    return (
+      <group
+        position={[0.3, 0.72, -0.24]}
+        rotation={[0.15, 0.2, -0.18]}
+      >
+        <mesh castShadow>
+          <boxGeometry args={[0.46, 0.06, 0.34]} />
+          <meshStandardMaterial color="#dfd3b5" roughness={0.9} />
+        </mesh>
+
+        <mesh position={[0, 0.05, 0]}>
+          <boxGeometry args={[0.42, 0.025, 0.3]} />
+          <meshStandardMaterial color="#f1e9d6" />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (task === "light") {
+    return (
+      <group position={[0.3, 0.72, -0.24]}>
+        <mesh>
+          <sphereGeometry args={[0.12, 16, 16]} />
+          <meshStandardMaterial
+            color="#f2c778"
+            emissive="#d98e31"
+            emissiveIntensity={2.5}
+          />
+        </mesh>
+
+        <pointLight
+          color="#f1b763"
+          intensity={8}
+          distance={3.5}
+        />
+      </group>
+    );
+  }
+
+  if (task === "water") {
+    return (
+      <group
+        position={[0.28, 0.46, -0.28]}
+        rotation={[0, 0, -0.25]}
+      >
+        <mesh castShadow>
+          <cylinderGeometry args={[0.22, 0.28, 0.38, 14]} />
+          <meshStandardMaterial
+            color="#536b72"
+            metalness={0.1}
+            roughness={0.7}
+          />
+        </mesh>
+
+        <mesh
+          position={[0.28, 0.05, 0]}
+          rotation={[0, 0, Math.PI / 2]}
+        >
+          <cylinderGeometry args={[0.055, 0.08, 0.38, 10]} />
+          <meshStandardMaterial color="#536b72" />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (task === "rope") {
+    return (
+      <mesh
+        position={[0.28, 0.56, -0.25]}
+        rotation={[Math.PI / 2, 0.2, 0]}
+        castShadow
+      >
+        <torusGeometry args={[0.22, 0.035, 8, 24]} />
+        <meshStandardMaterial color="#9a7950" roughness={1} />
+      </mesh>
+    );
+  }
+
+  return (
+    <group position={[0.3, 0.54, -0.2]}>
+      <mesh castShadow>
+        <sphereGeometry args={[0.12, 14, 14]} />
+        <meshStandardMaterial color="#a49366" roughness={1} />
+      </mesh>
+
+      <mesh position={[0, 0.19, 0]}>
+        <coneGeometry args={[0.06, 0.28, 8]} />
+        <meshStandardMaterial color="#d8d5c2" />
+      </mesh>
+    </group>
+  );
+}
+
+function Poet({
+  position,
+  rotation,
+  color,
+  task,
+  phase,
+  scale,
+}: PoetData) {
+  const group = useRef<THREE.Group>(null);
+  const arm = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime() * 1.15 + phase;
+
+    if (group.current) {
+      group.current.position.y =
+        position[1] + Math.sin(t) * 0.035;
+
+      group.current.rotation.y =
+        rotation + Math.sin(t * 0.35) * 0.06;
+    }
+
+    if (arm.current) {
+      arm.current.rotation.x =
+        -0.35 + Math.sin(t) * 0.28;
+    }
+  });
+
+  return (
+    <group
+      ref={group}
+      position={position}
+      rotation={[0, rotation, 0]}
+      scale={scale}
+    >
+      <mesh position={[0, 0.64, 0]} castShadow>
+        <cylinderGeometry args={[0.2, 0.31, 0.92, 12]} />
+        <meshStandardMaterial color={color} roughness={0.92} />
+      </mesh>
+
+      <mesh position={[0, 1.25, 0]} castShadow>
+        <sphereGeometry args={[0.2, 18, 18]} />
+        <meshStandardMaterial color="#b78e70" roughness={0.9} />
+      </mesh>
+
+      <group ref={arm} position={[0.2, 0.88, -0.04]}>
+        <mesh rotation={[0, 0, -0.45]} castShadow>
+          <cylinderGeometry args={[0.05, 0.065, 0.55, 10]} />
+          <meshStandardMaterial color="#a98268" roughness={0.9} />
+        </mesh>
+      </group>
+
+      <PoetTool task={task} />
+    </group>
+  );
+}
+
+function Terraces() {
+  const terraces = [
+    {
+      position: [0, 0, 0] as [number, number, number],
+      size: [22, 1.15, 16] as [number, number, number],
+      color: "#403b35",
+    },
+    {
+      position: [0.5, 1.2, -1.5] as [number, number, number],
+      size: [18, 1.2, 12] as [number, number, number],
+      color: "#4b443b",
+    },
+    {
+      position: [2.2, 2.55, -3.6] as [number, number, number],
+      size: [13.5, 1.45, 8.2] as [number, number, number],
+      color: "#393631",
+    },
+    {
+      position: [3.8, 4.05, -5.5] as [number, number, number],
+      size: [8.8, 1.55, 5.5] as [number, number, number],
+      color: "#514a40",
+    },
+  ];
+
+  const stairCount = 8;
+  const totalRise = 1.225;
+  const stepRise = totalRise / stairCount;
+  const baseHeight = 0.575;
+
+  return (
+    <>
+      {terraces.map((terrace, index) => (
+        <mesh
+          key={index}
+          position={terrace.position}
+          receiveShadow
+          castShadow
+        >
+          <boxGeometry args={terrace.size} />
+
+          <meshStandardMaterial
+            color={terrace.color}
+            roughness={1}
+          />
+        </mesh>
+      ))}
+
+      <group position={[-4.4, baseHeight, 4.45]}>
+        {Array.from({ length: stairCount }).map((_, index) => {
+          const stepHeight = stepRise * (index + 1);
+
+          return (
+            <mesh
+              key={`monumental-step-${index}`}
+              position={[
+                0,
+                stepHeight / 2,
+                -index * 0.43,
+              ]}
+              castShadow
+              receiveShadow
+            >
+              <boxGeometry
+                args={[
+                  2.55,
+                  stepHeight,
+                  0.48,
+                ]}
+              />
+
+              <meshStandardMaterial
+                color={
+                  index % 2 === 0
+                    ? "#6d6254"
+                    : "#645a4e"
+                }
+                roughness={0.96}
+                metalness={0}
+              />
+            </mesh>
+          );
+        })}
+
+        <mesh
+          position={[
+            0,
+            totalRise + 0.055,
+            -(stairCount - 1) * 0.43 - 0.12,
+          ]}
+          receiveShadow
+        >
+          <boxGeometry args={[2.7, 0.11, 0.72]} />
+
+          <meshStandardMaterial
+            color="#756a5a"
+            roughness={1}
+          />
+        </mesh>
+      </group>
+
+      <mesh
+        position={[-8.7, 0.72, -4.8]}
+        receiveShadow
+      >
+        <boxGeometry args={[4.2, 0.16, 4.8]} />
+
+        <meshStandardMaterial
+          color="#263b45"
+          roughness={0.3}
+          metalness={0.05}
+        />
+      </mesh>
+    </>
+  );
+}
+
+function Ruins() {
+  return (
+    <group position={[7.2, 5.4, -6.5]}>
+      {[-1.2, 0, 1.2].map((x) => (
+        <mesh key={x} position={[x, 1.35, 0]} castShadow>
+          <cylinderGeometry args={[0.18, 0.25, 2.7, 12]} />
+          <meshStandardMaterial color="#b7ad96" roughness={1} />
+        </mesh>
+      ))}
+
+      <mesh position={[0, 2.72, 0]} castShadow>
+        <boxGeometry args={[3.4, 0.32, 0.62]} />
+        <meshStandardMaterial color="#a99e87" roughness={1} />
+      </mesh>
+    </group>
+  );
+}
+
+function Bridge() {
+  return (
+    <group
+      position={[5.2, 3.85, 0.8]}
+      rotation={[0, -0.12, 0]}
+    >
+      <mesh receiveShadow castShadow>
+        <boxGeometry args={[6.5, 0.28, 1.55]} />
+        <meshStandardMaterial color="#67513d" roughness={1} />
+      </mesh>
+
+      {Array.from({ length: 7 }).map((_, index) => (
+        <mesh
+          key={index}
+          position={[-3 + index, 0.6, -0.63]}
+          castShadow
+        >
+          <cylinderGeometry args={[0.045, 0.045, 1.2, 8]} />
+          <meshStandardMaterial color="#927452" />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+function BookJourney() {
+  const book = useRef<THREE.Group>(null);
+
+  const curve = useMemo(
+    () =>
+      new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-8.2, 1.5, 4.4),
+        new THREE.Vector3(-5.8, 2.6, 1.2),
+        new THREE.Vector3(-1.2, 3.9, -2),
+        new THREE.Vector3(3, 5.2, -4.6),
+        new THREE.Vector3(4.2, 6.25, -6.1),
+      ]),
+    []
+  );
+
+  const point = useMemo(() => new THREE.Vector3(), []);
+  const tangent = useMemo(() => new THREE.Vector3(), []);
+
+  useFrame(({ clock }) => {
+    if (!book.current) return;
+
+    const cycle =
+      (clock.getElapsedTime() % CYCLE_DURATION) /
+      CYCLE_DURATION;
+
+    const travel = Math.min(cycle / 0.78, 1);
+    const eased = travel * travel * (3 - 2 * travel);
+
+    curve.getPointAt(eased, point);
+    curve.getTangentAt(Math.min(eased, 0.999), tangent);
+
+    book.current.position.copy(point);
+    book.current.position.y +=
+      Math.sin(clock.getElapsedTime() * 2) * 0.08;
+
+    book.current.rotation.y =
+      Math.atan2(tangent.x, tangent.z);
+  });
+
+  return (
+    <group ref={book}>
+      <mesh castShadow>
+        <boxGeometry args={[0.72, 0.18, 0.52]} />
+        <meshStandardMaterial
+          color="#c7a666"
+          emissive="#4a3015"
+          emissiveIntensity={0.45}
+          roughness={0.55}
+        />
+      </mesh>
+
+      <mesh position={[0, 0.12, 0]}>
+        <boxGeometry args={[0.64, 0.06, 0.46]} />
+        <meshStandardMaterial color="#e9dfc8" roughness={0.9} />
+      </mesh>
+
+      <pointLight
+        position={[0, 0.3, 0]}
+        color="#e9b65e"
+        intensity={5}
+        distance={3}
+      />
+    </group>
+  );
+}
+
+function WhiteTree() {
+  const blossoms = useRef<Array<THREE.Mesh | null>>([]);
+
+  const blossomData = useMemo(
+    () =>
+      Array.from({ length: 60 }).map((_, index) => {
+        const angle = index * 2.399;
+        const radius =
+          0.5 + (((index * 37) % 100) / 100) * 2.2;
+
+        const height =
+          3.7 + (((index * 23) % 100) / 100) * 2.7;
+
+        return {
+          position: [
+            Math.cos(angle) * radius,
+            height,
+            Math.sin(angle) * radius * 0.72,
+          ] as [number, number, number],
+          delay: (index % 12) / 12,
+        };
+      }),
+    []
+  );
+
+  useFrame(({ clock }) => {
+    const cycle =
+      (clock.getElapsedTime() % CYCLE_DURATION) /
+      CYCLE_DURATION;
+
+    const rawBloom = THREE.MathUtils.clamp(
+      (cycle - 0.72) / 0.18,
+      0,
+      1
+    );
+
+    const bloom =
+      rawBloom * rawBloom * (3 - 2 * rawBloom);
+
+    blossoms.current.forEach((mesh, index) => {
+      if (!mesh) return;
+
+      const delayed = THREE.MathUtils.clamp(
+        bloom * 1.5 -
+          blossomData[index].delay * 0.5,
+        0,
+        1
+      );
+
+      const pulse =
+        1 +
+        Math.sin(clock.getElapsedTime() * 2 + index) *
+          0.06;
+
+      mesh.scale.setScalar(delayed * pulse);
+    });
+  });
+
+  return (
+    <group position={[4.2, 4.85, -6.15]}>
+      <mesh position={[0, 2.25, 0]} castShadow>
+        <cylinderGeometry args={[0.23, 0.52, 4.5, 14]} />
+        <meshStandardMaterial color="#c6bdaa" roughness={1} />
+      </mesh>
+
+      {[
+        [0.8, 4.1, 0, 0.85],
+        [-0.9, 4.25, 0.2, -0.8],
+        [0.5, 4.9, -0.1, 0.55],
+        [-0.5, 5.05, 0.1, -0.55],
+      ].map(([x, y, z, rotation], index) => (
+        <mesh
+          key={index}
+          position={[x, y, z]}
+          rotation={[0, 0, rotation]}
+          castShadow
+        >
+          <cylinderGeometry args={[0.09, 0.15, 2.1, 10]} />
+          <meshStandardMaterial color="#d4ccbb" roughness={1} />
+        </mesh>
+      ))}
+
+      {blossomData.map((blossom, index) => (
+        <mesh
+          key={index}
+          ref={(node) => {
+            blossoms.current[index] = node;
+          }}
+          position={blossom.position}
+          scale={0}
+        >
+          <sphereGeometry args={[0.17, 12, 12]} />
+          <meshStandardMaterial
+            color="#f4f1e8"
+            emissive="#d2c79f"
+            emissiveIntensity={0.6}
+            roughness={0.75}
+          />
+        </mesh>
+      ))}
+
+      <pointLight
+        position={[0, 4.8, 0]}
+        color="#fff0c5"
+        intensity={10}
+        distance={8}
+      />
+    </group>
+  );
+}
+
+function Scene() {
+  return (
+    <>
+      <color attach="background" args={["#07090d"]} />
+      <fog attach="fog" args={["#0b1016", 20, 52]} />
+
+      <ambientLight intensity={0.62} />
+
+      <hemisphereLight
+        color="#d3deeb"
+        groundColor="#2d241a"
+        intensity={1.35}
+      />
+
+      <directionalLight
+        position={[-12, 18, 10]}
+        color="#ffd79e"
+        intensity={3.1}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+      />
+
+      <pointLight
+        position={[6, 8, -3]}
+        color="#d79747"
+        intensity={20}
+        distance={22}
+      />
+
+      <pointLight
+        position={[4.2, 8.6, -6.2]}
+        color="#fff1c8"
+        intensity={10}
+        distance={10}
+      />
+
+      <group position={[-1.2, 0, 0]} scale={1.08}>
+        <Terraces />
+        <WorldStory />
+        <FirstVoiceRitual />
+        <Bridge />
+        <Ruins />
+
+        {POETS.map((poet, index) => (
+          <Poet key={index} {...poet} />
+        ))}
+
+        <BookJourney />
+        <WhiteTree />
+      </group>
+
+      <Sparkles
+        count={110}
+        scale={[32, 12, 24]}
+        position={[0, 5, -2]}
+        size={1.4}
+        speed={0.18}
+        opacity={0.3}
+        color="#dbc9a0"
+      />
+
+      <AutonomousCamera />
+    </>
+  );
+}
+
+export default function MundoPoema() {
+  return (
+    <main className={styles.page}>
+      <div className={styles.canvas}>
+        <Canvas
+          shadows
+          dpr={[1, 1.7]}
+          camera={{
+            position: [8, 10.8, 24],
+            fov: 42,
+            near: 0.1,
+            far: 100,
+          }}
+          gl={{
+            antialias: true,
+            toneMapping: THREE.ACESFilmicToneMapping,
+          }}
+        >
+          <Scene />
+        </Canvas>
+      </div>
+
+      <div className={styles.atmosphere} />
+
+      <header className={styles.header}>
+        <Link href="/poema-universal" className={styles.back}>
+          POEMA UNIVERSAL
+        </Link>
+
+        <p className={styles.eyebrow}>
+          EXPERIENCIA AUTÓNOMA · PROTOTIPO I
+        </p>
+
+        <h1>La Construcción del Poema</h1>
+
+        <p className={styles.intro}>
+          Sesenta voces llegan a una tierra que todavía no sabe
+          convertirse en mundo. Cada poema entrega algo al Libro;
+          cada entrega modifica la materia, hasta que el Árbol
+          Blanco recuerda cómo florecer.
+        </p>
+      </header>
+
+      <NarrativeOverlay />
+
+      <PoemBook poems={BOOK_POEMS} />
+
+      <div className={styles.legend}>
+        <span className={styles.liveDot} />
+        La obra vive sin ser dirigida
+      </div>
+    </main>
+  );
+}

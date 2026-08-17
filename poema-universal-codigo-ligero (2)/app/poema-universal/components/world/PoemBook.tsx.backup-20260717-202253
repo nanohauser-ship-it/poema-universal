@@ -1,0 +1,133 @@
+"use client";
+
+import { useState } from "react";
+import styles from "./PoemBook.module.css";
+
+export type PoemEntry = {
+  id: string;
+  poetName: string;
+  country: string;
+  title: string;
+  poem: string;
+};
+
+type PoemBookProps = {
+  poems: PoemEntry[];
+};
+
+export default function PoemBook({ poems }: PoemBookProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  if (poems.length === 0) {
+    return null;
+  }
+
+  const currentPoem = poems[currentIndex];
+
+  function previousPoem() {
+    setCurrentIndex((index) =>
+      index === 0 ? poems.length - 1 : index - 1
+    );
+  }
+
+  function nextPoem() {
+    setCurrentIndex((index) =>
+      index === poems.length - 1 ? 0 : index + 1
+    );
+  }
+
+  return (
+    <>
+      {!isOpen && (
+        <button
+          type="button"
+          className={styles.trigger}
+          onClick={() => setIsOpen(true)}
+        >
+          <span className={styles.symbol}>◇</span>
+          <span>Libro de las voces</span>
+          <small>Abrir</small>
+        </button>
+      )}
+
+      <aside
+        className={`${styles.book} ${
+          isOpen ? styles.open : ""
+        }`}
+      >
+        <div className={styles.spine}>
+          POEMA UNIVERSAL
+        </div>
+
+        <div className={styles.content}>
+          <header className={styles.header}>
+            <div>
+              <p className={styles.eyebrow}>
+                Archivo fundacional
+              </p>
+
+              <h2>Libro de las Sesenta Voces</h2>
+            </div>
+
+            <button
+              type="button"
+              className={styles.close}
+              onClick={() => setIsOpen(false)}
+              aria-label="Cerrar libro"
+            >
+              ×
+            </button>
+          </header>
+
+          <section className={styles.author}>
+            <div>
+              <span>Voz</span>
+              <strong>{currentPoem.poetName}</strong>
+            </div>
+
+            <div>
+              <span>Territorio</span>
+              <strong>{currentPoem.country}</strong>
+            </div>
+          </section>
+
+          <article
+            key={currentPoem.id}
+            className={styles.page}
+          >
+            <p className={styles.number}>
+              Poema {String(currentIndex + 1).padStart(2, "0")}
+            </p>
+
+            <h3>{currentPoem.title}</h3>
+
+            <div className={styles.poem}>
+              {currentPoem.poem
+                .split("\n")
+                .map((line, lineIndex) => (
+                  <p key={lineIndex}>
+                    {line || "\u00A0"}
+                  </p>
+                ))}
+            </div>
+          </article>
+
+          <footer className={styles.footer}>
+            <button type="button" onClick={previousPoem}>
+              ← Anterior
+            </button>
+
+            <span>
+              {currentIndex + 1} / {poems.length}
+            </span>
+
+            <button type="button" onClick={nextPoem}>
+              Siguiente →
+            </button>
+          </footer>
+        </div>
+      </aside>
+    </>
+  );
+}

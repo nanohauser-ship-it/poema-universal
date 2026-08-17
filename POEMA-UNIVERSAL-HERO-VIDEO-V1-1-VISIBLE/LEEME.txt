@@ -1,0 +1,2 @@
+POEMA UNIVERSAL · HERO VIDEO V1.1
+Corrección: el vídeo ya no usa z-index negativo. El instalador verifica que la portada activa usa EditorialHero y que el MP4 existe en public.

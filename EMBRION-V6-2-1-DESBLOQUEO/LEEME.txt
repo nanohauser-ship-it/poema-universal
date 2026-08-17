@@ -1,0 +1,7 @@
+EMBRIÓN V6.2.1 · DESBLOQUEO FUNCIONAL
+
+Corrige dos bloqueos de V6.2:
+1. Las formas recuperadas de la Membrana ya pueden ser núcleo aunque el campo de escritura esté vacío.
+2. El modo RELACIONAL no elimina todas las rutas de palabras sin nodo documental directo; esas rutas aparecen como EXPERIMENTALES.
+
+No borra la Membrana, el vivero ni el corpus.

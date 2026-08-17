@@ -1,0 +1,31 @@
+EMBRIÓN V6.3 · LIBRETA LITERARIA
+
+Esta versión añade debajo del organismo una libreta de escritura independiente.
+
+PRINCIPIO
+- Alimentación verbal = transforma/alimenta el organismo.
+- Libreta de Escritura = conserva la literatura del autor.
+- Embrión no completa frases ni escribe por el usuario.
+
+FUNCIONES
+- Espejo de la Membrana con todas las formas archivadas.
+- Filtros: palabras, símbolos, imágenes, materias, verbos y tensiones.
+- Clic sobre una forma = inserción exactamente en la posición del cursor.
+- Varias páginas en una misma libreta.
+- Título independiente por página.
+- Autoguardado local.
+- Contador de palabras y caracteres.
+- Exportación de la página activa a TXT.
+- "ENVIAR A LIBRETA" desde la consola simbólica.
+- "LLEVAR SECUENCIA A LA LIBRETA" desde la Mesa de Montaje.
+
+NO MODIFICA
+- motor simbólico
+- corpus
+- Membrana existente
+- vivero simbólico
+- estado del organismo
+- datos V6.2.2
+
+La libreta usa la clave local:
+embrion-libreta-literaria-v1

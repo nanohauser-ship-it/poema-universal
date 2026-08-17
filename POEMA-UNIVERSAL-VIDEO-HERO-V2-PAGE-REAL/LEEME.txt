@@ -1,0 +1,15 @@
+POEMA UNIVERSAL · HERO VIDEO V2 · PAGE REAL
+
+Este parche trabaja sobre la arquitectura ACTUAL:
+- app/poema-universal/page.tsx
+- app/poema-universal/PoemaUniversalPage.module.css
+
+No utiliza EditorialHero.tsx.
+
+Integra el vídeo dentro del hero real #entrada, detrás de:
+- Poema Universal
+- frase fundacional
+- cuenta atrás
+- enlace al manifiesto
+
+Crea backups antes de modificar.
