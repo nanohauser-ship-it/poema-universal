@@ -1,0 +1,156 @@
+import type { ExperienceDefinition } from "../types/audiovisual";
+import { performanceBorderlessExperience } from "./borderless";
+
+const videoSource = "/flores.mp4";
+
+export const performanceExperience: ExperienceDefinition = {
+  id: "performance",
+  label: "Performance",
+  architecture: "performance",
+  environment: {
+    background: 0x000000,
+    fogColor: 0x000000,
+    fogDensity: 0.026,
+    exposure: 0.9,
+  },
+  architectureState: {
+    platformVisible: true,
+    platformOpacity: 0.94,
+    ringVisible: true,
+    ringOpacity: 0.55,
+    ringPulse: 1.4,
+    edgeLightOpacity: 0.06,
+    hemisphereIntensity: 0.07,
+    centralSpotIntensity: 5.3,
+    warmFillIntensity: 0.18,
+  },
+  camera: { preset: "PERFORMANCE" },
+  surfaces: [
+    {
+      id: "LEFT",
+      content: {
+        kind: "VIDEO",
+        src: videoSource,
+        texture: { repeat: [0.24, 1], offset: [0, 0] },
+      },
+      visible: true,
+      opacity: 0.4,
+    },
+    {
+      id: "BACK",
+      content: {
+        kind: "VIDEO",
+        src: videoSource,
+        texture: { repeat: [0.52, 1], offset: [0.24, 0] },
+      },
+      visible: true,
+      opacity: 0.48,
+    },
+    {
+      id: "RIGHT",
+      content: {
+        kind: "VIDEO",
+        src: videoSource,
+        texture: { repeat: [0.24, 1], offset: [0.76, 0] },
+      },
+      visible: true,
+      opacity: 0.4,
+    },
+    {
+      id: "FLOOR",
+      content: { kind: "COLOR", color: 0x020303 },
+      visible: true,
+      opacity: 1,
+    },
+    {
+      id: "CEILING",
+      content: { kind: "COLOR", color: 0x000000 },
+      visible: true,
+      opacity: 1,
+    },
+    { id: "FREE_SCREEN_LEFT", content: { kind: "NONE" }, visible: false, opacity: 0 },
+    { id: "FREE_SCREEN_BACK_A", content: { kind: "NONE" }, visible: false, opacity: 0 },
+    { id: "FREE_SCREEN_BACK_B", content: { kind: "NONE" }, visible: false, opacity: 0 },
+    { id: "FREE_SCREEN_RIGHT", content: { kind: "NONE" }, visible: false, opacity: 0 },
+  ],
+  human: {
+    content: {
+      kind: "CANVAS",
+      canvas: {
+        title: "HUMAN_LAYER",
+        subtitle: "WEBCAM READY · SIN CAPTURA ACTIVA",
+        accent: "#d5ad68",
+        background: "rgba(0, 0, 0, 0)",
+        transparent: true,
+        width: 768,
+        height: 1152,
+        variant: "human-placeholder",
+      },
+    },
+    position: [0, 1.92, 0.62],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    visible: true,
+    opacity: 0.82,
+  },
+  humanPresets: {
+    PRESENCE: {
+      position: [0, 1.92, 0.62],
+      rotation: [0, 0, 0],
+      scale: [1, 1, 1],
+      opacity: 0.92,
+    },
+    GIANT: {
+      position: [0, 2.55, -0.68],
+      rotation: [0, 0, 0],
+      scale: [1.85, 1.85, 1.85],
+      opacity: 0.84,
+    },
+    GHOST: {
+      position: [0, 1.98, 0.16],
+      rotation: [0, 0, 0],
+      scale: [1.16, 1.16, 1.16],
+      opacity: 0.34,
+    },
+    ECHOES: {
+      position: [0, 1.94, 0.42],
+      rotation: [0, 0, 0],
+      scale: [1.04, 1.04, 1.04],
+      opacity: 0.88,
+      duplicates: [
+        {
+          id: "HUMAN_DUPLICATE_LEFT",
+          position: [-2.15, 1.86, -0.34],
+          rotation: [0, 0.16, 0],
+          scale: [0.84, 0.84, 0.84],
+          visible: true,
+          opacity: 0.38,
+        },
+        {
+          id: "HUMAN_DUPLICATE_RIGHT",
+          position: [2.15, 1.86, -0.34],
+          rotation: [0, -0.16, 0],
+          scale: [0.84, 0.84, 0.84],
+          visible: true,
+          opacity: 0.38,
+        },
+      ],
+    },
+  },
+  humanLook: {
+    brightness: 0.82,
+    contrast: 1.08,
+    saturation: 0.9,
+    warmth: 0.12,
+    vignette: 0.22,
+    rimColor: "#d4ad6d",
+    rimIntensity: 0.22,
+    rimBlur: 8,
+  },
+  borderless: performanceBorderlessExperience,
+  layers: {
+    BACKGROUND_FX: { visible: true },
+    HUMAN_LAYER: { visible: true },
+    FOREGROUND_FX: { visible: true },
+  },
+};
