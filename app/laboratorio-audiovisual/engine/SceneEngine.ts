@@ -109,7 +109,44 @@ export class SceneEngine implements ExperienceRuntime {
     this.scene.background = this.sceneBackground;
     this.scene.fog = new THREE.FogExp2(0x020304, 0.022);
 
+    // =====================================================
+    // DEBUG ABSOLUTO · SALA MADRE V2
+    // Si esto aparece, renderer + cámara funcionan.
+    // =====================================================
+
+    const debugGeometry = new THREE.BoxGeometry(2.4, 2.4, 2.4);
+
+    const debugMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff3355,
+      wireframe: false,
+    });
+
+    const debugCube = new THREE.Mesh(
+      debugGeometry,
+      debugMaterial
+    );
+
+    debugCube.name = "SALA_MADRE_DEBUG_CUBE";
+    debugCube.position.set(0, 2.2, -4);
+
+    this.scene.add(debugCube);
+
+    const debugGrid = new THREE.GridHelper(
+      30,
+      30,
+      0xffffff,
+      0x555555
+    );
+
+    debugGrid.position.y = 0;
+    this.scene.add(debugGrid);
+
     this.camera = new THREE.PerspectiveCamera(44, 1, 0.1, 120);
+
+    // DEBUG ABSOLUTO DE CÁMARA
+    this.camera.position.set(0, 3.2, 10);
+    this.camera.lookAt(0, 2.2, -4);
+    this.camera.updateProjectionMatrix();
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: false,
