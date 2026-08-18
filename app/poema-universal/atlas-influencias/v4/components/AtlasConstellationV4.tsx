@@ -3,6 +3,7 @@
 import {
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -41,6 +42,44 @@ function nodeKey(
   id: string
 ) {
   return `${type}:${id}`;
+}
+
+function normalizeAngle(
+  degrees: number
+) {
+  let value =
+    ((degrees + 180) % 360 + 360) %
+      360 -
+    180;
+
+  if (value === -180) {
+    value = 180;
+  }
+
+  return value;
+}
+
+function rotatePoint(
+  x: number,
+  y: number,
+  degrees: number
+) {
+  const radians =
+    (degrees * Math.PI) / 180;
+
+  const dx = x - CX;
+  const dy = y - CY;
+
+  return {
+    x:
+      CX +
+      dx * Math.cos(radians) -
+      dy * Math.sin(radians),
+    y:
+      CY +
+      dx * Math.sin(radians) +
+      dy * Math.cos(radians),
+  };
 }
 
 function hash(value: string) {
@@ -134,12 +173,176 @@ export default function AtlasConstellationV4() {
   const [searchOpen, setSearchOpen] =
     useState(false);
 
+  const [hoveredKey, setHoveredKey] =
+    useState<string | null>(null);
+
+  const [rotation, setRotation] =
+    useState(0);
+
+  const [dragging, setDragging] =
+    useState(false);
+
+  const [autoRotate, setAutoRotate] =
+    useState(false);
+
+  const [targetRotation, setTargetRotation] =
+    useState<number | null>(null);
+
+  const [focusZoom, setFocusZoom] =
+    useState(1);
+
+  const [targetFocusZoom, setTargetFocusZoom] =
+    useState(1);
+
+  const pointerLastXRef =
+    useRef(0);
+
+  const dragDistanceRef =
+    useRef(0);
+
+  const velocityRef =
+    useRef(0);
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    let frame = 0;
+    let previous =
+      performance.now();
+
+    const animate = (
+      now: number
+    ) => {
+      const deltaTime =
+        Math.min(
+          32,
+          now - previous
+        );
+
+      previous = now;
+
+      if (!dragging) {
+        setFocusZoom(
+          (current) => {
+            const delta =
+              targetFocusZoom -
+              current;
+
+            if (
+              Math.abs(delta) <
+              0.002
+            ) {
+              return current;
+            }
+
+            return (
+              current +
+              delta *
+                Math.min(
+                  0.18,
+                  deltaTime *
+                    0.009
+                )
+            );
+          }
+        );
+
+        if (
+          targetRotation !== null
+        ) {
+          setRotation(
+            (current) => {
+              const delta =
+                normalizeAngle(
+                  targetRotation -
+                    current
+                );
+
+              if (
+                Math.abs(delta) <
+                0.12
+              ) {
+                setTargetRotation(
+                  null
+                );
+                return targetRotation;
+              }
+
+              const step =
+                delta *
+                Math.min(
+                  0.18,
+                  deltaTime *
+                    0.009
+                );
+
+              return (
+                current + step
+              );
+            }
+          );
+        } else if (autoRotate) {
+          setRotation(
+            (current) =>
+              (current +
+                deltaTime *
+                  0.006) %
+              360
+          );
+        } else if (
+          Math.abs(
+            velocityRef.current
+          ) > 0.001
+        ) {
+          setRotation(
+            (current) =>
+              (current +
+                velocityRef.current *
+                  deltaTime) %
+              360
+          );
+
+          velocityRef.current *=
+            Math.pow(
+              0.93,
+              deltaTime /
+                16.67
+            );
+        }
+      }
+
+      frame =
+        requestAnimationFrame(
+          animate
+        );
+    };
+
+    frame =
+      requestAnimationFrame(
+        animate
+      );
+
+    return () => {
+      cancelAnimationFrame(
+        frame
+      );
+    };
+  }, [
+    dragging,
+    autoRotate,
+    targetRotation,
+    targetFocusZoom,
+  ]);
+
   const [selectedKey, setSelectedKey] =
     useState<string | null>(null);
+
+  const [
+    selectedRelationId,
+    setSelectedRelationId,
+  ] = useState<string | null>(null);
 
   const graph = useMemo(() => {
     const rawNodes = new Map<
@@ -473,6 +676,37 @@ export default function AtlasConstellationV4() {
         )
       : undefined;
 
+  const hovered =
+    graph.nodes.find(
+      (node) =>
+        node.key === hoveredKey
+    ) ?? null;
+
+  const hoveredAuthor =
+    hovered?.type === "author"
+      ? authorMetadata.get(
+          hovered.id
+        )
+      : undefined;
+
+  const selectedPosition =
+    selected
+      ? rotatePoint(
+          selected.x,
+          selected.y,
+          rotation
+        )
+      : null;
+
+  const hoveredPosition =
+    hovered
+      ? rotatePoint(
+          hovered.x,
+          hovered.y,
+          rotation
+        )
+      : null;
+
   const connectedKeys =
     useMemo(() => {
       if (!selectedKey) {
@@ -522,6 +756,236 @@ export default function AtlasConstellationV4() {
       selectedKey,
       graph.edges,
     ]);
+
+  const selectedRelation =
+    useMemo(() => {
+      if (!selectedRelationId) {
+        return null;
+      }
+
+      const edge =
+        graph.edges.find(
+          (candidate) =>
+            candidate.relation.id ===
+            selectedRelationId
+        ) ?? null;
+
+      if (!edge) {
+        return null;
+      }
+
+      if (
+        selectedKey &&
+        edge.source.key !== selectedKey &&
+        edge.target.key !== selectedKey
+      ) {
+        return null;
+      }
+
+      return edge;
+    }, [
+      selectedRelationId,
+      selectedKey,
+      graph.edges,
+    ]);
+
+  function humanize(value?: string) {
+    if (!value) {
+      return "—";
+    }
+
+    return value
+      .replaceAll("_", " ")
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, (letter) =>
+        letter.toUpperCase()
+      );
+  }
+
+  function relationArrow(
+    relationType: string
+  ) {
+    const mutual = new Set([
+      "friendship",
+      "correspondence",
+      "mutual_reading",
+      "collaboration",
+      "co_creation",
+      "co_curatorship",
+      "shared_oral_tradition",
+      "shared_historical_space",
+      "critical_affinity",
+    ]);
+
+    return mutual.has(
+      relationType
+    )
+      ? "↔"
+      : "→";
+  }
+
+  function confidenceLabel(
+    value?: string
+  ) {
+    const labels: Record<string, string> = {
+      maximum: "Máxima",
+      very_high: "Muy alta",
+      high: "Alta",
+      medium: "Media",
+      low: "Baja",
+    };
+
+    return value
+      ? labels[value] ??
+          humanize(value)
+      : "—";
+  }
+
+  function extractUrl(
+    value?: string
+  ) {
+    if (!value) {
+      return null;
+    }
+
+    const markdown =
+      value.match(
+        /\]\((https?:\/\/[^)]+)\)/
+      );
+
+    if (markdown?.[1]) {
+      return markdown[1];
+    }
+
+    const plain =
+      value.match(/https?:\/\/[^\s\]]+/);
+
+    return plain?.[0] ?? null;
+  }
+
+  function focusNode(
+    node: GraphNode
+  ) {
+    setAutoRotate(false);
+    velocityRef.current = 0;
+
+    const dx =
+      node.x - CX;
+    const dy =
+      node.y - CY;
+
+    const nodeAngle =
+      Math.atan2(
+        dy,
+        dx
+      ) *
+      (180 / Math.PI);
+
+    /*
+     * Zona privilegiada:
+     * ligeramente a la izquierda del centro,
+     * dejando espacio para la etiqueta.
+     */
+    const preferredAngle =
+      205;
+
+    const desired =
+      normalizeAngle(
+        preferredAngle -
+          nodeAngle
+      );
+
+    setTargetRotation(
+      desired
+    );
+
+    setTargetFocusZoom(
+      1.22
+    );
+  }
+
+  function handlePointerDown(
+    event:
+      React.PointerEvent<SVGSVGElement>
+  ) {
+    const target =
+      event.target as Element;
+
+    if (
+      target.closest(
+        '[data-atlas-node="true"]'
+      ) ||
+      target.closest(
+        '[data-atlas-relation="true"]'
+      )
+    ) {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(
+      event.pointerId
+    );
+
+    pointerLastXRef.current =
+      event.clientX;
+
+    dragDistanceRef.current = 0;
+    velocityRef.current = 0;
+
+    setDragging(true);
+    setAutoRotate(false);
+    setTargetRotation(null);
+  }
+
+  function handlePointerMove(
+    event:
+      React.PointerEvent<SVGSVGElement>
+  ) {
+    if (!dragging) {
+      return;
+    }
+
+    const deltaX =
+      event.clientX -
+      pointerLastXRef.current;
+
+    pointerLastXRef.current =
+      event.clientX;
+
+    dragDistanceRef.current +=
+      Math.abs(deltaX);
+
+    const rotationDelta =
+      deltaX * 0.18;
+
+    velocityRef.current =
+      rotationDelta /
+      16.67;
+
+    setRotation(
+      (current) =>
+        (current +
+          rotationDelta) %
+        360
+    );
+  }
+
+  function handlePointerUp(
+    event:
+      React.PointerEvent<SVGSVGElement>
+  ) {
+    if (
+      event.currentTarget.hasPointerCapture(
+        event.pointerId
+      )
+    ) {
+      event.currentTarget.releasePointerCapture(
+        event.pointerId
+      );
+    }
+
+    setDragging(false);
+  }
 
   function visibleByFilter(
     node: GraphNode
@@ -723,11 +1187,18 @@ export default function AtlasConstellationV4() {
                   setSelectedKey(
                     result.node.key
                   );
+                  setSelectedRelationId(
+                    null
+                  );
                   setFilter("all");
                   setSearchQuery(
                     result.node.label
                   );
                   setSearchOpen(false);
+
+                  focusNode(
+                    result.node
+                  );
                 }
 
                 if (
@@ -798,6 +1269,9 @@ export default function AtlasConstellationV4() {
                             setSelectedKey(
                               node.key
                             );
+                            setSelectedRelationId(
+                              null
+                            );
                             setFilter(
                               "all"
                             );
@@ -806,6 +1280,10 @@ export default function AtlasConstellationV4() {
                             );
                             setSearchOpen(
                               false
+                            );
+
+                            focusNode(
+                              node
                             );
                           }}
                           style={{
@@ -915,9 +1393,11 @@ export default function AtlasConstellationV4() {
             <button
               onClick={() => {
                 setSelectedKey(null);
+                setSelectedRelationId(null);
                 setSearchQuery("");
                 setSearchOpen(false);
                 setFilter("all");
+                setTargetFocusZoom(1);
               }}
               style={{
                 height: 52,
@@ -961,6 +1441,320 @@ export default function AtlasConstellationV4() {
             conexiones directas
           </div>
         )}
+
+        {selected &&
+          selectedRelations.length >
+            0 && (
+            <div
+              style={{
+                marginTop: 14,
+                border:
+                  "1px solid rgba(213,182,104,.13)",
+                background:
+                  "rgba(255,255,255,.018)",
+                padding: 14,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent:
+                    "space-between",
+                  alignItems:
+                    "baseline",
+                  gap: 20,
+                  marginBottom: 10,
+                }}
+              >
+                <div
+                  style={{
+                    color:
+                      "rgba(213,182,104,.62)",
+                    fontSize: 9,
+                    letterSpacing:
+                      ".15em",
+                    textTransform:
+                      "uppercase",
+                  }}
+                >
+                  Relaciones de{" "}
+                  {selected.label}
+                </div>
+
+                <div
+                  style={{
+                    color:
+                      "rgba(220,210,190,.28)",
+                    fontSize: 9,
+                  }}
+                >
+                  pulsa una conexión
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: 7,
+                  overflowX: "auto",
+                  paddingBottom: 5,
+                }}
+              >
+                {selectedRelations.map(
+                  ({
+                    relation,
+                    source,
+                    target,
+                  }) => {
+                    const active =
+                      selectedRelationId ===
+                      relation.id;
+
+                    const otherNode =
+                      source.key ===
+                      selectedKey
+                        ? target
+                        : source;
+
+                    return (
+                      <div
+                        key={relation.id}
+                        style={{
+                          flex:
+                            "0 0 auto",
+                          width: 245,
+                          border:
+                            active
+                              ? "1px solid rgba(229,195,113,.58)"
+                              : "1px solid rgba(255,255,255,.08)",
+                          background:
+                            active
+                              ? "rgba(213,182,104,.09)"
+                              : "rgba(3,4,4,.36)",
+                          transition:
+                            "border-color .25s ease, background .25s ease",
+                        }}
+                      >
+                        <button
+                          onClick={() => {
+                            setSelectedRelationId(
+                              relation.id
+                            );
+
+                            setAutoRotate(
+                              false
+                            );
+
+                            setTargetRotation(
+                              null
+                            );
+
+                            velocityRef.current =
+                              0;
+                          }}
+                          style={{
+                            width:
+                              "100%",
+                            display:
+                              "block",
+                            padding:
+                              "12px 13px 10px",
+                            border: 0,
+                            background:
+                              "transparent",
+                            color:
+                              active
+                                ? "#ead9a8"
+                                : "rgba(225,218,198,.66)",
+                            textAlign:
+                              "left",
+                            cursor:
+                              "pointer",
+                            fontFamily:
+                              "inherit",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize:
+                                11,
+                              lineHeight:
+                                1.4,
+                            }}
+                          >
+                            {
+                              source.label
+                            }{" "}
+                            <span
+                              style={{
+                                color:
+                                  "#b89b5c",
+                              }}
+                            >
+                              {relationArrow(
+                                relation.relationType
+                              )}
+                            </span>{" "}
+                            {
+                              target.label
+                            }
+                          </div>
+
+                          <div
+                            style={{
+                              marginTop:
+                                7,
+                              color:
+                                active
+                                  ? "rgba(213,182,104,.78)"
+                                  : "rgba(220,210,190,.30)",
+                              fontSize:
+                                8,
+                              letterSpacing:
+                                ".09em",
+                              textTransform:
+                                "uppercase",
+                            }}
+                          >
+                            {humanize(
+                              relation.relationType
+                            )}
+                          </div>
+
+                          {relation.evidence?.[0]
+                            ?.note && (
+                            <div
+                              style={{
+                                marginTop:
+                                  8,
+                                color:
+                                  "rgba(225,218,198,.38)",
+                                fontSize:
+                                  9,
+                                lineHeight:
+                                  1.4,
+                                display:
+                                  "-webkit-box",
+                                WebkitLineClamp:
+                                  2,
+                                WebkitBoxOrient:
+                                  "vertical",
+                                overflow:
+                                  "hidden",
+                              }}
+                            >
+                              {
+                                relation
+                                  .evidence[0]
+                                  .note
+                              }
+                            </div>
+                          )}
+                        </button>
+
+                        <div
+                          style={{
+                            display:
+                              "grid",
+                            gridTemplateColumns:
+                              "1fr auto",
+                            alignItems:
+                              "center",
+                            gap: 8,
+                            padding:
+                              "8px 10px",
+                            borderTop:
+                              "1px solid rgba(255,255,255,.055)",
+                          }}
+                        >
+                          <div
+                            style={{
+                              overflow:
+                                "hidden",
+                              color:
+                                "rgba(220,210,190,.32)",
+                              fontSize:
+                                8,
+                              whiteSpace:
+                                "nowrap",
+                              textOverflow:
+                                "ellipsis",
+                            }}
+                          >
+                            {confidenceLabel(
+                              relation.confidence
+                            )}{" "}
+                            confianza
+                          </div>
+
+                          <button
+                            onClick={() => {
+                              setSelectedKey(
+                                otherNode.key
+                              );
+
+                              setSelectedRelationId(
+                                null
+                              );
+
+                              setSearchQuery(
+                                otherNode.label
+                              );
+
+                              setSearchOpen(
+                                false
+                              );
+
+                              setFilter(
+                                "all"
+                              );
+
+                              setHoveredKey(
+                                null
+                              );
+
+                              setAutoRotate(
+                                false
+                              );
+
+                              velocityRef.current =
+                                0;
+
+                              focusNode(
+                                otherNode
+                              );
+                            }}
+                            style={{
+                              border:
+                                "1px solid rgba(213,182,104,.20)",
+                              background:
+                                "rgba(213,182,104,.045)",
+                              color:
+                                "#c5a75e",
+                              padding:
+                                "6px 8px",
+                              cursor:
+                                "pointer",
+                              fontFamily:
+                                "inherit",
+                              fontSize:
+                                8,
+                              letterSpacing:
+                                ".10em",
+                              whiteSpace:
+                                "nowrap",
+                            }}
+                          >
+                            IR A →
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+          )}
       </div>
 
       <div
@@ -1015,8 +1809,138 @@ export default function AtlasConstellationV4() {
           minHeight: 700,
         }}
       >
+        <div
+          style={{
+            position: "absolute",
+            top: 14,
+            left: 14,
+            zIndex: 20,
+            display: "flex",
+            gap: 7,
+            flexWrap: "wrap",
+          }}
+        >
+          <button
+            onClick={() => {
+              setAutoRotate(
+                (value) =>
+                  !value
+              );
+              velocityRef.current = 0;
+            }}
+            style={{
+              height: 34,
+              padding: "0 12px",
+              border:
+                "1px solid rgba(213,182,104,.22)",
+              background:
+                autoRotate
+                  ? "rgba(213,182,104,.13)"
+                  : "rgba(3,4,4,.72)",
+              color:
+                autoRotate
+                  ? "#e0c16f"
+                  : "rgba(220,210,190,.65)",
+              backdropFilter:
+                "blur(12px)",
+              fontFamily: "inherit",
+              fontSize: 9,
+              letterSpacing:
+                ".11em",
+              cursor: "pointer",
+            }}
+          >
+            ↻ GIRO SUAVE
+          </button>
+
+          <button
+            onClick={() => {
+              setAutoRotate(false);
+              setTargetRotation(null);
+              setTargetFocusZoom(1);
+              velocityRef.current = 0;
+              setRotation(0);
+            }}
+            style={{
+              height: 34,
+              padding: "0 12px",
+              border:
+                "1px solid rgba(213,182,104,.16)",
+              background:
+                "rgba(3,4,4,.72)",
+              color:
+                "rgba(220,210,190,.58)",
+              backdropFilter:
+                "blur(12px)",
+              fontFamily: "inherit",
+              fontSize: 9,
+              letterSpacing:
+                ".11em",
+              cursor: "pointer",
+            }}
+          >
+            ◎ CENTRAR
+          </button>
+
+          <button
+            onClick={() => {
+              setAutoRotate(false);
+              setTargetRotation(null);
+              velocityRef.current = 0;
+            }}
+            style={{
+              height: 34,
+              padding: "0 12px",
+              border:
+                "1px solid rgba(213,182,104,.16)",
+              background:
+                "rgba(3,4,4,.72)",
+              color:
+                "rgba(220,210,190,.58)",
+              backdropFilter:
+                "blur(12px)",
+              fontFamily: "inherit",
+              fontSize: 9,
+              letterSpacing:
+                ".11em",
+              cursor: "pointer",
+            }}
+          >
+            ⏸ PAUSA
+          </button>
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            top: 57,
+            left: 17,
+            zIndex: 19,
+            color:
+              "rgba(220,210,190,.32)",
+            fontSize: 9,
+            letterSpacing:
+              ".08em",
+            pointerEvents: "none",
+          }}
+        >
+          ARRASTRA PARA ROTAR
+        </div>
+
         <svg
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+          onPointerDown={
+            handlePointerDown
+          }
+          onPointerMove={
+            handlePointerMove
+          }
+          onPointerUp={
+            handlePointerUp
+          }
+          onPointerCancel={
+            handlePointerUp
+          }
           style={{
             display: "block",
             width: "100%",
@@ -1090,7 +2014,15 @@ export default function AtlasConstellationV4() {
             pointerEvents="none"
           />
           <g className="atlasBreathing">
-            <g className="atlasRotating">
+            <g
+              className="atlasRotatingManual"
+              transform={`
+                translate(${CX} ${CY})
+                scale(${focusZoom})
+                rotate(${rotation})
+                translate(${-CX} ${-CY})
+              `}
+            >
 
           <circle
             cx={CX}
@@ -1139,26 +2071,91 @@ export default function AtlasConstellationV4() {
                 target.type ===
                   filter;
 
+              const relationSelected =
+                selectedRelationId ===
+                relation.id;
+
               return (
-                <line
+                <g
                   key={`${relation.id}-${index}`}
-                  x1={source.x}
-                  y1={source.y}
-                  x2={target.x}
-                  y2={target.y}
-                  stroke={
-                    active &&
-                    filterVisible
-                      ? "rgba(206,181,117,.20)"
-                      : "rgba(255,255,255,.012)"
-                  }
-                  strokeWidth={
-                    active &&
-                    selectedKey
-                      ? 1.25
-                      : 0.55
-                  }
-                />
+                  data-atlas-relation="true"
+                  style={{
+                    cursor:
+                      active &&
+                      filterVisible
+                        ? "pointer"
+                        : "default",
+                  }}
+                >
+                  <line
+                    x1={source.x}
+                    y1={source.y}
+                    x2={target.x}
+                    y2={target.y}
+                    stroke="transparent"
+                    strokeWidth="12"
+                    pointerEvents={
+                      active &&
+                      filterVisible
+                        ? "stroke"
+                        : "none"
+                    }
+                    onClick={(event) => {
+                      event.stopPropagation();
+
+                      setSelectedRelationId(
+                        relationSelected
+                          ? null
+                          : relation.id
+                      );
+
+                      setSelectedKey(
+                        source.key
+                      );
+
+                      setSearchQuery(
+                        source.label
+                      );
+
+                      setSearchOpen(false);
+                      setFilter("all");
+                    }}
+                  />
+
+                  <line
+                    x1={source.x}
+                    y1={source.y}
+                    x2={target.x}
+                    y2={target.y}
+                    stroke={
+                      relationSelected
+                        ? "rgba(245,218,145,.95)"
+                        : active &&
+                            filterVisible
+                          ? "rgba(206,181,117,.20)"
+                          : "rgba(255,255,255,.012)"
+                    }
+                    strokeWidth={
+                      relationSelected
+                        ? 2.8
+                        : active &&
+                            selectedKey
+                          ? 1.25
+                          : 0.55
+                    }
+                    opacity={
+                      relationSelected
+                        ? 1
+                        : undefined
+                    }
+                    filter={
+                      relationSelected
+                        ? "url(#atlasSoftGlow)"
+                        : undefined
+                    }
+                    pointerEvents="none"
+                  />
+                </g>
               );
             }
           )}
@@ -1224,13 +2221,60 @@ export default function AtlasConstellationV4() {
               return (
                 <g
                   key={node.key}
-                  onClick={() =>
-                    setSelectedKey(
-                      selectedNode
-                        ? null
-                        : node.key
+                  data-atlas-node="true"
+                  onMouseEnter={() =>
+                    setHoveredKey(
+                      node.key
                     )
                   }
+                  onMouseLeave={() =>
+                    setHoveredKey(
+                      null
+                    )
+                  }
+                  onClick={(event) => {
+                    event.stopPropagation();
+
+                    if (
+                      dragDistanceRef.current >
+                      12
+                    ) {
+                      dragDistanceRef.current = 0;
+                      return;
+                    }
+
+                    setAutoRotate(false);
+                    velocityRef.current = 0;
+
+                    if (selectedNode) {
+                      setSelectedKey(null);
+                      setSelectedRelationId?.(
+                        null
+                      );
+                      setSearchQuery("");
+                      setTargetFocusZoom(1);
+                      return;
+                    }
+
+                    setSelectedKey(node.key);
+
+                    if (
+                      typeof setSelectedRelationId !==
+                      "undefined"
+                    ) {
+                      setSelectedRelationId(
+                        null
+                      );
+                    }
+
+                    setSearchQuery(
+                      node.label
+                    );
+                    setSearchOpen(false);
+                    setFilter("all");
+
+                    focusNode(node);
+                  }}
                   style={{
                     cursor: "pointer",
                   }}
@@ -1249,9 +2293,19 @@ export default function AtlasConstellationV4() {
                   <circle
                     cx={node.x}
                     cy={node.y}
-                    r={nodeRadius(
-                      node.type
-                    )}
+                    r={
+                      nodeRadius(
+                        node.type
+                      ) *
+                      (
+                        selectedKey &&
+                        connected
+                          ? selectedNode
+                            ? 1.9
+                            : 1.35
+                          : 1
+                      )
+                    }
                     className="atlasLivingNode"
                     style={{
                       filter:
@@ -1305,7 +2359,12 @@ export default function AtlasConstellationV4() {
                       x={node.x + 10}
                       y={node.y - 8}
                       fill="rgba(240,235,220,.9)"
-                      fontSize="10"
+                      fontSize={
+                        selectedNode
+                          ? "13"
+                          : "11"
+                      }
+                      transform={`rotate(${-rotation} ${node.x} ${node.y})`}
                     >
                       {node.label}
                     </text>
@@ -1317,7 +2376,556 @@ export default function AtlasConstellationV4() {
             </g>
           </g>
 
+          {selectedRelation && (
+            <foreignObject
+              x={WIDTH - 430}
+              y={28}
+              width="395"
+              height="560"
+            >
+              <div
+                style={{
+                  boxSizing: "border-box",
+                  width: "100%",
+                  maxHeight: 540,
+                  overflowY: "auto",
+                  padding: "22px 22px 24px",
+                  border:
+                    "1px solid rgba(220,190,120,.32)",
+                  background:
+                    "rgba(5,6,6,.94)",
+                  backdropFilter:
+                    "blur(24px)",
+                  color: "#e8e0ce",
+                  fontFamily:
+                    "Georgia, serif",
+                  boxShadow:
+                    "0 28px 90px rgba(0,0,0,.65)",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent:
+                      "space-between",
+                    gap: 16,
+                    alignItems:
+                      "flex-start",
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        color:
+                          "rgba(214,184,111,.72)",
+                        fontSize: 9,
+                        letterSpacing:
+                          ".18em",
+                        textTransform:
+                          "uppercase",
+                        marginBottom: 9,
+                      }}
+                    >
+                      ¿POR QUÉ ESTÁN
+                      CONECTADOS?
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: 21,
+                        lineHeight: 1.18,
+                      }}
+                    >
+                      {
+                        selectedRelation
+                          .source.label
+                      }
+                      <span
+                        style={{
+                          color:
+                            "#b89b5c",
+                          padding:
+                            "0 8px",
+                        }}
+                      >
+                        →
+                      </span>
+                      {
+                        selectedRelation
+                          .target.label
+                      }
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      setSelectedRelationId(
+                        null
+                      )
+                    }
+                    style={{
+                      border: 0,
+                      background:
+                        "transparent",
+                      color:
+                        "rgba(230,220,200,.55)",
+                      cursor:
+                        "pointer",
+                      fontSize: 18,
+                      lineHeight: 1,
+                    }}
+                    aria-label="Cerrar relación"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: 22,
+                    paddingTop: 17,
+                    borderTop:
+                      "1px solid rgba(255,255,255,.08)",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 9,
+                      letterSpacing:
+                        ".14em",
+                      color:
+                        "rgba(220,210,190,.40)",
+                      textTransform:
+                        "uppercase",
+                    }}
+                  >
+                    Tipo de relación
+                  </div>
+
+                  <div
+                    style={{
+                      marginTop: 6,
+                      fontSize: 15,
+                      color:
+                        "#d7b86b",
+                    }}
+                  >
+                    {humanize(
+                      selectedRelation
+                        .relation
+                        .relationType
+                    )}
+                  </div>
+                </div>
+
+                {!!selectedRelation
+                  .relation.mechanisms
+                  ?.length && (
+                  <div
+                    style={{
+                      marginTop: 17,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 9,
+                        letterSpacing:
+                          ".14em",
+                        color:
+                          "rgba(220,210,190,.40)",
+                        textTransform:
+                          "uppercase",
+                      }}
+                    >
+                      Mecanismos
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 7,
+                        display: "flex",
+                        gap: 6,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {selectedRelation
+                        .relation
+                        .mechanisms.map(
+                          (mechanism) => (
+                            <span
+                              key={
+                                mechanism
+                              }
+                              style={{
+                                padding:
+                                  "5px 8px",
+                                border:
+                                  "1px solid rgba(210,180,110,.18)",
+                                color:
+                                  "rgba(225,215,190,.68)",
+                                fontSize:
+                                  9,
+                              }}
+                            >
+                              {humanize(
+                                mechanism
+                              )}
+                            </span>
+                          )
+                        )}
+                    </div>
+                  </div>
+                )}
+
+                <div
+                  style={{
+                    marginTop: 18,
+                    display: "grid",
+                    gridTemplateColumns:
+                      "1fr 1fr",
+                    gap: 9,
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: 11,
+                      border:
+                        "1px solid rgba(255,255,255,.065)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 8,
+                        letterSpacing:
+                          ".12em",
+                        color:
+                          "rgba(220,210,190,.35)",
+                      }}
+                    >
+                      CONFIANZA
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 5,
+                        fontSize: 13,
+                      }}
+                    >
+                      {confidenceLabel(
+                        selectedRelation
+                          .relation
+                          .confidence
+                      )}
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      padding: 11,
+                      border:
+                        "1px solid rgba(255,255,255,.065)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 8,
+                        letterSpacing:
+                          ".12em",
+                        color:
+                          "rgba(220,210,190,.35)",
+                      }}
+                    >
+                      CONSENSO
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 5,
+                        fontSize: 13,
+                      }}
+                    >
+                      {selectedRelation
+                        .relation
+                        .scholarlyConsensus ===
+                      "yes"
+                        ? "Sí"
+                        : selectedRelation
+                              .relation
+                              .scholarlyConsensus ===
+                            "qualified"
+                          ? "Cualificado"
+                          : selectedRelation
+                                .relation
+                                .scholarlyConsensus ===
+                              "no"
+                            ? "No"
+                            : "—"}
+                    </div>
+                  </div>
+                </div>
+
+                {selectedRelation
+                  .relation.evidence.map(
+                    (evidence, index) => {
+                      const url =
+                        extractUrl(
+                          evidence.sourceUrl
+                        );
+
+                      return (
+                        <div
+                          key={`${evidence.basis}-${index}`}
+                          style={{
+                            marginTop: 17,
+                            paddingTop:
+                              15,
+                            borderTop:
+                              "1px solid rgba(255,255,255,.07)",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: 9,
+                              color:
+                                "#a88e58",
+                              letterSpacing:
+                                ".12em",
+                              textTransform:
+                                "uppercase",
+                            }}
+                          >
+                            Evidencia ·{" "}
+                            {humanize(
+                              evidence.basis
+                            )}
+                          </div>
+
+                          {evidence.note && (
+                            <p
+                              style={{
+                                margin:
+                                  "8px 0 0",
+                                fontSize: 13,
+                                lineHeight:
+                                  1.55,
+                                color:
+                                  "rgba(235,228,211,.76)",
+                              }}
+                            >
+                              {
+                                evidence.note
+                              }
+                            </p>
+                          )}
+
+                          {url && (
+                            <a
+                              href={url}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{
+                                display:
+                                  "inline-block",
+                                marginTop:
+                                  9,
+                                color:
+                                  "#c5a75e",
+                                fontSize:
+                                  10,
+                                textDecoration:
+                                  "none",
+                                borderBottom:
+                                  "1px solid rgba(197,167,94,.35)",
+                              }}
+                            >
+                              Consultar fuente ↗
+                            </a>
+                          )}
+                        </div>
+                      );
+                    }
+                  )}
+              </div>
+            </foreignObject>
+          )}
+
         </svg>
+
+        {hovered &&
+          hoveredPosition &&
+          hovered.key !==
+            selectedKey && (
+            <div
+              style={{
+                position: "absolute",
+                left:
+                  `${(
+                    hoveredPosition.x /
+                    WIDTH
+                  ) * 100}%`,
+                top:
+                  `${(
+                    hoveredPosition.y /
+                    HEIGHT
+                  ) * 100}%`,
+                transform:
+                  "translate(14px,-115%)",
+                zIndex: 24,
+                pointerEvents: "none",
+                padding:
+                  "7px 10px",
+                border:
+                  "1px solid rgba(213,182,104,.20)",
+                background:
+                  "rgba(4,5,5,.90)",
+                backdropFilter:
+                  "blur(12px)",
+                boxShadow:
+                  "0 12px 35px rgba(0,0,0,.38)",
+                whiteSpace:
+                  "nowrap",
+              }}
+            >
+              <div
+                style={{
+                  color:
+                    "#e6dcc2",
+                  fontSize: 11,
+                  lineHeight: 1.2,
+                }}
+              >
+                {hovered.label}
+              </div>
+
+              <div
+                style={{
+                  marginTop: 3,
+                  color:
+                    "rgba(213,182,104,.58)",
+                  fontSize: 8,
+                  letterSpacing:
+                    ".10em",
+                  textTransform:
+                    "uppercase",
+                }}
+              >
+                {typeLabel(
+                  hovered.type
+                )}
+                {hoveredAuthor
+                  ?.territory
+                  ? ` · ${hoveredAuthor.territory}`
+                  : ""}
+              </div>
+            </div>
+          )}
+
+        {selected &&
+          selectedPosition && (
+            <div
+              style={{
+                position: "absolute",
+                left:
+                  `${(
+                    selectedPosition.x /
+                    WIDTH
+                  ) * 100}%`,
+                top:
+                  `${(
+                    selectedPosition.y /
+                    HEIGHT
+                  ) * 100}%`,
+                transform:
+                  selectedPosition.x >
+                  WIDTH * 0.68
+                    ? "translate(calc(-100% - 18px),-50%)"
+                    : "translate(18px,-50%)",
+                zIndex: 25,
+                width: 245,
+                pointerEvents: "none",
+                padding:
+                  "13px 15px 14px",
+                border:
+                  "1px solid rgba(221,190,114,.36)",
+                background:
+                  "rgba(4,5,5,.93)",
+                backdropFilter:
+                  "blur(18px)",
+                boxShadow:
+                  "0 18px 60px rgba(0,0,0,.50)",
+              }}
+            >
+              <div
+                style={{
+                  color:
+                    "rgba(213,182,104,.58)",
+                  fontSize: 8,
+                  letterSpacing:
+                    ".16em",
+                  textTransform:
+                    "uppercase",
+                  marginBottom: 6,
+                }}
+              >
+                NODO SELECCIONADO
+              </div>
+
+              <div
+                style={{
+                  color: "#eee5cf",
+                  fontSize: 17,
+                  lineHeight: 1.12,
+                }}
+              >
+                {selected.label}
+              </div>
+
+              <div
+                style={{
+                  marginTop: 7,
+                  color:
+                    "rgba(225,215,190,.56)",
+                  fontSize: 9,
+                  lineHeight: 1.5,
+                  letterSpacing:
+                    ".05em",
+                }}
+              >
+                {typeLabel(
+                  selected.type
+                )}
+
+                {selectedAuthor
+                  ?.territory
+                  ? ` · ${selectedAuthor.territory}`
+                  : ""}
+
+                {" · "}
+
+                {
+                  selectedRelations.length
+                }{" "}
+                conexiones
+              </div>
+
+              {selectedAuthor
+                ?.movements?.length ? (
+                <div
+                  style={{
+                    marginTop: 8,
+                    color:
+                      "rgba(196,166,94,.62)",
+                    fontSize: 8,
+                    lineHeight: 1.45,
+                  }}
+                >
+                  {selectedAuthor.movements
+                    .slice(0, 3)
+                    .join(" · ")}
+                </div>
+              ) : null}
+            </div>
+          )}
 
         <div
           style={{

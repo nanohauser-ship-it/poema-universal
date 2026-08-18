@@ -141,14 +141,14 @@ function createCameraAnchors(
 ): CameraAnchorBlueprint[] {
   const eye = Math.min(3, roomHeight * 0.34);
   const lookAt: readonly [number, number, number] = [0, 2.05, stageZ];
-  const distance = Math.min(14.5, roomDepth * 0.47);
+  const distance = Math.min(10.2, roomDepth * 0.39);
 
   return [
     {
       id: "MASTER",
       position: [0, eye, distance],
       lookAt,
-      fov: 48,
+      fov: 44,
       response: 2.4,
       outputOverrides: {
         "9:16": { position: [0, eye + 0.3, distance - 1.7], fov: 43 },

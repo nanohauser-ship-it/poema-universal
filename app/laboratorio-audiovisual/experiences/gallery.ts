@@ -1,153 +1,287 @@
 import type { ExperienceDefinition } from "../types/audiovisual";
 
-const darkWall = { kind: "COLOR", color: 0x090b0d } as const;
+const darkWall = {
+  kind: "COLOR",
+  color: 0x07090a,
+} as const;
 
 export const galleryExperience: ExperienceDefinition = {
   id: "gallery",
   label: "Galería",
   architecture: "gallery",
+
   environment: {
-    background: 0x020304,
-    fogColor: 0x020304,
-    fogDensity: 0.022,
-    exposure: 1.02,
+    background: 0x20252a,
+    fogColor: 0x20252a,
+    fogDensity: 0.004,
+    exposure: 1.65,
   },
+
   architectureState: {
     platformVisible: true,
-    platformOpacity: 1,
+    platformOpacity: 0.72,
+
     ringVisible: false,
     ringOpacity: 0,
-    edgeLightOpacity: 0.22,
-    structuralDetailOpacity: 0.34,
-    technicalCeilingOpacity: 0.78,
-    projectionGlowIntensity: 0.14,
-    hemisphereIntensity: 0.28,
-    centralSpotIntensity: 3.1,
-    warmFillIntensity: 0.7,
+
+    edgeLightOpacity: 0.16,
+    structuralDetailOpacity: 0.26,
+    technicalCeilingOpacity: 0.42,
+
+    projectionGlowIntensity: 0.22,
+
+    hemisphereIntensity: 0.2,
+    centralSpotIntensity: 3.8,
+    warmFillIntensity: 0.82,
   },
-  camera: { preset: "GENERAL" },
+
+  camera: {
+    preset: "GENERAL",
+  },
+
   surfaces: [
-    { id: "LEFT", content: darkWall, visible: true, opacity: 1 },
-    { id: "BACK", content: darkWall, visible: true, opacity: 1 },
-    { id: "RIGHT", content: darkWall, visible: true, opacity: 1 },
+    // =====================================================
+    // ARQUITECTURA BASE
+    // =====================================================
+
+    {
+      id: "LEFT",
+      content: darkWall,
+      visible: true,
+      opacity: 1,
+    },
+
+    {
+      id: "BACK",
+      content: {
+        kind: "COLOR",
+        color: 0x040506,
+      },
+      visible: true,
+      opacity: 1,
+    },
+
+    {
+      id: "RIGHT",
+      content: darkWall,
+      visible: true,
+      opacity: 1,
+    },
+
     {
       id: "FLOOR",
-      content: { kind: "COLOR", color: 0x050607 },
+      content: {
+        kind: "COLOR",
+        color: 0x020304,
+      },
       visible: true,
       opacity: 1,
     },
+
     {
       id: "CEILING",
-      content: { kind: "COLOR", color: 0x030405 },
+      content: {
+        kind: "COLOR",
+        color: 0x010203,
+      },
       visible: true,
       opacity: 1,
     },
+
+    // =====================================================
+    // ALA IZQUIERDA
+    // PANEL VERTICAL / CARTELA
+    // =====================================================
+
     {
       id: "FREE_SCREEN_LEFT",
+
       content: {
         kind: "CANVAS",
         canvas: {
           title: "Materia viva",
-          subtitle: "Superficie audiovisual · 01",
+          subtitle: "Archivo · instalación audiovisual",
           accent: "#c7a56a",
         },
       },
+
       visible: true,
-      opacity: 0.9,
-      position: [-5.75, 3.28, -0.35],
+      opacity: 0.82,
+
+      position: [-6.15, 3.15, -0.65],
+
       motion: {
-        angularVelocity: [0, 0.13, 0],
-        float: { amplitude: 0.09, frequency: 0.54, phase: 0 },
+        angularVelocity: [0, 0.018, 0],
+
+        float: {
+          amplitude: 0.025,
+          frequency: 0.32,
+          phase: 0,
+        },
+
         viewerResponse: {
-          influence: 0.72,
-          minimumSpeed: 0.2,
-          attraction: 0.24,
-          attentionFrequency: 0.31,
+          influence: 0.3,
+          minimumSpeed: 0.08,
+          attraction: 0.12,
+          attentionFrequency: 0.22,
           phase: 0.4,
         },
       },
     },
+
+    // =====================================================
+    // GRAN OBRA IZQUIERDA
+    // =====================================================
+
     {
       id: "FREE_SCREEN_BACK_A",
+
       content: {
         kind: "VIDEO",
         src: "/flores.mp4",
-        texture: { repeat: [0.52, 1], offset: [0, 0] },
+
+        texture: {
+          repeat: [0.52, 1],
+          offset: [0, 0],
+        },
       },
+
       visible: true,
-      opacity: 0.94,
-      position: [-2.55, 3.36, -3.35],
+      opacity: 0.96,
+
+      position: [-3.15, 3.42, -3.95],
+
       motion: {
-        angularVelocity: [0, -0.105, 0],
-        float: { amplitude: 0.12, frequency: 0.47, phase: 1.35 },
+        angularVelocity: [0, -0.012, 0],
+
+        float: {
+          amplitude: 0.035,
+          frequency: 0.28,
+          phase: 1.35,
+        },
+
         viewerResponse: {
-          influence: 0.78,
-          minimumSpeed: 0.18,
-          attraction: 0.26,
-          attentionFrequency: 0.27,
+          influence: 0.34,
+          minimumSpeed: 0.08,
+          attraction: 0.14,
+          attentionFrequency: 0.2,
           phase: 1.8,
         },
       },
     },
+
+    // =====================================================
+    // GRAN OBRA DERECHA
+    // =====================================================
+
     {
       id: "FREE_SCREEN_BACK_B",
+
       content: {
         kind: "VIDEO",
         src: "/flores.mp4",
-        texture: { repeat: [0.52, 1], offset: [0.48, 0] },
+
+        texture: {
+          repeat: [0.52, 1],
+          offset: [0.48, 0],
+        },
       },
+
       visible: true,
-      opacity: 0.94,
-      position: [2.55, 3.36, -3.35],
+      opacity: 0.96,
+
+      position: [3.15, 3.42, -4.25],
+
       motion: {
-        angularVelocity: [0, 0.115, 0],
-        float: { amplitude: 0.115, frequency: 0.5, phase: 3.2 },
+        angularVelocity: [0, 0.012, 0],
+
+        float: {
+          amplitude: 0.032,
+          frequency: 0.3,
+          phase: 3.2,
+        },
+
         viewerResponse: {
-          influence: 0.78,
-          minimumSpeed: 0.18,
-          attraction: 0.26,
-          attentionFrequency: 0.29,
+          influence: 0.34,
+          minimumSpeed: 0.08,
+          attraction: 0.14,
+          attentionFrequency: 0.21,
           phase: 3.6,
         },
       },
     },
+
+    // =====================================================
+    // ALA DERECHA
+    // =====================================================
+
     {
       id: "FREE_SCREEN_RIGHT",
+
       content: {
         kind: "CANVAS",
+
         canvas: {
           title: "Archivo de luz",
-          subtitle: "Superficie audiovisual · 04",
-          accent: "#d8d8d4",
+          subtitle: "Presencia · imagen · memoria",
+          accent: "#d7d4ca",
         },
       },
+
       visible: true,
-      opacity: 0.9,
-      position: [5.75, 3.28, -0.35],
+      opacity: 0.82,
+
+      position: [6.15, 3.15, -1.05],
+
       motion: {
-        angularVelocity: [0, -0.13, 0],
-        float: { amplitude: 0.085, frequency: 0.57, phase: 4.6 },
+        angularVelocity: [0, -0.018, 0],
+
+        float: {
+          amplitude: 0.025,
+          frequency: 0.34,
+          phase: 4.6,
+        },
+
         viewerResponse: {
-          influence: 0.72,
-          minimumSpeed: 0.2,
-          attraction: 0.24,
-          attentionFrequency: 0.33,
+          influence: 0.3,
+          minimumSpeed: 0.08,
+          attraction: 0.12,
+          attentionFrequency: 0.22,
           phase: 5.1,
         },
       },
     },
   ],
+
+  // =======================================================
+  // PRESENCIA
+  // Reservamos el centro para el futuro performer.
+  // =======================================================
+
   human: {
-    content: { kind: "NONE" },
-    position: [0, 1.86, 0.55],
+    content: {
+      kind: "NONE",
+    },
+
+    position: [0, 1.86, -0.15],
     rotation: [0, 0, 0],
     scale: [1, 1, 1],
+
     visible: false,
     opacity: 0,
   },
+
   layers: {
-    BACKGROUND_FX: { visible: true },
-    HUMAN_LAYER: { visible: false },
-    FOREGROUND_FX: { visible: true },
+    BACKGROUND_FX: {
+      visible: true,
+    },
+
+    HUMAN_LAYER: {
+      visible: false,
+    },
+
+    FOREGROUND_FX: {
+      visible: true,
+    },
   },
 };

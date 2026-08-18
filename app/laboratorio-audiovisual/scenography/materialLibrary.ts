@@ -31,8 +31,8 @@ export function createMaterialLibrary(): MaterialLibraryInstance {
       "DARK_CONCRETE",
       prepare(
         new THREE.MeshStandardMaterial({
-          color: 0x07090a,
-          roughness: 0.91,
+          color: 0x171a1c,
+          roughness: 0.86,
           metalness: 0.04,
           side: THREE.DoubleSide,
         })

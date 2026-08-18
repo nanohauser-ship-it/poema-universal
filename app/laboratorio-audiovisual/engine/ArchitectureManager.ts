@@ -49,6 +49,40 @@ export class ArchitectureManager {
     this.root.add(compiled.group);
     compiled.setMediaSlots(this.mediaSlots);
     next.transition.setTarget(this.targetVisible);
+
+    // =====================================================
+    // DEBUG SALA MADRE V2
+    // Forzamos el blueprint recién compilado a ser visible.
+    // =====================================================
+
+    compiled.group.visible = true;
+
+    for (const material of compiled.materials) {
+      const baseOpacity =
+        Number(material.userData.baseOpacity) || 1;
+
+      material.transparent = false;
+      material.opacity = Math.max(baseOpacity, 0.92);
+      material.needsUpdate = true;
+    }
+
+    for (const light of compiled.lights) {
+      const baseIntensity =
+        Number(light.userData.baseIntensity) || 1;
+
+      light.intensity = Math.max(baseIntensity, 2.5);
+    }
+
+    console.log(
+      "[SALA MADRE V2] blueprint visible",
+      {
+        archetype: blueprint.archetype,
+        modules: blueprint.modules.length,
+        surfaces: blueprint.surfaces.length,
+        lights: blueprint.lights.length,
+        children: compiled.group.children.length,
+      }
+    );
   }
 
   setMediaSlot(slotId: string, content: MediaContent | null): void {
@@ -76,7 +110,8 @@ export class ArchitectureManager {
     }
 
     if (this.active) {
-      this.applyTransition(this.active, this.active.transition.update(deltaTime));
+      // DEBUG V2: mantenemos la arquitectura completamente visible.
+      this.applyTransition(this.active, 1);
     }
 
     for (let index = this.exiting.length - 1; index >= 0; index -= 1) {

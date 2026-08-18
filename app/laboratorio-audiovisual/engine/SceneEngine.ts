@@ -148,6 +148,63 @@ export class SceneEngine implements ExperienceRuntime {
       this.layers.FOREGROUND_FX
     );
 
+    // =====================================================
+    // SALA MADRE V2 · LUZ ARQUITECTÓNICA BASE
+    // Independiente de la arquitectura legacy.
+    // =====================================================
+
+    const galleryAmbient = new THREE.HemisphereLight(
+      0xd9e0e2,
+      0x16100b,
+      1.45
+    );
+
+    galleryAmbient.name = "GALLERY_V2_AMBIENT";
+
+    const galleryKey = new THREE.DirectionalLight(
+      0xf0dcc0,
+      2.4
+    );
+
+    galleryKey.name = "GALLERY_V2_KEY";
+    galleryKey.position.set(-4.5, 7.5, 6.5);
+
+    const galleryBack = new THREE.PointLight(
+      0xc99758,
+      24,
+      26,
+      1.7
+    );
+
+    galleryBack.name = "GALLERY_V2_BACK";
+    galleryBack.position.set(0, 4.8, -8.5);
+
+    const galleryLeft = new THREE.PointLight(
+      0xb5c7cf,
+      12,
+      18,
+      1.8
+    );
+
+    galleryLeft.position.set(-6.2, 3.2, -2.4);
+
+    const galleryRight = new THREE.PointLight(
+      0xe2c096,
+      12,
+      18,
+      1.8
+    );
+
+    galleryRight.position.set(6.2, 3.2, -2.4);
+
+    this.scene.add(
+      galleryAmbient,
+      galleryKey,
+      galleryBack,
+      galleryLeft,
+      galleryRight
+    );
+
     const architecture = this.createArchitecture();
     this.platform = architecture.platform;
     this.lightRing = architecture.lightRing;
@@ -193,8 +250,73 @@ export class SceneEngine implements ExperienceRuntime {
 
     this.activeMode = initialMode;
     this.experienceDirector.setExperience(initialMode);
+
+    // =====================================================
+    // SALA MADRE V2
+    // GALERÍA usa exclusivamente arquitectura procedural.
+    // La arquitectura y las pantallas legacy quedan fuera.
+    // =====================================================
+
+    const galleryV2 = initialMode === "gallery";
+
+    this.architectureRoot.visible = !galleryV2;
+    this.surfaceManager.root.visible = !galleryV2;
+
     this.architectureDirector.setMode(initialMode);
-    void this.architectureDirector.loadExperience("sala-madre");
+
+    if (galleryV2) {
+      void this.architectureDirector
+        .loadGallery()
+        .then((blueprint) => {
+          if (!blueprint || this.disposed) {
+            return;
+          }
+
+          // =================================================
+          // GALERÍA V2 · PRIMERA CURADURÍA ARQUITECTÓNICA
+          // =================================================
+
+          this.architectureManager.setMediaSlot(
+            "WALL_PRIMARY",
+            {
+              kind: "VIDEO",
+              src: "/flores.mp4",
+            }
+          );
+
+          this.architectureManager.setMediaSlot(
+            "WALL_LEFT",
+            {
+              kind: "VIDEO",
+              src: "/flores.mp4",
+              texture: {
+                repeat: [0.52, 1],
+                offset: [0, 0],
+              },
+            }
+          );
+
+          this.architectureManager.setMediaSlot(
+            "WALL_RIGHT",
+            {
+              kind: "VIDEO",
+              src: "/flores.mp4",
+              texture: {
+                repeat: [0.52, 1],
+                offset: [0.48, 0],
+              },
+            }
+          );
+
+          // La cámara se aplica DESPUÉS de existir el blueprint.
+          this.architectureDirector.setCameraAnchor(
+            "MASTER",
+            "16:9"
+          );
+        });
+    } else {
+      void this.architectureDirector.loadExperience("sala-madre");
+    }
     this.running = true;
     this.clock.start();
     this.scheduleNextFrame();
@@ -211,7 +333,62 @@ export class SceneEngine implements ExperienceRuntime {
 
     this.activeMode = mode;
     this.experienceDirector.setExperience(mode);
+
+    const galleryV2 = mode === "gallery";
+
+    // GALERÍA V2 = motor procedural puro.
+    // Los demás modos conservan temporalmente la sala legacy.
+    this.architectureRoot.visible = !galleryV2;
+    this.surfaceManager.root.visible = !galleryV2;
+
     this.architectureDirector.setMode(mode);
+
+    if (galleryV2) {
+      void this.architectureDirector
+        .loadGallery()
+        .then((blueprint) => {
+          if (!blueprint || this.disposed) {
+            return;
+          }
+
+          this.architectureManager.setMediaSlot(
+            "WALL_PRIMARY",
+            {
+              kind: "VIDEO",
+              src: "/flores.mp4",
+            }
+          );
+
+          this.architectureManager.setMediaSlot(
+            "WALL_LEFT",
+            {
+              kind: "VIDEO",
+              src: "/flores.mp4",
+              texture: {
+                repeat: [0.52, 1],
+                offset: [0, 0],
+              },
+            }
+          );
+
+          this.architectureManager.setMediaSlot(
+            "WALL_RIGHT",
+            {
+              kind: "VIDEO",
+              src: "/flores.mp4",
+              texture: {
+                repeat: [0.52, 1],
+                offset: [0.48, 0],
+              },
+            }
+          );
+
+          this.architectureDirector.setCameraAnchor(
+            "MASTER",
+            "16:9"
+          );
+        });
+    }
   }
 
   subscribeArchitectureState(

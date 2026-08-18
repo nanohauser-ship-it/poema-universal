@@ -65,6 +65,32 @@ export class ArchitectureDirector {
     return this.createNewTake(experienceId);
   }
 
+  loadGallery(): Promise<ArchitectureBlueprint | null> {
+    this.requestedCameraAnchor = "MASTER";
+
+    const brief = this.createBrief(
+      "gallery",
+      createExperienceInstanceId(),
+      "sala-madre-gallery-v2",
+      "CURATED",
+      {
+        theme: "museo negro",
+        narrativeIntent:
+          "galería audiovisual monumental, silenciosa y cinematográfica",
+        preferredArchetype: "DARK_GALLERY",
+        emotion:
+          "presencia, oscuridad, escala humana y contemplación",
+        rhythm:
+          "muy lento, museístico, respirado",
+        spatialIntent:
+          "gran sala profunda con nichos audiovisuales, muro monumental y reflejos",
+        performerRequired: true,
+      }
+    );
+
+    return this.generateTake(brief, false);
+  }
+
   createNewTake(
     experienceId = this.brief?.experienceId ?? "sala-madre"
   ): Promise<ArchitectureBlueprint | null> {
@@ -136,12 +162,18 @@ export class ArchitectureDirector {
   setMode(mode: SceneMode): void {
     this.activeMode = mode;
     this.manager.setVisible(
-      mode === "immersive" ||
+      mode === "gallery" ||
+        mode === "immersive" ||
         (mode === "performance" && Boolean(this.brief?.theme))
     );
 
-    if (mode === "immersive") {
-      this.setCameraAnchor(this.requestedCameraAnchor, "16:9");
+    if (mode === "gallery" || mode === "immersive") {
+      this.setCameraAnchor(
+        mode === "gallery"
+          ? "MASTER"
+          : this.requestedCameraAnchor,
+        "16:9"
+      );
     }
   }
 
@@ -336,7 +368,8 @@ export class ArchitectureDirector {
   ): void {
     this.manager.applyBlueprint(blueprint);
     this.manager.setVisible(
-      this.activeMode === "immersive" ||
+      this.activeMode === "gallery" ||
+        this.activeMode === "immersive" ||
         (this.activeMode === "performance" && Boolean(this.brief?.theme))
     );
     this.blueprintsByInstance.set(
@@ -345,8 +378,16 @@ export class ArchitectureDirector {
     );
     this.blueprintsBySeed.set(blueprint.seed, blueprint);
 
-    if (this.activeMode === "immersive") {
-      this.setCameraAnchor(this.requestedCameraAnchor, "16:9");
+    if (
+      this.activeMode === "gallery" ||
+      this.activeMode === "immersive"
+    ) {
+      this.setCameraAnchor(
+        this.activeMode === "gallery"
+          ? "MASTER"
+          : this.requestedCameraAnchor,
+        "16:9"
+      );
     }
 
     this.setState({
