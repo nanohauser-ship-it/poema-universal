@@ -148,6 +148,10 @@ const navigationLinks = [
     href: "/poema-universal/herramientas-literarias",
   },
   {
+    label: "Esfera de Influencias",
+    href: "/poema-universal/atlas-influencias/v4",
+  },
+  {
     label: "El coro",
     href: "/poema-universal/coro-de-la-tierra",
   },
