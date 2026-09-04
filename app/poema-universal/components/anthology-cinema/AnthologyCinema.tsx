@@ -1019,11 +1019,13 @@ export default function AnthologyCinema() {
             onClick={() =>
               setPlaybackRate(
                 (current) =>
-                  current === 0.75
+                  current === 0.5
+                    ? 0.75
+                    : current === 0.75
                     ? 1
                     : current === 1
                     ? 1.25
-                    : 0.75
+                    : 0.5
               )
             }
             style={{
