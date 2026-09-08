@@ -212,8 +212,10 @@ function PoemBookContent({
         <button
           type="button"
           className={styles.trigger}
-          onClick={() => setIsOpen(true)}
-          aria-label="Abrir el Libro de las Sesenta Voces"
+          onClick={() => {
+            window.location.href = "/poema-universal/antologia-viva";
+          }}
+          aria-label="Abrir la Antología Viva"
         >
           <span className={styles.symbol}>
             ◇

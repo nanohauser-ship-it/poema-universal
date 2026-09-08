@@ -1,0 +1,953 @@
+"use client";
+
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import { BOOK_POEMS } from "../world/MundoPoema";
+import { FOUNDATIONAL_BOOK_POEMS } from "../../data/foundationalPoems";
+import { getPoeticFilm } from "../../data/poeticFilms";
+
+type Poem = {
+  id: string;
+  poetName: string;
+  country: string;
+  title: string;
+  poem: string;
+  translation?: string;
+  originalLabel?: string;
+  translationLabel?: string;
+};
+
+const ALL_POEMS = [
+  ...BOOK_POEMS,
+  ...FOUNDATIONAL_BOOK_POEMS,
+] as Poem[];
+
+function buildAnthology() {
+  const seen = new Set<string>();
+
+  return ALL_POEMS.filter((poem) => {
+    if (!poem?.poetName || !poem?.title || !poem?.poem) {
+      return false;
+    }
+
+    const key =
+      `${poem.poetName}::${poem.title}`
+        .toLowerCase()
+        .trim();
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+
+    return true;
+  });
+}
+
+const IMAGES = [
+  "/antologia/campo.jpg",
+  "/antologia/elcarrodepaja.JPG",
+  "/antologia/icaro%201.JPG",
+  "/museo/coleccion/no-desaparezcamos/el-arbol-blanco.webp",
+  "/museo/coleccion/bielka/la-memoria-bajo-el-agua.webp",
+  "/museo/coleccion/no-desaparezcamos/la-promesa.webp",
+  "/museo/coleccion/bielka/el-corazon-de-dos-mitades.webp",
+  "/museo/coleccion/no-desaparezcamos/el-exiliado.webp",
+  "/museo/coleccion/jerarquia/la-cadena-rota.webp",
+  "/museo/coleccion/bielka/la-entrada-al-laberinto.webp",
+];
+
+function clamp01(value: number) {
+  return Math.max(0, Math.min(1, value));
+}
+
+function getFrameState(
+  frames: string[],
+  progress: number
+) {
+  const safeFrames =
+    frames.length > 0
+      ? frames
+      : ["/antologia/campo.jpg"];
+
+  const lastIndex =
+    Math.max(
+      0,
+      safeFrames.length - 1
+    );
+
+  const position =
+    clamp01(progress) *
+    lastIndex;
+
+  const indexA =
+    Math.floor(position);
+
+  const indexB =
+    Math.min(
+      lastIndex,
+      indexA + 1
+    );
+
+  /*
+   * Mezcla suave dentro del intervalo.
+   * smoothstep evita una transición mecánica.
+   */
+  const rawBlend =
+    position - indexA;
+
+  const blend =
+    rawBlend *
+    rawBlend *
+    (3 - 2 * rawBlend);
+
+  return {
+    frameA:
+      safeFrames[indexA],
+
+    frameB:
+      safeFrames[indexB],
+
+    blend,
+
+    indexA,
+    indexB,
+
+    frameCount:
+      safeFrames.length,
+  };
+}
+
+export default function AnthologyCinema() {
+  const poems = useMemo(
+    () => buildAnthology(),
+    []
+  );
+
+  const scroller =
+    useRef<HTMLDivElement | null>(null);
+
+  const chapters =
+    useRef<Array<HTMLElement | null>>([]);
+
+  const [activeIndex, setActiveIndex] =
+    useState(0);
+
+  const [localProgress, setLocalProgress] =
+    useState(0);
+
+  const [globalProgress, setGlobalProgress] =
+    useState(0);
+
+  const [language, setLanguage] =
+    useState<"original" | "translation">(
+      "original"
+    );
+
+  function updateTimeline() {
+    const container = scroller.current;
+
+    if (!container) return;
+
+    const containerRect =
+      container.getBoundingClientRect();
+
+    const readingLine =
+      containerRect.top +
+      containerRect.height * 0.42;
+
+    let foundIndex = activeIndex;
+    let foundProgress = localProgress;
+
+    chapters.current.forEach(
+      (chapter, index) => {
+        if (!chapter) return;
+
+        const rect =
+          chapter.getBoundingClientRect();
+
+        if (
+          readingLine >= rect.top &&
+          readingLine < rect.bottom
+        ) {
+          foundIndex = index;
+
+          /*
+           * PROGRESO REAL DEL CAPÍTULO
+           *
+           * Antes calculábamos desde la línea visual
+           * situada al 42% del viewport.
+           *
+           * Eso hacía que el primer poema empezase
+           * aproximadamente en 0.33 y se saltase
+           * los primeros fotogramas.
+           */
+
+          const chapterTop =
+            chapter.offsetTop;
+
+          const chapterHeight =
+            chapter.offsetHeight;
+
+          /*
+           * Para el primer poema:
+           * scrollTop 0 = progreso 0.
+           *
+           * Para los siguientes:
+           * empiezan cuando su parte superior
+           * alcanza la línea de lectura.
+           */
+          const startScroll =
+            index === 0
+              ? 0
+              : chapterTop -
+                container.clientHeight * 0.42;
+
+          const endScroll =
+            chapterTop +
+            chapterHeight -
+            container.clientHeight * 0.42;
+
+          foundProgress = clamp01(
+            (
+              container.scrollTop -
+              startScroll
+            ) /
+            Math.max(
+              1,
+              endScroll -
+              startScroll
+            )
+          );
+        }
+      }
+    );
+
+    setActiveIndex(foundIndex);
+    setLocalProgress(foundProgress);
+
+    const maxScroll =
+      container.scrollHeight -
+      container.clientHeight;
+
+    setGlobalProgress(
+      maxScroll > 0
+        ? clamp01(
+            container.scrollTop / maxScroll
+          )
+        : 0
+    );
+  }
+
+  useEffect(() => {
+    requestAnimationFrame(
+      updateTimeline
+    );
+  }, []);
+
+  const currentPoem =
+    poems[activeIndex];
+
+  const nextIndex =
+    Math.min(
+      activeIndex + 1,
+      poems.length - 1
+    );
+
+  const nextPoem =
+    poems[nextIndex];
+
+  /*
+   * ========================================================
+   * PELÍCULA DEL POEMA
+   *
+   * Hasta el 82 % del capítulo:
+   * recorremos todos sus fotogramas.
+   *
+   * Último 18 %:
+   * la película ya ha llegado al final
+   * y comienza la transición al poema siguiente.
+   * ========================================================
+   */
+
+  const filmProgress =
+    clamp01(
+      localProgress / 0.82
+    );
+
+  const transition =
+    activeIndex === poems.length - 1
+      ? 0
+      : clamp01(
+          (
+            localProgress -
+            0.82
+          ) /
+          0.18
+        );
+
+  const currentFilm =
+    getPoeticFilm(
+      currentPoem,
+      activeIndex
+    );
+
+  const nextFilm =
+    getPoeticFilm(
+      nextPoem,
+      nextIndex
+    );
+
+  const currentFrameState =
+    getFrameState(
+      currentFilm.frames,
+      filmProgress
+    );
+
+  /*
+   * La película siguiente entra
+   * prácticamente desde su primer fotograma.
+   */
+  const nextFrameState =
+    getFrameState(
+      nextFilm.frames,
+      transition * 0.08
+    );
+
+  const currentScale =
+    1.025 +
+    filmProgress * 0.055;
+
+  const nextScale =
+    1.08 -
+    transition * 0.025;
+
+  if (!currentPoem) {
+    return null;
+  }
+
+  return (
+    <main
+      style={{
+        position: "fixed",
+        inset: 0,
+        display: "grid",
+        gridTemplateColumns:
+          "44% 56%",
+        overflow: "hidden",
+        background: "#050403",
+        color: "#eee8de",
+      }}
+    >
+      {/* ==============================
+          ANTOLOGÍA
+      ============================== */}
+
+      <section
+        style={{
+          position: "relative",
+          minWidth: 0,
+          minHeight: 0,
+          overflow: "hidden",
+          background:
+            "linear-gradient(135deg,#090604,#0d0906)",
+          borderRight:
+            "1px solid rgba(177,132,77,.15)",
+        }}
+      >
+        <header
+          style={{
+            position: "absolute",
+            zIndex: 20,
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 105,
+            padding: "27px 38px",
+            boxSizing: "border-box",
+            display: "flex",
+            justifyContent:
+              "space-between",
+            alignItems:
+              "flex-start",
+            background:
+              "linear-gradient(#090604 48%,rgba(9,6,4,.9) 68%,transparent)",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: 9,
+                letterSpacing:
+                  ".24em",
+                color: "#a47a49",
+              }}
+            >
+              POEMA UNIVERSAL
+            </div>
+
+            <div
+              style={{
+                marginTop: 7,
+                fontFamily:
+                  "Georgia, serif",
+                fontSize: 13,
+                opacity: 0.55,
+              }}
+            >
+              Libro de las Sesenta Voces
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: 6,
+            }}
+          >
+            <button
+              onClick={() =>
+                setLanguage(
+                  "original"
+                )
+              }
+              style={{
+                border:
+                  "1px solid rgba(176,129,71,.24)",
+                background:
+                  language ===
+                  "original"
+                    ? "rgba(176,129,71,.15)"
+                    : "transparent",
+                color: "#b78b55",
+                padding: "7px 10px",
+                fontSize: 8,
+                letterSpacing:
+                  ".13em",
+                cursor: "pointer",
+              }}
+            >
+              ORIGINAL
+            </button>
+
+            <button
+              onClick={() =>
+                setLanguage(
+                  "translation"
+                )
+              }
+              style={{
+                border:
+                  "1px solid rgba(176,129,71,.24)",
+                background:
+                  language ===
+                  "translation"
+                    ? "rgba(176,129,71,.15)"
+                    : "transparent",
+                color: "#b78b55",
+                padding: "7px 10px",
+                fontSize: 8,
+                letterSpacing:
+                  ".13em",
+                cursor: "pointer",
+              }}
+            >
+              ESPAÑOL
+            </button>
+          </div>
+        </header>
+
+        <div
+          ref={scroller}
+          onScroll={updateTimeline}
+          style={{
+            position: "absolute",
+            inset: 0,
+            overflowY: "auto",
+            overflowX: "hidden",
+            overscrollBehavior:
+              "contain",
+            scrollbarWidth: "thin",
+          }}
+        >
+          {poems.map(
+            (poem, index) => {
+              const text =
+                language ===
+                  "translation" &&
+                poem.translation
+                  ? poem.translation
+                  : poem.poem;
+
+              return (
+                <article
+                  key={poem.id}
+                  ref={(element) => {
+                    chapters.current[
+                      index
+                    ] = element;
+                  }}
+                  style={{
+                    boxSizing:
+                      "border-box",
+                    minHeight:
+                      "125vh",
+                    padding:
+                      index === 0
+                        ? "155px 72px 24vh"
+                        : "24vh 72px",
+                    borderBottom:
+                      "1px solid rgba(150,110,68,.10)",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent:
+                        "space-between",
+                      marginBottom: 19,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 9,
+                        letterSpacing:
+                          ".21em",
+                        color:
+                          "#a77c4b",
+                        textTransform:
+                          "uppercase",
+                      }}
+                    >
+                      {poem.poetName}
+                      {" · "}
+                      {poem.country}
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: 9,
+                        letterSpacing:
+                          ".14em",
+                        opacity: 0.32,
+                      }}
+                    >
+                      {String(
+                        index + 1
+                      ).padStart(
+                        2,
+                        "0"
+                      )}
+                      {" / "}
+                      {String(
+                        poems.length
+                      ).padStart(
+                        2,
+                        "0"
+                      )}
+                    </div>
+                  </div>
+
+                  <h2
+                    style={{
+                      margin:
+                        "0 0 32px",
+                      maxWidth: 600,
+                      fontFamily:
+                        "Georgia, 'Times New Roman', serif",
+                      fontWeight: 400,
+                      fontSize:
+                        "clamp(42px,4.5vw,72px)",
+                      lineHeight: 0.96,
+                      letterSpacing:
+                        "-.045em",
+                    }}
+                  >
+                    {poem.title}
+                  </h2>
+
+                  <div
+                    style={{
+                      marginBottom: 39,
+                      fontSize: 9,
+                      letterSpacing:
+                        ".16em",
+                      color:
+                        "rgba(185,139,83,.58)",
+                    }}
+                  >
+                    {language ===
+                    "translation"
+                      ? poem.translationLabel ??
+                        "Traducción · Español"
+                      : poem.originalLabel ??
+                        "Original"}
+                  </div>
+
+                  <div
+                    style={{
+                      maxWidth: 500,
+                      fontFamily:
+                        "Georgia, 'Times New Roman', serif",
+                      fontSize: 18,
+                      lineHeight: 1.86,
+                      color:
+                        "rgba(238,232,222,.91)",
+                    }}
+                  >
+                    {text
+                      .split("\n")
+                      .map(
+                        (
+                          line,
+                          lineIndex
+                        ) =>
+                          line ? (
+                            <div
+                              key={
+                                lineIndex
+                              }
+                            >
+                              {line}
+                            </div>
+                          ) : (
+                            <div
+                              key={
+                                lineIndex
+                              }
+                              style={{
+                                height: 27,
+                              }}
+                            />
+                          )
+                      )}
+                  </div>
+                </article>
+              );
+            }
+          )}
+
+          <div
+            style={{
+              height: "40vh",
+            }}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 2,
+            background:
+              "rgba(255,255,255,.04)",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width:
+                `${globalProgress * 100}%`,
+              background:
+                "rgba(181,130,70,.72)",
+            }}
+          />
+        </div>
+      </section>
+
+      {/* ==============================
+          PELÍCULA
+      ============================== */}
+
+      <section
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          background: "#020202",
+        }}
+      >
+        {/* =============================================
+            PELÍCULA ACTUAL
+        ============================================= */}
+
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity:
+              1 - transition,
+          }}
+        >
+          {/* Fotograma A */}
+
+          <img
+            src={
+              currentFrameState.frameA
+            }
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              inset: 0,
+
+              width: "100%",
+              height: "100%",
+
+              objectFit: "contain",
+
+              opacity:
+                1 -
+                currentFrameState.blend,
+
+              transform:
+                `scale(${currentScale})`,
+
+              filter:
+                "brightness(.90) saturate(.95) contrast(1.04)",
+
+              willChange:
+                "opacity, transform",
+
+              pointerEvents:
+                "none",
+            }}
+          />
+
+          {/* Fotograma B */}
+
+          <img
+            src={
+              currentFrameState.frameB
+            }
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              inset: 0,
+
+              width: "100%",
+              height: "100%",
+
+              objectFit: "contain",
+
+              opacity:
+                currentFrameState.blend,
+
+              transform:
+                `scale(${currentScale + 0.008})`,
+
+              filter:
+                "brightness(.92) saturate(.97) contrast(1.04)",
+
+              willChange:
+                "opacity, transform",
+
+              pointerEvents:
+                "none",
+            }}
+          />
+        </div>
+
+        {/* =============================================
+            PELÍCULA SIGUIENTE
+        ============================================= */}
+
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+
+            opacity:
+              transition,
+
+            pointerEvents:
+              "none",
+          }}
+        >
+          <img
+            src={
+              nextFrameState.frameA
+            }
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              inset: 0,
+
+              width: "100%",
+              height: "100%",
+
+              objectFit: "contain",
+
+              opacity:
+                1 -
+                nextFrameState.blend,
+
+              transform:
+                `scale(${nextScale})`,
+
+              filter:
+                "brightness(.90) saturate(.95) contrast(1.04)",
+            }}
+          />
+
+          <img
+            src={
+              nextFrameState.frameB
+            }
+            alt=""
+            draggable={false}
+            style={{
+              position: "absolute",
+              inset: 0,
+
+              width: "100%",
+              height: "100%",
+
+              objectFit: "contain",
+
+              opacity:
+                nextFrameState.blend,
+
+              transform:
+                `scale(${nextScale + 0.008})`,
+
+              filter:
+                "brightness(.92) saturate(.97) contrast(1.04)",
+            }}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: `
+              radial-gradient(
+                circle at center,
+                transparent 30%,
+                rgba(0,0,0,.44) 100%
+              ),
+              linear-gradient(
+                90deg,
+                rgba(6,4,3,.30),
+                transparent 18%
+              )
+            `,
+            pointerEvents: "none",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            top: 34,
+            left: 40,
+            right: 38,
+            display: "flex",
+            justifyContent:
+              "space-between",
+            pointerEvents: "none",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: 8,
+                letterSpacing:
+                  ".24em",
+                color:
+                  "rgba(210,174,129,.66)",
+                marginBottom: 9,
+              }}
+            >
+              PELÍCULA POÉTICA
+            </div>
+
+            <div
+              style={{
+                fontFamily:
+                  "Georgia, serif",
+                fontSize: 14,
+                color:
+                  "rgba(239,231,218,.58)",
+              }}
+            >
+              {currentPoem.title}
+            </div>
+          </div>
+
+          <div
+            style={{
+              fontSize: 9,
+              letterSpacing:
+                ".18em",
+              opacity: 0.35,
+            }}
+          >
+            {String(
+              activeIndex + 1
+            ).padStart(
+              2,
+              "0"
+            )}
+            {" / "}
+            {String(
+              poems.length
+            ).padStart(
+              2,
+              "0"
+            )}
+          </div>
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            right: 28,
+            top: "50%",
+            width: 1,
+            height: 160,
+            transform:
+              "translateY(-50%)",
+            background:
+              "rgba(255,255,255,.09)",
+          }}
+        >
+          <div
+            style={{
+              width: 2,
+              height:
+                `${localProgress * 100}%`,
+              background:
+                "rgba(194,143,84,.68)",
+            }}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: 40,
+            bottom: 34,
+            fontSize: 8,
+            letterSpacing:
+              ".18em",
+            opacity: 0.28,
+            pointerEvents: "none",
+          }}
+        >
+          LA PELÍCULA AVANZA CON LA LECTURA
+        </div>
+      </section>
+    </main>
+  );
+}

@@ -3,6 +3,7 @@ import PoemaUniversalThreshold from "./components/PoemaUniversalThreshold";
 import HomeObraComunGateway from "./components/HomeObraComunGateway";
 import HomeSupportGateway from "./components/HomeSupportGateway";
 import HomeStoreGateway from "./components/HomeStoreGateway";
+import HomeRecorderDot from "./components/HomeRecorderDot";
 
 const salasAbiertas = [
   {
@@ -702,6 +703,7 @@ export default function HomePage() {
           </Link>
         </footer>
       </div>
+      <HomeRecorderDot />
     </main>
   );
 }

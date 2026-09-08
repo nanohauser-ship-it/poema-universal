@@ -1,0 +1,72 @@
+export type PoeticFilmPoem = {
+  id?: string;
+  poetName: string;
+  title: string;
+};
+
+export type PoeticFilm = {
+  id: string;
+  frames: string[];
+};
+
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+const EL_HUERTO: PoeticFilm = {
+  id: "el-huerto",
+  frames: [
+    "/poema-universal/films/el-huerto/01-abrazo.png",
+    "/poema-universal/films/el-huerto/01-abrazo.png",
+
+    "/poema-universal/films/el-huerto/02-se-va.png",
+    "/poema-universal/films/el-huerto/02-se-va.png",
+
+    "/poema-universal/films/el-huerto/03-entierro.png",
+    "/poema-universal/films/el-huerto/03-entierro.png",
+
+    "/poema-universal/films/el-huerto/04-entierro-transicion.png",
+    "/poema-universal/films/el-huerto/05-hallazgo.png",
+    "/poema-universal/films/el-huerto/06-huesos-emergen.png",
+    "/poema-universal/films/el-huerto/07-huesos.png",
+    "/poema-universal/films/el-huerto/08-vuelve-a-cubrir.png",
+    "/poema-universal/films/el-huerto/09-arbol-joven.png",
+    "/poema-universal/films/el-huerto/10-arbol-memoria.png",
+  ],
+};
+
+const FALLBACK_IMAGES = [
+  "/antologia/campo.jpg",
+  "/antologia/elcarrodepaja.JPG",
+  "/antologia/icaro%201.JPG",
+  "/museo/coleccion/no-desaparezcamos/el-arbol-blanco.webp",
+  "/museo/coleccion/bielka/la-memoria-bajo-el-agua.webp",
+  "/museo/coleccion/no-desaparezcamos/la-promesa.webp",
+  "/museo/coleccion/bielka/el-corazon-de-dos-mitades.webp",
+  "/museo/coleccion/no-desaparezcamos/el-exiliado.webp",
+  "/museo/coleccion/jerarquia/la-cadena-rota.webp",
+  "/museo/coleccion/bielka/la-entrada-al-laberinto.webp",
+];
+
+export function getPoeticFilm(
+  poem: PoeticFilmPoem,
+  index: number
+): PoeticFilm {
+  const poet = normalize(poem.poetName);
+  const title = normalize(poem.title);
+
+  if (poet === "jose naveiro" && title === "el huerto") {
+    return EL_HUERTO;
+  }
+
+  const image = FALLBACK_IMAGES[index % FALLBACK_IMAGES.length];
+
+  return {
+    id: `fallback-${index}`,
+    frames: [image],
+  };
+}

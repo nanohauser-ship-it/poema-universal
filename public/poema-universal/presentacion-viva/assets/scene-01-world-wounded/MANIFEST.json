@@ -1,0 +1,1064 @@
+{
+  "counts": {
+    "00_revision": 75,
+    "01_mundo_herido": 11,
+    "02_fogon_a_pagina": 27,
+    "03_cambio_de_rumbo": 10,
+    "04_literatura": 19,
+    "05_la_pregunta": 5,
+    "06_nace_poema_universal": 9,
+    "07_llamada_al_mundo": 22,
+    "08_primeras_voces": 13,
+    "09_somos_diez": 5,
+    "10_faltan_cincuenta": 1,
+    "11_arbol_blanco": 7,
+    "12_final": 5
+  },
+  "files": [
+    {
+      "scene": "12_final",
+      "file": "60_voces_un_mundo_de_poesía.png",
+      "source": "60_voces_un_mundo_de_poesía.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_cinematic_highly_detailed_photorealistic_scene.png",
+      "source": "a_cinematic_highly_detailed_photorealistic_scene.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "a_cinematic_moody_warm_and_cool_toned_collage_gr.png",
+      "source": "a_cinematic_moody_warm_and_cool_toned_collage_gr.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "a_cinematic_moody_warm_toned_collage_grid_of_10.png",
+      "source": "a_cinematic_moody_warm_toned_collage_grid_of_10.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_cinematic_photorealistic_warm_golden_hour_stre.png",
+      "source": "a_cinematic_photorealistic_warm_golden_hour_stre.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_cinematic_storyboard_style_poster_board_in_a_dar.png",
+      "source": "a_cinematic_storyboard_style_poster_board_in_a_dar.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "a_clean_collage_asset_sheet_style_image_with_a_gri.png",
+      "source": "a_clean_collage_asset_sheet_style_image_with_a_gri.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "a_clean_composite_collage_asset_sheet_on_a_trans.png",
+      "source": "a_clean_composite_collage_asset_sheet_on_a_trans.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_clean_composite_illustration_sheet_asset_grid.png",
+      "source": "a_clean_composite_illustration_sheet_asset_grid.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_clean_minimal_warm_toned_close_up_still_life.png",
+      "source": "a_clean_minimal_warm_toned_close_up_still_life.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_clean_photorealistic_cgi_style_still_life_scene.png",
+      "source": "a_clean_photorealistic_cgi_style_still_life_scene.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_clean_studio_like_high_detail_artistic_illustr.png",
+      "source": "a_clean_studio_like_high_detail_artistic_illustr.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_clean_studio_like_illustration_scene_with_a_sin.png",
+      "source": "a_clean_studio_like_illustration_scene_with_a_sin.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_clean_studio_like_isolated_illustration_composi.png",
+      "source": "a_clean_studio_like_isolated_illustration_composi.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_clean_studio_style_still_life_scene_a_single_r.png",
+      "source": "a_clean_studio_style_still_life_scene_a_single_r.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "a_clean_warm_cozy_rustic_still_life_collage_m.png",
+      "source": "a_clean_warm_cozy_rustic_still_life_collage_m.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_close_top_down_still_life_photograph_realistic.png",
+      "source": "a_close_top_down_still_life_photograph_realistic.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_close_up_still_life_concept_art_scene_with_a_h.png",
+      "source": "a_close_up_still_life_concept_art_scene_with_a_h.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_close_up_still_life_illustration_scene_on_a_note.png",
+      "source": "a_close_up_still_life_illustration_scene_on_a_note.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_cozy_cinematic_handcrafted_paper_craft_diorama.png",
+      "source": "a_cozy_cinematic_handcrafted_paper_craft_diorama.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_high_resolution_studio_like_still_life_render_o.png",
+      "source": "a_high_resolution_studio_like_still_life_render_o.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "a_warm_cinematic_collage_of_five_tabletop_still_l.png",
+      "source": "a_warm_cinematic_collage_of_five_tabletop_still_l.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_cinematic_handcrafted_diorama_stop_motion.png",
+      "source": "a_warm_cinematic_handcrafted_diorama_stop_motion.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_cinematic_handcrafted_paper_stop_motion_s.png",
+      "source": "a_warm_cinematic_handcrafted_paper_stop_motion_s.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_cinematic_shallow_depth_of_field_still_li.png",
+      "source": "a_warm_cinematic_shallow_depth_of_field_still_li.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_cinematic_still_life_scene_a_close_up_to.png",
+      "source": "a_warm_cinematic_still_life_scene_a_close_up_to.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_cozy_cinematic_miniature_stop_motion_hand.png",
+      "source": "a_warm_cozy_cinematic_miniature_stop_motion_hand.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_cozy_highly_detailed_artisan_stop_motion.png",
+      "source": "a_warm_cozy_highly_detailed_artisan_stop_motion.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_detailed_cinematic_paper_art_stop_motion.png",
+      "source": "a_warm_detailed_cinematic_paper_art_stop_motion.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_handcrafted_diorama_style_still_life_scene.png",
+      "source": "a_warm_handcrafted_diorama_style_still_life_scene.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_minimal_artistic_still_life_scene_on_a_no.png",
+      "source": "a_warm_minimal_artistic_still_life_scene_on_a_no.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_moody_cinematic_still_life_scene_on_a_woo.png",
+      "source": "a_warm_moody_cinematic_still_life_scene_on_a_woo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_photoreal_cg_styled_still_life_scene_of_a.png",
+      "source": "a_warm_photoreal_cg_styled_still_life_scene_of_a.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_photorealistic_studio_lit_still_life_of_a.png",
+      "source": "a_warm_photorealistic_studio_lit_still_life_of_a.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_shallow_depth_of_field_handcrafted_paper.png",
+      "source": "a_warm_shallow_depth_of_field_handcrafted_paper.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_warm_softly_lit_studio_like_still_life_scene_o.png",
+      "source": "a_warm_softly_lit_studio_like_still_life_scene_o.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "a_wide_storyboard_scene_board_layout_for_an_animat.png",
+      "source": "a_wide_storyboard_scene_board_layout_for_an_animat.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "altar_de_papel_para_historias_universales.png",
+      "source": "altar_de_papel_para_historias_universales.png"
+    },
+    {
+      "scene": "05_la_pregunta",
+      "file": "archivo_de_las_voces_un_mundo_en_papel.png",
+      "source": "archivo_de_las_voces_un_mundo_en_papel.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "archivo_de_voces_y_poemas.png",
+      "source": "archivo_de_voces_y_poemas.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "archivo_mágico_de_papel_al_atardecer.png",
+      "source": "archivo_mágico_de_papel_al_atardecer.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "asamblea_de_las_voces_al_atardecer.png",
+      "source": "asamblea_de_las_voces_al_atardecer.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "avión_de_papel_con_palabras_viajeras.png",
+      "source": "avión_de_papel_con_palabras_viajeras.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "avión_de_papel_hacia_todos_los_destinos.png",
+      "source": "avión_de_papel_hacia_todos_los_destinos.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "bandada_de_aves_de_papel_en_vuelo.png",
+      "source": "bandada_de_aves_de_papel_en_vuelo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "baúl_de_historias_que_viajan.png",
+      "source": "baúl_de_historias_que_viajan.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "baúl_de_viajes_ideas_y_poemas.png",
+      "source": "baúl_de_viajes_ideas_y_poemas.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "bicicleta_de_cartón_mensajera_de_poemas.png",
+      "source": "bicicleta_de_cartón_mensajera_de_poemas.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "bicicleta_vintage_de_papel_y_cartón.png",
+      "source": "bicicleta_vintage_de_papel_y_cartón.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "bodegón_de_tinta_y_palabras.png",
+      "source": "bodegón_de_tinta_y_palabras.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "brote_de_papel_en_maceta_artesanal.png",
+      "source": "brote_de_papel_en_maceta_artesanal.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "buzón_de_cartón_lleno_de_palabras.png",
+      "source": "buzón_de_cartón_lleno_de_palabras.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "buzón_de_voces_al_atardecer.png",
+      "source": "buzón_de_voces_al_atardecer.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "buzón_de_voces_del_mundo.png",
+      "source": "buzón_de_voces_del_mundo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "cacerola_artesanal_de_cartón_humeante.png",
+      "source": "cacerola_artesanal_de_cartón_humeante.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "carta_artesanal_entre_mundos_de_papel.png",
+      "source": "carta_artesanal_entre_mundos_de_papel.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "carta_artesanal_voces_que_cambian_mundos.png",
+      "source": "carta_artesanal_voces_que_cambian_mundos.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "cartas_del_mundo_atadas_con_hilo_rojo.png",
+      "source": "cartas_del_mundo_atadas_con_hilo_rojo.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "cartas_del_mundo_poesía_sin_fronteras.png",
+      "source": "cartas_del_mundo_poesía_sin_fronteras.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "cartas_para_un_mismo_mundo.png",
+      "source": "cartas_para_un_mismo_mundo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "cartel_de_papel_kraft_desgarrado.png",
+      "source": "cartel_de_papel_kraft_desgarrado.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "cartografía_de_un_mundo_conectado.png",
+      "source": "cartografía_de_un_mundo_conectado.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "chaqueta_de_chef_al_atardecer.png",
+      "source": "chaqueta_de_chef_al_atardecer.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "chaqueta_de_chef_de_papel_artesanal.png",
+      "source": "chaqueta_de_chef_de_papel_artesanal.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "chaqueta_de_chef_en_papel_artesanal.png",
+      "source": "chaqueta_de_chef_en_papel_artesanal.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "chef_de_papel_con_cuaderno_y_cuchara.png",
+      "source": "chef_de_papel_con_cuaderno_y_cuchara.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "chef_de_papel_con_sueños.png",
+      "source": "chef_de_papel_con_sueños.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "cine_de_cartón_bajo_las_estrellas.png",
+      "source": "cine_de_cartón_bajo_las_estrellas.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "ciudad_de_cartón_sobre_la_colina.png",
+      "source": "ciudad_de_cartón_sobre_la_colina.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "cuaderno_artesanal_de_poema_universal.png",
+      "source": "cuaderno_artesanal_de_poema_universal.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "cuaderno_de_pequeñas_ideas.png",
+      "source": "cuaderno_de_pequeñas_ideas.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "cuaderno_de_recetas_y_poesía_artesanal.png",
+      "source": "cuaderno_de_recetas_y_poesía_artesanal.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "cámara_artesanal_poema_universal.png",
+      "source": "cámara_artesanal_poema_universal.png"
+    },
+    {
+      "scene": "11_arbol_blanco",
+      "file": "círculo_de_historias_bajo_el_árbol_de_papel.png",
+      "source": "círculo_de_historias_bajo_el_árbol_de_papel.png"
+    },
+    {
+      "scene": "11_arbol_blanco",
+      "file": "círculo_de_historias_bajo_el_árbol_luminoso.png",
+      "source": "círculo_de_historias_bajo_el_árbol_luminoso.png"
+    },
+    {
+      "scene": "12_final",
+      "file": "círculo_de_poesía_sin_fronteras.png",
+      "source": "círculo_de_poesía_sin_fronteras.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "del_fogón_al_poema_diorama_de_papel.png",
+      "source": "del_fogón_al_poema_diorama_de_papel.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diario_artesanal_para_un_mundo_mejor.png",
+      "source": "diario_artesanal_para_un_mundo_mejor.png"
+    },
+    {
+      "scene": "09_somos_diez",
+      "file": "diez_faroles_florales_de_papel_iluminados.png",
+      "source": "diez_faroles_florales_de_papel_iluminados.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "diez_voces_de_papel_en_armonía.png",
+      "source": "diez_voces_de_papel_en_armonía.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "diez_voces_un_mundo_de_papel.png",
+      "source": "diez_voces_un_mundo_de_papel.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "dilema_entre_fogones_y_libros.png",
+      "source": "dilema_entre_fogones_y_libros.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_artesanal_de_brasil_en_papel.png",
+      "source": "diorama_artesanal_de_brasil_en_papel.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "diorama_artesanal_de_la_voz_argentina.png",
+      "source": "diorama_artesanal_de_la_voz_argentina.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "diorama_artesanal_de_la_voz_rusa.png",
+      "source": "diorama_artesanal_de_la_voz_rusa.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_artesanal_de_sudáfrica_en_cartón.png",
+      "source": "diorama_artesanal_de_sudáfrica_en_cartón.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_artesanal_del_estudio_del_escritor.png",
+      "source": "diorama_artesanal_del_estudio_del_escritor.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_artesanal_del_santuario_japonés_de_sakura.png",
+      "source": "diorama_artesanal_del_santuario_japonés_de_sakura.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "diorama_artesanal_voz_de_colombia.png",
+      "source": "diorama_artesanal_voz_de_colombia.png"
+    },
+    {
+      "scene": "12_final",
+      "file": "diorama_de_60_voces_y_sueños.png",
+      "source": "diorama_de_60_voces_y_sueños.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "diorama_de_cartas_alrededor_del_mundo.png",
+      "source": "diorama_de_cartas_alrededor_del_mundo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_cámara_y_poesía_artesanal.png",
+      "source": "diorama_de_cámara_y_poesía_artesanal.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "diorama_de_escritorio_de_escritor_artesanal.png",
+      "source": "diorama_de_escritorio_de_escritor_artesanal.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "diorama_de_esperanza_y_unidadաշխարհային.png",
+      "source": "diorama_de_esperanza_y_unidadաշխարհային.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_fiordo_noruego_en_papel.png",
+      "source": "diorama_de_fiordo_noruego_en_papel.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_papel_artesanal_de_chile.png",
+      "source": "diorama_de_papel_artesanal_de_chile.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_papel_de_una_piazza_italiana.png",
+      "source": "diorama_de_papel_de_una_piazza_italiana.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_papel_niño_estudiando.png",
+      "source": "diorama_de_papel_niño_estudiando.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_papel_voces_y_poesía.png",
+      "source": "diorama_de_papel_voces_y_poesía.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_poesía_en_papel_artesanal.png",
+      "source": "diorama_de_poesía_en_papel_artesanal.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "diorama_de_tormenta_sobre_ciudad_en_ruinas.png",
+      "source": "diorama_de_tormenta_sobre_ciudad_en_ruinas.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "diorama_de_un_estudio_poético_acogedor.png",
+      "source": "diorama_de_un_estudio_poético_acogedor.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "diorama_de_voces_del_mundo.png",
+      "source": "diorama_de_voces_del_mundo.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "diorama_de_voces_y_sueños.png",
+      "source": "diorama_de_voces_y_sueños.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "diorama_literario_bajo_luz_cálida.png",
+      "source": "diorama_literario_bajo_luz_cálida.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "el_buzón_de_las_voces.png",
+      "source": "el_buzón_de_las_voces.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "el_mundo_herido_un_mañana_posible.png",
+      "source": "el_mundo_herido_un_mañana_posible.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "el_primer_hilo_del_mundo.png",
+      "source": "el_primer_hilo_del_mundo.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "el_taller_de_historias_y_sabores.png",
+      "source": "el_taller_de_historias_y_sabores.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "el_árbol_blanco_de_la_esperanza.png",
+      "source": "el_árbol_blanco_de_la_esperanza.png"
+    },
+    {
+      "scene": "11_arbol_blanco",
+      "file": "el_árbol_blanco_de_papel.png",
+      "source": "el_árbol_blanco_de_papel.png"
+    },
+    {
+      "scene": "11_arbol_blanco",
+      "file": "el_árbol_luminoso_de_papel.png",
+      "source": "el_árbol_luminoso_de_papel.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "emblema_artesanal_del_poema_universal.png",
+      "source": "emblema_artesanal_del_poema_universal.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "escalera_de_libros_hacia_la_luna.png",
+      "source": "escalera_de_libros_hacia_la_luna.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "escribir_esperanza_frente_a_la_tormenta.png",
+      "source": "escribir_esperanza_frente_a_la_tormenta.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "escritorio_artesanal_de_ideas_y_palabras.png",
+      "source": "escritorio_artesanal_de_ideas_y_palabras.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "escritorio_artesanal_de_palabras_y_mundos.png",
+      "source": "escritorio_artesanal_de_palabras_y_mundos.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "esperanza_entre_ruinas_de_papel.png",
+      "source": "esperanza_entre_ruinas_de_papel.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "espiral_de_ideas_de_papel.png",
+      "source": "espiral_de_ideas_de_papel.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "espiral_de_papeles_manuscritos.png",
+      "source": "espiral_de_papeles_manuscritos.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "estante_artesanal_con_utensilios_de_cocina.png",
+      "source": "estante_artesanal_con_utensilios_de_cocina.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "estante_de_cocina_de_cartón_artesanal.png",
+      "source": "estante_de_cocina_de_cartón_artesanal.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "estudio_de_cartón_preparando_un_mundo.png",
+      "source": "estudio_de_cartón_preparando_un_mundo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "estudio_de_papel_del_poema_universal.png",
+      "source": "estudio_de_papel_del_poema_universal.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "estudio_de_poema_universal.png",
+      "source": "estudio_de_poema_universal.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "estudio_del_poeta_viajero_al_atardecer.png",
+      "source": "estudio_del_poeta_viajero_al_atardecer.png"
+    },
+    {
+      "scene": "12_final",
+      "file": "familia_de_papel_alrededor_del_mundo.png",
+      "source": "familia_de_papel_alrededor_del_mundo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "farol_artesanal_de_cartón_con_luz_cálida.png",
+      "source": "farol_artesanal_de_cartón_con_luz_cálida.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "farol_artesanal_de_cartón_iluminado.png",
+      "source": "farol_artesanal_de_cartón_iluminado.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "globo_de_papel_remendado_con_esperanza.png",
+      "source": "globo_de_papel_remendado_con_esperanza.png"
+    },
+    {
+      "scene": "05_la_pregunta",
+      "file": "globo_de_papel_voces_y_horizontes.png",
+      "source": "globo_de_papel_voces_y_horizontes.png"
+    },
+    {
+      "scene": "05_la_pregunta",
+      "file": "globo_terráqueo_artesanal_de_cartón.png",
+      "source": "globo_terráqueo_artesanal_de_cartón.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "grabadora_de_campo_artesanal_con_micrófono.png",
+      "source": "grabadora_de_campo_artesanal_con_micrófono.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "guirnalda_artesanal_voces_del_mundo.png",
+      "source": "guirnalda_artesanal_voces_del_mundo.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "hilo_rojo_de_corazones_artesanales.png",
+      "source": "hilo_rojo_de_corazones_artesanales.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "imagegen.png",
+      "source": "imagegen.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "josé_escritor_de_papel_y_sueños.png",
+      "source": "josé_escritor_de_papel_y_sueños.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "joven_chef_de_cartón_con_cuchara_de_madera.png",
+      "source": "joven_chef_de_cartón_con_cuchara_de_madera.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "joven_lector_entre_libros_y_recetas.png",
+      "source": "joven_lector_entre_libros_y_recetas.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "jóvenes_creativos_en_diorama_de_cartón.png",
+      "source": "jóvenes_creativos_en_diorama_de_cartón.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "la_decisión_palabras_que_alimentan.png",
+      "source": "la_decisión_palabras_que_alimentan.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "la_traducción_puentes_de_palabras.png",
+      "source": "la_traducción_puentes_de_palabras.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "letrero_artesanal_poema_universal.png",
+      "source": "letrero_artesanal_poema_universal.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "libros_iluminados_al_atardecer.png",
+      "source": "libros_iluminados_al_atardecer.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "lámpara_artesanal_sobre_papel_rayado.png",
+      "source": "lámpara_artesanal_sobre_papel_rayado.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "lámpara_de_cartón_articulada_encendida.png",
+      "source": "lámpara_de_cartón_articulada_encendida.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "maleta_de_cartón_llena_de_viajes.png",
+      "source": "maleta_de_cartón_llena_de_viajes.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "maleta_de_historias_y_recetas.png",
+      "source": "maleta_de_historias_y_recetas.png"
+    },
+    {
+      "scene": "05_la_pregunta",
+      "file": "mapa_de_conexiones_en_cartón.png",
+      "source": "mapa_de_conexiones_en_cartón.png"
+    },
+    {
+      "scene": "09_somos_diez",
+      "file": "mapa_de_diez_voces_primeras.png",
+      "source": "mapa_de_diez_voces_primeras.png"
+    },
+    {
+      "scene": "05_la_pregunta",
+      "file": "mapa_de_historias_sin_fronteras.png",
+      "source": "mapa_de_historias_sin_fronteras.png"
+    },
+    {
+      "scene": "09_somos_diez",
+      "file": "mapa_de_los_primeros_diez_países.png",
+      "source": "mapa_de_los_primeros_diez_países.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "mapa_de_voces_del_mundo.png",
+      "source": "mapa_de_voces_del_mundo.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "mapa_del_mundo_de_papel_iluminado.png",
+      "source": "mapa_del_mundo_de_papel_iluminado.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "mesa_de_cartón_para_grandes_ideas.png",
+      "source": "mesa_de_cartón_para_grandes_ideas.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "mesa_rústica_de_cartón_artesanal.png",
+      "source": "mesa_rústica_de_cartón_artesanal.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "micrófono_artesanal_de_voces_y_sueños.png",
+      "source": "micrófono_artesanal_de_voces_y_sueños.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "micrófono_grabador_de_cartón_artesanal.png",
+      "source": "micrófono_grabador_de_cartón_artesanal.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "micrófono_vintage_entre_voces_de_papel.png",
+      "source": "micrófono_vintage_entre_voces_de_papel.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "mini_máquina_de_escribir_poética_artesanal.png",
+      "source": "mini_máquina_de_escribir_poética_artesanal.png"
+    },
+    {
+      "scene": "10_faltan_cincuenta",
+      "file": "montículo_de_50_brotes_de_papel_artesanal.png",
+      "source": "montículo_de_50_brotes_de_papel_artesanal.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "móvil_de_cuna_artesanal_de_papel.png",
+      "source": "móvil_de_cuna_artesanal_de_papel.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "móvil_de_papel_constelación_del_mundo.png",
+      "source": "móvil_de_papel_constelación_del_mundo.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "niño_de_papel_leyendo_en_su_diorama.png",
+      "source": "niño_de_papel_leyendo_en_su_diorama.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "olla_de_papel_sobre_cuaderno_rayado.png",
+      "source": "olla_de_papel_sobre_cuaderno_rayado.png"
+    },
+    {
+      "scene": "09_somos_diez",
+      "file": "pasaporte_poético_diez_países_mil_voces.png",
+      "source": "pasaporte_poético_diez_países_mil_voces.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "pequeño_faro_de_cartón_y_esperanza.png",
+      "source": "pequeño_faro_de_cartón_y_esperanza.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "perchero_de_cocina_en_cartón_artesanal.png",
+      "source": "perchero_de_cocina_en_cartón_artesanal.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "pila_artesanal_de_libros_literarios.png",
+      "source": "pila_artesanal_de_libros_literarios.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "pila_de_libros_de_papel_artesanal.png",
+      "source": "pila_de_libros_de_papel_artesanal.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "poema_universal_el_estudio_en_diorama.png",
+      "source": "poema_universal_el_estudio_en_diorama.png"
+    },
+    {
+      "scene": "11_arbol_blanco",
+      "file": "poema_universal_el_árbol_blanco.png",
+      "source": "poema_universal_el_árbol_blanco.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "poema_universal_en_un_escritorio_acogedor.png",
+      "source": "poema_universal_en_un_escritorio_acogedor.png"
+    },
+    {
+      "scene": "09_somos_diez",
+      "file": "poema_universal_las_primeras_diez_voces.png",
+      "source": "poema_universal_las_primeras_diez_voces.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "poema_universal_palabras_que_unen.png",
+      "source": "poema_universal_palabras_que_unen.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "poema_universal_storyboard_de_cocina_y_literatura.png",
+      "source": "poema_universal_storyboard_de_cocina_y_literatura.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "poema_universal_una_invitación_al_mundo.png",
+      "source": "poema_universal_una_invitación_al_mundo.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "poema_universal_voces_que_construyen_hogar.png",
+      "source": "poema_universal_voces_que_construyen_hogar.png"
+    },
+    {
+      "scene": "04_literatura",
+      "file": "polilla_de_papel_sobre_cuaderno.png",
+      "source": "polilla_de_papel_sobre_cuaderno.png"
+    },
+    {
+      "scene": "11_arbol_blanco",
+      "file": "portal_dorado_en_el_árbol_de_papel.png",
+      "source": "portal_dorado_en_el_árbol_de_papel.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "primeras_respuestas_entre_sobres.png",
+      "source": "primeras_respuestas_entre_sobres.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "puente_de_cartas_al_atardecer.png",
+      "source": "puente_de_cartas_al_atardecer.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "puente_de_fantasía_hacia_la_biblioteca.png",
+      "source": "puente_de_fantasía_hacia_la_biblioteca.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "puente_de_palabras_entre_mundos.png",
+      "source": "puente_de_palabras_entre_mundos.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "puente_de_palabras_sin_fronteras.png",
+      "source": "puente_de_palabras_sin_fronteras.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "puerta_al_lugar_de_los_sueños.png",
+      "source": "puerta_al_lugar_de_los_sueños.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "puerto_de_papel_al_atardecer.png",
+      "source": "puerto_de_papel_al_atardecer.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "rama_de_papel_artesanal_iluminada.png",
+      "source": "rama_de_papel_artesanal_iluminada.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "ramo_de_cerezo_en_papel_artesanal.png",
+      "source": "ramo_de_cerezo_en_papel_artesanal.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "raíces_blancas_de_papel_artesanal.png",
+      "source": "raíces_blancas_de_papel_artesanal.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "refugio_de_papel_bajo_la_tormenta.png",
+      "source": "refugio_de_papel_bajo_la_tormenta.png"
+    },
+    {
+      "scene": "12_final",
+      "file": "reunión_acogedora_en_un_diorama_de_papel.png",
+      "source": "reunión_acogedora_en_un_diorama_de_papel.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "rincón_de_cocina_y_palabras_voladoras.png",
+      "source": "rincón_de_cocina_y_palabras_voladoras.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "santuario_de_papel_voz_de_méxico.png",
+      "source": "santuario_de_papel_voz_de_méxico.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "sello_artesanal_de_poesía_universal.png",
+      "source": "sello_artesanal_de_poesía_universal.png"
+    },
+    {
+      "scene": "06_nace_poema_universal",
+      "file": "sello_artesanal_poema_universal.png",
+      "source": "sello_artesanal_poema_universal.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "tabla_de_cortar_de_cartón_con_cuchillo_artesanal.png",
+      "source": "tabla_de_cortar_de_cartón_con_cuchillo_artesanal.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "tabla_de_cortar_y_cuchillo_de_cartón.png",
+      "source": "tabla_de_cortar_y_cuchillo_de_cartón.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "taller_de_imprenta_en_miniatura.png",
+      "source": "taller_de_imprenta_en_miniatura.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "taza_de_cartón_con_vapor_artesanal.png",
+      "source": "taza_de_cartón_con_vapor_artesanal.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "teatro_de_papel_poema_universal.png",
+      "source": "teatro_de_papel_poema_universal.png"
+    },
+    {
+      "scene": "07_llamada_al_mundo",
+      "file": "un_hilo_rojo_para_el_mundo.png",
+      "source": "un_hilo_rojo_para_el_mundo.png"
+    },
+    {
+      "scene": "01_mundo_herido",
+      "file": "ventana_de_papel_entre_lluvia_y_esperanza.png",
+      "source": "ventana_de_papel_entre_lluvia_y_esperanza.png"
+    },
+    {
+      "scene": "03_cambio_de_rumbo",
+      "file": "viaje_al_atardecer_entre_páginas.png",
+      "source": "viaje_al_atardecer_entre_páginas.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "viaje_del_chef_entre_páginas_y_sueños.png",
+      "source": "viaje_del_chef_entre_páginas_y_sueños.png"
+    },
+    {
+      "scene": "08_primeras_voces",
+      "file": "voces_de_papel_al_atardecer.png",
+      "source": "voces_de_papel_al_atardecer.png"
+    },
+    {
+      "scene": "00_revision",
+      "file": "wide_cinematic_shallow_depth_of_field_atmospheri.png",
+      "source": "wide_cinematic_shallow_depth_of_field_atmospheri.png"
+    },
+    {
+      "scene": "02_fogon_a_pagina",
+      "file": "wide_collage_style_studio_render_still_life_phot.png",
+      "source": "wide_collage_style_studio_render_still_life_phot.png"
+    },
+    {
+      "scene": "11_arbol_blanco",
+      "file": "árbol_blanco_de_papel_iluminado.png",
+      "source": "árbol_blanco_de_papel_iluminado.png"
+    }
+  ]
+}

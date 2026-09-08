@@ -1,0 +1,306 @@
+.page {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(118, 73, 25, .08),
+      transparent 31%
+    ),
+    #020201;
+
+  color: #eee3cf;
+}
+
+.glow {
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(183, 126, 44, .055),
+      transparent 68%
+    );
+
+  filter: blur(25px);
+
+  pointer-events: none;
+}
+
+.door {
+  position: relative;
+  z-index: 2;
+
+  width:
+    min(
+      390px,
+      calc(100vw - 44px)
+    );
+
+  padding:
+    52px 42px 38px;
+
+  border:
+    1px solid
+    rgba(199, 147, 65, .16);
+
+  border-radius: 4px;
+
+  text-align: center;
+
+  background:
+    rgba(3, 3, 2, .82);
+
+  box-shadow:
+    0 40px 100px
+    rgba(0,0,0,.65);
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 29px;
+
+  font-size: 7px;
+
+  letter-spacing: .34em;
+
+  color:
+    rgba(
+      204,
+      155,
+      76,
+      .6
+    );
+}
+
+.symbol {
+  margin-bottom: 14px;
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size: 27px;
+
+  color:
+    rgba(
+      197,
+      143,
+      55,
+      .58
+    );
+}
+
+.door h1 {
+  margin: 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      35px,
+      5vw,
+      48px
+    );
+
+  line-height: .98;
+
+  font-weight: 400;
+
+  letter-spacing: -.035em;
+
+  color:
+    rgba(
+      239,
+      228,
+      207,
+      .92
+    );
+}
+
+.door p {
+  margin:
+    20px 0 31px;
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size: 11px;
+
+  font-style: italic;
+
+  color:
+    rgba(
+      231,
+      219,
+      197,
+      .32
+    );
+}
+
+.door form {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    auto;
+
+  gap: 6px;
+}
+
+.door input {
+  min-width: 0;
+  height: 40px;
+
+  border:
+    1px solid
+    rgba(
+      222,
+      205,
+      176,
+      .11
+    );
+
+  border-radius: 3px;
+
+  outline: none;
+
+  padding:
+    0 13px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .018
+    );
+
+  color:
+    rgba(
+      239,
+      228,
+      207,
+      .82
+    );
+
+  font-size: 11px;
+}
+
+.door input:focus {
+  border-color:
+    rgba(
+      205,
+      152,
+      67,
+      .42
+    );
+}
+
+.door button {
+  height: 40px;
+
+  border:
+    1px solid
+    rgba(
+      205,
+      152,
+      67,
+      .32
+    );
+
+  border-radius: 3px;
+
+  padding:
+    0 17px;
+
+  background:
+    rgba(
+      154,
+      99,
+      28,
+      .09
+    );
+
+  color:
+    rgba(
+      225,
+      184,
+      112,
+      .82
+    );
+
+  font-family:
+    Georgia,
+    serif;
+
+  cursor: pointer;
+}
+
+.door button:disabled {
+  opacity: .36;
+  cursor: default;
+}
+
+.door small {
+  display: block;
+
+  margin-top: 13px;
+
+  font-size: 8px;
+
+  color:
+    rgba(
+      192,
+      88,
+      63,
+      .7
+    );
+}
+
+.door footer {
+  margin-top: 35px;
+
+  font-size: 6px;
+
+  letter-spacing: .28em;
+
+  color:
+    rgba(
+      225,
+      210,
+      186,
+      .16
+    );
+}
+
+@media (
+  max-width: 540px
+) {
+  .door {
+    padding:
+      44px 24px 32px;
+  }
+
+  .door form {
+    grid-template-columns:
+      1fr;
+  }
+}

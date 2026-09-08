@@ -1,0 +1,660 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
+
+const POEM = [
+  "Let the wound weep",
+  "",
+  "Mess with your sleep",
+  "Make you forget",
+  "To call or eat",
+  "Want to curl up",
+  "Hide from light",
+  "",
+  "Letting is never easy",
+  "But somehow part",
+  "Of the getting better",
+  "Getting over",
+  "Coming through",
+  "",
+  "Something vital",
+  "Is being retrieved",
+  "",
+  "Let the wound weep",
+  "Rage, sob and howl",
+  "Hear its call",
+  "Listen",
+  "",
+  "Breathe, go slowly",
+  "Healing is a dawning",
+];
+
+function LivingScene({ progress }: { progress: number }) {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef(progress);
+
+  useEffect(() => {
+    progressRef.current = progress;
+  }, [progress]);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(
+      42,
+      1,
+      0.1,
+      100
+    );
+
+    camera.position.z = 4.4;
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
+
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    mount.appendChild(renderer.domElement);
+
+    // TEST VISUAL: confirma que Three.js está renderizando
+    const testGeometry = new THREE.SphereGeometry(0.65, 64, 64);
+
+    const testMaterial = new THREE.MeshBasicMaterial({
+      color: new THREE.Color("#ff7a18"),
+    });
+
+    const testSphere = new THREE.Mesh(
+      testGeometry,
+      testMaterial
+    );
+
+    testSphere.position.set(0, 0, -0.5);
+    scene.add(testSphere);
+
+    const geometry = new THREE.PlaneGeometry(
+      5.4,
+      6.2,
+      100,
+      100
+    );
+
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+
+      uniforms: {
+        uTime: { value: 0 },
+        uProgress: { value: 0 },
+      },
+
+      vertexShader: `
+        uniform float uTime;
+        varying vec2 vUv;
+
+        void main() {
+          vUv = uv;
+
+          vec3 p = position;
+
+          float breath =
+            sin(uTime * 0.75) * 0.5 + 0.5;
+
+          p.z +=
+            sin(p.y * 3.1 + uTime * 0.45) * 0.045 +
+            sin(p.x * 4.8 - uTime * 0.28) * 0.025;
+
+          p.x *= 1.0 + breath * 0.008;
+          p.y *= 1.0 + breath * 0.006;
+
+          gl_Position =
+            projectionMatrix *
+            modelViewMatrix *
+            vec4(p, 1.0);
+        }
+      `,
+
+      fragmentShader: `
+        precision highp float;
+
+        uniform float uTime;
+        uniform float uProgress;
+
+        varying vec2 vUv;
+
+        float hash(vec2 p) {
+          return fract(
+            sin(dot(p, vec2(127.1, 311.7))) *
+            43758.5453123
+          );
+        }
+
+        void main() {
+          vec2 p = vUv - 0.5;
+
+          float breath =
+            sin(uTime * 0.72) * 0.5 + 0.5;
+
+          // Grieta central viva
+          float crackCenter =
+            sin(p.y * 15.0 + uTime * 0.25) * 0.025 +
+            sin(p.y * 41.0) * 0.008;
+
+          float crackDist =
+            abs(p.x - crackCenter);
+
+          float crack =
+            exp(-crackDist * 105.0);
+
+          // Halo interior
+          float d =
+            length(p * vec2(0.85, 1.15));
+
+          float glow =
+            exp(-d * (6.0 - uProgress * 3.0));
+
+          // Apertura / amanecer
+          float dawn =
+            smoothstep(
+              0.50,
+              0.95,
+              uProgress
+            );
+
+          float horizon =
+            smoothstep(
+              0.35,
+              -0.20,
+              p.y
+            );
+
+          // Materia en movimiento
+          float mist =
+            sin(vUv.x * 10.0 + uTime * 0.18) *
+            sin(vUv.y * 8.0 - uTime * 0.12);
+
+          mist = mist * 0.5 + 0.5;
+
+          vec3 darkness =
+            vec3(0.008, 0.004, 0.002);
+
+          vec3 wound =
+            vec3(0.38, 0.065, 0.018);
+
+          vec3 amber =
+            vec3(1.0, 0.30, 0.055);
+
+          vec3 healing =
+            vec3(1.0, 0.72, 0.39);
+
+          vec3 color = darkness;
+
+          color +=
+            wound *
+            glow *
+            (0.20 + uProgress * 0.75);
+
+          color +=
+            amber *
+            crack *
+            (0.28 + uProgress * 1.55);
+
+          color +=
+            amber *
+            glow *
+            breath *
+            0.09;
+
+          color +=
+            healing *
+            glow *
+            dawn *
+            horizon *
+            0.92;
+
+          color +=
+            wound *
+            mist *
+            uProgress *
+            0.065;
+
+          // Grano
+          float grain =
+            hash(
+              vUv * 900.0 +
+              uTime * 0.5
+            );
+
+          color +=
+            (grain - 0.5) * 0.015;
+
+          // Viñeta
+          float vignette =
+            smoothstep(
+              0.78,
+              0.16,
+              length(p)
+            );
+
+          color *=
+            0.28 + vignette;
+
+          float alpha =
+            smoothstep(
+              0.73,
+              0.24,
+              length(
+                p * vec2(0.80, 0.70)
+              )
+            );
+
+          alpha = max(
+            alpha * 0.88,
+            crack * 0.8
+          );
+
+          gl_FragColor =
+            vec4(color, alpha);
+        }
+      `,
+    });
+
+    const membrane =
+      new THREE.Mesh(geometry, material);
+
+    scene.add(membrane);
+
+    // Partículas
+    const particleCount = 900;
+
+    const positions =
+      new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] =
+        (Math.random() - 0.5) * 7;
+
+      positions[i * 3 + 1] =
+        (Math.random() - 0.5) * 7;
+
+      positions[i * 3 + 2] =
+        (Math.random() - 0.5) * 2.5;
+    }
+
+    const particleGeometry =
+      new THREE.BufferGeometry();
+
+    particleGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(
+        positions,
+        3
+      )
+    );
+
+    const particleMaterial =
+      new THREE.PointsMaterial({
+        size: 0.012,
+        color: new THREE.Color("#c1844d"),
+        transparent: true,
+        opacity: 0.15,
+        depthWrite: false,
+      });
+
+    const particles =
+      new THREE.Points(
+        particleGeometry,
+        particleMaterial
+      );
+
+    scene.add(particles);
+
+    const resize = () => {
+      const rect =
+        mount.getBoundingClientRect();
+
+      if (!rect.width || !rect.height) return;
+
+      camera.aspect =
+        rect.width / rect.height;
+
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(
+        rect.width,
+        rect.height,
+        false
+      );
+    };
+
+    const observer =
+      new ResizeObserver(resize);
+
+    observer.observe(mount);
+    resize();
+
+    const clock =
+      new THREE.Clock();
+
+    let animationFrame = 0;
+
+    const animate = () => {
+      animationFrame =
+        requestAnimationFrame(animate);
+
+      const t =
+        clock.getElapsedTime();
+
+      const current =
+        material.uniforms.uProgress.value;
+
+      const target =
+        progressRef.current;
+
+      material.uniforms.uTime.value = t;
+
+      material.uniforms.uProgress.value =
+        THREE.MathUtils.lerp(
+          current,
+          target,
+          0.035
+        );
+
+      const p =
+        material.uniforms.uProgress.value;
+
+      membrane.rotation.z =
+        -0.035 +
+        Math.sin(t * 0.18) * 0.01;
+
+      membrane.position.y =
+        Math.sin(t * 0.23) * 0.04;
+
+      particles.rotation.z =
+        t * 0.006;
+
+      particles.rotation.y =
+        Math.sin(t * 0.1) * 0.05;
+
+      particleMaterial.opacity =
+        0.10 + p * 0.28;
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      observer.disconnect();
+
+      testGeometry.dispose();
+      testMaterial.dispose();
+
+      geometry.dispose();
+      material.dispose();
+
+      particleGeometry.dispose();
+      particleMaterial.dispose();
+
+      renderer.dispose();
+
+      renderer.domElement.remove();
+    };
+  }, []);
+
+  return (
+    <div
+      ref={mountRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+      }}
+    />
+  );
+}
+
+export default function Page() {
+  const readerRef =
+    useRef<HTMLDivElement>(null);
+
+  const [progress, setProgress] =
+    useState(0);
+
+  function handleScroll() {
+    const el = readerRef.current;
+    if (!el) return;
+
+    const max =
+      el.scrollHeight -
+      el.clientHeight;
+
+    if (max <= 0) return;
+
+    setProgress(
+      Math.min(
+        1,
+        Math.max(
+          0,
+          el.scrollTop / max
+        )
+      )
+    );
+  }
+
+  return (
+    <main
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 99999,
+        display: "grid",
+        gridTemplateColumns:
+          "minmax(420px, 42%) 1fr",
+        overflow: "hidden",
+        background: "#050302",
+        color: "#eee7dc",
+      }}
+    >
+      <section
+        style={{
+          position: "relative",
+          borderRight:
+            "1px solid rgba(185,126,60,.16)",
+          background:
+            "linear-gradient(135deg,#090604,#100905)",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 10,
+            left: 48,
+            right: 48,
+            top: 32,
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: 9,
+            letterSpacing: ".2em",
+            color: "#a77b46",
+          }}
+        >
+          <span>
+            LIBRO DE LAS SESENTA VOCES
+          </span>
+
+          <span>
+            08 / 60
+          </span>
+        </div>
+
+        <div
+          ref={readerRef}
+          onScroll={handleScroll}
+          style={{
+            height: "100%",
+            overflowY: "auto",
+            padding:
+              "125px 72px 240px",
+            scrollbarWidth: "none",
+          }}
+        >
+          <div
+            style={{
+              marginBottom: 18,
+              color: "#a8783d",
+              fontSize: 10,
+              letterSpacing: ".19em",
+              textTransform: "uppercase",
+            }}
+          >
+            Malika Ndlovu · South Africa
+          </div>
+
+          <h1
+            style={{
+              margin: "0 0 60px",
+              fontFamily:
+                "Georgia, Times New Roman, serif",
+              fontWeight: 400,
+              fontSize:
+                "clamp(48px,5vw,78px)",
+              lineHeight: 0.92,
+              letterSpacing: "-.045em",
+            }}
+          >
+            Let the
+            <br />
+            Wound Weep
+          </h1>
+
+          <div
+            style={{
+              maxWidth: 460,
+              fontFamily:
+                "Georgia, Times New Roman, serif",
+              fontSize: 19,
+              lineHeight: 1.85,
+            }}
+          >
+            {POEM.map((line, i) =>
+              line ? (
+                <div key={i}>
+                  {line}
+                </div>
+              ) : (
+                <div
+                  key={i}
+                  style={{
+                    height: 28,
+                  }}
+                />
+              )
+            )}
+          </div>
+
+          <div style={{ height: "65vh" }} />
+        </div>
+      </section>
+
+      <section
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          background:
+            "radial-gradient(circle at 50% 47%,#170703 0%,#050201 38%,#010101 74%)",
+        }}
+      >
+        <LivingScene
+          progress={progress}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents: "none",
+            background:
+              "radial-gradient(circle at center,transparent 28%,rgba(0,0,0,.55) 100%)",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            top: 36,
+            left: 42,
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            style={{
+              marginBottom: 9,
+              color: "#ff2b2b",
+              fontSize: 9,
+              letterSpacing: ".24em",
+            }}
+          >
+            🔴 DIAGNÓSTICO ACTIVO · ESCENA 08
+          </div>
+
+          <div
+            style={{
+              fontFamily: "Georgia",
+              fontSize: 14,
+              opacity: 0.5,
+            }}
+          >
+            wound / breath / dawning
+          </div>
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            right: 32,
+            top: "50%",
+            width: 1,
+            height: 190,
+            transform:
+              "translateY(-50%)",
+            background:
+              "rgba(255,255,255,.10)",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              left: -1,
+              top: 0,
+              width: 3,
+              height:
+                `${progress * 100}%`,
+              background: "#b47735",
+              boxShadow:
+                "0 0 16px rgba(185,112,43,.45)",
+            }}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: 42,
+            bottom: 36,
+            fontSize: 9,
+            letterSpacing: ".18em",
+            opacity: 0.34,
+          }}
+        >
+          DESPLAZA EL POEMA · LA ESCENA RESPONDE
+        </div>
+      </section>
+    </main>
+  );
+}

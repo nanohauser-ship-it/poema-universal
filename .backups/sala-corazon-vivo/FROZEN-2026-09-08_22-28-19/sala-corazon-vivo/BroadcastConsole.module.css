@@ -1,0 +1,551 @@
+.console {
+  width: 100%;
+
+  margin-top: 12px;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .14);
+
+  border-radius: 13px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 14% 0%,
+      rgba(182, 113, 17, .055),
+      transparent 38%
+    ),
+    rgba(0, 0, 0, .92);
+}
+
+.header {
+  min-height: 66px;
+
+  padding:
+    13px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-bottom:
+    1px solid
+    rgba(216, 179, 107, .08);
+}
+
+.identity {
+  min-width: 0;
+}
+
+.eyebrow {
+  display: block;
+
+  font-size: 6px;
+  letter-spacing: .17em;
+
+  color:
+    rgba(216, 179, 107, .56);
+}
+
+.identity h2 {
+  margin:
+    4px 0 1px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 20px;
+  font-weight: 400;
+
+  color:
+    rgba(241, 222, 188, .90);
+}
+
+.identity small {
+  font-size: 7px;
+
+  color:
+    rgba(235, 220, 185, .30);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.masterStatus,
+.masterStatusLive {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 6px;
+  letter-spacing: .14em;
+}
+
+.masterStatus {
+  color:
+    rgba(151, 202, 132, .64);
+}
+
+.masterStatusLive {
+  color:
+    rgba(234, 128, 91, .86);
+}
+
+.masterStatus i,
+.masterStatusLive i {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+}
+
+.masterStatus i {
+  background:
+    rgba(126, 196, 105, .85);
+}
+
+.masterStatusLive i {
+  background:
+    rgba(235, 90, 56, .95);
+
+  box-shadow:
+    0 0 10px
+    rgba(235, 90, 56, .60);
+}
+
+.collapseButton {
+  width: 29px;
+  height: 29px;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .12);
+
+  border-radius: 50%;
+
+  background:
+    transparent;
+
+  color:
+    rgba(235, 220, 185, .48);
+
+  cursor: pointer;
+}
+
+.masterStrip {
+  min-height: 70px;
+
+  padding:
+    10px 14px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(80px, 1fr)
+    )
+    auto;
+
+  gap: 7px;
+
+  align-items: stretch;
+
+  border-bottom:
+    1px solid
+    rgba(216, 179, 107, .07);
+}
+
+.masterMetric {
+  padding:
+    8px 10px;
+
+  display: grid;
+
+  align-content: center;
+
+  gap: 3px;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .07);
+
+  border-radius: 7px;
+
+  background:
+    rgba(8, 5, 2, .28);
+}
+
+.masterMetric span {
+  font-size: 5px;
+  letter-spacing: .13em;
+
+  color:
+    rgba(216, 179, 107, .40);
+}
+
+.masterMetric strong {
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 13px;
+  font-weight: 400;
+
+  color:
+    rgba(235, 220, 185, .70);
+}
+
+.masterButton,
+.stopButton {
+  min-width: 130px;
+
+  padding:
+    0 14px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-size: 6px;
+  letter-spacing: .12em;
+}
+
+.masterButton {
+  border:
+    1px solid
+    rgba(216, 179, 107, .19);
+
+  background:
+    rgba(216, 179, 107, .06);
+
+  color:
+    rgba(235, 220, 185, .72);
+}
+
+.stopButton {
+  border:
+    1px solid
+    rgba(220, 99, 63, .24);
+
+  background:
+    rgba(220, 77, 42, .06);
+
+  color:
+    rgba(235, 146, 118, .82);
+}
+
+.platformGrid {
+  padding: 12px 14px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      6,
+      minmax(0, 1fr)
+    );
+
+  gap: 8px;
+}
+
+.platform,
+.platformActive {
+  min-width: 0;
+
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 9px;
+
+  transition:
+    border-color .2s ease,
+    background .2s ease,
+    transform .2s ease;
+}
+
+.platform {
+  border:
+    1px solid
+    rgba(216, 179, 107, .07);
+
+  background:
+    rgba(5, 4, 2, .36);
+}
+
+.platformActive {
+  border:
+    1px solid
+    rgba(216, 179, 107, .18);
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(215, 151, 44, .055),
+      transparent 60%
+    ),
+    rgba(8, 5, 2, .42);
+}
+
+.platform:hover,
+.platformActive:hover {
+  transform:
+    translateY(-1px);
+}
+
+.platform header {
+  display: flex;
+  justify-content: space-between;
+
+  gap: 5px;
+}
+
+.platformSignal {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.platformSignal i {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(216, 179, 107, .40);
+}
+
+.platformActive
+.platformSignal i {
+  background:
+    rgba(126, 196, 105, .80);
+
+  box-shadow:
+    0 0 8px
+    rgba(126, 196, 105, .30);
+}
+
+.platformSignal span {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  font-size: 6px;
+  letter-spacing: .12em;
+
+  color:
+    rgba(216, 179, 107, .62);
+}
+
+.ready,
+.pending {
+  font-size: 5px;
+  letter-spacing: .10em;
+}
+
+.ready {
+  color:
+    rgba(140, 199, 119, .64);
+}
+
+.pending {
+  color:
+    rgba(235, 220, 185, .20);
+}
+
+.platformBody {
+  min-height: 64px;
+
+  padding:
+    15px 0 9px;
+
+  display: grid;
+
+  align-content: start;
+
+  gap: 4px;
+}
+
+.platformBody strong {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 12px;
+  font-weight: 400;
+
+  color:
+    rgba(239, 220, 185, .72);
+}
+
+.platformBody small {
+  font-size: 6px;
+
+  color:
+    rgba(235, 220, 185, .28);
+}
+
+.platformMetrics {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 4px;
+
+  margin-bottom: 8px;
+}
+
+.platformMetrics > span {
+  padding:
+    5px;
+
+  display: grid;
+
+  gap: 2px;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .05);
+
+  border-radius: 5px;
+}
+
+.platformMetrics small {
+  font-size: 4px;
+
+  color:
+    rgba(216, 179, 107, .28);
+}
+
+.platformMetrics strong {
+  font-size: 8px;
+  font-weight: 400;
+
+  color:
+    rgba(235, 220, 185, .52);
+}
+
+.platform > button,
+.platformActive > button {
+  width: 100%;
+  height: 27px;
+
+  margin-top: auto;
+
+  border:
+    1px solid
+    rgba(216, 179, 107, .08);
+
+  border-radius: 6px;
+
+  background:
+    rgba(216, 179, 107, .025);
+
+  color:
+    rgba(235, 220, 185, .40);
+
+  cursor: pointer;
+
+  font-size: 5px;
+  letter-spacing: .09em;
+}
+
+.platformActive > button {
+  color:
+    rgba(235, 220, 185, .64);
+}
+
+.platform > button:disabled,
+.platformActive > button:disabled {
+  cursor: default;
+
+  opacity: .66;
+}
+
+.footer {
+  min-height: 32px;
+
+  padding:
+    0 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-top:
+    1px solid
+    rgba(216, 179, 107, .06);
+
+  font-size: 5px;
+  letter-spacing: .11em;
+
+  color:
+    rgba(216, 179, 107, .26);
+}
+
+@media (max-width: 1200px) {
+  .platformGrid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+  .masterStrip {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+@media (max-width: 700px) {
+  .platformGrid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .masterStrip {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .masterButton,
+  .stopButton {
+    min-height: 42px;
+  }
+}

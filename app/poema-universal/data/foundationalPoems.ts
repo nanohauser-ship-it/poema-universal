@@ -577,6 +577,323 @@ no es solo seguir respirando.
 Es convertir el dolor
 en futuro.`,
   },
+
+  {
+    id: "malika-ndlovu-09",
+    poetName: "Malika Ndlovu",
+    country: "Sudáfrica · South Africa",
+    title: "Let the Wound Weep",
+    originalLabel: "Original · English",
+    translationLabel: "Traducción · Español",
+    poem: `Let the wound weep
+Let the wound weep
+Mess with your sleep
+Make you forget
+To call or eat
+Want to curl up
+Hide from light
+Knot your tongue
+Your mind chattering
+Scratched record
+Through the night
+Let it
+Letting is never easy
+But somehow part
+Of the getting better
+Getting over
+Coming through
+Even when you cannot see
+Something vital
+Is being retrieved
+Let the wound weep
+For its own coming
+Into being
+For all the time it took
+For you to truly
+Look at it
+Naked and raw
+Swollen and sore
+Inflamed
+Like never before
+Once more
+Let the wound weep
+Rage, sob and howl
+Hear its call
+In solitude or crowds
+Listen
+For when and how
+To answer
+To play, stay shallow
+Dive or sink deep
+Let the wound weep
+It knows why it exists
+What it is here to teach
+Not in the past
+Or the future
+Stay here
+Grounded
+By its presence
+Let the wound weep
+Breathe, go slowly
+Healing is a dawning
+Can feel like losing
+Seem like burning
+Drowning or dying
+Only the wound knows
+How many days or ways`,
+    translation: `Deja que la herida llore
+Deja que la herida llore
+Que perturbe tu sueño
+Que te haga olvidar
+Llamar o comer
+Que quieras acurrucarte
+Esconderte de la luz
+Que te anude la lengua
+Tu mente parloteando
+Como un disco rayado
+Durante toda la noche
+Déjala
+Dejar nunca es fácil
+Pero, de algún modo, forma parte
+De empezar a estar mejor
+De superarlo
+De atravesarlo
+Incluso cuando no puedas verlo
+Algo vital
+Está siendo recuperado
+Deja que la herida llore
+Por su propia llegada
+A la existencia
+Por todo el tiempo que hizo falta
+Para que de verdad
+La miraras
+Desnuda y en carne viva
+Hinchada y dolorida
+Inflamada
+Como nunca antes
+Una vez más
+Deja que la herida llore
+Que rabie, solloce y aúlle
+Escucha su llamada
+En soledad o entre la multitud
+Escucha
+Cuándo y cómo
+Responder
+Jugar, quedarte en la superficie
+Sumergirte o hundirte hasta el fondo
+Deja que la herida llore
+Sabe por qué existe
+Lo que ha venido a enseñarte
+No en el pasado
+Ni en el futuro
+Quédate aquí
+Anclado
+Por su presencia
+Deja que la herida llore
+Respira, ve despacio
+Sanar es un amanecer
+Puede sentirse como perder
+Parecer que ardes
+Que te ahogas o mueres
+Solo la herida sabe
+Cuántos días
+O cuántos caminos`,
+  },
+
+  {
+    id: "sasha-10",
+    poetName: "Sasha",
+    country: "Rusia · Россия",
+    title: "ГАЛА",
+    originalLabel: "Original · Русский",
+    translationLabel: "Traducción · Español",
+    poem: `ГАЛА
+
+Оно уносит древнюю печаль
+Оно переродится очень скоро
+Меня разбив как трепетный хрусталь
+И унесёт с собою Сальвадора
+
+Расплавятся последние часы
+Сломаются последние подпорки
+И Фрейд свою последнюю мораль
+Произнесет стыдливо и негромко
+
+Единорог ждёт час своей любви
+Чтоб рядом тонкий стан согнуть в движении
+И расплываются как в море корабли
+Лиц галлюциногенных выражения
+
+Подпорки сломаны и женщины цветы
+Совсем иной порочной чистоты.`,
+    translation: `GALA
+
+Se lleva consigo una tristeza antigua.
+Muy pronto volverá a nacer,
+después de quebrarme como frágil cristal,
+y se llevará consigo a Salvador.
+
+Se fundirán los últimos relojes,
+se quebrarán los últimos soportes,
+y Freud pronunciará su última moral
+con pudor, en voz baja.
+
+El unicornio aguarda la hora de su amor
+para inclinar, junto a ella, su esbelto talle.
+Y, como barcos que se pierden en el mar,
+se desdibujan los gestos de rostros alucinógenos.
+
+Los soportes están rotos. Y las mujeres, flores
+de una pureza perversa, completamente distinta.`,
+  },
+
+  {
+    id: "gabriel-11",
+    poetName: "Gabriel",
+    country: "Brasil · Brazil",
+    title: "A Volta",
+    originalLabel: "Original · Português",
+    translationLabel: "Traducción · Español",
+    poem: `Anseio
+pela volta do que já não volta,
+escrito por mãos quebradas
+que nascem do rogo.
+
+Regozijo
+só se encontra dentro do incerto.
+
+Ódio…
+pelo que se tornou certo demais
+e pelo meio que atina
+a alma desconcertante.
+
+Maldições e desesperanças,
+tudo por voltar
+ao que já não volta.
+
+Ardor que já não agoniza,
+sem força,
+já que não move o inexistente.
+
+O lar que já o foi
+agora não se encontra
+nem adentro.
+
+Escapar para se perder
+em um lugar diferente, porém.
+
+O que se sacrificou para ter
+aquilo que terás que sacrificar
+para voltar,
+onde não se volta mais.
+
+A transformação jazia,
+por medo do que um dia fora evolução.
+
+Tornar-te como a filha em O Cavalo de Turim,
+que lembrava
+que a maior das realizações da potência
+poderia tornar
+a parte do destino que não se controla
+em indiferença.
+
+O ranger dos tão rígidos
+reflete, ainda assim,
+a dada importância do âmago
+pela mudança.
+
+E nesse
+se atentará para a cura
+das feridas que carregam
+a pele imune pela emoção.
+
+Mesmo sabendo então
+sobre a força da vitalidade,
+como, nesse mesmo momento,
+reacendê-la
+sem sacrificar
+o que se recebeu depois do martírio?
+
+E de que se alimenta
+qualquer potência vital,
+senão da dor?
+
+Aquela que só através,
+e mesmo sendo a causa,
+poderia então conseguir,
+sem conseguir nada,
+alcançar a última esperança da volta.`,
+    translation: `Anhelo
+el regreso de aquello que ya no regresa,
+escrito por manos quebradas
+que nacen del ruego.
+
+El gozo
+solo se encuentra dentro de lo incierto.
+
+Odio…
+por aquello que se volvió demasiado cierto
+y por el medio que alcanza
+el alma desconcertante.
+
+Maldiciones y desesperanzas,
+todo por regresar
+a aquello que ya no regresa.
+
+Ardor que ya no agoniza,
+sin fuerza,
+pues no mueve lo inexistente.
+
+El hogar que un día lo fue
+ahora no se encuentra
+ni siquiera dentro.
+
+Escapar para perderse,
+sin embargo,
+en un lugar diferente.
+
+Lo que se sacrificó para tener
+aquello que tendrás que sacrificar
+para regresar
+adonde ya no se regresa.
+
+La transformación yacía
+por miedo a lo que un día fue evolución.
+
+Volverte como la hija de El caballo de Turín,
+que recordaba
+que la mayor realización de la potencia
+podría convertir
+la parte del destino que no se controla
+en indiferencia.
+
+El crujir de los tan rígidos
+refleja, aun así,
+la importancia concedida por lo más íntimo
+al cambio.
+
+Y en ello
+se atenderá a la cura
+de las heridas que cargan
+una piel inmune a la emoción.
+
+Aun sabiendo entonces
+de la fuerza de la vitalidad,
+¿cómo, en ese mismo instante,
+reavivarla
+sin sacrificar
+lo que se recibió después del martirio?
+
+¿Y de qué se alimenta
+toda potencia vital,
+sino del dolor?
+
+Aquel que solo atravesándolo,
+y aun siendo la causa,
+podría entonces conseguir,
+sin conseguir nada,
+alcanzar la última esperanza del regreso.`,
+  },
 ];
 
 export const FOUNDATIONAL_BOOK_POEMS_BY_POET = new Map(

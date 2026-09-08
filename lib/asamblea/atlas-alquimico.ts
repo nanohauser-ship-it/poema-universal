@@ -9,7 +9,9 @@ export type GeneratedAlchemicalPlate = {
   title: string;
   caption: string;
   imageBase64: string;
-  mimeType: "image/webp";
+  mimeType:
+    | "image/webp"
+    | "image/svg+xml";
 };
 
 export const ALCHEMICAL_PLATE_TYPES:

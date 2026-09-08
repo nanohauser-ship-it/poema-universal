@@ -174,10 +174,6 @@ Que lo que no pudo salir, al fin, tenga forma.`;
               Cartas
             </Link>
 
-            <Link href="/rinconcito" className="transition hover:text-black">
-              El Rinconcito
-            </Link>
-
             <Link href="/noches-en-paz" className="transition hover:text-black">
               Noches en Paz
             </Link>

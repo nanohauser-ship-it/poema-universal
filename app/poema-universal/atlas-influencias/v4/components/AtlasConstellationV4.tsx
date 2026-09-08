@@ -194,6 +194,24 @@ export default function AtlasConstellationV4() {
   const [targetFocusZoom, setTargetFocusZoom] =
     useState(1);
 
+  const [travelOpen, setTravelOpen] =
+    useState(false);
+
+  const [travelFrom, setTravelFrom] =
+    useState("Homero");
+
+  const [travelTo, setTravelTo] =
+    useState("Jorge Luis Borges");
+
+  const [travelPath, setTravelPath] =
+    useState<string[]>([]);
+
+  const [travelStep, setTravelStep] =
+    useState(0);
+
+  const [travelError, setTravelError] =
+    useState("");
+
   const pointerLastXRef =
     useRef(0);
 
@@ -863,6 +881,72 @@ export default function AtlasConstellationV4() {
     return plain?.[0] ?? null;
   }
 
+  function findTravelPath(
+    fromKey: string,
+    toKey: string
+  ) {
+    if (fromKey === toKey) {
+      return [fromKey];
+    }
+
+    const queue: string[][] = [
+      [fromKey],
+    ];
+
+    const visited =
+      new Set<string>([
+        fromKey,
+      ]);
+
+    while (queue.length) {
+      const path =
+        queue.shift()!;
+
+      const current =
+        path[path.length - 1];
+
+      for (const edge of graph.edges) {
+        let next: string | null =
+          null;
+
+        if (
+          edge.source.key ===
+          current
+        ) {
+          next =
+            edge.target.key;
+        } else if (
+          edge.target.key ===
+          current
+        ) {
+          next =
+            edge.source.key;
+        }
+
+        if (
+          !next ||
+          visited.has(next)
+        ) {
+          continue;
+        }
+
+        const nextPath = [
+          ...path,
+          next,
+        ];
+
+        if (next === toKey) {
+          return nextPath;
+        }
+
+        visited.add(next);
+        queue.push(nextPath);
+      }
+    }
+
+    return [];
+  }
+
   function focusNode(
     node: GraphNode
   ) {
@@ -985,6 +1069,178 @@ export default function AtlasConstellationV4() {
     }
 
     setDragging(false);
+  }
+
+  function resolveNode(
+    value: string
+  ) {
+    const q =
+      value.trim().toLowerCase();
+
+    if (!q) {
+      return null;
+    }
+
+    return (
+      graph.nodes.find(
+        (node) =>
+          node.label
+            .toLowerCase() === q
+      ) ??
+      graph.nodes.find(
+        (node) =>
+          node.label
+            .toLowerCase()
+            .includes(q)
+      ) ??
+      null
+    );
+  }
+
+  function startTravel() {
+    setTravelError("");
+
+    const fromNode =
+      resolveNode(travelFrom);
+
+    const toNode =
+      resolveNode(travelTo);
+
+    if (!fromNode || !toNode) {
+      setTravelPath([]);
+      setTravelError(
+        "No encuentro uno de los dos nodos."
+      );
+      return;
+    }
+
+    const path =
+      findTravelPath(
+        fromNode.key,
+        toNode.key
+      );
+
+    if (!path.length) {
+      setTravelPath([]);
+      setTravelError(
+        `No existe una ruta conectada entre ${fromNode.label} y ${toNode.label} en el corpus actual.`
+      );
+      return;
+    }
+
+    setTravelPath(path);
+    setTravelStep(0);
+
+    setSelectedKey(
+      path[0]
+    );
+
+    setSelectedRelationId(
+      null
+    );
+
+    const first =
+      graph.nodes.find(
+        (node) =>
+          node.key === path[0]
+      );
+
+    if (first) {
+      setSearchQuery(
+        first.label
+      );
+      focusNode(first);
+    }
+  }
+
+  function travelNext() {
+    if (
+      !travelPath.length
+    ) {
+      return;
+    }
+
+    const nextIndex =
+      Math.min(
+        travelPath.length - 1,
+        travelStep + 1
+      );
+
+    setTravelStep(
+      nextIndex
+    );
+
+    const key =
+      travelPath[nextIndex];
+
+    const node =
+      graph.nodes.find(
+        (candidate) =>
+          candidate.key === key
+      );
+
+    if (!node) {
+      return;
+    }
+
+    setSelectedKey(
+      node.key
+    );
+
+    setSelectedRelationId(
+      null
+    );
+
+    setSearchQuery(
+      node.label
+    );
+
+    focusNode(node);
+  }
+
+  function travelPrev() {
+    if (
+      !travelPath.length
+    ) {
+      return;
+    }
+
+    const prevIndex =
+      Math.max(
+        0,
+        travelStep - 1
+      );
+
+    setTravelStep(
+      prevIndex
+    );
+
+    const key =
+      travelPath[prevIndex];
+
+    const node =
+      graph.nodes.find(
+        (candidate) =>
+          candidate.key === key
+      );
+
+    if (!node) {
+      return;
+    }
+
+    setSelectedKey(
+      node.key
+    );
+
+    setSelectedRelationId(
+      null
+    );
+
+    setSearchQuery(
+      node.label
+    );
+
+    focusNode(node);
   }
 
   function visibleByFilter(
@@ -1821,6 +2077,38 @@ export default function AtlasConstellationV4() {
           }}
         >
           <button
+            onClick={() =>
+              setTravelOpen(
+                (value) =>
+                  !value
+              )
+            }
+            style={{
+              height: 34,
+              padding: "0 12px",
+              border:
+                "1px solid rgba(213,182,104,.22)",
+              background:
+                travelOpen
+                  ? "rgba(213,182,104,.13)"
+                  : "rgba(3,4,4,.72)",
+              color:
+                travelOpen
+                  ? "#e0c16f"
+                  : "rgba(220,210,190,.65)",
+              backdropFilter:
+                "blur(12px)",
+              fontFamily: "inherit",
+              fontSize: 9,
+              letterSpacing:
+                ".11em",
+              cursor: "pointer",
+            }}
+          >
+            ⇢ MODO VIAJE
+          </button>
+
+          <button
             onClick={() => {
               setAutoRotate(
                 (value) =>
@@ -1926,6 +2214,240 @@ export default function AtlasConstellationV4() {
         >
           ARRASTRA PARA ROTAR
         </div>
+
+        {travelOpen && (
+          <div
+            style={{
+              position: "absolute",
+              top: 62,
+              left: 14,
+              zIndex: 21,
+              width: 330,
+              padding: 14,
+              border:
+                "1px solid rgba(213,182,104,.18)",
+              background:
+                "rgba(4,5,5,.94)",
+              backdropFilter:
+                "blur(18px)",
+              boxShadow:
+                "0 20px 60px rgba(0,0,0,.5)",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 9,
+                letterSpacing:
+                  ".16em",
+                color:
+                  "rgba(213,182,104,.65)",
+                marginBottom: 10,
+              }}
+            >
+              VIAJE ENTRE INFLUENCIAS
+            </div>
+
+            <input
+              value={travelFrom}
+              onChange={(e) =>
+                setTravelFrom(
+                  e.target.value
+                )
+              }
+              placeholder="Origen: Homero"
+              style={{
+                width: "100%",
+                height: 36,
+                boxSizing:
+                  "border-box",
+                padding:
+                  "0 10px",
+                border:
+                  "1px solid rgba(255,255,255,.09)",
+                background:
+                  "rgba(255,255,255,.025)",
+                color:
+                  "#e8dfc8",
+                fontFamily:
+                  "inherit",
+                fontSize: 11,
+                outline: "none",
+              }}
+            />
+
+            <input
+              value={travelTo}
+              onChange={(e) =>
+                setTravelTo(
+                  e.target.value
+                )
+              }
+              placeholder="Destino: Borges"
+              style={{
+                width: "100%",
+                height: 36,
+                boxSizing:
+                  "border-box",
+                marginTop: 7,
+                padding:
+                  "0 10px",
+                border:
+                  "1px solid rgba(255,255,255,.09)",
+                background:
+                  "rgba(255,255,255,.025)",
+                color:
+                  "#e8dfc8",
+                fontFamily:
+                  "inherit",
+                fontSize: 11,
+                outline: "none",
+              }}
+            />
+
+            <button
+              onClick={startTravel}
+              style={{
+                width: "100%",
+                height: 34,
+                marginTop: 8,
+                border:
+                  "1px solid rgba(213,182,104,.24)",
+                background:
+                  "rgba(213,182,104,.06)",
+                color:
+                  "#c9ad68",
+                fontFamily:
+                  "inherit",
+                fontSize: 9,
+                letterSpacing:
+                  ".11em",
+                cursor:
+                  "pointer",
+              }}
+            >
+              INICIAR VIAJE
+            </button>
+
+            {travelError && (
+              <div
+                style={{
+                  marginTop: 9,
+                  color:
+                    "rgba(220,160,120,.72)",
+                  fontSize: 9,
+                  lineHeight: 1.45,
+                }}
+              >
+                {travelError}
+              </div>
+            )}
+
+            {!!travelPath.length && (
+              <div
+                style={{
+                  marginTop: 12,
+                  paddingTop: 10,
+                  borderTop:
+                    "1px solid rgba(255,255,255,.06)",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 9,
+                    lineHeight: 1.5,
+                    color:
+                      "rgba(225,218,198,.60)",
+                  }}
+                >
+                  {travelPath
+                    .map(
+                      (key) =>
+                        graph.nodes.find(
+                          (node) =>
+                            node.key === key
+                        )?.label ??
+                        key
+                    )
+                    .join(" → ")}
+                </div>
+
+                <div
+                  style={{
+                    marginTop: 10,
+                    display: "grid",
+                    gridTemplateColumns:
+                      "1fr 1fr",
+                    gap: 6,
+                  }}
+                >
+                  <button
+                    onClick={travelPrev}
+                    disabled={
+                      travelStep === 0
+                    }
+                    style={{
+                      height: 30,
+                      border:
+                        "1px solid rgba(255,255,255,.08)",
+                      background:
+                        "transparent",
+                      color:
+                        "rgba(220,210,190,.55)",
+                      fontFamily:
+                        "inherit",
+                      fontSize: 9,
+                      cursor:
+                        travelStep === 0
+                          ? "default"
+                          : "pointer",
+                      opacity:
+                        travelStep === 0
+                          ? .35
+                          : 1,
+                    }}
+                  >
+                    ← ANTERIOR
+                  </button>
+
+                  <button
+                    onClick={travelNext}
+                    disabled={
+                      travelStep >=
+                      travelPath.length -
+                        1
+                    }
+                    style={{
+                      height: 30,
+                      border:
+                        "1px solid rgba(213,182,104,.17)",
+                      background:
+                        "rgba(213,182,104,.045)",
+                      color:
+                        "#c5a75e",
+                      fontFamily:
+                        "inherit",
+                      fontSize: 9,
+                      cursor:
+                        travelStep >=
+                        travelPath.length -
+                          1
+                          ? "default"
+                          : "pointer",
+                      opacity:
+                        travelStep >=
+                        travelPath.length -
+                          1
+                          ? .35
+                          : 1,
+                    }}
+                  >
+                    SIGUIENTE →
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <svg
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}

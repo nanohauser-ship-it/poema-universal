@@ -168,13 +168,15 @@ export default function GlobalRecorder() {
   }
 
   const room =
-    pathname
-      .replace(
-        /^\/poema-universal\/?/,
-        "",
-      )
-      .replace(/\//g, "-") ||
-    "inicio";
+    pathname === "/"
+      ? "portada"
+      : pathname
+          .replace(
+            /^\/poema-universal\/?/,
+            "",
+          )
+          .replace(/\//g, "-") ||
+        "inicio";
 
   return (
     <div

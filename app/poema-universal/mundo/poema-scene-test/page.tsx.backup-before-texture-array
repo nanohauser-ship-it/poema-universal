@@ -1,0 +1,1242 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
+import { BOOK_POEMS } from "../../components/world/MundoPoema";
+import { FOUNDATIONAL_BOOK_POEMS } from "../../data/foundationalPoems";
+
+/*
+ * CORPUS ESCÉNICO
+ *
+ * Conserva los poemas existentes de MundoPoema
+ * y añade automáticamente cualquier voz nueva
+ * presente en foundationalPoems.ts.
+ */
+const SCENE_BOOK_POEMS = [
+  ...BOOK_POEMS,
+
+  ...FOUNDATIONAL_BOOK_POEMS.filter(
+    (candidate) =>
+      !BOOK_POEMS.some(
+        (existing) =>
+          existing.poetName === candidate.poetName &&
+          existing.title === candidate.title
+      )
+  ),
+];
+
+function LivingScene({
+  poemId,
+  sceneIndex,
+  progress,
+}: {
+  poemId: string;
+  sceneIndex: number;
+  progress: number;
+}) {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef(progress);
+
+  useEffect(() => {
+    progressRef.current = progress;
+  }, [progress]);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color("#020202");
+    scene.fog = new THREE.FogExp2(0x030303, 0.06);
+
+    const camera = new THREE.PerspectiveCamera(
+      42,
+      1,
+      0.1,
+      100
+    );
+
+    camera.position.set(0, 0.1, 6);
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      powerPreference: "high-performance",
+    });
+
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio, 2)
+    );
+
+    renderer.outputColorSpace =
+      THREE.SRGBColorSpace;
+
+    mount.appendChild(renderer.domElement);
+
+    const world = new THREE.Group();
+    scene.add(world);
+
+    const ambient =
+      new THREE.AmbientLight(
+        0xffffff,
+        0.28
+      );
+
+    scene.add(ambient);
+
+    const point =
+      new THREE.PointLight(
+        0xffb061,
+        2,
+        12,
+        2
+      );
+
+    point.position.set(0, 0.3, 3);
+    scene.add(point);
+
+    const backLight =
+      new THREE.PointLight(
+        0x704020,
+        1,
+        10,
+        2
+      );
+
+    backLight.position.set(
+      -2.5,
+      1,
+      -1
+    );
+
+    scene.add(backLight);
+
+    const materials: THREE.Material[] = [];
+    const geometries: THREE.BufferGeometry[] = [];
+
+    function remember(
+      geometry: THREE.BufferGeometry,
+      material: THREE.Material
+    ) {
+      geometries.push(geometry);
+      materials.push(material);
+    }
+
+    /*
+     * 01 · EL HUERTO
+     */
+    if (poemId.startsWith("jose-naveiro")) {
+      scene.background =
+        new THREE.Color("#030402");
+
+      const earthGeo =
+        new THREE.IcosahedronGeometry(
+          1.7,
+          4
+        );
+
+      const earthMat =
+        new THREE.MeshStandardMaterial({
+          color: 0x24180e,
+          roughness: 0.95,
+          metalness: 0,
+          emissive: 0x100805,
+        });
+
+      remember(earthGeo, earthMat);
+
+      const earth =
+        new THREE.Mesh(
+          earthGeo,
+          earthMat
+        );
+
+      earth.scale.set(
+        1.25,
+        0.65,
+        1.1
+      );
+
+      earth.position.y = -0.8;
+
+      world.add(earth);
+
+      const trunkGeo =
+        new THREE.CylinderGeometry(
+          0.09,
+          0.16,
+          2.6,
+          16
+        );
+
+      const trunkMat =
+        new THREE.MeshStandardMaterial({
+          color: 0x5a3b22,
+          roughness: 1,
+        });
+
+      remember(trunkGeo, trunkMat);
+
+      const trunk =
+        new THREE.Mesh(
+          trunkGeo,
+          trunkMat
+        );
+
+      trunk.position.y = 0.55;
+      world.add(trunk);
+
+      const crownGeo =
+        new THREE.IcosahedronGeometry(
+          0.75,
+          2
+        );
+
+      const crownMat =
+        new THREE.MeshStandardMaterial({
+          color: 0x34402a,
+          roughness: 0.9,
+          emissive: 0x10160c,
+        });
+
+      remember(crownGeo, crownMat);
+
+      const crown =
+        new THREE.Mesh(
+          crownGeo,
+          crownMat
+        );
+
+      crown.position.y = 1.65;
+      crown.scale.set(
+        1.25,
+        0.85,
+        1
+      );
+
+      world.add(crown);
+
+      point.color.set(0xd18a4a);
+    }
+
+    /*
+     * 02 · LA LUZ REGRESA DESCALZA
+     */
+    else if (poemId.startsWith("asataka")) {
+      scene.background =
+        new THREE.Color("#020305");
+
+      const orbGeo =
+        new THREE.SphereGeometry(
+          0.72,
+          64,
+          64
+        );
+
+      const orbMat =
+        new THREE.MeshStandardMaterial({
+          color: 0xe7be81,
+          emissive: 0x8b5e28,
+          emissiveIntensity: 1.2,
+          roughness: 0.35,
+        });
+
+      remember(orbGeo, orbMat);
+
+      const orb =
+        new THREE.Mesh(
+          orbGeo,
+          orbMat
+        );
+
+      orb.position.y = 0.7;
+      world.add(orb);
+
+      for (const x of [-0.65, 0.65]) {
+        const railGeo =
+          new THREE.BoxGeometry(
+            0.055,
+            5.2,
+            0.055
+          );
+
+        const railMat =
+          new THREE.MeshStandardMaterial({
+            color: 0x7f8790,
+            metalness: 0.85,
+            roughness: 0.28,
+          });
+
+        remember(
+          railGeo,
+          railMat
+        );
+
+        const rail =
+          new THREE.Mesh(
+            railGeo,
+            railMat
+          );
+
+        rail.position.set(
+          x,
+          -0.4,
+          -0.4
+        );
+
+        world.add(rail);
+      }
+
+      world.rotation.z =
+        Math.PI / 2;
+
+      point.color.set(0xffd18d);
+    }
+
+    /*
+     * 03 · HABITACIÓN BLANCA
+     */
+    else if (poemId.startsWith("azucena")) {
+      scene.background =
+        new THREE.Color("#070707");
+
+      const roomGeo =
+        new THREE.BoxGeometry(
+          3.5,
+          3.7,
+          3.2
+        );
+
+      const roomMat =
+        new THREE.MeshBasicMaterial({
+          color: 0xe9e5dc,
+          transparent: true,
+          opacity: 0.09,
+          wireframe: true,
+        });
+
+      remember(
+        roomGeo,
+        roomMat
+      );
+
+      const room =
+        new THREE.Mesh(
+          roomGeo,
+          roomMat
+        );
+
+      world.add(room);
+
+      const lightGeo =
+        new THREE.SphereGeometry(
+          0.58,
+          48,
+          48
+        );
+
+      const lightMat =
+        new THREE.MeshStandardMaterial({
+          color: 0xf1eee8,
+          emissive: 0xffffff,
+          emissiveIntensity: 0.75,
+          roughness: 0.2,
+        });
+
+      remember(
+        lightGeo,
+        lightMat
+      );
+
+      const light =
+        new THREE.Mesh(
+          lightGeo,
+          lightMat
+        );
+
+      light.position.set(
+        0,
+        -0.35,
+        0
+      );
+
+      world.add(light);
+
+      point.color.set(0xf5eee3);
+    }
+
+    /*
+     * 04 · EL TIEMPO
+     */
+    else if (
+      poemId.startsWith(
+        "andres-giraldo"
+      )
+    ) {
+      scene.background =
+        new THREE.Color("#030303");
+
+      for (let i = 0; i < 4; i++) {
+        const ringGeo =
+          new THREE.TorusGeometry(
+            0.75 + i * 0.33,
+            0.022,
+            12,
+            100
+          );
+
+        const ringMat =
+          new THREE.MeshStandardMaterial({
+            color:
+              i % 2 === 0
+                ? 0xc99b5d
+                : 0x6c6259,
+            emissive: 0x2b1709,
+            roughness: 0.45,
+            metalness: 0.55,
+          });
+
+        remember(
+          ringGeo,
+          ringMat
+        );
+
+        const ring =
+          new THREE.Mesh(
+            ringGeo,
+            ringMat
+          );
+
+        ring.rotation.x =
+          i * 0.48;
+
+        ring.rotation.y =
+          i * 0.37;
+
+        ring.userData.speed =
+          0.12 +
+          i * 0.05;
+
+        world.add(ring);
+      }
+
+      point.color.set(0xe6a35c);
+    }
+
+    /*
+     * 05 · LO QUE PERMANECE
+     */
+    else if (
+      poemId.startsWith("johan")
+    ) {
+      scene.background =
+        new THREE.Color("#020203");
+
+      for (const x of [-0.82, 0.82]) {
+        const bodyGeo =
+          new THREE.SphereGeometry(
+            0.48,
+            48,
+            48
+          );
+
+        const bodyMat =
+          new THREE.MeshStandardMaterial({
+            color: 0x5b4650,
+            emissive: 0x2b1720,
+            emissiveIntensity: 0.7,
+            roughness: 0.5,
+          });
+
+        remember(
+          bodyGeo,
+          bodyMat
+        );
+
+        const body =
+          new THREE.Mesh(
+            bodyGeo,
+            bodyMat
+          );
+
+        body.position.x = x;
+
+        body.userData.side = x;
+
+        world.add(body);
+      }
+
+      point.color.set(0xd38b8f);
+    }
+
+    /*
+     * RESTO DE VOCES
+     * Base provisional hasta diseñar
+     * su escena específica.
+     */
+    else {
+      const formGeo =
+        new THREE.IcosahedronGeometry(
+          1.25,
+          3
+        );
+
+      const hue =
+        (sceneIndex * 0.137) % 1;
+
+      const color =
+        new THREE.Color().setHSL(
+          hue,
+          0.35,
+          0.4
+        );
+
+      const formMat =
+        new THREE.MeshStandardMaterial({
+          color,
+          emissive:
+            color.clone().multiplyScalar(
+              0.2
+            ),
+          emissiveIntensity: 0.6,
+          roughness: 0.6,
+          metalness: 0.1,
+        });
+
+      remember(
+        formGeo,
+        formMat
+      );
+
+      const form =
+        new THREE.Mesh(
+          formGeo,
+          formMat
+        );
+
+      world.add(form);
+
+      point.color.copy(color);
+    }
+
+    /*
+     * PARTÍCULAS COMUNES
+     */
+    const particleCount = 700;
+
+    const positions =
+      new Float32Array(
+        particleCount * 3
+      );
+
+    for (
+      let i = 0;
+      i < particleCount;
+      i++
+    ) {
+      positions[i * 3] =
+        (Math.random() - 0.5) * 8;
+
+      positions[i * 3 + 1] =
+        (Math.random() - 0.5) * 7;
+
+      positions[i * 3 + 2] =
+        (Math.random() - 0.5) * 4;
+    }
+
+    const particlesGeo =
+      new THREE.BufferGeometry();
+
+    particlesGeo.setAttribute(
+      "position",
+      new THREE.BufferAttribute(
+        positions,
+        3
+      )
+    );
+
+    const particlesMat =
+      new THREE.PointsMaterial({
+        color: 0xb88b61,
+        size: 0.013,
+        transparent: true,
+        opacity: 0.13,
+        depthWrite: false,
+      });
+
+    geometries.push(
+      particlesGeo
+    );
+
+    materials.push(
+      particlesMat
+    );
+
+    const particles =
+      new THREE.Points(
+        particlesGeo,
+        particlesMat
+      );
+
+    scene.add(particles);
+
+    const resize = () => {
+      const rect =
+        mount.getBoundingClientRect();
+
+      const width =
+        Math.max(
+          1,
+          rect.width
+        );
+
+      const height =
+        Math.max(
+          1,
+          rect.height
+        );
+
+      camera.aspect =
+        width / height;
+
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(
+        width,
+        height,
+        false
+      );
+    };
+
+    const observer =
+      new ResizeObserver(resize);
+
+    observer.observe(mount);
+    resize();
+
+    let frame = 0;
+    let last = performance.now();
+    let smoothProgress = 0;
+
+    const animate = (
+      now: number
+    ) => {
+      frame =
+        requestAnimationFrame(
+          animate
+        );
+
+      const dt =
+        Math.min(
+          (now - last) / 1000,
+          0.1
+        );
+
+      last = now;
+
+      const t = now / 1000;
+
+      smoothProgress =
+        THREE.MathUtils.lerp(
+          smoothProgress,
+          progressRef.current,
+          0.035
+        );
+
+      const p =
+        smoothProgress;
+
+      const breath =
+        Math.sin(t * 0.7) *
+          0.5 +
+        0.5;
+
+      world.rotation.y =
+        Math.sin(t * 0.13) *
+        0.10;
+
+      world.rotation.x =
+        Math.sin(t * 0.09) *
+        0.035;
+
+      world.children.forEach(
+        (child, i) => {
+          if (
+            child instanceof
+            THREE.Mesh
+          ) {
+            if (
+              child.userData.speed
+            ) {
+              child.rotation.z +=
+                dt *
+                child.userData.speed;
+            }
+          }
+        }
+      );
+
+      point.intensity =
+        1.1 +
+        p * 3.1 +
+        breath * 0.35;
+
+      particles.rotation.y +=
+        dt *
+        (0.008 + p * 0.03);
+
+      particlesMat.opacity =
+        0.08 +
+        p * 0.26;
+
+      world.scale.setScalar(
+        0.97 +
+        breath * 0.018 +
+        p * 0.035
+      );
+
+      camera.position.x =
+        Math.sin(t * 0.08) *
+        0.08;
+
+      camera.position.y =
+        0.1 +
+        Math.sin(t * 0.11) *
+        0.05;
+
+      camera.lookAt(
+        0,
+        0,
+        0
+      );
+
+      renderer.render(
+        scene,
+        camera
+      );
+    };
+
+    frame =
+      requestAnimationFrame(
+        animate
+      );
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+
+      geometries.forEach(
+        geometry =>
+          geometry.dispose()
+      );
+
+      materials.forEach(
+        material =>
+          material.dispose()
+      );
+
+      renderer.dispose();
+      renderer.domElement.remove();
+    };
+  }, [poemId, sceneIndex]);
+
+  return (
+    <div
+      ref={mountRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+      }}
+    />
+  );
+}
+
+export default function Page() {
+  const [index, setIndex] =
+    useState(0);
+
+  const [mode, setMode] =
+    useState<
+      "original" | "translation"
+    >("original");
+
+  const [progress, setProgress] =
+    useState(0);
+
+  const readerRef =
+    useRef<HTMLDivElement>(null);
+
+  const poem =
+    SCENE_BOOK_POEMS[index];
+
+  const total =
+    SCENE_BOOK_POEMS.length;
+
+  const visibleText =
+    mode === "translation" &&
+    poem.translation
+      ? poem.translation
+      : poem.poem;
+
+  const lines =
+    useMemo(
+      () =>
+        visibleText.split("\n"),
+      [visibleText]
+    );
+
+  function changePoem(
+    direction: number
+  ) {
+    setIndex(current => {
+      const next =
+        (current +
+          direction +
+          total) %
+        total;
+
+      return next;
+    });
+
+    setMode("original");
+    setProgress(0);
+
+    requestAnimationFrame(() => {
+      if (readerRef.current) {
+        readerRef.current.scrollTop =
+          0;
+      }
+    });
+  }
+
+  function handleScroll() {
+    const el =
+      readerRef.current;
+
+    if (!el) return;
+
+    const max =
+      el.scrollHeight -
+      el.clientHeight;
+
+    setProgress(
+      max > 0
+        ? Math.min(
+            1,
+            Math.max(
+              0,
+              el.scrollTop / max
+            )
+          )
+        : 0
+    );
+  }
+
+  useEffect(() => {
+    function keydown(
+      event: KeyboardEvent
+    ) {
+      if (
+        event.key ===
+        "ArrowLeft"
+      ) {
+        changePoem(-1);
+      }
+
+      if (
+        event.key ===
+        "ArrowRight"
+      ) {
+        changePoem(1);
+      }
+    }
+
+    window.addEventListener(
+      "keydown",
+      keydown
+    );
+
+    return () =>
+      window.removeEventListener(
+        "keydown",
+        keydown
+      );
+  });
+
+  if (!poem) {
+    return null;
+  }
+
+  return (
+    <main
+      style={{
+        position: "fixed",
+        inset: 0,
+        display: "grid",
+        gridTemplateColumns:
+          "minmax(420px, 42%) 1fr",
+        overflow: "hidden",
+        background: "#050403",
+        color: "#eee8de",
+      }}
+    >
+      <section
+        style={{
+          position: "relative",
+          minHeight: 0,
+          minWidth: 0,
+          overflow: "hidden",
+          borderRight:
+            "1px solid rgba(184,132,69,.16)",
+          background:
+            "linear-gradient(135deg,#080604,#0d0906)",
+        }}
+      >
+        <header
+          style={{
+            position: "absolute",
+            zIndex: 10,
+            top: 0,
+            left: 0,
+            right: 0,
+            padding:
+              "26px 38px 20px",
+            display: "flex",
+            justifyContent:
+              "space-between",
+            alignItems: "center",
+            background:
+              "linear-gradient(#080604 68%,transparent)",
+          }}
+        >
+          <button
+            onClick={() =>
+              changePoem(-1)
+            }
+            style={{
+              border: 0,
+              background:
+                "transparent",
+              color: "#b58b56",
+              cursor: "pointer",
+              fontSize: 18,
+            }}
+          >
+            ←
+          </button>
+
+          <div
+            style={{
+              fontSize: 9,
+              letterSpacing:
+                ".22em",
+              color: "#9d7543",
+            }}
+          >
+            LIBRO DE LAS SESENTA VOCES
+          </div>
+
+          <div
+            style={{
+              fontSize: 10,
+              letterSpacing:
+                ".12em",
+              opacity: 0.48,
+            }}
+          >
+            {String(
+              index + 1
+            ).padStart(2, "0")}
+            {" / "}
+            {String(
+              total
+            ).padStart(2, "0")}
+          </div>
+
+          <button
+            onClick={() =>
+              changePoem(1)
+            }
+            style={{
+              border: 0,
+              background:
+                "transparent",
+              color: "#b58b56",
+              cursor: "pointer",
+              fontSize: 18,
+            }}
+          >
+            →
+          </button>
+        </header>
+
+        <div
+          ref={readerRef}
+          onScroll={
+            handleScroll
+          }
+          style={{
+            position: "absolute",
+            inset: 0,
+            overflowY: "auto",
+            overflowX: "hidden",
+            boxSizing: "border-box",
+            padding:
+              "118px 68px 220px",
+            scrollbarWidth: "thin",
+            overscrollBehavior: "contain",
+            touchAction: "pan-y",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          <div
+            style={{
+              color: "#a9783e",
+              fontSize: 10,
+              letterSpacing:
+                ".19em",
+              textTransform:
+                "uppercase",
+              marginBottom: 15,
+            }}
+          >
+            {poem.poetName}
+            {" · "}
+            {poem.country}
+          </div>
+
+          <h1
+            style={{
+              fontFamily:
+                "Georgia, Times New Roman, serif",
+              fontSize:
+                "clamp(42px,4.6vw,72px)",
+              fontWeight: 400,
+              lineHeight: 0.96,
+              letterSpacing:
+                "-.045em",
+              margin:
+                "0 0 30px",
+              maxWidth: 580,
+            }}
+          >
+            {poem.title}
+          </h1>
+
+          {poem.translation && (
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                marginBottom: 42,
+              }}
+            >
+              <button
+                onClick={() =>
+                  setMode(
+                    "original"
+                  )
+                }
+                style={{
+                  border:
+                    "1px solid rgba(170,122,64,.26)",
+                  background:
+                    mode ===
+                    "original"
+                      ? "rgba(170,122,64,.13)"
+                      : "transparent",
+                  color: "#b98b51",
+                  padding:
+                    "7px 11px",
+                  cursor:
+                    "pointer",
+                  fontSize: 9,
+                  letterSpacing:
+                    ".12em",
+                }}
+              >
+                ORIGINAL
+              </button>
+
+              <button
+                onClick={() =>
+                  setMode(
+                    "translation"
+                  )
+                }
+                style={{
+                  border:
+                    "1px solid rgba(170,122,64,.26)",
+                  background:
+                    mode ===
+                    "translation"
+                      ? "rgba(170,122,64,.13)"
+                      : "transparent",
+                  color: "#b98b51",
+                  padding:
+                    "7px 11px",
+                  cursor:
+                    "pointer",
+                  fontSize: 9,
+                  letterSpacing:
+                    ".12em",
+                }}
+              >
+                TRADUCCIÓN
+              </button>
+            </div>
+          )}
+
+          {!poem.translation && (
+            <div
+              style={{
+                marginBottom: 38,
+                fontSize: 9,
+                letterSpacing:
+                  ".16em",
+                color:
+                  "rgba(184,139,83,.58)",
+              }}
+            >
+              {poem.originalLabel}
+            </div>
+          )}
+
+          <div
+            style={{
+              maxWidth: 500,
+              fontFamily:
+                "Georgia, Times New Roman, serif",
+              fontSize: 18,
+              lineHeight: 1.82,
+            }}
+          >
+            {lines.map(
+              (line, i) =>
+                line ? (
+                  <div key={i}>
+                    {line}
+                  </div>
+                ) : (
+                  <div
+                    key={i}
+                    style={{
+                      height: 27,
+                    }}
+                  />
+                )
+            )}
+          </div>
+
+          <div
+            style={{
+              height: "45vh",
+            }}
+          />
+        </div>
+      </section>
+
+      <section
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          background: "#020202",
+        }}
+      >
+        <LivingScene
+          key={poem.id}
+          poemId={poem.id}
+          sceneIndex={index}
+          progress={progress}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            pointerEvents:
+              "none",
+            background:
+              "radial-gradient(circle at center,transparent 25%,rgba(0,0,0,.48) 100%)",
+          }}
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            top: 35,
+            left: 40,
+            pointerEvents:
+              "none",
+          }}
+        >
+          <div
+            style={{
+              color: "#a77a42",
+              fontSize: 9,
+              letterSpacing:
+                ".24em",
+              marginBottom: 9,
+            }}
+          >
+            ESCENA POÉTICA ·{" "}
+            {String(
+              index + 1
+            ).padStart(2, "0")}
+          </div>
+
+          <div
+            style={{
+              fontFamily:
+                "Georgia",
+              fontSize: 14,
+              opacity: 0.54,
+            }}
+          >
+            {poem.title}
+          </div>
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            right: 30,
+            top: "50%",
+            width: 1,
+            height: 180,
+            transform:
+              "translateY(-50%)",
+            background:
+              "rgba(255,255,255,.10)",
+          }}
+        >
+          <div
+            style={{
+              width: 3,
+              height:
+                `${progress * 100}%`,
+              background:
+                "#ad7639",
+              transition:
+                "height 80ms linear",
+            }}
+          />
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: 40,
+            bottom: 34,
+            fontSize: 9,
+            letterSpacing:
+              ".18em",
+            opacity: 0.32,
+          }}
+        >
+          ← → CAMBIAR VOZ ·
+          DESPLAZA EL POEMA
+        </div>
+      </section>
+    </main>
+  );
+}

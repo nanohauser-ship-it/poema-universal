@@ -2,15 +2,26 @@
 
 import {
   useEffect,
+  useRef,
   useState,
 } from "react";
 
 import Link from "next/link";
-
 import GlobalRecorder from "./GlobalRecorder";
 
 const KEY =
   "poema-universal-admin-secret";
+
+const POSITION_KEY =
+  "poema-universal-private-studio-position";
+
+const PANEL_WIDTH = 360;
+const EDGE = 12;
+
+type Position = {
+  x: number;
+  y: number;
+};
 
 export default function PrivateStudio() {
   const [authorized, setAuthorized] =
@@ -19,6 +30,24 @@ export default function PrivateStudio() {
   const [open, setOpen] =
     useState(false);
 
+  const [position, setPosition] =
+    useState<Position>({
+      x: 20,
+      y: 100,
+    });
+
+  const [dragging, setDragging] =
+    useState(false);
+
+  const panelRef =
+    useRef<HTMLElement | null>(null);
+
+  const dragOffset =
+    useRef({
+      x: 0,
+      y: 0,
+    });
+
   useEffect(() => {
     const secret =
       sessionStorage.getItem(KEY);
@@ -26,6 +55,87 @@ export default function PrivateStudio() {
     if (secret) {
       void verify(secret);
     }
+  }, []);
+
+  useEffect(() => {
+    const saved =
+      sessionStorage.getItem(
+        POSITION_KEY,
+      );
+
+    if (saved) {
+      try {
+        const parsed =
+          JSON.parse(saved) as Position;
+
+        setPosition(parsed);
+        return;
+      } catch {
+        // Ignorar posición inválida.
+      }
+    }
+
+    setPosition({
+      x: Math.max(
+        EDGE,
+        window.innerWidth -
+          PANEL_WIDTH -
+          22,
+      ),
+      y: Math.max(
+        EDGE,
+        window.innerHeight -
+          520,
+      ),
+    });
+  }, []);
+
+  useEffect(() => {
+    function keepInsideWindow() {
+      if (!panelRef.current) {
+        return;
+      }
+
+      const rect =
+        panelRef.current.getBoundingClientRect();
+
+      setPosition((current) => {
+        const next = {
+          x: Math.max(
+            EDGE,
+            Math.min(
+              current.x,
+              window.innerWidth -
+                rect.width -
+                EDGE,
+            ),
+          ),
+          y: Math.max(
+            EDGE,
+            Math.min(
+              current.y,
+              window.innerHeight -
+                rect.height -
+                EDGE,
+            ),
+          ),
+        };
+
+        return next;
+      });
+    }
+
+    window.addEventListener(
+      "resize",
+      keepInsideWindow,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "resize",
+        keepInsideWindow,
+      );
+    };
   }, []);
 
   async function verify(
@@ -47,7 +157,6 @@ export default function PrivateStudio() {
     if (!response.ok) {
       sessionStorage.removeItem(KEY);
       setAuthorized(false);
-
       return false;
     }
 
@@ -80,6 +189,139 @@ export default function PrivateStudio() {
         "Clave incorrecta.",
       );
     }
+  }
+
+  function startDrag(
+    event: React.PointerEvent<HTMLElement>,
+  ) {
+    if (
+      event.button !== 0 ||
+      !panelRef.current
+    ) {
+      return;
+    }
+
+    const target =
+      event.target as HTMLElement;
+
+    if (
+      target.closest(
+        "button, a, input, textarea, select",
+      )
+    ) {
+      return;
+    }
+
+    const rect =
+      panelRef.current.getBoundingClientRect();
+
+    dragOffset.current = {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+
+    setDragging(true);
+
+    event.currentTarget.setPointerCapture(
+      event.pointerId,
+    );
+  }
+
+  function moveDrag(
+    event: React.PointerEvent<HTMLElement>,
+  ) {
+    if (
+      !dragging ||
+      !panelRef.current
+    ) {
+      return;
+    }
+
+    const rect =
+      panelRef.current.getBoundingClientRect();
+
+    const maxX =
+      window.innerWidth -
+      rect.width -
+      EDGE;
+
+    const maxY =
+      window.innerHeight -
+      rect.height -
+      EDGE;
+
+    const nextX =
+      event.clientX -
+      dragOffset.current.x;
+
+    const nextY =
+      event.clientY -
+      dragOffset.current.y;
+
+    setPosition({
+      x: Math.max(
+        EDGE,
+        Math.min(maxX, nextX),
+      ),
+      y: Math.max(
+        EDGE,
+        Math.min(maxY, nextY),
+      ),
+    });
+  }
+
+  function stopDrag(
+    event: React.PointerEvent<HTMLElement>,
+  ) {
+    if (!dragging) {
+      return;
+    }
+
+    setDragging(false);
+
+    try {
+      event.currentTarget.releasePointerCapture(
+        event.pointerId,
+      );
+    } catch {
+      // El pointer capture ya pudo liberarse.
+    }
+
+    sessionStorage.setItem(
+      POSITION_KEY,
+      JSON.stringify(position),
+    );
+  }
+
+  function resetPosition() {
+    if (!panelRef.current) {
+      return;
+    }
+
+    const rect =
+      panelRef.current.getBoundingClientRect();
+
+    const next = {
+      x: Math.max(
+        EDGE,
+        window.innerWidth -
+          rect.width -
+          22,
+      ),
+      y: Math.max(
+        EDGE,
+        window.innerHeight -
+          rect.height -
+          22,
+      ),
+    };
+
+    setPosition(next);
+
+    sessionStorage.setItem(
+      POSITION_KEY,
+      JSON.stringify(next),
+    );
   }
 
   if (!authorized) {
@@ -136,10 +378,11 @@ export default function PrivateStudio() {
 
   return (
     <aside
+      ref={panelRef}
       style={{
         position: "fixed",
-        right: 22,
-        bottom: 22,
+        left: position.x,
+        top: position.y,
         zIndex: 999999,
         width: 330,
         padding: 14,
@@ -149,17 +392,41 @@ export default function PrivateStudio() {
         background:
           "rgba(5,4,3,.96)",
         boxShadow:
-          "0 24px 70px rgba(0,0,0,.65)",
+          dragging
+            ? "0 30px 90px rgba(0,0,0,.82)"
+            : "0 24px 70px rgba(0,0,0,.65)",
         color: "#ead9b8",
+        userSelect:
+          dragging
+            ? "none"
+            : "auto",
       }}
     >
       <header
+        onPointerDown={
+          startDrag
+        }
+        onPointerMove={
+          moveDrag
+        }
+        onPointerUp={
+          stopDrag
+        }
+        onPointerCancel={
+          stopDrag
+        }
         style={{
           display: "flex",
           justifyContent:
             "space-between",
           alignItems: "center",
           marginBottom: 14,
+          cursor:
+            dragging
+              ? "grabbing"
+              : "grab",
+          touchAction: "none",
+          userSelect: "none",
         }}
       >
         <div>
@@ -183,23 +450,75 @@ export default function PrivateStudio() {
           >
             Estudio privado
           </div>
+
+          <div
+            style={{
+              marginTop: 3,
+              color:
+                "rgba(224,182,94,.42)",
+              fontSize: 8,
+              letterSpacing:
+                ".10em",
+            }}
+          >
+            ARRASTRAR PARA MOVER
+          </div>
         </div>
 
-        <button
-          onClick={() =>
-            setOpen(false)
-          }
+        <div
           style={{
-            background:
-              "transparent",
-            border: 0,
-            color: "#cfa85a",
-            fontSize: 20,
-            cursor: "pointer",
+            display: "flex",
+            gap: 4,
+            alignItems: "center",
           }}
         >
-          −
-        </button>
+          <button
+            onClick={
+              resetPosition
+            }
+            title="Volver a la esquina"
+            style={{
+              width: 28,
+              height: 28,
+              display: "grid",
+              placeItems:
+                "center",
+              background:
+                "transparent",
+              border: 0,
+              color:
+                "rgba(207,168,90,.6)",
+              fontSize: 13,
+              cursor:
+                "pointer",
+            }}
+          >
+            ↘
+          </button>
+
+          <button
+            onClick={() =>
+              setOpen(false)
+            }
+            title="Minimizar"
+            style={{
+              width: 28,
+              height: 28,
+              display: "grid",
+              placeItems:
+                "center",
+              background:
+                "transparent",
+              border: 0,
+              color: "#cfa85a",
+              fontSize: 20,
+              cursor:
+                "pointer",
+            }}
+          >
+            −
+          </button>
+        </div>
       </header>
 
       <GlobalRecorder />

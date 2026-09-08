@@ -1,7 +1,14 @@
-import { redirect } from "next/navigation";
+import {
+  BestiaryHall,
+} from "./components/BestiaryHall";
 
-export default function BestiarioPoeticoPage() {
-  redirect(
-    "/poema-universal/bestiario-poetico/asamblea"
-  );
+export const metadata = {
+  title:
+    "Bestiario Poético | Poema Universal",
+  description:
+    "Invocación, alquimia y archivo de las criaturas del Bestiario Poético.",
+};
+
+export default function BestiaryPage() {
+  return <BestiaryHall />;
 }

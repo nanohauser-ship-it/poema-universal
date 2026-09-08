@@ -52,14 +52,20 @@ async function withStore<T>(
     const store = transaction.objectStore(POEMS_STORE);
     const request = operation(store);
 
-    request.onsuccess = () => resolve(request.result);
+    // A successful request can still belong to an aborted transaction.
+    let result: T;
+    request.onsuccess = () => { result = request.result; };
     request.onerror = () =>
       reject(
         request.error ??
           new Error("El archivo local no respondió."),
       );
 
-    transaction.oncomplete = () => database.close();
+    transaction.oncomplete = () => { database.close(); resolve(result); };
+    transaction.onabort = () => {
+      database.close();
+      reject(transaction.error ?? new Error("El guardado fue cancelado."));
+    };
     transaction.onerror = () => {
       database.close();
       reject(

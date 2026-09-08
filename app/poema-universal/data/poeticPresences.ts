@@ -140,6 +140,30 @@ const CONFIRMED_METADATA_BY_POSITION: Readonly<
     languageCode: "und",
     languageLabel: "Lengua pendiente",
   },
+  9: {
+    country: "Sudáfrica",
+    slug: "malika-ndlovu",
+    portraitUrl: "/avatars/avatar-09.webp",
+    languageCode: "en",
+    languageLabel: "English",
+    territoryNative: "South Africa",
+  },
+  10: {
+    country: "Rusia",
+    slug: "sasha",
+    portraitUrl: "/avatars/avatar-10.webp",
+    languageCode: "ru",
+    languageLabel: "Русский",
+    territoryNative: "Россия",
+  },
+  11: {
+    country: "Brasil",
+    slug: "gabriel",
+    portraitUrl: "/avatars/avatar-11.webp",
+    languageCode: "pt",
+    languageLabel: "Português",
+    territoryNative: "Brasil",
+  },
 };
 
 function buildPoem(

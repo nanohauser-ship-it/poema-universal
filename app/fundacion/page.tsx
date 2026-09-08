@@ -79,10 +79,6 @@ export default function FundacionPage() {
               Duelo
             </Link>
 
-            <Link href="/rinconcito" className="transition hover:text-black">
-              El Rinconcito
-            </Link>
-
             <Link href="/fundacion" className="font-medium text-black">
               Fundación
             </Link>

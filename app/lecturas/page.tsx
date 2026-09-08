@@ -244,10 +244,6 @@ export default function LecturasPage() {
               Cartas
             </Link>
 
-            <Link href="/rinconcito" className="hover:text-white">
-              El Rinconcito
-            </Link>
-
             <Link href="/noches-en-paz" className="hover:text-white">
               Noches en Paz
             </Link>

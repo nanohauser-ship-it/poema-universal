@@ -14,6 +14,7 @@ import WorldGlobeLive from "./components/WorldGlobeLive";
 import { CURATED_VOICES_BY_POSITION } from "./data/curatedVoices";
 
 import styles from "./PoemaUniversalPage.module.css";
+import { PresentationVivaPortal } from "./components/PresentationVivaPortal";
 
 const PRESENTATION_DATE = new Date(
   "2027-01-01T00:00:00+01:00"
@@ -126,6 +127,10 @@ const navigationLinks = [
   {
     label: "Las voces",
     href: "#voces",
+  },
+  {
+    label: "El Museo",
+    href: "/museo-de-los-tres-mundos",
   },
   {
     label: "El avatar",
@@ -766,6 +771,8 @@ export default function PoemaUniversalPage() {
             </div>
 
             <div className={styles.globeStage}>
+              <PresentationVivaPortal />
+
               <WorldGlobeLive />
             </div>
           </div>

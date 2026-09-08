@@ -8,7 +8,7 @@ import ThreePresencesEntrance from "../components/ThreePresencesEntrance";
 
 const tools = [
   {
-    number: "01",
+    number: "07",
     title: "Matriz Poética",
     anchor: "#matriz-poetica",
     description:
@@ -41,6 +41,21 @@ const tools = [
     anchor: "#atlas-interior",
     description:
       "Cartografía memoria, cuerpo, territorio, obsesiones y lugares de procedencia.",
+  },
+  {
+    number: "06",
+    title: "El Rinconcito",
+    anchor: "#el-rinconcito",
+    description:
+      "Un espacio íntimo para conservar palabras, imágenes, recuerdos y aquello que no debería desaparecer.",
+  },
+
+  {
+    number: "06",
+    title: "Verso · Tecno · Embrión",
+    description:
+      "Laboratorio sonoro donde el verso, el ritmo y el lenguaje se transforman en materia electrónica.",
+    anchor: "#verso-tecno-embrion",
   },
 ];
 
@@ -110,7 +125,7 @@ export default function HerramientasLiterariasPage() {
             <div className="mt-12 border-y border-white/10">
               {tools.map((tool) => (
                 <Link
-                  key={tool.number}
+                  key={tool.anchor}
                   href={tool.anchor}
                   className="group grid gap-4 border-b border-white/10 py-6 last:border-b-0 sm:grid-cols-[54px_1fr_28px] sm:items-center"
                 >
@@ -145,7 +160,7 @@ export default function HerramientasLiterariasPage() {
         <div className="mx-auto flex max-w-[1380px] gap-7 overflow-x-auto px-5 py-5 sm:px-8 lg:px-12">
           {tools.map((tool) => (
             <Link
-              key={tool.number}
+              key={tool.anchor}
               href={tool.anchor}
               className="shrink-0 text-[8px] uppercase tracking-[0.3em] text-white/36 transition hover:text-[#c7a467]"
             >
@@ -175,6 +190,51 @@ export default function HerramientasLiterariasPage() {
         <section id="atlas-interior" className="scroll-mt-20">
           <AtlasInteriorEntrance />
         </section>
+        <section
+          id="verso-tecno-embrion"
+          className="relative scroll-mt-20 overflow-hidden bg-[#07090b] px-5 py-28 sm:px-8 lg:px-12 lg:py-36"
+        >
+          <div className="mx-auto max-w-[1380px]">
+            <div className="grid gap-12 border-t border-white/10 pt-10 lg:grid-cols-[220px_1fr] lg:gap-20">
+              <div>
+                <span className="text-[9px] uppercase tracking-[0.34em] text-[#c7a467]">
+                  07 · Laboratorio sonoro
+                </span>
+              </div>
+
+              <div className="max-w-4xl">
+                <p className="mb-5 text-[9px] uppercase tracking-[0.38em] text-white/35">
+                  Poema Universal · Herramientas
+                </p>
+
+                <h2 className="font-serif text-4xl font-light tracking-[-0.03em] text-[#f2eadc] sm:text-5xl lg:text-7xl">
+                  Verso · Tecno · Embrión
+                </h2>
+
+                <p className="mt-8 max-w-2xl font-serif text-lg leading-relaxed text-white/55 sm:text-xl">
+                  Un organismo experimental que convierte palabra,
+                  ritmo y sensibilidad poética en materia electrónica.
+                  El poema deja de ser solamente texto y comienza a
+                  comportarse como pulso, estructura y sonido.
+                </p>
+
+                <div className="mt-10 flex flex-wrap items-center gap-6">
+                  <Link
+                    href="/laboratorio/verso-tecno"
+                    className="inline-flex items-center gap-4 border-b border-[#c7a467]/45 pb-2 text-[10px] uppercase tracking-[0.3em] text-[#c7a467] transition hover:border-[#c7a467] hover:text-[#ead3a6]"
+                  >
+                    Entrar al laboratorio
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+
+                  <span className="text-[8px] uppercase tracking-[0.28em] text-white/22">
+                    Verso → ritmo → materia electrónica
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <footer className="border-t border-white/10">
@@ -191,6 +251,47 @@ export default function HerramientasLiterariasPage() {
           </Link>
         </div>
       </footer>
-    </main>
+    
+      <section
+        id="el-rinconcito"
+        className="relative overflow-hidden bg-[#080706] px-5 py-28 sm:px-8 lg:px-12 lg:py-36"
+      >
+        <div className="mx-auto max-w-[1380px]">
+          <div className="grid gap-12 border-t border-white/10 pt-10 lg:grid-cols-[220px_1fr] lg:gap-20">
+
+            <div>
+              <span className="text-[9px] uppercase tracking-[0.34em] text-[#c7a467]">
+                05 · Memoria íntima
+              </span>
+            </div>
+
+            <div className="max-w-4xl">
+              <p className="mb-5 text-[9px] uppercase tracking-[0.38em] text-white/35">
+                Poema Universal · Herramientas
+              </p>
+
+              <h2 className="font-serif text-4xl font-light tracking-[-0.03em] text-[#f2eadc] sm:text-5xl lg:text-7xl">
+                El Rinconcito
+              </h2>
+
+              <p className="mt-8 max-w-2xl font-serif text-lg leading-relaxed text-white/55 sm:text-xl">
+                Un lugar pequeño dentro de Poema Universal para conservar
+                palabras, imágenes, recuerdos y aquello que no debería desaparecer.
+              </p>
+
+              <Link
+                href="/rinconcito"
+                className="mt-10 inline-flex items-center gap-4 border-b border-[#c7a467]/45 pb-2 text-[10px] uppercase tracking-[0.3em] text-[#c7a467] transition hover:border-[#c7a467] hover:text-[#ead3a6]"
+              >
+                Entrar al Rinconcito
+                <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+</main>
   );
 }

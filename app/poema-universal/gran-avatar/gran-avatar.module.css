@@ -1648,3 +1648,236 @@
 .avatarBody[data-shot="right"] .v5CameraRig {
   transform: scale(1.032) translate3d(-1.55%, 0.2%, 0);
 }
+
+
+/* =========================================================
+   GRAN AVATAR · CATEDRAL DE LA MEMORIA
+   Background environment · 2026
+   ========================================================= */
+
+.avatarStage {
+  background: #030302;
+}
+
+.avatarStage::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -2%;
+  pointer-events: none;
+
+  background-image:
+    url("/poema-universal/gran-avatar/gran-avatar-catedral.png");
+
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+
+  filter:
+    brightness(0.48)
+    saturate(0.68)
+    contrast(1.08);
+
+  transform: scale(1.025);
+  transform-origin: 50% 50%;
+
+  animation:
+    granAvatarCathedralBreath
+    20s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+.avatarStage::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 44%,
+      rgba(214, 164, 90, 0.055) 0%,
+      rgba(80, 54, 27, 0.035) 25%,
+      rgba(0, 0, 0, 0.16) 58%,
+      rgba(0, 0, 0, 0.68) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.18) 22%,
+      rgba(0, 0, 0, 0.06) 50%,
+      rgba(0, 0, 0, 0.18) 78%,
+      rgba(0, 0, 0, 0.72) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.20) 0%,
+      transparent 32%,
+      transparent 66%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+}
+
+.avatarBody {
+  z-index: 1;
+}
+
+/*
+ * Los vídeos del Gran Avatar están construidos
+ * sobre una escena muy oscura.
+ *
+ * Screen permite que el negro se funda con
+ * la arquitectura en lugar de comportarse
+ * como un rectángulo opaco.
+ */
+video.avatarMedia {
+  mix-blend-mode: screen;
+}
+
+@keyframes granAvatarCathedralBreath {
+  0% {
+    transform:
+      scale(1.018)
+      translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform:
+      scale(1.045)
+      translate3d(0, -0.35%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatarStage::before {
+    animation: none;
+    transform: scale(1.03);
+  }
+}
+
+/* Poetic direction: a stable portrait within the architectural darkness.
+   Historical video modes remain scoped to their own existing classes. */
+.avatarStage::before {
+  animation: none;
+  transform: none;
+  filter: brightness(0.34) saturate(0.55);
+}
+.poeticPresence {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 68px;
+  pointer-events: none;
+}
+.presenceFrame {
+  position: relative;
+  width: min(82%, 440px);
+  height: min(560px, 68%);
+  overflow: hidden;
+  /* Edge mask only. Opaque clothing retains its depth, unlike screen blending. */
+  mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 76%, transparent 100%), linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 76%, transparent 100%), linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+  -webkit-mask-composite: source-in;
+}
+.presencePortrait,
+.presenceFilm {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+  filter: brightness(0.77) saturate(0.76);
+}
+.presencePortrait { object-position: 50% 38%; }
+.presenceFilm {
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+.presenceFilm[data-visible="true"] { opacity: 1; }
+.poeticPresence[data-state="paused"] .presenceFilm { transition: none; }
+.avatarMotto { display: none; }
+.avatarTelemetry {
+  top: 22px;
+  right: 20px;
+  width: auto;
+  max-width: 220px;
+  z-index: 5;
+  padding: 8px 10px;
+  background: rgba(3, 3, 3, 0.76);
+}
+.avatarTelemetry summary { cursor: pointer; color: #c7b9a3; font-size: 11px; }
+.avatarTelemetry dl { margin-top: 12px; }
+.currentReading { bottom: 116px; background: rgba(3, 3, 3, 0.8); }
+.emotionControl {
+  position: absolute;
+  z-index: 5;
+  bottom: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #c7b9a3;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.emotionControl select {
+  color: #e8dfd2;
+  background: #100e0b;
+  border: 1px solid #6a5840;
+  padding: 6px 9px;
+  font: inherit;
+}
+.readingControls { z-index: 5; }
+.readingControls button { color: #e2d5be; border-color: #67553c; }
+.readingControls button:disabled { opacity: 0.45; }
+.titleField input::placeholder,
+.poemField textarea::placeholder,
+.messageComposer textarea::placeholder { color: #a39a8d; }
+.headerNavigation a,
+.sessionState { color: #aca294; }
+.footer p { color: #c7b9a3; }
+@media (max-width: 1120px) {
+  .presenceFrame { height: calc(76svh - 190px); min-height: 270px; }
+}
+@media (max-width: 720px) {
+  .avatarStage { min-height: max(620px, 78svh); }
+  .poeticPresence { padding-top: 55px; }
+  .presenceFrame { width: 86%; height: 410px; max-height: calc(78svh - 180px); }
+  .avatarTelemetry { display: none; }
+  .currentReading { bottom: 175px; }
+  .emotionControl { bottom: 124px; }
+  .readingControls { bottom: 24px; flex-wrap: wrap; justify-content: center; gap: 7px; }
+  .readingControls button { min-height: 36px; font-size: 10px; }
+  .footer { display: flex; flex-wrap: wrap; gap: 14px; padding: 20px 18px 100px; }
+  .footer p { display: block; flex-basis: 100%; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .presenceFilm { transition: none; }
+}
+
+.scoreEditor { margin-top: 24px; padding-top: 18px; border-top: 1px solid #332c22; font-size: 12px; }
+.scoreEditor summary { color: #c7b9a3; cursor: pointer; }
+.scoreEditor p { line-height: 1.7; color: #afa597; }
+.scoreEditor label { display: grid; gap: 6px; margin: 12px 0; color: #c7b9a3; }
+.scoreEditor input, .scoreEditor select, .scoreEditor button { color: #e8dfd2; background: #100e0b; border: 1px solid #6a5840; padding: 7px; max-width: 100%; }
+.scoreEditor button { cursor: pointer; }
+.scoreEditor button:disabled { opacity: 0.4; cursor: default; }
+.scoreEditor ol { padding: 0; list-style: none; }
+.scoreEditor li { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 0; color: #c7b9a3; }
+
+.serviceNotice {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border-left: 2px solid #a88751;
+  background: rgba(168, 135, 81, 0.08);
+  color: #e8dfd2;
+  font-size: 13px;
+  line-height: 1.65;
+}

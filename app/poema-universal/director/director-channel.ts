@@ -29,6 +29,14 @@ export type DirectorCommand =
       type: "VIDEO";
       active: boolean;
       timestamp: number;
+    }
+  | {
+      type: "PROJECT_MESSAGE";
+      messageId: string;
+      text: string;
+      author: string;
+      place?: string | null;
+      timestamp: number;
     };
 
 export type DirectorResponse =

@@ -1,4 +1,3 @@
-import VersoTechnoDock from "./components/VersoTechnoDock";
 import "./globals.css";
 
 export default function RootLayout({
@@ -8,8 +7,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body>{children}        <VersoTechnoDock />
-      </body>
+      <body>{children}
+</body>
     </html>
   );
 }

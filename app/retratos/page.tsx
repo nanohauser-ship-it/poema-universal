@@ -486,10 +486,6 @@ export default function RetratosPage() {
               Cartas
             </Link>
 
-            <Link href="/rinconcito" className="hover:text-black">
-              El Rinconcito
-            </Link>
-
             <Link href="/noches-en-paz" className="hover:text-black">
               Noches en Paz
             </Link>

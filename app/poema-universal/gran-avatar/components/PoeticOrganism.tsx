@@ -5,6 +5,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
+import { avatarPerformanceSignal } from "../lib/avatarPerformanceSignal";
+import { AVATAR_EMOTIONS } from "../lib/avatarEmotion";
 import { avatarVoiceSignal } from "../lib/avatarVoiceSignal";
 import type { AvatarPresenceState } from "../types";
 import styles from "../gran-avatar.module.css";
@@ -26,12 +28,12 @@ const vertexShader = /* glsl */ `
     vec3 transformed = position;
     float chest = ellipseMask(uv, vec2(0.5, 0.14), vec2(0.31, 0.28));
     float head = ellipseMask(uv, vec2(0.5, 0.57), vec2(0.19, 0.35));
-    float slowDrift = sin(uTime * 0.31) * 0.0028;
+    float slowDrift = sin(uTime * 0.31) * 0.0007;
 
-    transformed.y += chest * uBreath * 0.009;
+    transformed.y += chest * uBreath * 0.002;
     transformed.y += head * (slowDrift - uThinking * 0.006);
-    transformed.x += head * (uGaze.x * 0.005 + sin(uTime * 0.19) * 0.0018);
-    transformed.z += chest * uBreath * 0.012;
+    transformed.x += head * (uGaze.x * 0.005 + sin(uTime * 0.19) * 0.00045);
+    transformed.z += chest * uBreath * 0.003;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
   }
@@ -118,6 +120,10 @@ function PortraitPlane({
   const scale = useAspect(1920, 1080, 1.04);
   const nextBlinkAt = useRef(2.6);
   const blinkStartedAt = useRef<number | null>(null);
+  const doubleBlink = useRef(false);
+  const nextGazeAt = useRef(3.8);
+  const gazeTarget = useRef(new THREE.Vector2());
+  const motionTime = useRef(0);
 
   const texture = useMemo(() => {
     const preparedTexture = sourceTexture.clone();
@@ -145,11 +151,19 @@ function PortraitPlane({
     [texture],
   );
 
-  useFrame(({ clock, pointer }, delta) => {
+  useFrame((_frame, delta) => {
     const material = materialRef.current;
     if (!material) return;
 
-    const elapsed = clock.getElapsedTime();
+    const direction = avatarPerformanceSignal;
+    const frozen = reducedMotion || direction.silent || direction.paused || direction.emotion === "silence" || state === "paused";
+    if (frozen) {
+      material.uniforms.uVoice.value = 0;
+      return;
+    }
+    motionTime.current += Math.min(delta, 0.1);
+    const elapsed = motionTime.current;
+    const emotional = AVATAR_EMOTIONS[direction.emotion];
     const speaking = state === "reading" || state === "speaking";
     const listening = state === "listening";
     const thinking = state === "thinking" || state === "receiving";
@@ -161,41 +175,42 @@ function PortraitPlane({
 
     if (blinkStartedAt.current !== null) {
       const blinkTime = elapsed - blinkStartedAt.current;
-      blink = Math.sin(Math.min(1, blinkTime / 0.19) * Math.PI);
+      // Fast closure, slower reopening; occasional second blink after a short gap.
+      blink = blinkTime < 0.06 ? Math.sin(blinkTime / 0.06 * Math.PI / 2)
+        : Math.cos(Math.min(1, (blinkTime - 0.06) / 0.15) * Math.PI / 2);
 
-      if (blinkTime >= 0.19) {
+      if (blinkTime >= 0.21) {
         blinkStartedAt.current = null;
-        nextBlinkAt.current = elapsed + 2.4 + Math.random() * 4.2;
+        if (!doubleBlink.current && Math.random() < 0.12) {
+          doubleBlink.current = true;
+          nextBlinkAt.current = elapsed + 0.13;
+        } else {
+          doubleBlink.current = false;
+          nextBlinkAt.current = elapsed + 2.8 + Math.random() * (Math.random() < 0.2 ? 8 : 4.5);
+        }
       }
     }
 
     const measuredVoice = avatarVoiceSignal.active
       ? avatarVoiceSignal.level
       : 0;
-    const fallbackVoice = speaking
-      ? Math.max(
-          0,
-          Math.sin(elapsed * 10.7) * 0.22 +
-            Math.sin(elapsed * 17.3) * 0.13 +
-            0.2,
-        )
-      : 0;
-    const targetVoice = reducedMotion
-      ? 0
-      : Math.min(1, measuredVoice * 1.3 + fallbackVoice * 0.42);
+    const targetVoice = speaking && avatarVoiceSignal.audible ? Math.min(1, measuredVoice * 1.3) : 0;
     const currentVoice = material.uniforms.uVoice.value as number;
-    const gazeTargetX = reducedMotion ? 0 : pointer.x * 0.72;
-    const gazeTargetY = reducedMotion
-      ? 0
-      : thinking
-        ? -0.34
-        : pointer.y * 0.22;
+    if (elapsed >= nextGazeAt.current) {
+      // Approximate portrait deformation only, never an independent eye rig.
+      const targets = [[0, 0], [-0.18, -0.16], [0.08, -0.24], [0.2, 0.06]];
+      const target = targets[Math.floor(Math.random() * targets.length)];
+      gazeTarget.current.set(target[0], target[1]);
+      nextGazeAt.current = elapsed + emotional.gazeHold[0] + Math.random() * (emotional.gazeHold[1] - emotional.gazeHold[0]);
+    }
+    const gazeTargetX = gazeTarget.current.x;
+    const gazeTargetY = thinking ? -0.18 : gazeTarget.current.y;
     const gaze = material.uniforms.uGaze.value as THREE.Vector2;
 
     material.uniforms.uTime.value = elapsed;
     material.uniforms.uBreath.value = reducedMotion
       ? 0
-      : Math.sin(elapsed * 1.16) * 0.5 + 0.5;
+      : (Math.sin(elapsed * 1.03 + Math.sin(elapsed * 0.13) * 0.16) * 0.5 + 0.5) * emotional.breath;
     material.uniforms.uBlink.value = reducedMotion ? 0 : blink;
     material.uniforms.uVoice.value = THREE.MathUtils.damp(
       currentVoice,

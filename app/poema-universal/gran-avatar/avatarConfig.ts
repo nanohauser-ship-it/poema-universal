@@ -1,14 +1,7 @@
 import type { AvatarBodyMode, AvatarMediaConfig } from "./types";
 
-/**
- * V5 · cuerpo continuo.
- *
- * Principio: una única interpretación de vídeo permanece viva durante toda la
- * sesión. Los estados y la voz ya no provocan seeks, congelaciones ni cambios
- * de clip. Solo modifican lentamente velocidad, luz y encuadre.
- *
- * La alineación de voz y los cuerpos V4/V3/V2 continúan en el proyecto como
- * infraestructura y respaldo, pero synchronized ejecuta V5 por defecto.
+/** Local video presence. Anatomical motion remains baked into the media.
+ * Alternate bodies and the existing API contracts remain available.
  */
 export const GRAN_AVATAR_MEDIA: AvatarMediaConfig = {
   posterUrl: "/poema-universal/gran-avatar/cinematic/avatar-reposo.webp",
@@ -35,3 +28,12 @@ export const GRAN_AVATAR_ORGANISM_PORTRAIT =
 
 export const GRAN_AVATAR_MAX_POEM_CHARS = 5_000;
 export const GRAN_AVATAR_MAX_MESSAGE_CHARS = 1_200;
+
+export const GRAN_AVATAR_DIRECTION = {
+  normalVideo: "/poema-universal/gran-avatar/v56/avatar-speaking-normal-01.mp4",
+  intenseVideo: "/poema-universal/gran-avatar/v56/avatar-speaking-intense-01.mp4",
+  closingSilence: 2.4,
+  voiceThreshold: 0.018,
+  quietHoldMs: 440,
+  maxAudioCacheBytes: 8 * 1024 * 1024,
+} as const;

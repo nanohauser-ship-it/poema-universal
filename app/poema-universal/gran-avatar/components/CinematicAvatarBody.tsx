@@ -85,7 +85,7 @@ const CinematicAvatarBody = forwardRef<
 
   useEffect(() => {
     const video = videoRef.current;
-    setVideoReady(false);
+
 
     if (!awake || !video || !selection.url) return;
 
@@ -125,6 +125,7 @@ const CinematicAvatarBody = forwardRef<
           playsInline
           preload="auto"
           aria-hidden="true"
+          onLoadStart={() => setVideoReady(false)}
           onCanPlay={() => setVideoReady(true)}
         />
       ) : null}

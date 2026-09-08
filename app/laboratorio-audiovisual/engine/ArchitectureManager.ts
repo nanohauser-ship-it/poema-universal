@@ -47,6 +47,23 @@ export class ArchitectureManager {
 
     this.active = next;
     this.root.add(compiled.group);
+
+    // DEBUG ARQUITECTURA
+    const debugGeometry = new THREE.BoxGeometry(1.8, 1.8, 1.8);
+    const debugMaterial = new THREE.MeshBasicMaterial({
+      color: 0x3366ff,
+    });
+
+    const debugCube = new THREE.Mesh(
+      debugGeometry,
+      debugMaterial
+    );
+
+    debugCube.position.set(0, 2.2, -4);
+    debugCube.name = "ARCHITECTURE_DEBUG_BLUE";
+
+    compiled.group.add(debugCube);
+
     compiled.setMediaSlots(this.mediaSlots);
     next.transition.setTarget(this.targetVisible);
 

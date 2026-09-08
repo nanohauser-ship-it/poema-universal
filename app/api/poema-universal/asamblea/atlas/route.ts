@@ -471,32 +471,482 @@ function getErrorMessage(
   );
 }
 
+
+/* ============================================================
+   BLINDAJE LOCAL DEL ATLAS ALQUÍMICO
+
+   La IA es una capa de enriquecimiento.
+   La existencia de la lámina no depende de ella.
+   ============================================================ */
+
+let remoteAtlasBlockedUntil = 0;
+
+function escapeSvgText(
+  value: string
+) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
+function atlasHash(
+  value: string
+) {
+  let hash = 2166136261;
+
+  for (
+    let index = 0;
+    index < value.length;
+    index += 1
+  ) {
+    hash ^= value.charCodeAt(index);
+
+    hash = Math.imul(
+      hash,
+      16777619
+    );
+  }
+
+  return hash >>> 0;
+}
+
+function buildLocalPlateSvg({
+  poem,
+  cartography,
+  plateType,
+}: {
+  poem: string;
+  cartography:
+    Record<string, unknown>;
+  plateType:
+    AlchemicalPlateType;
+}) {
+  const symbol =
+    escapeSvgText(
+      readString(
+        cartography,
+        "centralSymbol",
+        "◇"
+      ).slice(0, 6)
+    );
+
+  const hash =
+    atlasHash(
+      poem + plateType
+    );
+
+  const shiftA =
+    24 + (hash % 90);
+
+  const shiftB =
+    42 + (
+      (hash >>> 8) % 120
+    );
+
+  const rotation =
+    -13 + (
+      (hash >>> 16) % 27
+    );
+
+  const geometry =
+    plateType === "prima-materia"
+      ? `
+        <circle
+          cx="768"
+          cy="512"
+          r="272"
+          fill="none"
+          stroke="#b99a5d"
+          stroke-width="2"
+          opacity=".66"
+        />
+        <circle
+          cx="768"
+          cy="512"
+          r="196"
+          fill="none"
+          stroke="#d0b474"
+          stroke-width="1"
+          opacity=".48"
+        />
+        <circle
+          cx="768"
+          cy="512"
+          r="92"
+          fill="#b99a5d"
+          fill-opacity=".035"
+          stroke="#d4b979"
+          stroke-width="2"
+        />
+      `
+      : plateType === "operation"
+        ? `
+          <polygon
+            points="768,210 1038,718 498,718"
+            fill="none"
+            stroke="#c3a363"
+            stroke-width="2"
+            opacity=".68"
+          />
+          <polygon
+            points="768,814 1038,306 498,306"
+            fill="none"
+            stroke="#8f7545"
+            stroke-width="1"
+            opacity=".48"
+          />
+          <circle
+            cx="768"
+            cy="512"
+            r="148"
+            fill="none"
+            stroke="#d4b979"
+            stroke-width="2"
+          />
+        `
+        : plateType === "emblem"
+          ? `
+            <circle
+              cx="768"
+              cy="512"
+              r="282"
+              fill="none"
+              stroke="#c9a969"
+              stroke-width="2"
+              opacity=".65"
+            />
+            <rect
+              x="565"
+              y="309"
+              width="406"
+              height="406"
+              rx="6"
+              fill="none"
+              stroke="#8c7140"
+              stroke-width="1"
+              transform="rotate(${rotation} 768 512)"
+            />
+            <circle
+              cx="768"
+              cy="512"
+              r="112"
+              fill="#d1b16c"
+              fill-opacity=".025"
+              stroke="#d1b16c"
+              stroke-width="2"
+            />
+          `
+          : `
+            <path
+              d="
+                M 768 224
+                C 968 292, 1052 414, 1028 560
+                C 1002 720, 882 794, 768 808
+                C 654 794, 534 720, 508 560
+                C 484 414, 568 292, 768 224
+                Z
+              "
+              fill="#b99a5d"
+              fill-opacity=".026"
+              stroke="#b99a5d"
+              stroke-width="2"
+              opacity=".72"
+            />
+            <circle
+              cx="768"
+              cy="512"
+              r="118"
+              fill="none"
+              stroke="#d0b474"
+              stroke-width="2"
+            />
+          `;
+
+  const orbitNodes =
+    Array.from(
+      { length: 8 },
+      (_, index) => {
+        const angle =
+          (
+            index * 45 +
+            shiftA
+          ) *
+          Math.PI /
+          180;
+
+        const radius =
+          322 +
+          (
+            index % 2 === 0
+              ? shiftB * .16
+              : -shiftB * .11
+          );
+
+        const x =
+          768 +
+          Math.cos(angle) *
+            radius;
+
+        const y =
+          512 +
+          Math.sin(angle) *
+            radius *
+            .72;
+
+        return `
+          <circle
+            cx="${x.toFixed(1)}"
+            cy="${y.toFixed(1)}"
+            r="${
+              index % 3 === 0
+                ? 8
+                : 5
+            }"
+            fill="#c4a464"
+            opacity="${
+              index % 2 === 0
+                ? ".66"
+                : ".38"
+            }"
+          />
+          <line
+            x1="768"
+            y1="512"
+            x2="${x.toFixed(1)}"
+            y2="${y.toFixed(1)}"
+            stroke="#8f7545"
+            stroke-width="1"
+            opacity=".18"
+          />
+        `;
+      }
+    ).join("");
+
+  return `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1536"
+  height="1024"
+  viewBox="0 0 1536 1024"
+>
+  <defs>
+    <radialGradient
+      id="bg"
+      cx="50%"
+      cy="46%"
+      r="72%"
+    >
+      <stop
+        offset="0%"
+        stop-color="#16130e"
+      />
+      <stop
+        offset="56%"
+        stop-color="#0d0b08"
+      />
+      <stop
+        offset="100%"
+        stop-color="#050403"
+      />
+    </radialGradient>
+
+    <radialGradient
+      id="halo"
+      cx="50%"
+      cy="50%"
+      r="50%"
+    >
+      <stop
+        offset="0%"
+        stop-color="#d4b979"
+        stop-opacity=".12"
+      />
+      <stop
+        offset="100%"
+        stop-color="#d4b979"
+        stop-opacity="0"
+      />
+    </radialGradient>
+
+    <filter id="soft">
+      <feGaussianBlur
+        stdDeviation="18"
+      />
+    </filter>
+  </defs>
+
+  <rect
+    width="1536"
+    height="1024"
+    fill="url(#bg)"
+  />
+
+  <ellipse
+    cx="768"
+    cy="512"
+    rx="440"
+    ry="350"
+    fill="url(#halo)"
+    filter="url(#soft)"
+  />
+
+  <rect
+    x="74"
+    y="64"
+    width="1388"
+    height="896"
+    fill="none"
+    stroke="#745d35"
+    stroke-width="1"
+    opacity=".32"
+  />
+
+  <rect
+    x="92"
+    y="82"
+    width="1352"
+    height="860"
+    fill="none"
+    stroke="#c2a15f"
+    stroke-width="1"
+    opacity=".12"
+  />
+
+  ${orbitNodes}
+
+  ${geometry}
+
+  <line
+    x1="310"
+    y1="512"
+    x2="1226"
+    y2="512"
+    stroke="#9b7d47"
+    stroke-width="1"
+    opacity=".14"
+  />
+
+  <line
+    x1="768"
+    y1="168"
+    x2="768"
+    y2="856"
+    stroke="#9b7d47"
+    stroke-width="1"
+    opacity=".14"
+  />
+
+  <text
+    x="768"
+    y="548"
+    text-anchor="middle"
+    font-size="128"
+    font-family="Georgia, 'Times New Roman', serif"
+    fill="#d5b876"
+    opacity=".86"
+  >${symbol}</text>
+
+  <circle
+    cx="768"
+    cy="512"
+    r="34"
+    fill="none"
+    stroke="#efe0b5"
+    stroke-width="1"
+    opacity=".32"
+  />
+</svg>
+`.trim();
+}
+
+function buildLocalAlchemicalPlate({
+  poem,
+  cartography,
+  plateType,
+}: {
+  poem: string;
+  cartography:
+    Record<string, unknown>;
+  plateType:
+    AlchemicalPlateType;
+}): GeneratedAlchemicalPlate {
+  const definition =
+    PLATE_DEFINITIONS[
+      plateType
+    ];
+
+  const svg =
+    buildLocalPlateSvg({
+      poem,
+      cartography,
+      plateType,
+    });
+
+  return {
+    type:
+      plateType,
+
+    title:
+      definition.title,
+
+    caption:
+      plateType === "relic"
+        ? readString(
+            cartography,
+            "relic",
+            definition.caption
+          )
+        : definition.caption,
+
+    imageBase64:
+      Buffer.from(
+        svg,
+        "utf8"
+      ).toString("base64"),
+
+    mimeType:
+      "image/svg+xml",
+  };
+}
+
+function localAtlasResponse(
+  plate:
+    GeneratedAlchemicalPlate
+) {
+  return NextResponse.json(
+    {
+      plate,
+      source: "local",
+    },
+    {
+      headers:
+        noStoreHeaders(),
+    }
+  );
+}
+
 export async function POST(
   request: Request
 ) {
-  try {
-    if (
-      !process.env
-        .OPENAI_API_KEY
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "OPENAI_API_KEY no está configurada.",
-        },
-        {
-          status: 500,
-          headers:
-            noStoreHeaders(),
-        }
-      );
-    }
+  let poem = "";
 
+  let plateType:
+    AlchemicalPlateType | null =
+      null;
+
+  let cartography:
+    Record<string, unknown> | null =
+      null;
+
+  try {
     const body =
       (await request.json()) as
         RequestBody;
 
-    const poem =
+    poem =
       cleanText(
         body.poem,
         10000
@@ -557,55 +1007,121 @@ export async function POST(
       );
     }
 
-    const plateType =
+    plateType =
       body.plateType as
         AlchemicalPlateType;
+
+    cartography =
+      body.cartography;
+
+    const localPlate =
+      () =>
+        buildLocalAlchemicalPlate({
+          poem,
+          cartography:
+            cartography!,
+          plateType:
+            plateType!,
+        });
+
+    const apiKey =
+      process.env
+        .OPENAI_API_KEY;
+
+    /*
+     * Sin API, o durante un bloqueo
+     * temporal por cuota, el Atlas
+     * continúa inmediatamente en local.
+     */
+    if (
+      !apiKey ||
+      Date.now() <
+        remoteAtlasBlockedUntil
+    ) {
+      return localAtlasResponse(
+        localPlate()
+      );
+    }
 
     const prompt =
       buildPrompt({
         poem,
         analysis:
           body.analysis,
-        cartography:
-          body.cartography,
+        cartography,
         plateType,
       });
 
-    const imageResponse =
-      await fetch(
-        "https://api.openai.com/v1/images/generations",
-        {
-          method: "POST",
-          headers: {
-            Authorization:
-              `Bearer ${process.env.OPENAI_API_KEY}`,
-            "Content-Type":
-              "application/json",
-          },
-          body: JSON.stringify({
-            model:
-              process.env
-                .ATLAS_IMAGE_MODEL ??
-              "gpt-image-2",
-            prompt,
-            size:
-              "1536x1024",
-            quality:
-              process.env
-                .ATLAS_IMAGE_QUALITY ??
-              "medium",
-            output_format:
-              "webp",
-            output_compression:
-              78,
-            background:
-              "opaque",
-            moderation:
-              "auto",
-          }),
-          cache: "no-store",
-        }
+    let imageResponse:
+      Response;
+
+    try {
+      imageResponse =
+        await fetch(
+          "https://api.openai.com/v1/images/generations",
+          {
+            method: "POST",
+
+            headers: {
+              Authorization:
+                `Bearer ${apiKey}`,
+
+              "Content-Type":
+                "application/json",
+            },
+
+            body:
+              JSON.stringify({
+                model:
+                  process.env
+                    .ATLAS_IMAGE_MODEL ??
+                  "gpt-image-2",
+
+                prompt,
+
+                size:
+                  "1536x1024",
+
+                quality:
+                  process.env
+                    .ATLAS_IMAGE_QUALITY ??
+                  "medium",
+
+                output_format:
+                  "webp",
+
+                output_compression:
+                  78,
+
+                background:
+                  "opaque",
+
+                moderation:
+                  "auto",
+              }),
+
+            cache:
+              "no-store",
+          }
+        );
+    } catch (networkError) {
+      console.warn(
+        "Atlas remoto no disponible; usando lámina local.",
+        networkError
       );
+
+      /*
+       * Evita reintentos inútiles
+       * durante cinco minutos.
+       */
+      remoteAtlasBlockedUntil =
+        Date.now() +
+        5 * 60 * 1000;
+
+      return localAtlasResponse(
+        localPlate()
+      );
+    }
 
     const imagePayload:
       unknown =
@@ -613,38 +1129,44 @@ export async function POST(
         .json()
         .catch(() => null);
 
-    const requestId =
-      imageResponse.headers.get(
-        "x-request-id"
-      );
-
     if (
       !imageResponse.ok
     ) {
-      console.error(
-        "Atlas image generation failed",
+      const message =
+        getErrorMessage(
+          imagePayload
+        );
+
+      console.warn(
+        "Atlas remoto rechazado; usando lámina local.",
         {
           status:
             imageResponse.status,
-          requestId,
-          payload:
-            imagePayload,
+          message,
         }
       );
 
-      return NextResponse.json(
-        {
-          error:
-            getErrorMessage(
-              imagePayload
-            ),
-        },
-        {
-          status:
-            imageResponse.status,
-          headers:
-            noStoreHeaders(),
-        }
+      /*
+       * Cuota / autenticación:
+       * media hora sin volver a
+       * molestar a la API.
+       */
+      if (
+        imageResponse.status === 401 ||
+        imageResponse.status === 403 ||
+        imageResponse.status === 429
+      ) {
+        remoteAtlasBlockedUntil =
+          Date.now() +
+          30 * 60 * 1000;
+      } else {
+        remoteAtlasBlockedUntil =
+          Date.now() +
+          5 * 60 * 1000;
+      }
+
+      return localAtlasResponse(
+        localPlate()
       );
     }
 
@@ -663,8 +1185,12 @@ export async function POST(
           .b64_json !==
         "string"
     ) {
-      throw new Error(
-        "La API no devolvió una imagen válida."
+      console.warn(
+        "Atlas remoto devolvió una imagen inválida; usando lámina local."
+      );
+
+      return localAtlasResponse(
+        localPlate()
       );
     }
 
@@ -675,21 +1201,26 @@ export async function POST(
 
     const plate:
       GeneratedAlchemicalPlate = {
-      type: plateType,
+      type:
+        plateType,
+
       title:
         definition.title,
+
       caption:
         plateType ===
           "relic"
           ? readString(
-              body.cartography,
+              cartography,
               "relic",
               definition.caption
             )
           : definition.caption,
+
       imageBase64:
         imagePayload.data[0]
           .b64_json,
+
       mimeType:
         "image/webp",
     };
@@ -697,6 +1228,7 @@ export async function POST(
     return NextResponse.json(
       {
         plate,
+        source: "openai",
       },
       {
         headers:
@@ -704,6 +1236,32 @@ export async function POST(
       }
     );
   } catch (error) {
+    /*
+     * Última red de seguridad.
+     *
+     * Si ya poseemos los datos
+     * necesarios para la lámina,
+     * jamás dejamos caer el Atlas.
+     */
+    if (
+      poem.length >= 40 &&
+      plateType &&
+      cartography
+    ) {
+      console.warn(
+        "Atlas recuperado mediante fallback local.",
+        error
+      );
+
+      return localAtlasResponse(
+        buildLocalAlchemicalPlate({
+          poem,
+          cartography,
+          plateType,
+        })
+      );
+    }
+
     const message =
       error instanceof Error
         ? error.message
@@ -716,7 +1274,8 @@ export async function POST(
 
     return NextResponse.json(
       {
-        error: message,
+        error:
+          message,
       },
       {
         status: 502,

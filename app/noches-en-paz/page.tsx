@@ -124,10 +124,6 @@ export default function NochesEnPazPage() {
               Cartas
             </Link>
 
-            <Link href="/rinconcito" className="hover:text-white">
-              El Rinconcito
-            </Link>
-
             <Link href="/noches-en-paz" className="text-white">
               Noches en Paz
             </Link>

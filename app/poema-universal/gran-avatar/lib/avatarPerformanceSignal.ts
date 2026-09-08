@@ -1,4 +1,4 @@
-import type { AvatarVoicePurpose } from "../types";
+import type { AvatarEmotion, AvatarVoicePurpose } from "../types";
 
 export type AvatarPerformanceProfile = "normal" | "intense" | "recital";
 
@@ -6,12 +6,18 @@ type AvatarPerformanceSignal = {
   profile: AvatarPerformanceProfile;
   version: number;
   text: string;
+  emotion: AvatarEmotion;
+  silent: boolean;
+  paused: boolean;
 };
 
 export const avatarPerformanceSignal: AvatarPerformanceSignal = {
   profile: "normal",
   version: 0,
   text: "",
+  emotion: "neutral",
+  silent: false,
+  paused: false,
 };
 
 const STRONG_TERMS = [
@@ -101,7 +107,11 @@ export function chooseAvatarPerformanceProfile(
 export function setAvatarPerformanceProfile(
   text: string,
   purpose: AvatarVoicePurpose,
+  emotion: AvatarEmotion = purpose === "reading" ? "contemplative" : "neutral",
 ) {
+  avatarPerformanceSignal.emotion = emotion;
+  avatarPerformanceSignal.silent = false;
+  avatarPerformanceSignal.paused = false;
   avatarPerformanceSignal.profile = chooseAvatarPerformanceProfile(
     text,
     purpose,

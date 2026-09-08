@@ -27,6 +27,8 @@ export type AvatarPoemRecord = {
   sourceName?: string;
   createdAt: string;
   updatedAt: string;
+  /** Optional score in seconds of the generated audio, excluding inserted holds. */
+  score?: AvatarTimelineEvent[];
 };
 
 export type AvatarMediaConfig = {
@@ -54,3 +56,17 @@ export type AvatarBodyHandle = {
   speak: (text: string, purpose: AvatarVoicePurpose) => Promise<boolean>;
   wake: () => Promise<boolean>;
 };
+
+export type AvatarEmotion = "neutral" | "contemplative" | "tender" | "intense" | "silence";
+export type AvatarGaze = "poem" | "viewer" | "floor" | "horizon";
+export type AvatarTimelineEvent = {
+  id: string;
+  time: number;
+  duration?: number;
+} & (
+  | { action: "emotion"; emotion: AvatarEmotion }
+  | { action: "silence"; duration: number }
+  | { action: "lookAtViewer" }
+  | { action: "lookAt"; target: AvatarGaze }
+  | { action: "handGesture"; gesture: string; intensity?: number }
+);

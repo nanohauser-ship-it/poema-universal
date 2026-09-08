@@ -1,0 +1,1002 @@
+"use client";
+
+import { WorldReactivity } from "./WorldReactivity";
+
+import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
+import { useTexture } from "@react-three/drei";
+import { useRef } from "react";
+import type { MutableRefObject } from "react";
+import { RedThread } from "./RedThread";
+import { SceneGate } from "./SceneGate";
+import { Scene09Physical, Scene10Physical } from "./FinalePhysical";
+import { WorldReplies } from "./WorldReplies";
+
+const BASE =
+  "/poema-universal/presentacion-viva/assets/story-master";
+
+const CUT =
+  "/poema-universal/presentacion-viva/assets/story-cutouts";
+
+type Vec3 = [number, number, number];
+
+type AssetProps = {
+  src: string;
+  position: Vec3;
+  rotation?: Vec3;
+  width: number;
+  framed?: boolean;
+  opacity?: number;
+};
+
+function StoryAsset({
+  src,
+  position,
+  rotation = [0, 0, 0],
+  width,
+  framed = false,
+  opacity = 1,
+}: AssetProps) {
+  const texture = useTexture(src);
+
+  texture.colorSpace = THREE.SRGBColorSpace;
+
+  const image = texture.image as
+    | { width?: number; height?: number }
+    | undefined;
+
+  const aspect =
+    image?.width && image?.height
+      ? image.width / image.height
+      : 1.4;
+
+  const height = width / aspect;
+
+  return (
+    <group
+      position={position}
+      rotation={rotation}
+    >
+      {framed && (
+        <mesh
+          position={[0, 0, -0.055]}
+          castShadow
+          receiveShadow
+        >
+          <boxGeometry
+            args={[
+              width + 0.28,
+              height + 0.28,
+              0.08,
+            ]}
+          />
+
+          <meshStandardMaterial
+            color="#dfcfb3"
+            roughness={1}
+          />
+        </mesh>
+      )}
+
+      <mesh castShadow>
+        <planeGeometry args={[width, height]} />
+
+        <meshBasicMaterial
+          map={texture}
+          transparent
+          alphaTest={0.025}
+          opacity={opacity}
+          toneMapped={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function Ground() {
+  return (
+    <mesh
+      position={[55, -0.12, -0.55]}
+      rotation={[-Math.PI / 2, 0, 0]}
+      receiveShadow
+    >
+      <planeGeometry args={[126, 18]} />
+
+      <meshStandardMaterial
+        color="#d8c6a6"
+        roughness={1}
+      />
+    </mesh>
+  );
+}
+
+function PaperPages() {
+  return (
+    <group>
+      {Array.from({ length: 8 }).map((_, i) => {
+        const x = 28.5 + i * 1.35;
+        const y =
+          2.2 + Math.sin(i * 1.4) * 0.7;
+
+        return (
+          <mesh
+            key={i}
+            position={[x, y, 0.15]}
+            rotation={[
+              0,
+              Math.sin(i) * 0.12,
+              Math.cos(i * 0.8) * 0.18,
+            ]}
+            castShadow
+          >
+            <planeGeometry args={[0.48, 0.68]} />
+
+            <meshStandardMaterial
+              color={
+                i % 2
+                  ? "#eadfc9"
+                  : "#f1e6d2"
+              }
+              roughness={1}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+function Scene01() {
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/01-storm-bg.png`}
+        position={[3.5, 2.55, -1.35]}
+        rotation={[0, 0.015, -0.012]}
+        width={9.2}
+        framed
+      />
+
+      <StoryAsset
+        src={`${CUT}/01-globe.png`}
+        position={[9.4, 1.7, 0.2]}
+        rotation={[0, -0.04, 0.025]}
+        width={2.8}
+      />
+
+      <pointLight
+        position={[8.8, 3.7, 2.4]}
+        intensity={2}
+        distance={7}
+        color="#e7c790"
+      />
+    </group>
+  );
+}
+
+function Scene02() {
+  const steam = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!steam.current) return;
+
+    steam.current.position.y =
+      2.15 +
+      Math.sin(clock.elapsedTime * 1.2) * 0.1;
+
+    steam.current.rotation.z =
+      Math.sin(clock.elapsedTime * 0.7) * 0.07;
+  });
+
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/02-kitchen-bg.png`}
+        position={[18.0, 2.45, -1.35]}
+        rotation={[0, -0.01, 0]}
+        width={9.8}
+        framed
+      />
+
+      <StoryAsset
+        src={`${CUT}/02-cup.png`}
+        position={[15.0, 1.0, 0.4]}
+        rotation={[0, 0.02, -0.025]}
+        width={1.8}
+      />
+
+      <group
+        ref={steam}
+        position={[15.1, 2.15, 0.3]}
+      >
+        <mesh>
+          <planeGeometry args={[0.11, 0.8]} />
+          <meshBasicMaterial
+            color="#f5ead8"
+            transparent
+            opacity={0.22}
+            depthWrite={false}
+          />
+        </mesh>
+
+        <mesh position={[0.18, 0.12, 0]}>
+          <planeGeometry args={[0.07, 0.55]} />
+          <meshBasicMaterial
+            color="#f5ead8"
+            transparent
+            opacity={0.14}
+            depthWrite={false}
+          />
+        </mesh>
+      </group>
+
+      <StoryAsset
+        src={`${CUT}/02-board.png`}
+        position={[22.0, 0.95, 0.35]}
+        rotation={[0, -0.03, 0.025]}
+        width={2.8}
+      />
+    </group>
+  );
+}
+
+function Scene03({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const plane = useRef<THREE.Group>(null);
+  const bike = useRef<THREE.Group>(null);
+
+  useFrame((_, dt) => {
+    const p = progress.current;
+
+    const t = THREE.MathUtils.smoothstep(
+      p,
+      0.21,
+      0.33,
+    );
+
+    if (bike.current) {
+      bike.current.rotation.z =
+        Math.sin(p * 80) * 0.018;
+    }
+
+    if (plane.current) {
+      plane.current.position.x =
+        THREE.MathUtils.lerp(
+          29.5,
+          39.5,
+          t,
+        );
+
+      plane.current.position.y =
+        2.15 +
+        Math.sin(t * Math.PI) * 2.2;
+
+      plane.current.rotation.z =
+        THREE.MathUtils.lerp(
+          -0.22,
+          0.16,
+          t,
+        );
+
+      plane.current.scale.lerp(
+        new THREE.Vector3(1, 1, 1),
+        1 - Math.exp(-6 * dt),
+      );
+    }
+  });
+
+  return (
+    <group>
+      <group
+        ref={bike}
+        position={[29.5, 0, 0]}
+      >
+        <StoryAsset
+          src={`${CUT}/03-bike.png`}
+          position={[0, 1.2, 0.35]}
+          rotation={[0, 0.03, 0]}
+          width={4.2}
+        />
+      </group>
+
+      <group
+        ref={plane}
+        position={[29.5, 2.15, 0.55]}
+      >
+        <StoryAsset
+          src={`${CUT}/03-plane.png`}
+          position={[0, 0, 0]}
+          rotation={[0, 0, -0.1]}
+          width={1.8}
+        />
+      </group>
+
+      <PaperPages />
+    </group>
+  );
+}
+
+function Scene04() {
+  const moth = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!moth.current) return;
+
+    moth.current.position.y =
+      2.65 +
+      Math.sin(clock.elapsedTime * 1.35) * 0.22;
+
+    moth.current.position.x =
+      50.8 +
+      Math.sin(clock.elapsedTime * 0.55) * 0.25;
+
+    moth.current.rotation.z =
+      Math.sin(clock.elapsedTime * 1.7) * 0.12;
+  });
+
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/04-literature-bg.png`}
+        position={[46.8, 2.45, -1.4]}
+        width={9.8}
+        framed
+      />
+
+      <StoryAsset
+        src={`${CUT}/04-typewriter.png`}
+        position={[45.6, 1.05, 0.48]}
+        rotation={[0, -0.03, 0.015]}
+        width={2.5}
+      />
+
+      <group
+        ref={moth}
+        position={[50.8, 2.65, 0.55]}
+      >
+        <StoryAsset
+          src={`${CUT}/04-moth.png`}
+          position={[0, 0, 0]}
+          width={1.25}
+        />
+      </group>
+    </group>
+  );
+}
+
+function Scene05() {
+  const globe = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!globe.current) return;
+
+    globe.current.rotation.y =
+      Math.sin(clock.elapsedTime * 0.35) * 0.1;
+
+    globe.current.position.y =
+      1.95 +
+      Math.sin(clock.elapsedTime * 0.7) * 0.07;
+  });
+
+  return (
+    <group>
+      <group
+        ref={globe}
+        position={[56.4, 1.95, 0.2]}
+      >
+        <StoryAsset
+          src={`${CUT}/05-globe.png`}
+          position={[0, 0, 0]}
+          width={4.0}
+        />
+      </group>
+
+      <mesh
+        position={[53.7, 3.7, -0.25]}
+        rotation={[0, 0, -0.14]}
+      >
+        <planeGeometry args={[0.6, 0.85]} />
+
+        <meshStandardMaterial
+          color="#eadfca"
+          roughness={1}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      <mesh
+        position={[59.5, 3.4, -0.2]}
+        rotation={[0, 0, 0.18]}
+      >
+        <planeGeometry args={[0.5, 0.72]} />
+
+        <meshStandardMaterial
+          color="#f1e6d4"
+          roughness={1}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function Scene06({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const sign = useRef<THREE.Group>(null);
+
+  useFrame(() => {
+    if (!sign.current) return;
+
+    const t = THREE.MathUtils.smoothstep(
+      progress.current,
+      0.51,
+      0.6,
+    );
+
+    const s = THREE.MathUtils.lerp(
+      0.55,
+      1,
+      t,
+    );
+
+    sign.current.scale.setScalar(s);
+
+    sign.current.rotation.z =
+      THREE.MathUtils.lerp(
+        -0.09,
+        -0.015,
+        t,
+      );
+  });
+
+  return (
+    <group>
+      <group
+        ref={sign}
+        position={[64.3, 2.4, 0.1]}
+      >
+        <StoryAsset
+          src={`${CUT}/06-sign.png`}
+          position={[0, 0, 0]}
+          width={5.3}
+        />
+      </group>
+
+      <mesh
+        position={[67.7, 1.1, 0.4]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <cylinderGeometry
+          args={[0.52, 0.52, 0.08, 32]}
+        />
+
+        <meshStandardMaterial
+          color="#8a392f"
+          roughness={0.9}
+        />
+      </mesh>
+
+      <pointLight
+        position={[64.5, 4.1, 2.1]}
+        intensity={3}
+        distance={8}
+        color="#e7bf7e"
+      />
+    </group>
+  );
+}
+
+function Scene07({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const messenger = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!messenger.current) return;
+
+    const t = THREE.MathUtils.smoothstep(
+      progress.current,
+      0.61,
+      0.72,
+    );
+
+    messenger.current.position.x =
+      THREE.MathUtils.lerp(
+        72.2,
+        83.6,
+        t,
+      );
+
+    messenger.current.position.y =
+      2.0 +
+      Math.sin(t * Math.PI) * 2.6 +
+      Math.sin(clock.elapsedTime * 2) * 0.04;
+
+    messenger.current.rotation.z =
+      THREE.MathUtils.lerp(
+        -0.2,
+        0.18,
+        t,
+      );
+  });
+
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/07-map-bg.png`}
+        position={[77.5, 2.4, -1.4]}
+        width={9.2}
+        framed
+      />
+
+      <StoryAsset
+        src={`${CUT}/07-mailbox.png`}
+        position={[72.7, 1.25, 0.35]}
+        rotation={[0, 0.03, -0.015]}
+        width={2.8}
+      />
+
+      <StoryAsset
+        src={`${CUT}/07-birds.png`}
+        position={[81.0, 3.6, 0.1]}
+        rotation={[0, -0.02, 0.02]}
+        width={3.9}
+      />
+
+      <group
+        ref={messenger}
+        position={[72.2, 2, 0.65]}
+      >
+        <StoryAsset
+          src={`${CUT}/03-plane.png`}
+          position={[0, 0, 0]}
+          width={1.5}
+        />
+      </group>
+    </group>
+  );
+}
+
+function VoiceLights() {
+  return (
+    <group>
+      {Array.from({ length: 10 }).map((_, i) => {
+        const x = 84.3 + i * 0.85;
+        const y =
+          1.2 +
+          Math.sin(i * 1.8) * 0.45;
+
+        return (
+          <group
+            key={i}
+            position={[x, y, 0.5]}
+          >
+            <mesh>
+              <sphereGeometry args={[0.1, 16, 16]} />
+
+              <meshStandardMaterial
+                color="#efe1bd"
+                emissive="#d49d55"
+                emissiveIntensity={1.5}
+              />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+function Scene08() {
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/08-voices-map.png`}
+        position={[88.1, 2.35, -0.65]}
+        rotation={[0, 0.015, 0]}
+        width={6.1}
+        framed
+      />
+
+      <VoiceLights />
+
+      <pointLight
+        position={[88, 3.8, 2.3]}
+        intensity={2.8}
+        distance={7}
+        color="#e4b66e"
+      />
+    </group>
+  );
+}
+
+function LanternField() {
+  return (
+    <group>
+      {Array.from({ length: 10 }).map((_, i) => {
+        const x = 93.0 + i * 0.7;
+        const y =
+          0.75 +
+          Math.sin(i * 1.3) * 0.15;
+
+        return (
+          <group
+            key={i}
+            position={[x, y, 0.7]}
+          >
+            <mesh>
+              <sphereGeometry args={[0.12, 16, 16]} />
+
+              <meshStandardMaterial
+                color="#f0d8a3"
+                emissive="#c98a3c"
+                emissiveIntensity={1.8}
+              />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+function Scene09() {
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/09-lanterns.png`}
+        position={[96.2, 2.05, -0.2]}
+        width={5.4}
+      />
+
+      <LanternField />
+
+      <pointLight
+        position={[96.2, 3.2, 2]}
+        intensity={3}
+        distance={6}
+        color="#e8b85d"
+      />
+    </group>
+  );
+}
+
+function SproutField() {
+  return (
+    <group>
+      {Array.from({ length: 50 }).map((_, i) => {
+        const col = i % 10;
+        const row = Math.floor(i / 10);
+
+        const x = 98.7 + col * 0.55;
+        const z = 0.15 + row * 0.12;
+        const h =
+          0.18 +
+          ((i * 17) % 7) * 0.035;
+
+        return (
+          <group
+            key={i}
+            position={[x, 0.08, z]}
+          >
+            <mesh position={[0, h / 2, 0]}>
+              <boxGeometry
+                args={[0.025, h, 0.025]}
+              />
+
+              <meshStandardMaterial
+                color="#9d8a68"
+                roughness={1}
+              />
+            </mesh>
+
+            <mesh
+              position={[0.07, h, 0]}
+              rotation={[0, 0, 0.5]}
+            >
+              <planeGeometry args={[0.13, 0.07]} />
+
+              <meshStandardMaterial
+                color="#c4b892"
+                roughness={1}
+                side={THREE.DoubleSide}
+              />
+            </mesh>
+
+            <mesh
+              position={[-0.07, h * 0.85, 0]}
+              rotation={[0, 0, -0.5]}
+            >
+              <planeGeometry args={[0.13, 0.07]} />
+
+              <meshStandardMaterial
+                color="#d1c4a0"
+                roughness={1}
+                side={THREE.DoubleSide}
+              />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+function Scene10() {
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/10-sprouts.png`}
+        position={[101.4, 2.0, -0.55]}
+        width={5.0}
+      />
+
+      <SproutField />
+    </group>
+  );
+}
+
+function Scene11({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const tree = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!tree.current) return;
+
+    const t = THREE.MathUtils.smoothstep(
+      progress.current,
+      0.91,
+      0.97,
+    );
+
+    const pulse =
+      1 +
+      Math.sin(clock.elapsedTime * 0.8) * 0.015;
+
+    const s =
+      THREE.MathUtils.lerp(0.55, 1, t) *
+      pulse;
+
+    tree.current.scale.setScalar(s);
+  });
+
+  return (
+    <group>
+      <group
+        ref={tree}
+        position={[106.3, 2.8, 0.2]}
+      >
+        <StoryAsset
+          src={`${CUT}/11-white-tree.png`}
+          position={[0, 0, 0]}
+          width={6.3}
+        />
+      </group>
+
+      <pointLight
+        position={[106.2, 4.0, 2]}
+        intensity={5}
+        distance={9}
+        color="#fff0cc"
+      />
+    </group>
+  );
+}
+
+function FinalVoices({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const root = useRef<THREE.Group>(null);
+
+  useFrame(() => {
+    if (!root.current) return;
+
+    const t = THREE.MathUtils.smoothstep(
+      progress.current,
+      0.955,
+      1,
+    );
+
+    const s =
+      THREE.MathUtils.lerp(
+        0.45,
+        1,
+        t,
+      );
+
+    root.current.scale.setScalar(s);
+  });
+
+  return (
+    <group
+      ref={root}
+      position={[110, 2.5, 0.7]}
+    >
+      {Array.from({ length: 60 }).map((_, i) => {
+        const a =
+          (i / 60) * Math.PI * 2;
+
+        const radius =
+          i % 2 === 0
+            ? 3.0
+            : 2.55;
+
+        const x = Math.cos(a) * radius;
+        const y = Math.sin(a) * 1.85;
+
+        return (
+          <mesh
+            key={i}
+            position={[x, y, 0]}
+          >
+            <sphereGeometry
+              args={[0.055, 12, 12]}
+            />
+
+            <meshStandardMaterial
+              color="#f3e6c8"
+              emissive="#d8a85e"
+              emissiveIntensity={1.35}
+            />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+function Scene12({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  return (
+    <group>
+      <StoryAsset
+        src={`${BASE}/12-final-bg.png`}
+        position={[110.0, 2.45, -1.45]}
+        width={8.2}
+        framed
+      />
+
+      <FinalVoices progress={progress} />
+
+      <pointLight
+        position={[110, 4.5, 2.2]}
+        intensity={5}
+        distance={10}
+        color="#e7bd78"
+      />
+    </group>
+  );
+}
+
+export function StoryMaster({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  return (
+    <>
+      <Ground />
+      <WorldReactivity progress={progress} />
+
+      <RedThread progress={progress} />
+
+      <WorldReplies progress={progress} />
+
+      <SceneGate
+        progress={progress}
+        start={0}
+        end={0.15}
+      >
+        <Scene01 />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.06}
+        end={0.25}
+      >
+        <Scene02 />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.16}
+        end={0.37}
+      >
+        <Scene03 progress={progress} />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.28}
+        end={0.50}
+      >
+        <Scene04 />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.41}
+        end={0.58}
+      >
+        <Scene05 />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.49}
+        end={0.66}
+      >
+        <Scene06 progress={progress} />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.57}
+        end={0.78}
+      >
+        <Scene07 progress={progress} />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.68}
+        end={0.85}
+      >
+        <Scene08 />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.76}
+        end={0.91}
+      >
+        <Scene09Physical />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.82}
+        end={0.96}
+      >
+        <Scene10Physical
+          progress={progress}
+        />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.88}
+        end={0.997}
+      >
+        <Scene11 progress={progress} />
+      </SceneGate>
+
+      <SceneGate
+        progress={progress}
+        start={0.94}
+        end={1.001}
+      >
+        <Scene12 progress={progress} />
+      </SceneGate>
+    </>
+  );
+}

@@ -13,12 +13,13 @@ import WorldStory from "./WorldStory";
 import ElHuertoRitual from "./ElHuertoRitual";
 import LaLuzRegresaRitual from "./LaLuzRegresaRitual";
 import PoemBook, { type PoemEntry } from "./PoemBook";
+import { FOUNDATIONAL_BOOK_POEMS } from "../../data/foundationalPoems";
 import PoemSoundLightRig from "./PoemSoundLightRig";
 import PoemSoundtrack from "./PoemSoundtrack";
 
 const CYCLE_DURATION = 32;
 
-const BOOK_POEMS: PoemEntry[] = [
+export const BOOK_POEMS: PoemEntry[] = [
   {
     id: "jose-naveiro-01",
     poetName: "José Naveiro",
@@ -2591,7 +2592,7 @@ export default function MundoPoema() {
       <PoemSoundtrack />
 
       <PoemBook
-        poems={BOOK_POEMS}
+        poems={FOUNDATIONAL_BOOK_POEMS}
         onActivePoemChange={
           setActivePoemId
         }

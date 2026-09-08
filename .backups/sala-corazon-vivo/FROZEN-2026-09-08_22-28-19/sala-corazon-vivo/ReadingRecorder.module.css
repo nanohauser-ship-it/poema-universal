@@ -1,0 +1,115 @@
+.recorder {
+  position: relative;
+  padding: 24px 0 4px;
+  border-top: 1px solid rgba(232,223,210,.06);
+  text-align: center;
+}
+
+.recordButton {
+  border: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  background: transparent;
+  color: rgba(239,230,213,.9);
+  cursor: pointer;
+}
+
+.circle {
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgba(215,169,92,.65);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 0 0 6px rgba(180,123,42,.025),
+    0 0 28px rgba(180,123,42,.07);
+}
+
+.circle i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #cf7058;
+  box-shadow:
+    0 0 16px rgba(207,112,88,.25);
+}
+
+.recordButton strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .16em;
+}
+
+.caption {
+  margin: 5px 0 0;
+  font-family: Georgia, serif;
+  font-size: 10px;
+  font-style: italic;
+  color: rgba(232,223,210,.27);
+}
+
+.recorder[data-recording="true"] .circle i {
+  border-radius: 2px;
+  animation: pulse 1.3s ease-in-out infinite;
+}
+
+.result {
+  width: min(660px,100%);
+  margin: 22px auto 0;
+  padding: 12px;
+  border: 1px solid rgba(210,164,82,.14);
+  border-radius: 10px;
+  background: rgba(255,255,255,.012);
+}
+
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 9px;
+  font-size: 8px;
+  color: rgba(210,164,82,.58);
+}
+
+.result video {
+  width: 100%;
+  max-height: 320px;
+  border-radius: 7px;
+  background: #000;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.actions a,
+.actions button {
+  border: 1px solid rgba(232,223,210,.1);
+  border-radius: 999px;
+  padding: 7px 13px;
+  background: transparent;
+  color: rgba(239,230,213,.58);
+  font-family: Georgia, serif;
+  font-size: 9px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.error {
+  margin: 12px auto 0;
+  font-size: 9px;
+  color: rgba(218,130,105,.8);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .45;
+    transform: scale(.75);
+  }
+}

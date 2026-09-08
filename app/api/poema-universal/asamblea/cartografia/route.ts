@@ -8,6 +8,11 @@ import type {
   SymbolicCartography,
 } from "@/lib/asamblea/cartografia";
 
+import {
+  buildLocalCartography,
+} from "@/lib/asamblea/cartografia";
+
+
 const CARTOGRAPHY_SCHEMA = {
   type: "object",
   additionalProperties: false,
@@ -311,18 +316,43 @@ function errorMessage(
 export async function POST(
   request: Request
 ) {
+  let sourcePoem:
+    string | null = null;
+
   try {
     if (
       !process.env.OPENAI_API_KEY
     ) {
+      const body =
+        await request.json();
+
+      const poem =
+        normalizePoem(body);
+
+      if (!poem) {
+        return NextResponse.json(
+          {
+            error:
+              "El escrito debe contener entre 40 y 12.000 caracteres.",
+          },
+          {
+            status: 400,
+            headers: noStoreHeaders(),
+          }
+        );
+      }
+
       return NextResponse.json(
         {
-          error:
-            "OPENAI_API_KEY no está configurada.",
+          cartography:
+            buildLocalCartography(
+              poem
+            ),
+          source: "local",
         },
         {
-          status: 500,
-          headers: noStoreHeaders(),
+          headers:
+            noStoreHeaders(),
         }
       );
     }
@@ -332,6 +362,8 @@ export async function POST(
 
     const poem =
       normalizePoem(body);
+
+    sourcePoem = poem;
 
     if (!poem) {
       return NextResponse.json(
@@ -417,6 +449,27 @@ legible y relacionado con sus imágenes concretas.
       }
     );
   } catch (error) {
+    if (sourcePoem) {
+      console.warn(
+        "Cartografía IA no disponible; usando motor local:",
+        errorMessage(error)
+      );
+
+      return NextResponse.json(
+        {
+          cartography:
+            buildLocalCartography(
+              sourcePoem
+            ),
+          source: "local",
+        },
+        {
+          headers:
+            noStoreHeaders(),
+        }
+      );
+    }
+
     return NextResponse.json(
       {
         error:
@@ -424,7 +477,8 @@ legible y relacionado con sus imágenes concretas.
       },
       {
         status: 502,
-        headers: noStoreHeaders(),
+        headers:
+          noStoreHeaders(),
       }
     );
   }

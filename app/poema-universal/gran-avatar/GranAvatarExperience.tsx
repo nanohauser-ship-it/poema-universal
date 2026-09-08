@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 
-import { GRAN_AVATAR_MEDIA, GRAN_AVATAR_MAX_MESSAGE_CHARS, GRAN_AVATAR_MAX_POEM_CHARS } from "./avatarConfig";
+import { GRAN_AVATAR_BODY_MODE, GRAN_AVATAR_MEDIA, GRAN_AVATAR_MAX_MESSAGE_CHARS, GRAN_AVATAR_MAX_POEM_CHARS } from "./avatarConfig";
 import AvatarBody, {
   type AvatarBodyHandle,
 } from "./components/AvatarBody";
@@ -18,19 +18,14 @@ import {
   listAvatarPoems,
   saveAvatarPoem,
 } from "./lib/avatarArchiveStore";
-import {
-  attachAvatarVoice,
-  silenceAvatarVoice,
-} from "./lib/avatarVoiceSignal";
-import { setAvatarPerformanceProfile } from "./lib/avatarPerformanceSignal";
-import {
-  attachAvatarLipTimeline,
-  buildApproximateVisemeTimeline,
-  buildVisemeTimeline,
-  silenceAvatarLipSync,
-  type AvatarWordTiming,
-} from "./lib/avatarLipSync";
+import { primeAvatarVoice, silenceAvatarVoice } from "./lib/avatarVoiceSignal";
+import { avatarPerformanceSignal, setAvatarPerformanceProfile } from "./lib/avatarPerformanceSignal";
+import { createAvatarPlayback, type AvatarPlayback } from "./lib/avatarAudio";
+import { splitVoiceText } from "./lib/avatarTimeline";
+import { canPerform } from "./lib/avatarCapabilities";
 import type {
+  AvatarEmotion,
+  AvatarTimelineEvent,
   AvatarConversationMessage,
   AvatarLifeState,
   AvatarPoemRecord,
@@ -59,7 +54,7 @@ const LIFE_LABELS: Record<AvatarLifeState, string> = {
   alive: "Organismo vivo",
   organism: "Presencia propia",
   cinematic: "Presencia cinematográfica",
-  synchronized: "Voz y rostro sincronizados",
+  synchronized: "Presencia audiovisual",
   unconfigured: "Vida preparada",
   error: "Umbral cerrado",
 };
@@ -94,98 +89,6 @@ function formatArchiveDate(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(date);
-}
-
-function splitVoiceText(text: string, maximum = 1_100) {
-  const paragraphs = text
-    .split(/\n{2,}/)
-    .map((part) => part.trim())
-    .filter(Boolean);
-
-  const chunks: string[] = [];
-
-  for (const paragraph of paragraphs) {
-    if (paragraph.length <= maximum) {
-      chunks.push(paragraph);
-      continue;
-    }
-
-    const sentences = paragraph.split(/(?<=[.!?…])\s+/);
-    let current = "";
-
-    for (const sentence of sentences) {
-      if (sentence.length > maximum) {
-        if (current) {
-          chunks.push(current);
-          current = "";
-        }
-
-        for (let start = 0; start < sentence.length; start += maximum) {
-          chunks.push(sentence.slice(start, start + maximum));
-        }
-        continue;
-      }
-
-      const candidate = current
-        ? `${current} ${sentence}`
-        : sentence;
-
-      if (candidate.length > maximum) {
-        chunks.push(current);
-        current = sentence;
-      } else {
-        current = candidate;
-      }
-    }
-
-    if (current) chunks.push(current);
-  }
-
-  return chunks.length > 0 ? chunks : [text.trim()];
-}
-
-async function requestVoiceAlignment(
-  blob: Blob,
-  text: string,
-): Promise<AvatarWordTiming[]> {
-  try {
-    const formData = new FormData();
-    formData.append("audio", blob, "gran-avatar-voice.mp3");
-    formData.append("text", text);
-
-    const response = await fetch(
-      "/api/poema-universal/gran-avatar/align",
-      { method: "POST", body: formData },
-    );
-
-    if (!response.ok) return [];
-    const payload = (await response.json()) as { words?: AvatarWordTiming[] };
-    return Array.isArray(payload.words) ? payload.words : [];
-  } catch (error) {
-    console.warn("La alineación precisa no estuvo disponible.", error);
-    return [];
-  }
-}
-
-async function waitForAudioMetadata(audio: HTMLAudioElement) {
-  if (audio.readyState >= 1 && Number.isFinite(audio.duration)) {
-    return audio.duration;
-  }
-
-  return await new Promise<number>((resolve) => {
-    const finish = () => {
-      cleanup();
-      resolve(Number.isFinite(audio.duration) ? audio.duration : 0);
-    };
-    const timeout = window.setTimeout(finish, 8_000);
-    const cleanup = () => {
-      window.clearTimeout(timeout);
-      audio.removeEventListener("loadedmetadata", finish);
-      audio.removeEventListener("durationchange", finish);
-    };
-    audio.addEventListener("loadedmetadata", finish, { once: true });
-    audio.addEventListener("durationchange", finish, { once: true });
-  });
 }
 
 function makeMessage(
@@ -223,16 +126,20 @@ export default function GranAvatarExperience() {
   );
   const [voiceProgress, setVoiceProgress] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
+  const playbackRateRef = useRef(1);
+  const [emotion, setEmotion] = useState<AvatarEmotion>("contemplative");
+  const [cueTime, setCueTime] = useState("0");
+  const [cueDuration, setCueDuration] = useState("2.4");
+  const [cueAction, setCueAction] = useState<"silence" | AvatarEmotion>("silence");
+  const [savingScore, setSavingScore] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [lifeState, setLifeState] =
     useState<AvatarLifeState>("sleeping");
 
   const avatarBodyRef = useRef<AvatarBodyHandle>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioUrlRef = useRef<string | null>(null);
-  const voiceSignalCleanupRef = useRef<(() => void) | null>(null);
-  const lipSyncCleanupRef = useRef<(() => void) | null>(null);
+  const playbackRef = useRef<AvatarPlayback | null>(null);
+  const conversationAbortRef = useRef<AbortController | null>(null);
   const voiceSessionRef = useRef(0);
   const voiceModeRef = useRef<VoiceMode>("reading");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -273,188 +180,85 @@ export default function GranAvatarExperience() {
 
   const stopVoice = useCallback((returnToIdle = true) => {
     voiceSessionRef.current += 1;
+    playbackRef.current?.stop();
+    playbackRef.current = null;
     avatarBodyRef.current?.interrupt();
-    voiceSignalCleanupRef.current?.();
-    voiceSignalCleanupRef.current = null;
-    lipSyncCleanupRef.current?.();
-    lipSyncCleanupRef.current = null;
     silenceAvatarVoice();
-    silenceAvatarLipSync();
-    const audio = audioRef.current;
-
-    if (audio) {
-      audio.pause();
-      audio.removeAttribute("src");
-      audio.load();
-    }
-
-    if (audioUrlRef.current) {
-      URL.revokeObjectURL(audioUrlRef.current);
-      audioUrlRef.current = null;
-    }
-
+    avatarPerformanceSignal.silent = false;
+    avatarPerformanceSignal.paused = false;
     setVoiceProgress(0);
     if (returnToIdle) setPresenceState("idle");
   }, []);
 
-  useEffect(() => {
-    return () => {
-      stopVoice(false);
-      mediaStreamRef.current
-        ?.getTracks()
-        .forEach((track) => track.stop());
-    };
+  useEffect(() => () => {
+    conversationAbortRef.current?.abort();
+    stopVoice(false);
+    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
   }, [stopVoice]);
 
-  const playVoice = useCallback(
-    async (text: string, mode: VoiceMode) => {
-      const cleanText = text.trim();
-      if (!cleanText) return;
-
-      stopVoice(false);
-      const session = voiceSessionRef.current;
-      const chunks = splitVoiceText(cleanText);
-      voiceModeRef.current = mode;
-      const performanceProfile = setAvatarPerformanceProfile(cleanText, mode);
-      setPresenceState(mode);
-      setNotice(
-        mode === "reading"
-          ? "La voz entra en modo de recitación contenida."
-          : performanceProfile === "intense"
-            ? "La presencia reconoce una reflexión de mayor intensidad."
-            : "La presencia prepara una respuesta natural.",
-      );
-
-      try {
-        for (let index = 0; index < chunks.length; index += 1) {
+  const playVoice = useCallback(async (text: string, mode: VoiceMode, score?: AvatarTimelineEvent[]) => {
+    if (!text.trim()) return;
+    conversationAbortRef.current?.abort();
+    stopVoice(false);
+    const session = voiceSessionRef.current;
+    voiceModeRef.current = mode;
+    primeAvatarVoice();
+    setAvatarPerformanceProfile(text, mode, emotion);
+    setPresenceState(mode);
+    setNotice("Preparando la voz y sus pausas…");
+    try {
+      // Keep the remote body contract. Its service owns playback and timing.
+      let localText = text;
+      if (GRAN_AVATAR_BODY_MODE === "live") {
+        const chunks = splitVoiceText(text);
+        let completed = true;
+        let completedChunks = 0;
+        for (const chunk of chunks) {
           if (session !== voiceSessionRef.current) return;
-
-          const spokenLive = await avatarBodyRef.current?.speak(
-            chunks[index],
-            mode,
-          );
-          if (spokenLive) {
-            setVoiceProgress((index + 1) / chunks.length);
-            continue;
-          }
-
-          const response = await fetch(
-            "/api/poema-universal/gran-avatar/voice",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                text: chunks[index],
-                purpose: mode,
-              }),
-            },
-          );
-
-          if (!response.ok) {
-            const payload = (await response.json().catch(() => null)) as
-              | { error?: string }
-              | null;
-            throw new Error(
-              payload?.error ?? "No fue posible crear la voz.",
-            );
-          }
-
-          const blob = await response.blob();
-          const objectUrl = URL.createObjectURL(blob);
-          audioUrlRef.current = objectUrl;
-
-          const audio = new Audio();
-          audioRef.current = audio;
-          audio.src = objectUrl;
-          audio.playbackRate = playbackRate;
-          audio.preload = "auto";
-
-          setNotice(
-            mode === "reading"
-              ? "Alineando las palabras con el rostro…"
-              : "Alineando la respuesta con el rostro…",
-          );
-
-          const alignmentPromise = requestVoiceAlignment(
-            blob,
-            chunks[index],
-          );
-          const durationPromise = waitForAudioMetadata(audio);
-          audio.load();
-
-          const [wordTimings, duration] = await Promise.all([
-            alignmentPromise,
-            durationPromise,
-          ]);
-
-          if (session !== voiceSessionRef.current) return;
-
-          const lipCues = wordTimings.length > 0
-            ? buildVisemeTimeline(wordTimings)
-            : buildApproximateVisemeTimeline(chunks[index], duration);
-
-          const detachVoiceSignal = await attachAvatarVoice(audio);
-          const detachLipSync = attachAvatarLipTimeline(audio, lipCues);
-          voiceSignalCleanupRef.current = detachVoiceSignal;
-          lipSyncCleanupRef.current = detachLipSync;
-
-          setNotice(
-            wordTimings.length > 0
-              ? "Sincronización labial activa · marcas de palabra."
-              : "Sincronización labial activa · alineación aproximada.",
-          );
-
-          try {
-            await new Promise<void>((resolve, reject) => {
-              audio.ontimeupdate = () => {
-                const localProgress = Number.isFinite(audio.duration)
-                  ? audio.currentTime / audio.duration
-                  : 0;
-                setVoiceProgress(
-                  (index + localProgress) / chunks.length,
-                );
-              };
-              audio.onended = () => resolve();
-              audio.onerror = () =>
-                reject(new Error("La voz no pudo reproducirse."));
-              void audio.play().catch(reject);
-            });
-          } finally {
-            detachLipSync();
-            detachVoiceSignal();
-            if (lipSyncCleanupRef.current === detachLipSync) {
-              lipSyncCleanupRef.current = null;
-            }
-            if (voiceSignalCleanupRef.current === detachVoiceSignal) {
-              voiceSignalCleanupRef.current = null;
-            }
-            if (audioRef.current === audio) audioRef.current = null;
-          }
-
-          URL.revokeObjectURL(objectUrl);
-          if (audioUrlRef.current === objectUrl) {
-            audioUrlRef.current = null;
-          }
+          if (!(await avatarBodyRef.current?.speak(chunk, mode))) { completed = false; break; }
+          completedChunks += 1;
         }
-
-        if (session === voiceSessionRef.current) {
+        if (session !== voiceSessionRef.current) return;
+        if (completed) {
           setVoiceProgress(1);
           setPresenceState("idle");
-          setNotice("La voz y el rostro han vuelto al silencio.");
+          setNotice("La voz ha vuelto al silencio.");
+          return;
         }
-      } catch (error) {
-        if (session !== voiceSessionRef.current) return;
-        console.error(error);
-        setPresenceState("error");
-        setNotice(
-          error instanceof Error
-            ? error.message
-            : "La voz no pudo atravesar la sala.",
-        );
+        // Preserve local fallback without repeating completed remote fragments.
+        avatarBodyRef.current?.interrupt();
+        localText = chunks.slice(completedChunks).join("\n\n");
+        setNotice("La lectura continúa con la voz local.");
       }
-    },
-    [playbackRate, stopVoice],
-  );
+      const playback = createAvatarPlayback({
+        text: localText, purpose: mode, rate: playbackRateRef.current,
+        score: localText === text ? score : undefined,
+        onProgress: (value) => { if (session === voiceSessionRef.current) setVoiceProgress(value); },
+        onReady: () => { if (session === voiceSessionRef.current) setNotice("La voz acompaña a la presencia."); },
+        onEvent: (event) => {
+          if (session !== voiceSessionRef.current) return;
+          if (!canPerform(GRAN_AVATAR_BODY_MODE, event)) {
+            // Unsupported anatomy is explicit; no misleading whole-image substitute.
+            console.info(`Gran Avatar: ${event.action} requiere otro recurso corporal.`);
+            return;
+          }
+          if (event.action === "emotion") avatarPerformanceSignal.emotion = event.emotion;
+        },
+      });
+      playbackRef.current = playback;
+      await playback.run();
+      if (session !== voiceSessionRef.current) return;
+      playbackRef.current = null;
+      setVoiceProgress(1);
+      setPresenceState("idle");
+      setNotice("La voz ha vuelto al silencio.");
+    } catch (error) {
+      if (session !== voiceSessionRef.current) return;
+      playbackRef.current = null;
+      setPresenceState("error");
+      setNotice(error instanceof Error ? error.message : "La voz no está disponible ahora.");
+    }
+  }, [emotion, stopVoice]);
 
   async function askAvatar(
     userText: string,
@@ -463,6 +267,10 @@ export default function GranAvatarExperience() {
   ) {
     const cleanText = userText.trim();
     if (!cleanText) return;
+    stopVoice(false);
+    conversationAbortRef.current?.abort();
+    const controller = new AbortController();
+    conversationAbortRef.current = controller;
 
     const userMessage = makeMessage("user", cleanText);
     const nextHistory = [...history, userMessage];
@@ -475,6 +283,7 @@ export default function GranAvatarExperience() {
         "/api/poema-universal/gran-avatar/converse",
         {
           method: "POST",
+          signal: controller.signal,
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             poem: poem
@@ -492,15 +301,18 @@ export default function GranAvatarExperience() {
         },
       );
 
-      const payload = (await response.json()) as {
+      const payload = (await response.json().catch(() => null)) as {
         reply?: string;
         error?: string;
-      };
+      } | null;
 
-      if (!response.ok || !payload.reply) {
-        throw new Error(
-          payload.error ?? "La presencia no encontró palabras.",
-        );
+      if (controller.signal.aborted) return;
+      if (!response.ok || !payload?.reply) {
+        // Service failures are recoverable UI states, not rendering exceptions.
+        // The server retains the diagnostic without exposing provider details here.
+        setPresenceState("error");
+        setNotice(payload?.error ?? "La conversación no está disponible ahora. Puedes intentarlo de nuevo; el poema permanece intacto.");
+        return;
       }
 
       setMessages((current) => [
@@ -510,7 +322,7 @@ export default function GranAvatarExperience() {
       setNotice("La conversación permanece abierta.");
       await playVoice(payload.reply, "speaking");
     } catch (error) {
-      console.error(error);
+      if (controller.signal.aborted) return;
       setPresenceState("error");
       setNotice(
         error instanceof Error
@@ -524,6 +336,8 @@ export default function GranAvatarExperience() {
     const text = draftText.trim();
     if (!canLoadPoem || !text) return;
 
+    conversationAbortRef.current?.abort();
+    stopVoice(false);
     setPresenceState("receiving");
     const now = new Date().toISOString();
     const existing = archive.find(
@@ -537,6 +351,7 @@ export default function GranAvatarExperience() {
       ...(existing?.sourceName
         ? { sourceName: existing.sourceName }
         : {}),
+      ...(existing?.score ? { score: existing.score } : {}),
       createdAt: existing?.createdAt ?? now,
       updatedAt: now,
     };
@@ -564,6 +379,7 @@ export default function GranAvatarExperience() {
   }
 
   async function selectArchivePoem(poem: AvatarPoemRecord) {
+    conversationAbortRef.current?.abort();
     stopVoice();
     setCurrentPoem(poem);
     setDraftTitle(poem.title);
@@ -575,6 +391,34 @@ export default function GranAvatarExperience() {
       ),
     ]);
     setNotice("El poema ha regresado desde la biblioteca.");
+  }
+
+  async function updateScore(score: AvatarTimelineEvent[]) {
+    if (!currentPoem || savingScore) return;
+    const updated = { ...currentPoem, score, updatedAt: new Date().toISOString() };
+    setSavingScore(true);
+    try {
+      await saveAvatarPoem(updated);
+      setCurrentPoem((current) => current?.id === updated.id ? updated : current);
+      await refreshArchive();
+      setNotice("La dirección de lectura queda guardada con el poema.");
+    } catch {
+      setNotice("No se pudo guardar la dirección de lectura.");
+    } finally { setSavingScore(false); }
+  }
+
+  async function addCue() {
+    const time = Number(cueTime);
+    const duration = Number(cueDuration);
+    if (!currentPoem || !cueTime.trim() || !Number.isFinite(time) || time < 0 ||
+        (cueAction === "silence" && (!cueDuration.trim() || !Number.isFinite(duration) || duration <= 0 || duration > 30))) {
+      setNotice("Indica un momento válido y una pausa de hasta 30 segundos.");
+      return;
+    }
+    const event: AvatarTimelineEvent = cueAction === "silence"
+      ? { id: createId("cue"), time, action: "silence", duration }
+      : { id: createId("cue"), time, action: "emotion", emotion: cueAction };
+    await updateScore([...(currentPoem.score ?? []), event].sort((a, b) => a.time - b.time));
   }
 
   async function removeArchivePoem(poem: AvatarPoemRecord) {
@@ -638,6 +482,8 @@ export default function GranAvatarExperience() {
     }
 
     try {
+      stopVoice();
+      conversationAbortRef.current?.abort();
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
@@ -706,33 +552,23 @@ export default function GranAvatarExperience() {
   }
 
   function togglePause() {
-    const audio = audioRef.current;
-    if (!audio || !audio.src) {
-      if (lifeState === "alive" && voiceActive) {
-        avatarBodyRef.current?.interrupt();
-        voiceSessionRef.current += 1;
-        setVoiceProgress(0);
-        setPresenceState("idle");
-        setNotice("La voz ha sido interrumpida.");
-      }
-      return;
-    }
-
-    if (audio.paused) {
-      audio.playbackRate = playbackRate;
-      void audio.play();
+    if (lifeState === "alive") { stopVoice(); return; }
+    const playback = playbackRef.current;
+    if (!playback) return;
+    if (presenceState === "paused") {
+      playback.resume();
       setPresenceState(voiceModeRef.current);
     } else {
-      audio.pause();
+      playback.pause();
       setPresenceState("paused");
     }
   }
 
   function cyclePlaybackRate() {
-    const nextRate =
-      playbackRate === 0.8 ? 1 : playbackRate === 1 ? 1.2 : 0.8;
+    const nextRate = playbackRate === 0.8 ? 1 : playbackRate === 1 ? 1.2 : 0.8;
+    playbackRateRef.current = nextRate;
     setPlaybackRate(nextRate);
-    if (audioRef.current) audioRef.current.playbackRate = nextRate;
+    playbackRef.current?.setRate(nextRate);
   }
 
   const voiceActive = ["reading", "speaking", "paused"].includes(
@@ -875,6 +711,28 @@ export default function GranAvatarExperience() {
               </p>
             )}
           </section>
+          {currentPoem && (
+            <details className={styles.scoreEditor}>
+              <summary>Dirigir la lectura</summary>
+              <p>Marca una pausa o un cambio de intención. Los segundos corresponden a la voz, sin contar las pausas añadidas. Revisa las marcas si se genera una nueva versión del audio.</p>
+              <label>Momento · segundos<input type="number" min="0" step="0.1" value={cueTime} onChange={(event) => setCueTime(event.target.value)} /></label>
+              <label>Acción<select value={cueAction} onChange={(event) => setCueAction(event.target.value as typeof cueAction)}>
+                <option value="silence">Guardar silencio</option>
+                <option value="neutral">Volver a la serenidad</option>
+                <option value="contemplative">Contemplar</option>
+                <option value="tender">Acercarse con ternura</option>
+                <option value="intense">Concentrar la intención</option>
+              </select></label>
+              {cueAction === "silence" && <label>Duración · segundos<input type="number" min="0.1" max="30" step="0.1" value={cueDuration} onChange={(event) => setCueDuration(event.target.value)} /></label>}
+              <button type="button" disabled={savingScore || voiceActive} onClick={() => void addCue()}>Guardar marca</button>
+              <ol>{currentPoem.score?.map((cue) => (
+                <li key={cue.id}>
+                  <span>{cue.time.toFixed(1)} s · {cue.action === "silence" ? `Silencio (${cue.duration} s)` : cue.action === "emotion" ? ({ neutral: "Serenidad", contemplative: "Contemplación", tender: "Ternura", intense: "Intensidad", silence: "Quietud" }[cue.emotion]) : "Gesto reservado"}</span>
+                  <button type="button" disabled={savingScore || voiceActive} aria-label={`Retirar marca de ${cue.time} segundos`} onClick={() => void updateScore(currentPoem.score?.filter((item) => item.id !== cue.id) ?? [])}>×</button>
+                </li>
+              ))}</ol>
+            </details>
+          )}
         </aside>
 
         <section id="avatar" className={styles.avatarStage}>
@@ -893,7 +751,8 @@ export default function GranAvatarExperience() {
             onLifeStateChange={setLifeState}
           />
 
-          <div className={styles.avatarTelemetry} aria-label="Estado del avatar">
+          <details className={styles.avatarTelemetry}>
+            <summary>Sobre esta presencia</summary>
             <dl>
               <div>
                 <dt>Vida</dt>
@@ -905,14 +764,14 @@ export default function GranAvatarExperience() {
               </div>
               <div>
                 <dt>Voz</dt>
-                <dd>TTS · visemas</dd>
+                <dd>Lectura poética</dd>
               </div>
               <div>
                 <dt>Idioma</dt>
                 <dd>ES · primera voz</dd>
               </div>
             </dl>
-          </div>
+          </details>
 
           <blockquote className={styles.avatarMotto}>
             La poesía no se lee.
@@ -931,13 +790,27 @@ export default function GranAvatarExperience() {
             </div>
           </div>
 
+          <label className={styles.emotionControl}>
+            <span>Intención</span>
+            <select value={emotion} onChange={(event) => {
+              const next = event.target.value as AvatarEmotion;
+              setEmotion(next);
+              avatarPerformanceSignal.emotion = next;
+            }}>
+              <option value="neutral">Serena</option>
+              <option value="contemplative">Contemplativa</option>
+              <option value="tender">Tierna</option>
+              <option value="intense">Intensa</option>
+              <option value="silence">Silencio corporal</option>
+            </select>
+          </label>
           <div className={styles.readingControls}>
             <button
               type="button"
               disabled={!currentPoem}
               onClick={() => {
                 if (currentPoem) {
-                  void playVoice(currentPoem.text, "reading");
+                  void playVoice(currentPoem.text, "reading", currentPoem.score);
                 }
               }}
             >
@@ -969,7 +842,7 @@ export default function GranAvatarExperience() {
             <button
               type="button"
               disabled={!voiceActive}
-              onClick={() => stopVoice()}
+              onClick={() => { conversationAbortRef.current?.abort(); stopVoice(); }}
             >
               Detener
             </button>
@@ -981,6 +854,10 @@ export default function GranAvatarExperience() {
             <p>La presencia escucha</p>
             <h2 id="conversation-title">Conversa con el avatar</h2>
           </div>
+
+          {presenceState === "error" && (
+            <p className={styles.serviceNotice} role="alert">{notice}</p>
+          )}
 
           <div
             ref={conversationRef}

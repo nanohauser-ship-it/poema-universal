@@ -1,96 +1,94 @@
-type WebkitWindow = Window &
-  typeof globalThis & {
-    webkitAudioContext?: typeof AudioContext;
-  };
+import { GRAN_AVATAR_DIRECTION } from "../avatarConfig";
 
-type VoiceSignal = {
-  active: boolean;
-  level: number;
-};
-
-export const avatarVoiceSignal: VoiceSignal = {
+type WebkitWindow = Window & typeof globalThis & { webkitAudioContext?: typeof AudioContext };
+export const avatarVoiceSignal = {
   active: false,
+  playing: false,
+  audible: false,
+  analysed: false,
   level: 0,
 };
-
 let audioContext: AudioContext | null = null;
 let activeCleanup: (() => void) | null = null;
+let generation = 0;
 
 export function silenceAvatarVoice() {
+  generation += 1;
   activeCleanup?.();
   activeCleanup = null;
-  avatarVoiceSignal.active = false;
-  avatarVoiceSignal.level = 0;
+  Object.assign(avatarVoiceSignal, { active: false, playing: false, audible: false, analysed: false, level: 0 });
+}
+
+/** Call from the user gesture, before awaiting TTS, to unlock Web Audio. */
+export function primeAvatarVoice() {
+  const Constructor = window.AudioContext ?? (window as WebkitWindow).webkitAudioContext;
+  if (!Constructor) return;
+  try {
+    audioContext ??= new Constructor();
+    if (audioContext.state === "suspended") void audioContext.resume().catch(() => undefined);
+  } catch { /* Native audio playback remains available without analysis. */ }
 }
 
 export async function attachAvatarVoice(audio: HTMLAudioElement) {
   silenceAvatarVoice();
-
-  const AudioContextConstructor =
-    window.AudioContext ??
-    (window as WebkitWindow).webkitAudioContext;
-
-  if (!AudioContextConstructor) return () => undefined;
-
+  const owner = generation;
+  let source: MediaElementAudioSourceNode | null = null;
+  let analyser: AnalyserNode | null = null;
+  const Constructor = window.AudioContext ?? (window as WebkitWindow).webkitAudioContext;
   try {
-    audioContext ??= new AudioContextConstructor();
-
-    if (audioContext.state === "suspended") {
-      await audioContext.resume();
-    }
-
-    if (audioContext.state !== "running") {
-      return () => undefined;
-    }
-
-    const analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaElementSource(audio);
-    let animationFrame = 0;
-    let closed = false;
-
-    analyser.fftSize = 256;
-    analyser.smoothingTimeConstant = 0.72;
-    const samples = new Uint8Array(analyser.fftSize);
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
-
-    avatarVoiceSignal.active = true;
-
-    const measure = () => {
-      if (closed) return;
-
-      analyser.getByteTimeDomainData(samples);
-      let energy = 0;
-
-      for (const sample of samples) {
-        const normalized = (sample - 128) / 128;
-        energy += normalized * normalized;
+    if (Constructor) {
+      audioContext ??= new Constructor();
+      if (audioContext.state === "suspended") {
+        // Do not let a browser autoplay restriction stall the recitation.
+        void audioContext.resume().catch(() => undefined);
       }
-
-      const rms = Math.sqrt(energy / samples.length);
-      avatarVoiceSignal.level = Math.min(1, rms * 4.2);
-      animationFrame = window.requestAnimationFrame(measure);
-    };
-
-    measure();
-
-    const cleanup = () => {
-      if (closed) return;
-      closed = true;
-      window.cancelAnimationFrame(animationFrame);
-      source.disconnect();
-      analyser.disconnect();
-      avatarVoiceSignal.active = false;
-      avatarVoiceSignal.level = 0;
-      if (activeCleanup === cleanup) activeCleanup = null;
-    };
-
-    activeCleanup = cleanup;
-    return cleanup;
-  } catch (error) {
-    console.warn("La voz continúa sin análisis gestual.", error);
-    avatarVoiceSignal.active = false;
-    avatarVoiceSignal.level = 0;
-    return () => undefined;
+      if (audioContext.state === "running") {
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.72;
+        source = audioContext.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+      }
+    }
+  } catch {
+    // Restore audible output if attaching the optional analyser failed mid-way.
+    if (source && audioContext) { source.disconnect(); source.connect(audioContext.destination); }
+    analyser = null;
   }
+  let frame = 0;
+  let closed = false;
+  let lastAudible = -Infinity;
+  const samples = new Uint8Array(256);
+  const cleanup = () => {
+    if (closed) return;
+    closed = true;
+    window.cancelAnimationFrame(frame);
+    source?.disconnect();
+    analyser?.disconnect();
+    if (owner === generation) {
+      Object.assign(avatarVoiceSignal, { active: false, playing: false, audible: false, analysed: false, level: 0 });
+    }
+    if (activeCleanup === cleanup) activeCleanup = null;
+  };
+  const measure = () => {
+    if (closed || owner !== generation) return;
+    const playing = !audio.paused && !audio.ended;
+    let rms = 0;
+    if (analyser && playing) {
+      analyser.getByteTimeDomainData(samples);
+      rms = Math.sqrt(samples.reduce((sum, value) => sum + ((value - 128) / 128) ** 2, 0) / samples.length);
+    }
+    const now = performance.now();
+    if (playing && rms > GRAN_AVATAR_DIRECTION.voiceThreshold) lastAudible = now;
+    avatarVoiceSignal.playing = playing;
+    avatarVoiceSignal.active = playing;
+    avatarVoiceSignal.analysed = analyser !== null;
+    avatarVoiceSignal.level = playing ? Math.min(1, rms * 4.2) : 0;
+    avatarVoiceSignal.audible = playing && (analyser === null || now - lastAudible < GRAN_AVATAR_DIRECTION.quietHoldMs);
+    frame = window.requestAnimationFrame(measure);
+  };
+  activeCleanup = cleanup;
+  measure();
+  return cleanup;
 }

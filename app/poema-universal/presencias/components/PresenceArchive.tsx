@@ -1,10 +1,11 @@
 import Link from "next/link";
 
 import {
-  POETIC_PRESENCES,
+  CONFIRMED_POETIC_PRESENCES,
   type PoeticPresence,
   type PresenceProductionStatus,
 } from "../../data/poeticPresences";
+
 import styles from "../archive.module.css";
 import PresencePortrait from "./PresencePortrait";
 
@@ -47,22 +48,17 @@ function PresenceCopy({
         </span>
 
         <div>
-          <h2>
-            {presence.name ?? "Presencia por llegar"}
-          </h2>
-          <p>
-            {presence.territory ??
-              "Territorio por documentar"}
-          </p>
+          <h2>{presence.name}</h2>
+          <p>{presence.territory}</p>
         </div>
       </div>
 
       <span
         className={styles.productionMark}
-        aria-label={status?.label ?? "Lugar en espera"}
-        title={status?.label ?? "Lugar en espera"}
+        aria-label={status?.label}
+        title={status?.label}
       >
-        {status?.symbol ?? "·"}
+        {status?.symbol}
       </span>
     </div>
   );
@@ -72,58 +68,37 @@ export default function PresenceArchive() {
   return (
     <ol
       className={styles.wall}
-      aria-label="Archivo de las sesenta presencias"
+      aria-label="Presencias documentadas"
     >
-      {POETIC_PRESENCES.map((presence, index) => {
-        const cadence = index % 5;
-        const isConfirmed =
-          presence.participantStatus === "confirmed";
-        const content = (
-          <>
-            <PresencePortrait
-              name={presence.name}
-              number={presence.id}
-              presenceSlug={presence.slug}
-              portraitUrl={presence.media.portraitUrl}
-              previewVideoUrl={
-                presence.media.previewVideoUrl
-              }
-              priority={index < 4}
-            />
-            <PresenceCopy presence={presence} />
-          </>
-        );
-
-        return (
+      {CONFIRMED_POETIC_PRESENCES.map(
+        (presence, index) => (
           <li
             key={presence.id}
-            className={`${styles.presence} ${
-              isConfirmed
-                ? styles.presenceConfirmed
-                : styles.presencePending
-            }`}
-            data-cadence={cadence}
+            className={`${styles.presence} ${styles.presenceConfirmed}`}
           >
-            {isConfirmed ? (
-              <Link
-                href={`/poema-universal/presencias/${presence.slug}`}
-                className={styles.presenceLink}
-                aria-label={`Entrar en la presencia ${String(
-                  presence.id,
-                ).padStart(2, "0")}: ${presence.name}`}
-              >
-                {content}
-              </Link>
-            ) : (
-              <article aria-label={`Presencia ${String(
-                presence.id,
-              ).padStart(2, "0")}, en espera`}>
-                {content}
-              </article>
-            )}
+            <Link
+              href={`/poema-universal/presencias/${presence.slug}`}
+              className={styles.presenceLink}
+              aria-label={`Entrar en la presencia ${String(
+                presence.id
+              ).padStart(2, "0")}: ${presence.name}`}
+            >
+              <PresencePortrait
+                name={presence.name}
+                number={presence.id}
+                presenceSlug={presence.slug}
+                portraitUrl={presence.media.portraitUrl}
+                previewVideoUrl={
+                  presence.media.previewVideoUrl
+                }
+                priority={index < 4}
+              />
+
+              <PresenceCopy presence={presence} />
+            </Link>
           </li>
-        );
-      })}
+        )
+      )}
     </ol>
   );
 }

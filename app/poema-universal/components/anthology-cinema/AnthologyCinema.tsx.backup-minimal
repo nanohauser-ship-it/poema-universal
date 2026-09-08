@@ -1,0 +1,22 @@
+"use client";
+
+import React from "react";
+
+export default function AnthologyCinema() {
+  return React.createElement(
+    "main",
+    {
+      style: {
+        position: "fixed",
+        inset: 0,
+        display: "grid",
+        placeItems: "center",
+        background: "#090604",
+        color: "#e9dfd0",
+        fontFamily: "Georgia, serif",
+        fontSize: "42px"
+      }
+    },
+    "ANTOLOGÍA VIVA · MOTOR CARGADO"
+  );
+}

@@ -420,14 +420,22 @@ AsambleaPoema() {
           ? caughtError.message
           : "La Asamblea no pudo completar la lectura.";
 
-      setError(
-        `${message} Se mostrará una lectura local provisional.`
+      console.warn(
+        "Asamblea IA no disponible; usando lectura local.",
+        message
       );
+
+      setError("");
 
       const fallback =
         fallbackAnalysis(poem);
 
       setAnalysis(fallback);
+
+      // La maquinaria alquímica debe seguir funcionando
+      // aunque falle la lectura remota de la Asamblea.
+      void generateCartography(poem);
+
       beginDeliberation(fallback);
     }
   }

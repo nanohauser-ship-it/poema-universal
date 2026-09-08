@@ -78,39 +78,27 @@ export const CURATED_VOICES: CuratedVoice[] = [
   },
   {
     "position": 9,
-    "kind": "literary",
-    "name": "Aiko Mori",
-    "territory": "Kioto · Japón",
-    "poemTitle": "La madre del tiempo",
-    "treasure": "una rueda dentada guardada en un pañuelo",
-    "chapter": "La casa anterior al miedo",
-    "occupation": "relojera jubilada",
-    "language": "JAPONÉS (TRANSLITERACIÓN RŌMAJI)",
-    "age": "72 años"
+    "kind": "real",
+    "name": "Malika Ndlovu",
+    "territory": "Sudáfrica · South Africa",
+    "poemTitle": "Let the Wound Weep",
+    "treasure": "Tesoro actual de la presencia"
   },
   {
     "position": 10,
-    "kind": "literary",
-    "name": "Mamadou Diop",
-    "territory": "Saint-Louis · Senegal",
-    "poemTitle": "Primer mar",
-    "treasure": "una viruta de madera con forma de ola",
-    "chapter": "La casa anterior al miedo",
-    "occupation": "carpintero de ribera",
-    "language": "WOLOF (WOLOF DE SAINT-LOUIS)",
-    "age": "33 años"
+    "kind": "real",
+    "name": "Sasha",
+    "territory": "Rusia · Россия",
+    "poemTitle": "ГАЛА",
+    "treasure": "Tesoro actual de la presencia"
   },
   {
     "position": 11,
-    "kind": "literary",
-    "name": "Lúa Carballo",
-    "territory": "Santiago de Compostela · España",
-    "poemTitle": "Inventario de la casa pequeña",
-    "treasure": "una llave que ya no abre ninguna puerta",
-    "chapter": "La casa anterior al miedo",
-    "occupation": "archivera",
-    "language": "GALEGO (GALEGO DE GALICIA)",
-    "age": "29 años"
+    "kind": "real",
+    "name": "Gabriel",
+    "territory": "Brasil · Brazil",
+    "poemTitle": "A Volta",
+    "treasure": "Tesoro actual de la presencia"
   },
   {
     "position": 12,

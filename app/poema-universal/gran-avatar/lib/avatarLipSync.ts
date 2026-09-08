@@ -198,12 +198,13 @@ export function attachAvatarLipTimeline(
     if (closed) return;
 
     const time = audio.currentTime;
+    if (cueIndex > 0 && time < cues[cueIndex]?.start) cueIndex = 0;
     while (cueIndex < cues.length - 1 && time >= cues[cueIndex].end) {
       cueIndex += 1;
     }
 
     const cue = cues[cueIndex];
-    const insideCue = cue && time >= cue.start && time < cue.end;
+    const insideCue = !audio.paused && !audio.ended && cue && time >= cue.start && time < cue.end;
 
     avatarLipSyncSignal.active = !audio.paused && !audio.ended;
     avatarLipSyncSignal.viseme = insideCue ? cue.viseme : "REST";

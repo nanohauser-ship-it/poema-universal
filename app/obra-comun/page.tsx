@@ -27,27 +27,27 @@ const principles = [
 
 const branches = [
   {
-    status: "Proyecto fundacional",
-    title: "Discapacidad, autonomía y cultura",
-    text: "La primera rama de La Obra Común nacerá junto a personas con parálisis cerebral, sus familias, profesionales y redes de cuidado.",
+    status: "Posible línea futura",
+    title: "Cultura, accesibilidad y autonomía",
+    text: "Proyectos que puedan relacionar cultura, accesibilidad, autonomía y participación, desarrollados únicamente cuando existan las personas, alianzas y conocimientos adecuados.",
   },
   {
-    status: "Rama futura",
+    status: "Posible línea futura",
     title: "Alimentación y dignidad",
     text: "Investigación, conocimiento culinario y sistemas capaces de alimentar con respeto en situaciones de emergencia o recursos limitados.",
   },
   {
-    status: "Rama futura",
+    status: "Posible línea futura",
     title: "Memoria que permanece",
     text: "Archivos orales, cartas, testimonios y pequeñas historias que podrían desaparecer si nadie las escucha y las conserva.",
   },
   {
-    status: "Rama futura",
+    status: "Posible línea futura",
     title: "Infancia y creación",
     text: "Espacios donde niños y jóvenes puedan escribir, imaginar, dibujar, expresarse y participar como autores de su propia memoria.",
   },
   {
-    status: "Rama futura",
+    status: "Posible línea futura",
     title: "Cultura en situaciones límite",
     text: "Preservación de archivos, cuadernos, bibliotecas, fotografías, instrumentos y memoria cuando una comunidad atraviesa una crisis.",
   },
@@ -59,7 +59,7 @@ const participation = [
   "Ofrezco un espacio",
   "Ofrezco materiales",
   "Propongo una alianza",
-  "Necesito ser escuchado",
+  "Propongo una necesidad",
 ];
 
 export default function ObraComunPage() {
@@ -125,7 +125,7 @@ export default function ObraComunPage() {
         <div className="relative mx-auto grid w-full max-w-[1500px] gap-14 px-5 py-24 sm:px-8 sm:py-32 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:px-12">
           <div>
             <p className="text-[9px] uppercase tracking-[0.52em] text-[#96703c]">
-              Poema Universal · obra social
+              Poema Universal · horizonte social
             </p>
 
             <h1 className="mt-10 max-w-6xl font-serif text-6xl leading-[0.87] tracking-[-0.065em] sm:text-8xl lg:text-[132px]">
@@ -143,7 +143,7 @@ export default function ObraComunPage() {
             </p>
 
             <p className="mt-7 max-w-xl text-sm leading-8 text-stone-600">
-              Algunas obras deben convertirse en tiempo,
+              Algunas obras podrían convertirse en tiempo,
               autonomía, memoria, alimento, accesibilidad,
               compañía y oportunidades compartidas.
             </p>
@@ -169,7 +169,7 @@ export default function ObraComunPage() {
 
       <MesaDelMundo />
 
-      {/* PROYECTO FUNDACIONAL */}
+      {/* HORIZONTE SOCIAL */}
 
       <section
         id="proyecto-fundacional"
@@ -179,19 +179,19 @@ export default function ObraComunPage() {
           <div className="grid gap-14 lg:grid-cols-[0.72fr_1.28fr]">
             <div>
               <p className="text-[8px] uppercase tracking-[0.46em] text-[#96703c]">
-                Proyecto fundacional
+                Horizonte social
               </p>
 
               <p className="mt-6 font-serif text-xl italic text-stone-500">
-                Asociación en gestación
+                Proyectos por nacer
               </p>
             </div>
 
             <div>
               <h2 className="max-w-5xl font-serif text-5xl leading-[1.02] tracking-[-0.05em] sm:text-7xl lg:text-[88px]">
-                Crear junto a personas con
+                Crear allí donde
                 <span className="block italic text-stone-500">
-                  parálisis cerebral.
+                  la cultura pueda cuidar.
                 </span>
               </h2>
 
@@ -215,19 +215,19 @@ export default function ObraComunPage() {
                 {[
                   [
                     "Escucha",
-                    "Conocer primero a las personas, familias, profesionales y asociaciones que ya poseen experiencia real.",
+                    "Antes de iniciar cualquier proyecto, escuchar a las personas, comunidades y organizaciones que conocen de primera mano cada realidad.",
                   ],
                   [
                     "Accesibilidad",
-                    "Diseñar comunicación, encuentros, herramientas y espacios accesibles desde el inicio.",
+                    "Explorar proyectos, herramientas y espacios capaces de incluir distintas formas de comprender, participar y crear.",
                   ],
                   [
                     "Creación",
-                    "Abrir lugares donde cada persona pueda expresarse, participar y ser reconocida como autora.",
+                    "Imaginar la cultura, la literatura, la cocina, la imagen, el sonido y la tecnología como posibles herramientas de expresión y autonomía.",
                   ],
                   [
                     "Comunidad",
-                    "Construir una red que una cultura, cuidados, conocimiento y colaboración continuada.",
+                    "Construir únicamente junto a quienes formen parte de cada proyecto, desde la colaboración y el conocimiento compartido.",
                   ],
                 ].map(([title, text]) => (
                   <div
@@ -247,7 +247,7 @@ export default function ObraComunPage() {
 
               <div className="mt-10 border-l-2 border-[#96703c]/45 pl-6">
                 <p className="text-[8px] uppercase tracking-[0.34em] text-[#96703c]">
-                  Estado actual
+                  Principio de realidad
                 </p>
 
                 <p className="mt-4 max-w-2xl font-serif text-xl italic leading-8 text-stone-600">
@@ -319,7 +319,7 @@ export default function ObraComunPage() {
       >
         <div className="mx-auto max-w-[1500px] px-5 py-24 sm:px-8 sm:py-32 lg:px-12">
           <p className="text-[8px] uppercase tracking-[0.46em] text-[#96703c]">
-            Arquitectura futura
+            Posibles líneas de futuro
           </p>
 
           <h2 className="mt-7 max-w-5xl font-serif text-5xl leading-none tracking-[-0.05em] sm:text-7xl">
@@ -506,7 +506,7 @@ export default function ObraComunPage() {
           </p>
 
           <p className="text-[7px] uppercase tracking-[0.32em] text-white/34">
-            Cultura · dignidad · acción
+            Cultura · cuidado · futuro
           </p>
         </div>
       </footer>
