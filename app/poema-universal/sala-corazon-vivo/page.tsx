@@ -1,4 +1,5 @@
-import SalaCorazonVivo from "./SalaCorazonVivo";
+import Link from "next/link";
+import RecordingStudio from "./RecordingStudio";
 import {
   LiveSessionProvider,
 } from "./LiveSessionProvider";
@@ -13,7 +14,7 @@ export const metadata = {
 export default function SalaCorazonVivoPage() {
   return (
     <>
-      <a
+      <Link
         href="/poema-universal"
         aria-label="Volver a Poema Universal"
         style={{
@@ -36,10 +37,10 @@ export default function SalaCorazonVivoPage() {
         }}
       >
         ← Poema Universal
-      </a>
+      </Link>
 
     <LiveSessionProvider>
-      <SalaCorazonVivo />
+      <RecordingStudio />
     </LiveSessionProvider>
     </>
   );

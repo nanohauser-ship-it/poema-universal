@@ -1,0 +1,28 @@
+'use client';
+import { useEffect, useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { CanvasTexture, CatmullRomCurve3, Color, DoubleSide, Group, InstancedMesh, Mesh, MeshStandardMaterial, Object3D, Vector3 } from 'three';
+import { phaseAt, type Contribution, type CeremonyState } from './ceremony';
+export type CeremonyProps={contribution:Contribution|null;contributions:Contribution[];onPhase:(state:CeremonyState)=>void};
+export default function ContributionCeremony({root,contribution,contributions,onPhase}:CeremonyProps&{root:Object3D}){
+ const anchor=useRef<Group>(null),paper=useRef<Group>(null),core=useRef<Mesh>(null),halo=useRef<Mesh>(null),marks=useRef<InstancedMesh>(null);
+ const runtime=useRef({id:'',elapsed:0,state:'IDLE' as CeremonyState});
+ const chest=useMemo(()=>root.getObjectByName('Spine02')??root,[root]);
+ const scratch=useMemo(()=>({chest:new Vector3(),target:new Vector3(),dummy:new Object3D(),warm:new Color('#d5ad73')}),[]);
+ const texture=useMemo(()=>{if(!contribution)return null;const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=640;const ctx=canvas.getContext('2d')!;ctx.fillStyle='#d8cbb1';ctx.fillRect(0,0,1024,640);ctx.fillStyle='#3c332b';ctx.font='44px Georgia';ctx.textAlign='center';const words=Array.from(contribution.text);let line='';const lines:string[]=[];for(const ch of words){if(ctx.measureText(line+ch).width>870||ch==='\n'){lines.push(line);line=ch==='\n'?'':ch}else line+=ch}if(line)lines.push(line);lines.forEach((s,i)=>ctx.fillText(s,512,320+(i-(lines.length-1)/2)*58));return new CanvasTexture(canvas)},[contribution]);
+ useEffect(()=>()=>texture?.dispose(),[texture]);
+ const curve=useMemo(()=>new CatmullRomCurve3([new Vector3(-.65,.8,1.25),new Vector3(-.55,1.2,.85),new Vector3(.35,1.42,.5),new Vector3(.38,1.25,.12),new Vector3(0,1.25,.09)]),[]);
+ useFrame((_,dt)=>{
+  const r=runtime.current;if(contribution&&r.id!==contribution.id){r.id=contribution.id;r.elapsed=0;r.state='IDLE'}
+  if(contribution&&!document.hidden)r.elapsed+=Math.min(dt,.05);
+  const phase=contribution?phaseAt(r.elapsed):{state:'IDLE' as const,progress:0};if(r.state!==phase.state){r.state=phase.state;onPhase(phase.state)}
+  chest.getWorldPosition(scratch.chest);scratch.chest.setZ(scratch.chest.z+.12);scratch.chest.setY(scratch.chest.y+.18);
+  if(anchor.current)anchor.current.position.copy(scratch.chest);
+  const pulse=phase.state==='PULSE'?Math.sin(phase.progress*Math.PI):phase.state==='ABSORBING'?phase.progress*.45:0;
+  if(core.current){core.current.scale.setScalar(1+pulse*1.1);(core.current.material as MeshStandardMaterial).emissiveIntensity=1+pulse*5}
+  if(halo.current){halo.current.scale.setScalar(1+pulse*5);(halo.current.material as MeshStandardMaterial).opacity=pulse*.22}
+  if(paper.current){const moving=['SENSING','ATTRACTING','CAPTURING','ABSORBING'].includes(phase.state);paper.current.visible=moving;let t=0;if(phase.state==='ATTRACTING')t=.5*phase.progress;if(phase.state==='CAPTURING')t=.5+.3*phase.progress;if(phase.state==='ABSORBING')t=.8+.2*phase.progress;curve.getPointAt(t*t*(3-2*t),scratch.target);scratch.target.setY(scratch.target.y+scratch.chest.y-1.25);paper.current.position.copy(scratch.target);if(phase.state==='ABSORBING')paper.current.position.lerp(scratch.chest,phase.progress);paper.current.rotation.set(.08*Math.sin(r.elapsed*2),Math.sin(r.elapsed)*.16,-.08*Math.cos(r.elapsed));paper.current.scale.setScalar(phase.state==='ABSORBING'?1-phase.progress*.98:1)}
+  if(marks.current){const visible=contributions.filter(c=>c.id!==contribution?.id||['INCORPORATING','REVEAL','RETURNING','IDLE'].includes(phase.state)).slice(-100);marks.current.count=visible.length;visible.forEach((c,i)=>{const a=c.position_seed*Math.PI*2;const radius=.06+((c.position_seed*17)%1)*.13;scratch.dummy.position.set(Math.cos(a)*radius,Math.sin(a)*radius,.025+((c.position_seed*31)%1)*.02);scratch.dummy.rotation.set(0,0,a*.2);scratch.dummy.scale.set(.022,.012,.004);scratch.dummy.updateMatrix();marks.current!.setMatrixAt(i,scratch.dummy.matrix)});marks.current.instanceMatrix.needsUpdate=true}
+ });
+ return <><group ref={anchor}><mesh ref={core}><sphereGeometry args={[.027,20,16]}/><meshStandardMaterial color="#bd9464" emissive="#d7a567" emissiveIntensity={1}/></mesh><mesh ref={halo}><sphereGeometry args={[.06,20,16]}/><meshStandardMaterial color="#e9c89c" emissive="#a87845" transparent opacity={0} depthWrite={false}/></mesh><instancedMesh ref={marks} args={[undefined,undefined,100]} frustumCulled={false}><boxGeometry/><meshStandardMaterial color="#c7ad7e" roughness={.72} metalness={.25}/></instancedMesh></group>{texture&&<group ref={paper}><mesh><boxGeometry args={[.55,.345,.009]}/><meshStandardMaterial color="#c6b596" roughness={.9}/></mesh><mesh position={[0,0,.005]}><planeGeometry args={[.55,.345]}/><meshStandardMaterial map={texture} side={DoubleSide} roughness={.95}/></mesh></group>}</>;
+}

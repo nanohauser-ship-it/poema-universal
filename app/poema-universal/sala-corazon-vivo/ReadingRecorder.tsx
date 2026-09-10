@@ -32,6 +32,11 @@ export default function ReadingRecorder() {
   const [videoUrl, setVideoUrl] =
     useState("");
 
+  const [
+    recordedMimeType,
+    setRecordedMimeType,
+  ] = useState("");
+
   const [error, setError] =
     useState("");
 
@@ -331,16 +336,20 @@ export default function ReadingRecorder() {
           );
         };
 
-      recorder.onstop = () => {
+      recorder.onstop = async () => {
         clearTimer();
+
+        const sourceMimeType =
+          recorder.mimeType ||
+          mimeType ||
+          "video/webm";
 
         const blob =
           new Blob(
             chunksRef.current,
             {
               type:
-                recorder.mimeType ||
-                "video/webm",
+                sourceMimeType,
             },
           );
 
@@ -358,11 +367,87 @@ export default function ReadingRecorder() {
         if (
           blob.size > 0
         ) {
-          setVideoUrl(
-            URL.createObjectURL(
+          try {
+            /*
+             * La grabación interna
+             * puede ser WebM.
+             *
+             * Antes de entregarla
+             * al usuario la convertimos
+             * SIEMPRE a MP4 universal.
+             */
+            const form =
+              new FormData();
+
+            form.append(
+              "file",
               blob,
-            ),
-          );
+              sourceMimeType
+                .includes(
+                  "mp4",
+                )
+                ? "recording.mp4"
+                : "recording.webm",
+            );
+
+            const response =
+              await fetch(
+                "/api/poema-universal/convert-recording",
+                {
+                  method:
+                    "POST",
+
+                  body:
+                    form,
+                },
+              );
+
+            if (
+              !response.ok
+            ) {
+              throw new Error(
+                "Falló la conversión MP4",
+              );
+            }
+
+            const mp4Blob =
+              await response.blob();
+
+            setRecordedMimeType(
+              "video/mp4",
+            );
+
+            setVideoUrl(
+              URL.createObjectURL(
+                mp4Blob,
+              ),
+            );
+          } catch (
+            conversionError
+          ) {
+            console.error(
+              "[CORAZÓN VIVO · CONVERSIÓN]",
+              conversionError,
+            );
+
+            /*
+             * No perdemos la lectura
+             * aunque falle FFmpeg.
+             */
+            setRecordedMimeType(
+              sourceMimeType,
+            );
+
+            setVideoUrl(
+              URL.createObjectURL(
+                blob,
+              ),
+            );
+
+            setError(
+              "La lectura se grabó, pero no pudo convertirse a MP4.",
+            );
+          }
         }
 
         setRecording(false);
@@ -387,7 +472,14 @@ export default function ReadingRecorder() {
           };
       }
 
-      recorder.start(500);
+      /*
+       * Grabación continua.
+       *
+       * No usamos timeslice con MP4:
+       * evitamos fragmentar el contenedor
+       * durante grabaciones largas.
+       */
+      recorder.start();
 
       startedAtRef.current =
         Date.now();
@@ -536,9 +628,35 @@ export default function ReadingRecorder() {
                 styles.actions
               }
             >
+              <span
+                style={{
+                  marginRight: "auto",
+                  fontSize: 8,
+                  opacity: 0.45,
+                  letterSpacing:
+                    ".12em",
+                }}
+              >
+                {recordedMimeType
+                  .toLowerCase()
+                  .includes(
+                    "video/mp4",
+                  )
+                  ? "MP4 · H.264"
+                  : "WEBM"}
+              </span>
+
               <a
                 href={videoUrl}
-                download="poema-universal-lectura.webm"
+                download={
+                  recordedMimeType
+                    .toLowerCase()
+                    .includes(
+                      "video/mp4",
+                    )
+                    ? "poema-universal-lectura.mp4"
+                    : "poema-universal-lectura.webm"
+                }
               >
                 Guardar vídeo
               </a>

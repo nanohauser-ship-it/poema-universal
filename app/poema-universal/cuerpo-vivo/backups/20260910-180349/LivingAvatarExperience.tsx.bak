@@ -1,0 +1,8 @@
+'use client';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { Component, useCallback, useState, type ReactNode } from 'react';
+import styles from './living-avatar.module.css';
+const Scene=dynamic(()=>import('../components/living-avatar/LivingAvatarScene'),{ssr:false});
+class SceneBoundary extends Component<{children:ReactNode},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return {failed:true}}render(){return this.state.failed?<div className={styles.failure} role="alert"><p>No se pudo abrir el cuerpo 3D.</p><button onClick={()=>location.reload()}>Volver a intentar</button></div>:this.props.children}}
+export default function LivingAvatarExperience(){const [ready,setReady]=useState(false);const onReady=useCallback(()=>setReady(true),[]);return <main className={styles.room}><header className={styles.header}><Link href="/poema-universal">POEMA UNIVERSAL</Link><span>ESTUDIO DE PRESENCIA · 01</span></header><div className={styles.title}><span>EL POEMA YA HA COMENZADO.</span><h1>Cuerpo vivo.</h1><p>Una escultura que ha empezado a vivir.</p></div><div className={styles.stage} role="img" aria-label="Gran Avatar de cuerpo entero, escultura dorada con esqueleto articulado"><SceneBoundary><Scene onReady={onReady}/></SceneBoundary></div><div className={styles.status} role="status">{ready?'Un cuerpo. Una presencia.':'La presencia está apareciendo…'}</div><footer className={styles.footer}>ESTUDIO AISLADO · SIN APORTACIONES NI CONEXIÓN AL ARCHIVO</footer></main>}

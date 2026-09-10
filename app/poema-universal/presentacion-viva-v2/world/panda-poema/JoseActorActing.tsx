@@ -274,7 +274,7 @@ export function JoseActorActing({
 
     root.current.position.lerp(
       targetPosition,
-      1 - Math.exp(-10 * dt),
+      1 - Math.exp(-16 * dt),
     );
 
     const tangent =
@@ -298,7 +298,7 @@ export function JoseActorActing({
       THREE.MathUtils.lerp(
         root.current.rotation.y,
         targetYaw,
-        1 - Math.exp(-8 * dt),
+        1 - Math.exp(-12 * dt),
       );
 
     const delta =
@@ -310,7 +310,7 @@ export function JoseActorActing({
 
     const targetMovement =
       THREE.MathUtils.clamp(
-        delta / Math.max(dt, 0.001) * 5,
+        delta / Math.max(dt, 0.001) * 7.5,
         0,
         1,
       );
@@ -319,7 +319,7 @@ export function JoseActorActing({
       THREE.MathUtils.lerp(
         movement.current,
         targetMovement,
-        1 - Math.exp(-10 * dt),
+        1 - Math.exp(-14 * dt),
       );
 
     const walk =
@@ -390,21 +390,21 @@ export function JoseActorActing({
         THREE.MathUtils.lerp(
           head.current.rotation.x,
           0,
-          1 - Math.exp(-8 * dt),
+          1 - Math.exp(-12 * dt),
         );
 
       head.current.rotation.y =
         THREE.MathUtils.lerp(
           head.current.rotation.y,
           0,
-          1 - Math.exp(-8 * dt),
+          1 - Math.exp(-12 * dt),
         );
 
       head.current.rotation.z =
         THREE.MathUtils.lerp(
           head.current.rotation.z,
           0,
-          1 - Math.exp(-8 * dt),
+          1 - Math.exp(-12 * dt),
         );
     }
 

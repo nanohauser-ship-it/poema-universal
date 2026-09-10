@@ -46,3 +46,4 @@ next-env.d.ts
 **/*.before-*
 atlas-interior-v1*.zip
 borges-entrance-final/*.zip
+.next-anterior-*/

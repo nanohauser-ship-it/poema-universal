@@ -10,16 +10,23 @@ import {
 } from "next/navigation";
 
 export default function GlobalRecorder() {
-  const pathname = usePathname();
+  const pathname =
+    usePathname();
 
-  const [recording, setRecording] =
-    useState(false);
+  const [
+    recording,
+    setRecording,
+  ] = useState(false);
 
-  const [url, setUrl] =
-    useState("");
+  const [
+    url,
+    setUrl,
+  ] = useState("");
 
-  const [error, setError] =
-    useState("");
+  const [
+    error,
+    setError,
+  ] = useState("");
 
   const recorderRef =
     useRef<MediaRecorder | null>(
@@ -34,12 +41,16 @@ export default function GlobalRecorder() {
 
     try {
       if (url) {
-        URL.revokeObjectURL(url);
+        URL.revokeObjectURL(
+          url,
+        );
+
         setUrl("");
       }
 
       const stream =
-        await navigator.mediaDevices
+        await navigator
+          .mediaDevices
           .getDisplayMedia({
             video: {
               frameRate: {
@@ -50,29 +61,38 @@ export default function GlobalRecorder() {
 
             audio: true,
 
-            preferCurrentTab: true,
+            preferCurrentTab:
+              true,
+
             selfBrowserSurface:
               "include",
           } as any);
 
-      chunksRef.current = [];
+      chunksRef.current =
+        [];
 
       const preferred =
         [
           "video/webm;codecs=vp9,opus",
           "video/webm;codecs=vp8,opus",
           "video/webm",
-        ].find((type) =>
-          MediaRecorder
-            .isTypeSupported(type),
+        ].find(
+          (type) =>
+            MediaRecorder
+              .isTypeSupported(
+                type,
+              ),
         );
 
       const recorder =
         new MediaRecorder(
           stream,
+
           preferred
             ? {
-                mimeType: preferred,
+                mimeType:
+                  preferred,
+
                 videoBitsPerSecond:
                   4_500_000,
               }
@@ -84,36 +104,44 @@ export default function GlobalRecorder() {
 
       recorder.ondataavailable =
         (event) => {
-          if (event.data.size) {
+          if (
+            event.data.size
+          ) {
             chunksRef.current.push(
               event.data,
             );
           }
         };
 
-      recorder.onstop = () => {
-        const blob =
-          new Blob(
-            chunksRef.current,
-            {
-              type:
-                recorder.mimeType ||
-                "video/webm",
-            },
+      recorder.onstop =
+        () => {
+          const blob =
+            new Blob(
+              chunksRef.current,
+              {
+                type:
+                  recorder.mimeType ||
+                  "video/webm",
+              },
+            );
+
+          setUrl(
+            URL.createObjectURL(
+              blob,
+            ),
           );
 
-        setUrl(
-          URL.createObjectURL(blob),
-        );
-
-        setRecording(false);
-
-        stream
-          .getTracks()
-          .forEach((track) =>
-            track.stop(),
+          setRecording(
+            false,
           );
-      };
+
+          stream
+            .getTracks()
+            .forEach(
+              (track) =>
+                track.stop(),
+            );
+        };
 
       const videoTrack =
         stream
@@ -131,9 +159,13 @@ export default function GlobalRecorder() {
           };
       }
 
-      recorder.start(1000);
+      recorder.start(
+        1000,
+      );
 
-      setRecording(true);
+      setRecording(
+        true,
+      );
     } catch (err) {
       const exception =
         err as DOMException;
@@ -153,14 +185,17 @@ export default function GlobalRecorder() {
         );
       }
 
-      setRecording(false);
+      setRecording(
+        false,
+      );
     }
   }
 
   function stopRecording() {
     if (
       recorderRef.current &&
-      recorderRef.current.state !==
+      recorderRef.current
+        .state !==
         "inactive"
     ) {
       recorderRef.current.stop();
@@ -175,74 +210,198 @@ export default function GlobalRecorder() {
             /^\/poema-universal\/?/,
             "",
           )
-          .replace(/\//g, "-") ||
+          .replace(
+            /\//g,
+            "-",
+          ) ||
         "inicio";
 
   return (
     <div
       style={{
-        display: "grid",
-        gap: 8,
+        position: "fixed",
+        right: 14,
+        bottom: 14,
+        zIndex: 999999,
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+        opacity: 0.42,
+        transition:
+          "opacity 180ms ease",
+      }}
+      onMouseEnter={(
+        event,
+      ) => {
+        event.currentTarget
+          .style.opacity =
+          "0.95";
+      }}
+      onMouseLeave={(
+        event,
+      ) => {
+        event.currentTarget
+          .style.opacity =
+          "0.42";
       }}
     >
-      {!recording ? (
+      {!recording &&
+      !url && (
         <button
-          onClick={startRecording}
-          style={buttonStyle}
-        >
-          ● GRABAR EXPERIENCIA
-        </button>
-      ) : (
-        <button
-          onClick={stopRecording}
+          type="button"
+          onClick={
+            startRecording
+          }
+          title="Grabar experiencia"
+          aria-label="Grabar experiencia"
           style={{
-            ...buttonStyle,
-            color: "#e78e76",
+            ...circleStyle,
+
+            color:
+              "#c99a4f",
           }}
         >
-          ■ DETENER
+          ●
         </button>
       )}
 
-      {url && !recording && (
-        <a
-          href={url}
-          download={
-            `poema-universal-${room}.webm`
+      {recording && (
+        <button
+          type="button"
+          onClick={
+            stopRecording
           }
+          title="Detener grabación"
+          aria-label="Detener grabación"
           style={{
-            ...buttonStyle,
-            display: "grid",
-            placeItems: "center",
-            textDecoration: "none",
+            ...circleStyle,
+
+            color:
+              "#db715f",
           }}
         >
-          ↓ GUARDAR VÍDEO
-        </a>
+          ■
+        </button>
       )}
+
+      {url &&
+        !recording && (
+          <>
+            <a
+              href={url}
+              download={
+                `poema-universal-${room}.webm`
+              }
+              title="Guardar vídeo"
+              aria-label="Guardar vídeo"
+              style={{
+                ...circleStyle,
+
+                display:
+                  "grid",
+
+                placeItems:
+                  "center",
+
+                textDecoration:
+                  "none",
+
+                color:
+                  "#d4ad68",
+              }}
+            >
+              ↓
+            </a>
+
+            <button
+              type="button"
+              onClick={() => {
+                URL.revokeObjectURL(
+                  url,
+                );
+
+                setUrl("");
+              }}
+              title="Descartar"
+              aria-label="Descartar"
+              style={{
+                ...smallStyle,
+
+                color:
+                  "rgba(235,220,195,.42)",
+              }}
+            >
+              ×
+            </button>
+          </>
+        )}
 
       {error && (
-        <small
+        <span
           style={{
-            color: "#d88a76",
+            maxWidth: 145,
+            padding:
+              "5px 8px",
+            borderRadius: 6,
+            background:
+              "rgba(5,4,3,.88)",
+            color:
+              "#c97f70",
+            fontSize: 8,
+            lineHeight: 1.35,
           }}
         >
           {error}
-        </small>
+        </span>
       )}
     </div>
   );
 }
 
-const buttonStyle = {
-  minHeight: 42,
+const circleStyle = {
+  width: 34,
+  height: 34,
+
   border:
-    "1px solid rgba(216,179,107,.24)",
-  borderRadius: 7,
+    "1px solid rgba(211,168,91,.22)",
+
+  borderRadius:
+    "50%",
+
   background:
-    "rgba(216,179,107,.06)",
-  color: "#dfbd78",
-  cursor: "pointer",
+    "rgba(4,3,2,.78)",
+
+  backdropFilter:
+    "blur(9px)",
+
+  boxShadow:
+    "0 6px 22px rgba(0,0,0,.24)",
+
+  cursor:
+    "pointer",
+
+  fontSize: 11,
+
+  padding: 0,
+};
+
+const smallStyle = {
+  width: 22,
+  height: 22,
+
+  border:
+    "1px solid rgba(220,205,180,.09)",
+
+  borderRadius:
+    "50%",
+
+  background:
+    "rgba(4,3,2,.72)",
+
+  cursor:
+    "pointer",
+
   fontSize: 10,
-  letterSpacing: ".08em",
+
+  padding: 0,
 };

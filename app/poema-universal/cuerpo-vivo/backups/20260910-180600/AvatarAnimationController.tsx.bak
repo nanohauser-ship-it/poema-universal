@@ -1,0 +1,32 @@
+'use client';
+import { useEffect,useMemo,useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { AnimationClip, AnimationMixer, Bone, LoopOnce, NumberKeyframeTrack, QuaternionKeyframeTrack, VectorKeyframeTrack } from 'three';
+import type { AnimationAction, Group, KeyframeTrack } from 'three';
+import { AVATAR_SOURCE_FILES, animationUrl, CROSS_FADE_SECONDS } from './config';
+import { assertCompatible, chooseUsefulClip, inspectClips, loadAnimationClips, prepareClip } from './avatarAnimationRegistry';
+import type { PlaybackReport, PlaybackRequest } from './types';
+export default function AvatarAnimationController({root,baseClips,request,paused,onReport}:{root:Group;baseClips:AnimationClip[];request:PlaybackRequest|null;paused:boolean;onReport:(report:PlaybackReport)=>void}){
+ const setup=useMemo(()=>{const tracks:KeyframeTrack[]=[];root.traverse(node=>{if(node instanceof Bone){tracks.push(new VectorKeyframeTrack(`${node.name}.position`,[0],node.position.toArray()),new QuaternionKeyframeTrack(`${node.name}.quaternion`,[0],node.quaternion.toArray()),new VectorKeyframeTrack(`${node.name}.scale`,[0],node.scale.toArray()))}});return {mixer:new AnimationMixer(root),rest:new AnimationClip('__bind_rest',1,tracks)}},[root]);
+ const cache=useRef(new Map<number,AnimationClip[]>());const active=useRef<AnimationAction|null>(null);const retiring=useRef<AnimationAction[]>([]);const fade=useRef(0);const returning=useRef(false);const pausedRef=useRef(paused);pausedRef.current=paused;
+ useEffect(()=>{const idle=setup.mixer.clipAction(setup.rest);idle.play();onReport({state:'IDLE',message:'La presencia espera.'});const finished=()=>{if(!active.current)return;idle.reset().setEffectiveWeight(1).play();active.current.crossFadeTo(idle,CROSS_FADE_SECONDS,false);retiring.current.push(active.current);active.current=null;fade.current=CROSS_FADE_SECONDS;returning.current=true;onReport({state:'RETURNING',message:'Regresando al reposo.'})};setup.mixer.addEventListener('finished',finished);return()=>{setup.mixer.removeEventListener('finished',finished);setup.mixer.stopAllAction();setup.mixer.uncacheRoot(root);active.current=null;retiring.current=[];cache.current.clear()}},[root,setup,onReport]);
+ useEffect(()=>{
+  const abort=new AbortController();const idle=setup.mixer.clipAction(setup.rest);
+  if(!request){if(active.current){idle.reset().setEffectiveWeight(1).play();active.current.crossFadeTo(idle,CROSS_FADE_SECONDS,false);retiring.current.push(active.current);active.current=null;fade.current=CROSS_FADE_SECONDS;returning.current=true;onReport({state:'RETURNING',message:'Regresando al reposo.'})}return()=>abort.abort()}
+  onReport({state:'LOADING',message:'Preparando el movimiento.'});
+  const load=async()=>{try{
+   let clips=cache.current.get(request.source);if(!clips){clips=request.source===0?baseClips:await loadAnimationClips(animationUrl(AVATAR_SOURCE_FILES[request.source]),abort.signal);if(abort.signal.aborted)return;cache.current.set(request.source,clips)}
+   const entries=inspectClips(AVATAR_SOURCE_FILES[request.source],clips);const chosen=chooseUsefulClip(entries);if(!chosen)throw new Error('Este archivo no contiene movimiento útil.');assertCompatible(root,chosen.clip);
+   const clip=prepareClip(chosen.clip,request.inPlace);const next=setup.mixer.clipAction(clip);next.reset().setLoop(LoopOnce,1);next.clampWhenFinished=true;next.setEffectiveWeight(1).play();
+   const previous=active.current??idle;previous.crossFadeTo(next,CROSS_FADE_SECONDS,false);if(previous!==idle)retiring.current.push(previous);active.current=next;fade.current=CROSS_FADE_SECONDS;returning.current=false;
+   onReport({state:'PLAYING',message:'El cuerpo está en movimiento.',selectedClip:chosen.name,clips:entries.map(({clip:_,...entry})=>entry)});
+  }catch(error){if(abort.signal.aborted)return;onReport({state:'ERROR',message:error instanceof Error?error.message:'No se pudo reproducir el movimiento.'})}};
+  void load();return()=>abort.abort();
+ },[request,root,baseClips,setup,onReport]);
+ useFrame((_,dt)=>{
+  if(pausedRef.current||document.hidden)return;
+  const delta=Math.min(dt,.05);setup.mixer.update(delta);
+  if(fade.current>0){fade.current-=delta;if(fade.current<=0){for(const old of retiring.current){old.stop();setup.mixer.uncacheAction(old.getClip(),root)}retiring.current=[];if(returning.current){returning.current=false;onReport({state:'IDLE',message:'La presencia espera.'})}}}
+ });
+ return null;
+}

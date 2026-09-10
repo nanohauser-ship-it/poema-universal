@@ -3,6 +3,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { MasterPlayer } from "./MasterPlayer";
+import { KeyboardFilmControls } from "./KeyboardFilmControls";
+import { StoryTextOverlay } from "./StoryTextOverlay";
+import { IcarusPaperScene } from "./IcarusPaperScene";
 
 export default function PresentationVivaLayout({
   children,
@@ -20,7 +23,32 @@ export default function PresentationVivaLayout({
         ← POEMA UNIVERSAL
       </Link>
 
-      <MasterPlayer />
+      {/*
+        MasterPlayer permanece montado porque
+        gobierna la película, pero su interfaz
+        queda completamente oculta durante
+        la experiencia y la grabación.
+      */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed",
+          width: 1,
+          height: 1,
+          overflow: "hidden",
+          opacity: 0,
+          pointerEvents: "none",
+          left: -9999,
+          top: -9999,
+        }}
+      >
+        <MasterPlayer />
+        <KeyboardFilmControls />
+      </div>
+
+      <IcarusPaperScene />
+
+      <StoryTextOverlay />
 
       <style jsx global>{`
         .puBackHome {

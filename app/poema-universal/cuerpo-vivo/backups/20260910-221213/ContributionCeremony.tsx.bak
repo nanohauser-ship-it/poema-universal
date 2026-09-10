@@ -1,0 +1,46 @@
+'use client';
+import { useEffect, useMemo, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { CanvasTexture, CatmullRomCurve3, DoubleSide, Group, InstancedMesh, Mesh, MeshStandardMaterial, Object3D, Quaternion, Vector3 } from 'three';
+import { phaseAt, ceremonyMotion, ease, type Contribution, type CeremonyState } from './ceremony';
+export type CeremonyProps={contribution:Contribution|null;contributions:Contribution[];onSelect:(contribution:Contribution)=>void;onPhase:(state:CeremonyState)=>void};
+export default function ContributionCeremony({root,contribution,contributions,onPhase,onSelect}:CeremonyProps&{root:Object3D}){
+ const anchor=useRef<Group>(null),paper=useRef<Group>(null),core=useRef<Mesh>(null),halo=useRef<Mesh>(null),marks=useRef<InstancedMesh>(null);
+ const visibleMarks=useRef<Contribution[]>([]);
+ const fieldRevision=useRef<{entries:Contribution[]|null;id:string|null;state:CeremonyState|null}>({entries:null,id:null,state:null});
+ const runtime=useRef({id:'',elapsed:0,state:'IDLE' as CeremonyState});
+ const chest=useMemo(()=>root.getObjectByName('Spine02')??root,[root]);
+ const restRotation=useMemo(()=>{root.updateMatrixWorld(true);return chest.getWorldQuaternion(new Quaternion()).invert()},[root,chest]);
+ const scratch=useMemo(()=>({rotation:new Quaternion(),offset:new Vector3(),chest:new Vector3(),target:new Vector3(),dummy:new Object3D(),endpoint:new Vector3(0,1.25,.09)}),[]);
+ const texture=useMemo(()=>{if(!contribution)return null;const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=640;const ctx=canvas.getContext('2d')!;ctx.fillStyle='#d8cbb1';ctx.fillRect(0,0,1024,640);ctx.fillStyle='#3c332b';ctx.font='44px Georgia';ctx.textAlign='center';const words=Array.from(contribution.text);let line='';const lines:string[]=[];for(const ch of words){if(ctx.measureText(line+ch).width>870||ch==='\n'){lines.push(line);line=ch==='\n'?'':ch}else line+=ch}if(line)lines.push(line);lines.forEach((s,i)=>ctx.fillText(s,512,320+(i-(lines.length-1)/2)*58));return new CanvasTexture(canvas)},[contribution]);
+ useEffect(()=>()=>texture?.dispose(),[texture]);
+ const curve=useMemo(()=>new CatmullRomCurve3([new Vector3(-.65,.8,1.25),new Vector3(-.55,1.2,.85),new Vector3(.35,1.42,.5),new Vector3(.38,1.25,.12),new Vector3(0,1.25,.09)]),[]);
+ useFrame((_,dt)=>{
+  const r=runtime.current;if(contribution&&r.id!==contribution.id){r.id=contribution.id;r.elapsed=0;r.state='IDLE'}
+  if(contribution&&!document.hidden)r.elapsed+=Math.min(dt,.05);
+  const phase=contribution?phaseAt(r.elapsed):{state:'IDLE' as const,progress:0};if(r.state!==phase.state){r.state=phase.state;onPhase(phase.state)}
+  chest.getWorldPosition(scratch.chest);
+  chest.getWorldQuaternion(scratch.rotation).multiply(restRotation);
+  scratch.offset.set(0,.18,.12).applyQuaternion(scratch.rotation);
+  scratch.chest.add(scratch.offset);
+  if(anchor.current){anchor.current.position.copy(scratch.chest);anchor.current.quaternion.copy(scratch.rotation)}
+  const motion=ceremonyMotion(phase.state,phase.progress);const pulse=motion.energy;
+  if(core.current){core.current.scale.setScalar(1+pulse*1.1);(core.current.material as MeshStandardMaterial).emissiveIntensity=1+pulse*5}
+  if(halo.current){halo.current.scale.setScalar(1+pulse*5);(halo.current.material as MeshStandardMaterial).opacity=pulse*.22}
+  if(paper.current){
+   paper.current.visible=['SENSING','ATTRACTING','CAPTURING','ABSORBING'].includes(phase.state);
+   curve.getPointAt(motion.path,scratch.target);
+   // Finish precisely at the living chest, including its motion during the receiving gesture.
+   scratch.target.add(scratch.chest).sub(scratch.endpoint);
+   paper.current.position.copy(scratch.target);
+   const stillness=phase.state==='ABSORBING'?1-ease(phase.progress):1;
+   paper.current.rotation.set(.08*Math.sin(r.elapsed*2)*stillness,Math.sin(r.elapsed)*.16*stillness,-.08*Math.cos(r.elapsed)*stillness);
+   paper.current.scale.setScalar(motion.scale);
+  }
+  const revision=fieldRevision.current;
+  const fieldChanged=revision.entries!==contributions||revision.id!==(contribution?.id??null)||revision.state!==phase.state;
+  // Resting fragments share one draw call; upload their matrices only when the field changes.
+  if(marks.current&&(fieldChanged||phase.state==='INCORPORATING')){revision.entries=contributions;revision.id=contribution?.id??null;revision.state=phase.state;const visible=contributions.filter(c=>c.id!==contribution?.id||['INCORPORATING','REVEAL','RETURNING','IDLE'].includes(phase.state)).slice(-100);visibleMarks.current=visible;marks.current.count=visible.length;visible.forEach((c,i)=>{const a=c.position_seed*Math.PI*2;const radius=.06+((c.position_seed*17)%1)*.13;scratch.dummy.position.set(Math.cos(a)*radius,Math.sin(a)*radius,.025+((c.position_seed*31)%1)*.02);scratch.dummy.rotation.set(0,0,a*.2);const growth=c.id===contribution?.id&&phase.state==='INCORPORATING'?ease(phase.progress):1;scratch.dummy.scale.set(.022*growth,.012*growth,.004*growth);scratch.dummy.updateMatrix();marks.current!.setMatrixAt(i,scratch.dummy.matrix)});marks.current.instanceMatrix.needsUpdate=true}
+ });
+ return <><group ref={anchor}><mesh ref={core}><sphereGeometry args={[.027,20,16]}/><meshStandardMaterial color="#bd9464" emissive="#d7a567" emissiveIntensity={1}/></mesh><mesh ref={halo}><sphereGeometry args={[.06,20,16]}/><meshStandardMaterial color="#e9c89c" emissive="#a87845" transparent opacity={0} depthWrite={false}/></mesh><instancedMesh onClick={event=>{if(runtime.current.state!=='IDLE'||event.instanceId===undefined)return;event.stopPropagation();const selected=visibleMarks.current[event.instanceId];if(selected)onSelect(selected)}} ref={marks} args={[undefined,undefined,100]} frustumCulled={false}><boxGeometry/><meshStandardMaterial color="#c7ad7e" roughness={.72} metalness={.25}/></instancedMesh></group>{texture&&<group ref={paper}><mesh><boxGeometry args={[.55,.345,.009]}/><meshStandardMaterial color="#c6b596" roughness={.9}/></mesh><mesh position={[0,0,.005]}><planeGeometry args={[.55,.345]}/><meshStandardMaterial map={texture} side={DoubleSide} roughness={.95}/></mesh></group>}</>;
+}

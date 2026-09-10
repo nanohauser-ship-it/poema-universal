@@ -2,7 +2,7 @@ import type {
   ReactNode,
 } from "react";
 
-import PrivateStudio from "./components/private/PrivateStudio";
+import GlobalRecorder from "./components/private/GlobalRecorder";
 
 export default function PoemaUniversalLayout({
   children,
@@ -12,7 +12,9 @@ export default function PoemaUniversalLayout({
   return (
     <>
       {children}
-      <PrivateStudio />
+
+      {/* Grabadora global mínima */}
+      <GlobalRecorder />
     </>
   );
 }

@@ -1,0 +1,22 @@
+'use client';
+import { useEffect, useMemo } from 'react';
+import { useGLTF } from '@react-three/drei';
+import { Box3, Vector3, Mesh, Material, MeshStandardMaterial, SkinnedMesh } from 'three';
+import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { MASTER_AVATAR_URL } from './config';
+import ContributionCeremony from './ContributionCeremony';
+import AvatarAnimationController from './AvatarAnimationController';
+import type { SceneProps } from './types';
+export default function LivingAvatar({onReady,request,paused,onReport,...ceremony}:SceneProps) {
+ const gltf=useGLTF(MASTER_AVATAR_URL);
+ const instance=useMemo(()=>{
+  const root=clone(gltf.scene);const materials:Material[]=[];
+  root.traverse(object=>{if(object instanceof Mesh){object.castShadow=true;object.receiveShadow=true;const copy=(source:Material)=>{const material=source.clone();if(material instanceof MeshStandardMaterial)material.emissiveIntensity=.18;materials.push(material);return material};object.material=Array.isArray(object.material)?object.material.map(copy):copy(object.material)}});
+  root.updateMatrixWorld(true);
+  // One measurement of the unanimated bind pose. Never refit the camera from animation.
+  const bounds=new Box3().setFromObject(root,true);const center=bounds.getCenter(new Vector3());
+  return {root,materials,offset:[-center.x,-bounds.min.y,-center.z] as [number,number,number]};
+ },[gltf.scene]);
+ useEffect(()=>{onReady();return()=>{instance.materials.forEach(m=>m.dispose());instance.root.traverse(object=>{if(object instanceof SkinnedMesh)object.skeleton.dispose()})}},[instance,onReady]);
+ return <><group position={instance.offset}><primitive object={instance.root} dispose={null}/><AvatarAnimationController root={instance.root} baseClips={gltf.animations} request={request} paused={paused} onReport={onReport}/></group><ContributionCeremony root={instance.root} {...ceremony}/></>;
+}

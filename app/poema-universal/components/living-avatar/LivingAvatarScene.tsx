@@ -1,0 +1,22 @@
+'use client';
+import { Suspense, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { ContactShadows } from '@react-three/drei';
+import { PMREMGenerator, ACESFilmicToneMapping, type Scene, type WebGLRenderer } from 'three';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import LivingAvatar from './LivingAvatar';
+import { AVATAR_CAMERA } from './config';
+import type { SceneProps } from './types';
+// Three owns this mutable scene. Preserve and restore its previous environment on teardown.
+function configureEnvironment(gl:WebGLRenderer,scene:Scene){
+ const previous=scene.environment;const intensity=scene.environmentIntensity;
+ const generator=new PMREMGenerator(gl);const room=new RoomEnvironment();const target=generator.fromScene(room,.04);
+ scene.environment=target.texture;scene.environmentIntensity=.65;room.dispose();generator.dispose();
+ return()=>{scene.environment=previous;scene.environmentIntensity=intensity;target.dispose()};
+}
+function Studio(){const {gl,scene,camera,size}=useThree();
+ useEffect(()=>configureEnvironment(gl,scene),[gl,scene]);
+ useEffect(()=>{camera.position.set(0,1.05,Math.max(4.8,2.8/(size.width/size.height)));camera.lookAt(0,size.width<720?.62:AVATAR_CAMERA.target[1],0);camera.updateMatrixWorld()},[camera,size.width,size.height]);
+ return null;
+}
+export default function LivingAvatarScene(props:SceneProps){return <Canvas dpr={[1,1.5]} camera={AVATAR_CAMERA} gl={{antialias:true,alpha:true,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.toneMapping=ACESFilmicToneMapping;gl.toneMappingExposure=1.05}} fallback={<p>Este dispositivo no puede mostrar la escultura 3D.</p>}><Studio/><hemisphereLight args={['#eed7b5','#393e4c',1.1]}/><directionalLight position={[3,4,5]} intensity={2.2} color="#ffe3bd"/><directionalLight position={[-3,2,-2]} intensity={1.4} color="#a1b5cd"/><Suspense fallback={null}><LivingAvatar {...props}/></Suspense><ContactShadows position={[0,-.015,0]} opacity={.3} scale={5} blur={2.8} far={3} resolution={256} frames={1}/></Canvas>}
