@@ -2,6 +2,7 @@
 
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
+import type { Group } from "three";
 import { PhotoCard } from "./PhotoCard";
 import { PaperObject } from "./PaperObject";
 
@@ -9,8 +10,8 @@ const BASE =
   "/poema-universal/presentacion-viva/assets/story-selected";
 
 export function Scene04LiteraturePhotos() {
-  const moth = useRef<THREE.Group>(null);
-  const pages = useRef<THREE.Group>(null);
+  const moth = useRef<Group>(null);
+  const pages = useRef<Group>(null);
 
   useFrame(({ clock }) => {
     if (moth.current) {

@@ -45,6 +45,9 @@ function LivingScene({
     const mount = mountRef.current;
     if (!mount) return;
 
+    // Alias no nulo para conservar el narrowing dentro de init() async.
+    const mountElement: HTMLDivElement = mount;
+
     let cancelled = false;
     let frame = 0;
 
@@ -397,7 +400,7 @@ function LivingScene({
       renderer.outputColorSpace =
         THREE.SRGBColorSpace;
 
-      mount.appendChild(
+      mountElement.appendChild(
         renderer.domElement
       );
 
@@ -566,7 +569,7 @@ function LivingScene({
         ) return;
 
         const rect =
-          mount.getBoundingClientRect();
+          mountElement.getBoundingClientRect();
 
         const width =
           Math.max(
@@ -598,7 +601,7 @@ function LivingScene({
         );
 
       observer.observe(
-        mount
+        mountElement
       );
 
       resize();
@@ -672,7 +675,7 @@ function LivingScene({
         error
       );
 
-      mount.innerHTML = `
+      mountElement.innerHTML = `
         <div style="
           position:absolute;
           inset:40px;
@@ -703,9 +706,9 @@ function LivingScene({
 
       if (
         renderer?.domElement
-          .parentNode === mount
+          .parentNode === mountElement
       ) {
-        mount.removeChild(
+        mountElement.removeChild(
           renderer.domElement
         );
       }

@@ -10,7 +10,7 @@ type AudioGraph = {
   context: AudioContext;
   analyser: AnalyserNode;
   source: MediaElementAudioSourceNode;
-  data: Uint8Array;
+  data: Uint8Array<ArrayBuffer>;
 };
 
 type BsoLevelDetail = {

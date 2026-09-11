@@ -1,3 +1,5 @@
+import type { AtlasAuthor } from "./atlas-corpus-01";
+
 export const atlasAuthorsMaster: AtlasAuthor[] = [
   {
     "id": "aeschylus",
