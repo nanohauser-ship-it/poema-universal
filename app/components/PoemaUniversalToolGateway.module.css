@@ -1,0 +1,531 @@
+.gateway{
+  --tool-x:0px;
+  --tool-y:0px;
+
+  position:relative;
+  width:100%;
+  min-height:760px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
+}
+
+.portal{
+  position:relative;
+
+  width:min(100%,1100px);
+  aspect-ratio:1672 / 941;
+
+  display:block;
+
+  color:#34392f;
+  text-decoration:none;
+
+  isolation:isolate;
+}
+
+/* ---------- capas ---------- */
+
+.layer{
+  position:absolute;
+  inset:0;
+
+  pointer-events:none;
+
+  transition:
+    filter .8s ease,
+    opacity .8s ease;
+}
+
+.layer img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+
+  display:block;
+  user-select:none;
+}
+
+/* fondo */
+.background{
+  z-index:0;
+
+  opacity:.52;
+
+  transform:
+    translate(
+      calc(var(--tool-x) * -.05),
+      calc(var(--tool-y) * -.04)
+    )
+    scale(1.02);
+}
+
+/* avatar */
+.avatar{
+  z-index:2;
+
+  transform:
+    translate(
+      calc(var(--tool-x) * .36),
+      calc(var(--tool-y) * .26)
+    );
+
+  animation:
+    avatarBreath
+    11s
+    ease-in-out
+    infinite;
+}
+
+.avatar img{
+  filter:
+    drop-shadow(
+      0 28px 34px
+      rgba(88,65,35,.11)
+    );
+}
+
+/* nubes / halo */
+.mist{
+  z-index:3;
+
+  opacity:.75;
+
+  transform:
+    translate(
+      calc(var(--tool-x) * .64),
+      calc(var(--tool-y) * .44)
+    );
+
+  animation:
+    mistDrift
+    18s
+    ease-in-out
+    infinite;
+}
+
+/* páginas cercanas */
+.pages{
+  z-index:5;
+
+  transform:
+    translate(
+      calc(var(--tool-x) * 1.12),
+      calc(var(--tool-y) * .82)
+    );
+
+  animation:
+    pagesDrift
+    15s
+    ease-in-out
+    infinite;
+}
+
+/* ---------- interfaz ---------- */
+
+.copy{
+  position:absolute;
+  z-index:8;
+
+  left:50%;
+  top:55%;
+
+  width:min(540px,72%);
+
+  transform:translate(-50%,-50%);
+
+  text-align:center;
+
+  pointer-events:none;
+}
+
+.eyebrow{
+  margin:0 0 18px;
+
+  font-size:9px;
+  letter-spacing:.34em;
+
+  color:#77786b;
+}
+
+.copy h2{
+  margin:0;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-weight:400;
+
+  font-size:
+    clamp(36px,4vw,65px);
+
+  line-height:.94;
+
+  letter-spacing:-.045em;
+}
+
+.invitation{
+  margin:25px 0 21px;
+
+  font-family:
+    Georgia,
+    'Times New Roman',
+    serif;
+
+  font-size:17px;
+  font-style:italic;
+
+  color:#65685b;
+}
+
+.inputGhost{
+  width:min(390px,90%);
+
+  margin:0 auto;
+
+  display:block;
+
+  padding:14px 7px;
+
+  border-bottom:
+    1px solid rgba(72,77,63,.35);
+
+  font-size:11px;
+  letter-spacing:.09em;
+
+  text-align:left;
+
+  color:#8c8d81;
+}
+
+.enter{
+  display:inline-flex;
+
+  margin-top:24px;
+
+  align-items:center;
+  gap:24px;
+
+  border-bottom:
+    1px solid rgba(66,73,58,.55);
+
+  padding:9px 0;
+
+  font-size:10px;
+  letter-spacing:.24em;
+
+  color:#3e4438;
+}
+
+.microcopy{
+  margin-top:18px;
+
+  font-size:8px;
+  letter-spacing:.19em;
+
+  color:#929286;
+}
+
+/* ---------- hover ---------- */
+
+.portal:hover .avatar{
+  filter:brightness(1.025);
+}
+
+.portal:hover .pages{
+  filter:brightness(1.04);
+}
+
+.portal:hover .enter{
+  border-color:#343a2f;
+}
+
+/* ---------- animación ---------- */
+
+@keyframes avatarBreath{
+  0%,100%{
+    margin-top:0;
+  }
+
+  50%{
+    margin-top:-6px;
+  }
+}
+
+@keyframes mistDrift{
+  0%,100%{
+    margin-left:0;
+    margin-top:0;
+  }
+
+  50%{
+    margin-left:7px;
+    margin-top:-5px;
+  }
+}
+
+@keyframes pagesDrift{
+  0%,100%{
+    margin-left:0;
+    margin-top:0;
+  }
+
+  50%{
+    margin-left:-8px;
+    margin-top:-8px;
+  }
+}
+
+@media(max-width:720px){
+  .gateway{
+    min-height:620px;
+  }
+
+  .portal{
+    width:145vw;
+    max-width:none;
+  }
+
+  .copy{
+    width:62vw;
+  }
+
+  .copy h2{
+    font-size:38px;
+  }
+
+  .eyebrow{
+    font-size:7px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .avatar,
+  .mist,
+  .pages{
+    animation:none !important;
+    transform:none !important;
+  }
+}
+
+
+/* =========================================================
+   POEMA UNIVERSAL TOOL · ORGANIC INTEGRATION
+   La herramienta deja de parecer una imagen rectangular
+   y aparece directamente dentro del mundo de la página.
+   ========================================================= */
+
+
+/* El fondo rectangular generado desaparece.
+   Conservamos el fondo real de la home. */
+.background{
+  opacity:0 !important;
+}
+
+
+/* El portal ya no se percibe como una lámina */
+.portal{
+  overflow:visible;
+}
+
+
+/* ---------- AVATAR CENTRAL ---------- */
+
+.avatar{
+  z-index:2;
+
+  transform:
+    translate(
+      calc(var(--tool-x) * .36),
+      calc(var(--tool-y) * .26 - 42px)
+    )
+    scale(1.18);
+
+  transform-origin:center center;
+}
+
+
+/* un poco más de profundidad sin endurecer los bordes */
+.avatar img{
+  filter:
+    drop-shadow(
+      0 34px 44px
+      rgba(88,65,35,.10)
+    );
+}
+
+
+/* ---------- NIEBLA ---------- */
+
+.mist{
+  z-index:3;
+
+  opacity:.58;
+
+  transform:
+    translate(
+      calc(var(--tool-x) * .64),
+      calc(var(--tool-y) * .44 - 8px)
+    )
+    scale(1.22);
+
+  transform-origin:center center;
+
+  /* fundido orgánico para que no exista un límite rectangular */
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 68% 60% at 50% 48%,
+      #000 0%,
+      #000 48%,
+      rgba(0,0,0,.88) 64%,
+      transparent 100%
+    );
+
+  mask-image:
+    radial-gradient(
+      ellipse 68% 60% at 50% 48%,
+      #000 0%,
+      #000 48%,
+      rgba(0,0,0,.88) 64%,
+      transparent 100%
+    );
+}
+
+
+/* ---------- PAPELES ---------- */
+
+.pages{
+  z-index:5;
+
+  transform:
+    translate(
+      calc(var(--tool-x) * 1.12),
+      calc(var(--tool-y) * .82 - 6px)
+    )
+    scale(1.13);
+
+  transform-origin:center center;
+}
+
+
+/* ---------- TEXTO / INTERFAZ ---------- */
+
+/* Lo bajamos para liberar la cara del avatar */
+.copy{
+  top:67%;
+
+  width:min(590px,74%);
+}
+
+
+/* título ligeramente más refinado */
+.copy h2{
+  font-size:
+    clamp(38px,4.2vw,67px);
+
+  line-height:.92;
+
+  letter-spacing:-.05em;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.18);
+}
+
+
+/* la frase se acerca al título */
+.invitation{
+  margin-top:20px;
+  margin-bottom:18px;
+}
+
+
+/* línea de escritura más limpia */
+.inputGhost{
+  width:min(420px,92%);
+
+  padding:11px 6px;
+
+  border-bottom:
+    1px solid rgba(72,77,63,.27);
+}
+
+
+/* botón de entrada menos pesado */
+.enter{
+  margin-top:20px;
+
+  padding:8px 0;
+
+  border-bottom:
+    1px solid rgba(66,73,58,.42);
+}
+
+
+/* ---------- RESPIRACIÓN DEL CONJUNTO ---------- */
+
+.gateway{
+  min-height:700px;
+}
+
+
+/* móvil */
+@media(max-width:720px){
+
+  .gateway{
+    min-height:600px;
+  }
+
+  .avatar{
+    transform:
+      translateY(-26px)
+      scale(1.08);
+  }
+
+  .mist{
+    transform:
+      scale(1.12);
+  }
+
+  .pages{
+    transform:
+      scale(1.05);
+  }
+
+  .copy{
+    top:68%;
+    width:65vw;
+  }
+
+  .copy h2{
+    font-size:36px;
+  }
+
+}
+
+
+/* movimiento reducido */
+@media(prefers-reduced-motion:reduce){
+
+  .avatar{
+    transform:
+      translateY(-42px)
+      scale(1.18) !important;
+  }
+
+  .mist{
+    transform:
+      scale(1.22) !important;
+  }
+
+  .pages{
+    transform:
+      scale(1.13) !important;
+  }
+
+}
+

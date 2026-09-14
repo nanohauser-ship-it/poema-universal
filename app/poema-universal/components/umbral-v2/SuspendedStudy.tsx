@@ -1,2 +1,119 @@
-// A deliberately provisional architectural maquette, not a replacement for the final artwork.
-export default function SuspendedStudy(){return <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="study-title"><title id="study-title">Maqueta provisional de un territorio suspendido, con un árbol, ruinas y figuras reunidas.</title><defs><linearGradient id="stone" x1="200" y1="300" x2="480" y2="520" gradientUnits="userSpaceOnUse"><stop stopColor="#bbb2a0"/><stop offset="1" stopColor="#6f7465"/></linearGradient><linearGradient id="paper" x1="250" y1="260" x2="550" y2="390" gradientUnits="userSpaceOnUse"><stop stopColor="#f4f0e5"/><stop offset="1" stopColor="#c7c6b4"/></linearGradient></defs><g stroke="#666958" strokeWidth=".65"><path d="M170 336 220 400 304 415 353 481 407 456 460 490 490 422 575 400 628 336 518 291 324 282Z" fill="url(#stone)"/><path d="m220 348 26 53m45-62 13 76m29-69 20 135m43-127 11 102m41-111 12 145m32-148-2 80m64-91 21 69" opacity=".5"/><path d="m170 336 59-51 111-33 96 13 92-6 100 77-81 41-112-5-77 21-98-30Z" fill="url(#paper)"/><path d="m202 331 49-35 89-28 93 14 89-10 79 61-59 28-110-4-75 21-87-30Z"/><path d="m230 328 35-23 78-21 88 15 85-11 57 42-37 15-103-5-78 21-77-25Z"/><path d="m266 324 79-23 88 16 79-12 37 24-20 5-96-10-78 24Z"/></g><g fill="#e9e3d4" stroke="#777b6b" strokeWidth="1"><path d="M254 304v-79l62-19v79l-13 5v-61l-34 11v60Z"/><path d="m254 225 13 8 62-19-13-8m0 79 13 8v-79"/><path d="M477 301v-93l62 20v90l-14-4v-68l-33-11v71Z"/><path d="m477 208 13-9 62 20-13 9m0 90 13-8v-91"/><path d="m288 279 14-5v21l-14 5Zm257 41 21-8 14 5-21 8Z"/></g><g stroke="#5b6551" strokeLinecap="round"><path d="M402 320c-7-53-5-91 7-134m-8 98c-31-9-57-24-72-51m73 28c20-12 45-33 53-64m-49 40c-15-13-29-36-28-53m-23 78-4-41m81 21 33-8m-59-14 23-37" strokeWidth="5"/><path d="m333 242-26-7m30 10-10-27m125 7 23-21m-92 8-19-13m-11 40-18-13m79-27 15-11" strokeWidth="2"/></g><g fill="#8b9478" opacity=".82">{[[319,225,22],[351,219,23],[374,190,26],[410,178,23],[432,193,25],[460,204,28],[474,228,17],[335,247,19],[385,223,24]].map(([x,y,r],i)=><ellipse key={i} cx={x} cy={y} rx={r} ry={r*.65}/>)}</g><g fill="#66624f">{[[349,314],[365,326],[385,333],[419,333],[440,321],[452,307]].map(([x,y],i)=><g key={i}><circle cx={x} cy={y-13} r="3"/><path d={`M${x-2} ${y-9}l-2 12h8l-2-12Z`}/><path d={`M${x-2} ${y+3}v7m4-7v7`} stroke="#66624f" strokeWidth="1.5"/></g>)}</g><path d="m370 361 68-18 17 7-68 18-1 10 69-18 17 7-69 18v10l68-18 15 7-68 19" stroke="#f1ecdf" strokeWidth="4"/><g stroke="#929180" opacity=".6"><path d="m214 317 26-8m-11 15 26-8m244 40 39-7m-303-11 35 10m180-20 22-3"/></g></svg>}
+import styles from './threshold.module.css';
+
+const BASE =
+  '/poema-universal/umbral-v2/world/layers';
+
+type Props = {
+  part: 'back' | 'front';
+};
+
+export default function SuspendedStudy({ part }: Props) {
+  if (part === 'back') {
+    return (
+      <div
+        className={`${styles.realWorld} ${styles.realWorldBack}`}
+        aria-hidden="true"
+      >
+        <div className={styles.realWorldGlow} />
+
+        <div className={`${styles.realLayer} ${styles.realSky}`}>
+          <img
+            src={`${BASE}/00-sky.png`}
+            alt=""
+            draggable="false"
+          />
+        </div>
+
+        <div className={`${styles.realLayer} ${styles.realDistant}`}>
+          <img
+            src={`${BASE}/01-distant-world.png`}
+            alt=""
+            draggable="false"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`${styles.realWorld} ${styles.realWorldFront}`}
+      role="img"
+      aria-label="Territorio suspendido de Poema Universal: una reunión de voces entre ruinas, árbol, niebla, poemas y piedra."
+    >
+      <div className={`${styles.realLayer} ${styles.realIsland}`}>
+        <img
+          src={`${BASE}/02-central-island.png`}
+          alt=""
+          draggable="false"
+        />
+      </div>
+
+      {/* Microvida 2.5D · visible solo durante la pausa interior */}
+      <div
+        className={styles.poetsLife}
+        aria-hidden="true"
+      >
+        <img
+          src={`${BASE}/02-central-island.png`}
+          alt=""
+          draggable="false"
+          className={`${styles.poetPatch} ${styles.poetSpeaker}`}
+        />
+
+        <img
+          src={`${BASE}/02-central-island.png`}
+          alt=""
+          draggable="false"
+          className={`${styles.poetPatch} ${styles.poetLeft}`}
+        />
+
+        <img
+          src={`${BASE}/02-central-island.png`}
+          alt=""
+          draggable="false"
+          className={`${styles.poetPatch} ${styles.poetRight}`}
+        />
+
+        <img
+          src={`${BASE}/02-central-island.png`}
+          alt=""
+          draggable="false"
+          className={`${styles.poetPatch} ${styles.poetStandingRight}`}
+        />
+
+        <span
+          className={`${styles.passingPaper} ${styles.paperA}`}
+        />
+
+        <span
+          className={`${styles.passingPaper} ${styles.paperB}`}
+        />
+      </div>
+
+      <div className={`${styles.realLayer} ${styles.realMist}`}>
+        <img
+          src={`${BASE}/03-mist-waterfalls.png`}
+          alt=""
+          draggable="false"
+        />
+      </div>
+
+      <div className={`${styles.realLayer} ${styles.realPapers}`}>
+        <img
+          src={`${BASE}/04-papers-birds.png`}
+          alt=""
+          draggable="false"
+        />
+      </div>
+
+      <div className={`${styles.realLayer} ${styles.realForeground}`}>
+        <img
+          src={`${BASE}/05-foreground-frame.png`}
+          alt=""
+          draggable="false"
+        />
+      </div>
+    </div>
+  );
+}

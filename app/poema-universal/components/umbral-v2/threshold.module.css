@@ -4,3 +4,4950 @@
 @media(min-aspect-ratio:2/1){.backTitle{font-size:23vw;top:15%}.frontTitle{font-size:18vw;bottom:12%}.objectPosition{width:50vw;top:45%}}
 @media(max-width:720px){.stage{min-height:580px}.header{top:22px;left:6%;right:6%;font-size:8px;flex-wrap:wrap;gap:20px}.header nav{width:100%;justify-content:space-between;gap:12px;order:3}.act{font-size:7px}.backTitle{top:22%;left:4%;font-size:33vw}.frontTitle{bottom:23%;left:-2%;font-size:20.2vw}.objectPosition{width:110vw;top:45%}.object figcaption{font-size:6px;top:79%;left:45%;width:190px;letter-spacing:.7px}.manifesto{left:6%;top:60%;font-size:8px;line-height:1.6;letter-spacing:1.2px}.manifesto>span{display:none}.common{top:17%;right:6%;font-size:7px}.footer{bottom:32px;left:6%;right:6%;font-size:7px}.scrollCue{display:none}.enter{min-width:85px;font-size:10px}.fragments i{left:18%;top:48%}.fragments i:nth-child(2){left:83%;top:35%}}
 @media(prefers-reduced-motion:reduce){.stage *{animation:none!important;transition:none!important}.backTitle,.frontTitle{transform:none}.objectPosition{transform:translate(-50%,-50%)}.experience{height:100svh}}
+
+/* ===== POEMA UNIVERSAL · LAYERED TERRITORY V1 ===== */
+
+.objectPosition{
+  width:min(75vw,1120px);
+  top:44%;
+
+  transform:
+    translate(
+      calc(-50% + var(--px)),
+      calc(-50% + var(--py))
+    )
+    scale(calc(1 + var(--scroll)*.055));
+}
+
+.object{
+  position:relative;
+  isolation:isolate;
+}
+
+.object > svg{
+  display:none;
+}
+
+.worldStudy{
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 8.5;
+  isolation:isolate;
+
+  animation:
+    worldEntrance 3.2s .45s
+    cubic-bezier(.2,.68,.3,1) both;
+}
+
+/* luz detrás del territorio */
+
+.worldAura{
+  position:absolute;
+  z-index:0;
+
+  left:50%;
+  top:48%;
+
+  width:55%;
+  aspect-ratio:1;
+
+  border-radius:50%;
+
+  transform:translate(-50%,-50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(236,220,180,.36) 0%,
+      rgba(236,220,180,.13) 39%,
+      transparent 72%
+    );
+
+  filter:blur(27px);
+
+  animation:
+    worldAura 13s ease-in-out infinite;
+}
+
+/* infraestructura común */
+
+.worldLayer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  will-change:transform;
+}
+
+.worldLayer img{
+  position:absolute;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+  object-position:center;
+
+  user-select:none;
+
+  filter:
+    saturate(.80)
+    contrast(.94)
+    brightness(1.035);
+
+  -webkit-user-drag:none;
+}
+
+/*
+ * CAPA 1
+ * montañas / mundo distante
+ */
+
+.farWorld{
+  z-index:1;
+
+  opacity:.42;
+
+  transform:
+    translate(
+      calc(var(--px)*-.18),
+      calc(var(--py)*-.12 + var(--scroll)*-5px)
+    )
+    scale(.93);
+}
+
+.farWorld img{
+  filter:
+    saturate(.60)
+    contrast(.88)
+    brightness(1.08)
+    blur(.6px);
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 48%,
+      rgba(0,0,0,.25) 81%,
+      transparent 100%
+    );
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      #000 48%,
+      rgba(0,0,0,.25) 81%,
+      transparent 100%
+    );
+}
+
+/*
+ * CAPA 2
+ * arquitectura y territorio medio
+ */
+
+.middleWorld{
+  z-index:2;
+
+  opacity:.74;
+
+  transform:
+    translate(
+      calc(var(--px)*-.34),
+      calc(var(--py)*-.25 + var(--scroll)*-10px)
+    )
+    scale(.97);
+}
+
+.middleWorld img{
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 84% 69% at 50% 50%,
+      #000 0%,
+      #000 57%,
+      rgba(0,0,0,.58) 75%,
+      transparent 100%
+    );
+
+  mask-image:
+    radial-gradient(
+      ellipse 84% 69% at 50% 50%,
+      #000 0%,
+      #000 57%,
+      rgba(0,0,0,.58) 75%,
+      transparent 100%
+    );
+}
+
+/*
+ * CAPA 3
+ * árbol, voces y corazón del territorio
+ */
+
+.centralWorld{
+  z-index:4;
+
+  transform:
+    translate(
+      calc(var(--px)*.55),
+      calc(var(--py)*.40 + var(--scroll)*-15px)
+    )
+    scale(calc(1 + var(--scroll)*.018));
+}
+
+.centralWorld img{
+  filter:
+    saturate(.87)
+    contrast(.97)
+    brightness(1.025);
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse 63% 76% at 50% 51%,
+      #000 0%,
+      #000 54%,
+      rgba(0,0,0,.80) 67%,
+      rgba(0,0,0,.22) 84%,
+      transparent 100%
+    );
+
+  mask-image:
+    radial-gradient(
+      ellipse 63% 76% at 50% 51%,
+      #000 0%,
+      #000 54%,
+      rgba(0,0,0,.80) 67%,
+      rgba(0,0,0,.22) 84%,
+      transparent 100%
+    );
+}
+
+/*
+ * NIEBLA
+ */
+
+.mistLayer{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+}
+
+.mistLayer i{
+  position:absolute;
+
+  display:block;
+
+  height:13%;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(236,233,224,.96) 0%,
+      rgba(236,233,224,.54) 41%,
+      transparent 76%
+    );
+
+  filter:blur(20px);
+
+  opacity:.22;
+}
+
+.mistLeft{
+  width:43%;
+  left:2%;
+  bottom:12%;
+
+  animation:
+    mistLeft 19s ease-in-out infinite;
+}
+
+.mistCenter{
+  width:39%;
+  left:31%;
+  bottom:6%;
+
+  opacity:.16 !important;
+
+  animation:
+    mistCenter 23s ease-in-out infinite;
+}
+
+.mistRight{
+  width:40%;
+  right:0;
+  bottom:17%;
+
+  animation:
+    mistRight 26s ease-in-out infinite;
+}
+
+/*
+ * PAPELES
+ */
+
+.paperLayer{
+  position:absolute;
+  inset:0;
+  z-index:7;
+  pointer-events:none;
+}
+
+.paperLayer i{
+  position:absolute;
+
+  display:block;
+
+  background:#d8d0bd;
+
+  clip-path:
+    polygon(
+      6% 2%,
+      92% 0,
+      100% 91%,
+      9% 100%
+    );
+
+  box-shadow:
+    0 8px 16px rgba(62,59,49,.07);
+}
+
+.paperOne{
+  width:23px;
+  height:31px;
+
+  left:16%;
+  top:40%;
+
+  opacity:.72;
+
+  animation:
+    paperOne 15s ease-in-out infinite;
+}
+
+.paperTwo{
+  width:16px;
+  height:23px;
+
+  left:30%;
+  top:23%;
+
+  opacity:.55;
+
+  animation:
+    paperTwo 19s -8s ease-in-out infinite;
+}
+
+.paperThree{
+  width:20px;
+  height:27px;
+
+  right:16%;
+  top:36%;
+
+  opacity:.68;
+
+  animation:
+    paperThree 17s -4s ease-in-out infinite;
+}
+
+.paperFour{
+  width:11px;
+  height:16px;
+
+  right:25%;
+  bottom:18%;
+
+  opacity:.42;
+
+  animation:
+    paperFour 21s -12s ease-in-out infinite;
+}
+
+/*
+ * AVES
+ */
+
+.birds{
+  position:absolute;
+  inset:0;
+  z-index:6;
+  pointer-events:none;
+}
+
+.birds i{
+  position:absolute;
+
+  width:12px;
+  height:5px;
+
+  border-top:
+    1px solid rgba(52,57,47,.63);
+
+  border-radius:50%;
+}
+
+.birds i::after{
+  content:"";
+
+  position:absolute;
+
+  left:8px;
+  top:-1px;
+
+  width:10px;
+  height:5px;
+
+  border-top:
+    1px solid rgba(52,57,47,.63);
+
+  border-radius:50%;
+}
+
+.birds i:nth-child(1){
+  right:19%;
+  top:23%;
+
+  animation:
+    birdDrift 21s ease-in-out infinite;
+}
+
+.birds i:nth-child(2){
+  right:15%;
+  top:27%;
+
+  transform:scale(.7);
+
+  opacity:.6;
+
+  animation:
+    birdDrift 24s -10s ease-in-out infinite;
+}
+
+.birds i:nth-child(3){
+  right:22%;
+  top:30%;
+
+  transform:scale(.55);
+
+  opacity:.45;
+
+  animation:
+    birdDrift 27s -15s ease-in-out infinite;
+}
+
+/*
+ * CAPA 4
+ * primer plano / piedra / base
+ */
+
+.frontWorld{
+  z-index:8;
+
+  opacity:.68;
+
+  transform:
+    translate(
+      calc(var(--px)*1.15),
+      calc(var(--py)*.85 + var(--scroll)*-22px)
+    )
+    scale(1.035);
+}
+
+.frontWorld img{
+  filter:
+    saturate(.72)
+    contrast(.94)
+    brightness(1.03);
+
+  -webkit-mask-image:
+    linear-gradient(
+      to top,
+      #000 0%,
+      #000 19%,
+      rgba(0,0,0,.52) 38%,
+      rgba(0,0,0,.10) 59%,
+      transparent 75%
+    );
+
+  mask-image:
+    linear-gradient(
+      to top,
+      #000 0%,
+      #000 19%,
+      rgba(0,0,0,.52) 38%,
+      rgba(0,0,0,.10) 59%,
+      transparent 75%
+    );
+}
+
+.worldGroundShadow{
+  position:absolute;
+
+  z-index:0;
+
+  left:18%;
+  right:18%;
+
+  bottom:3%;
+
+  height:12%;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(64,62,53,.15) 0%,
+      rgba(64,62,53,.04) 46%,
+      transparent 75%
+    );
+
+  filter:blur(17px);
+}
+
+/*
+ * RELACIÓN CON LA TIPOGRAFÍA
+ */
+
+.backTitle{
+  top:11.5%;
+  left:11.2%;
+
+  font-size:
+    clamp(150px,25.8vw,480px);
+}
+
+.frontTitle{
+  bottom:9%;
+  left:-1.8%;
+
+  font-size:
+    clamp(128px,20.4vw,395px);
+}
+
+.common{
+  top:37%;
+  right:3.8%;
+
+  width:175px;
+
+  text-align:right;
+}
+
+.manifesto{
+  top:50%;
+}
+
+.object figcaption{
+  left:65%;
+  top:84%;
+
+  width:260px;
+
+  opacity:.68;
+}
+
+/*
+ * MOVIMIENTO
+ */
+
+@keyframes worldEntrance{
+  from{
+    opacity:0;
+    transform:
+      translateY(18px)
+      scale(.985);
+  }
+
+  to{
+    opacity:1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes worldAura{
+  0%,100%{
+    opacity:.55;
+    transform:
+      translate(-50%,-50%)
+      scale(.96);
+  }
+
+  50%{
+    opacity:.92;
+    transform:
+      translate(-50%,-50%)
+      scale(1.05);
+  }
+}
+
+@keyframes mistLeft{
+  0%,100%{
+    transform:
+      translate3d(0,0,0)
+      scale(1);
+  }
+
+  50%{
+    transform:
+      translate3d(15px,-4px,0)
+      scale(1.05);
+  }
+}
+
+@keyframes mistCenter{
+  0%,100%{
+    transform:
+      translate3d(0,0,0);
+  }
+
+  50%{
+    transform:
+      translate3d(-8px,-5px,0);
+  }
+}
+
+@keyframes mistRight{
+  0%,100%{
+    transform:
+      translate3d(0,0,0)
+      scale(1);
+  }
+
+  50%{
+    transform:
+      translate3d(-18px,3px,0)
+      scale(1.06);
+  }
+}
+
+@keyframes paperOne{
+  0%,100%{
+    transform:
+      translate(0,0)
+      rotate(-16deg);
+  }
+
+  50%{
+    transform:
+      translate(6px,-11px)
+      rotate(-10deg);
+  }
+}
+
+@keyframes paperTwo{
+  0%,100%{
+    transform:
+      translate(0,0)
+      rotate(8deg);
+  }
+
+  50%{
+    transform:
+      translate(-4px,-9px)
+      rotate(14deg);
+  }
+}
+
+@keyframes paperThree{
+  0%,100%{
+    transform:
+      translate(0,0)
+      rotate(13deg);
+  }
+
+  50%{
+    transform:
+      translate(-7px,-10px)
+      rotate(18deg);
+  }
+}
+
+@keyframes paperFour{
+  0%,100%{
+    transform:
+      translate(0,0)
+      rotate(-8deg);
+  }
+
+  50%{
+    transform:
+      translate(4px,-8px)
+      rotate(-3deg);
+  }
+}
+
+@keyframes birdDrift{
+  0%,100%{
+    translate:0 0;
+  }
+
+  50%{
+    translate:10px -3px;
+  }
+}
+
+@media(max-width:720px){
+
+  .objectPosition{
+    width:132vw;
+    top:46%;
+  }
+
+  .backTitle{
+    top:22%;
+    left:4%;
+    font-size:33vw;
+  }
+
+  .frontTitle{
+    bottom:22%;
+    font-size:21vw;
+  }
+
+  .common{
+    top:17%;
+    right:6%;
+    width:120px;
+  }
+
+  .frontWorld{
+    opacity:.5;
+  }
+
+  .paperTwo,
+  .paperFour{
+    display:none;
+  }
+
+  .object figcaption{
+    left:44%;
+    top:82%;
+    width:180px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  .worldStudy,
+  .worldAura,
+  .mistLayer i,
+  .paperLayer i,
+  .birds i{
+    animation:none !important;
+  }
+
+  .farWorld,
+  .middleWorld,
+  .centralWorld,
+  .frontWorld{
+    transform:none !important;
+  }
+}
+
+
+/* =========================================================
+   POEMA UNIVERSAL · REAL LAYERS V3
+   6 PNG transparentes reales · 1672 × 941
+   ========================================================= */
+
+.objectPosition{
+  width:min(88vw,1380px);
+  top:44%;
+  z-index:3;
+
+  transform:
+    translate(
+      calc(-50% + var(--px)),
+      calc(-50% + var(--py))
+    )
+    scale(calc(1 + var(--scroll)*.065));
+}
+
+.object{
+  position:relative;
+  isolation:isolate;
+}
+
+.realWorld{
+  position:relative;
+
+  width:100%;
+  aspect-ratio:1672 / 941;
+
+  overflow:visible;
+  isolation:isolate;
+
+  transform-style:preserve-3d;
+
+  animation:
+    realWorldArrival
+    3.1s
+    .35s
+    cubic-bezier(.18,.7,.28,1)
+    both;
+}
+
+.realWorldGlow{
+  position:absolute;
+
+  z-index:0;
+
+  left:50%;
+  top:48%;
+
+  width:53%;
+  height:58%;
+
+  transform:translate(-50%,-50%);
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(237,218,171,.33) 0%,
+      rgba(237,218,171,.14) 34%,
+      rgba(233,229,216,.07) 57%,
+      transparent 75%
+    );
+
+  filter:blur(30px);
+
+  animation:
+    realGlowBreath
+    14s
+    ease-in-out
+    infinite;
+
+  pointer-events:none;
+}
+
+.realLayer{
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  pointer-events:none;
+
+  transform-origin:center center;
+
+  will-change:transform;
+}
+
+.realLayer img{
+  position:absolute;
+
+  inset:0;
+
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+
+  user-select:none;
+
+  -webkit-user-drag:none;
+}
+
+
+/* ------------------------------
+   00 · CIELO / LUNAS
+   ------------------------------ */
+
+.realSky{
+  z-index:1;
+
+  opacity:.84;
+
+  transform:
+    translate3d(
+      calc(var(--px)*-.10),
+      calc(var(--py)*-.08 + var(--scroll)*-5px),
+      0
+    )
+    scale(1.015);
+
+  animation:
+    skyBreathing
+    24s
+    2s
+    ease-in-out
+    infinite;
+}
+
+.realSky img{
+  filter:
+    saturate(.72)
+    contrast(.94)
+    brightness(1.055);
+}
+
+
+/* ------------------------------
+   01 · MONTAÑAS / CIUDAD
+   ------------------------------ */
+
+.realDistant{
+  z-index:2;
+
+  opacity:.92;
+
+  transform:
+    translate3d(
+      calc(var(--px)*-.24),
+      calc(var(--py)*-.18 + var(--scroll)*-9px),
+      0
+    )
+    scale(calc(.995 + var(--scroll)*.008));
+}
+
+.realDistant img{
+  filter:
+    saturate(.78)
+    contrast(.95)
+    brightness(1.025);
+}
+
+
+/* ------------------------------
+   02 · ISLA / ÁRBOL / VOCES
+   ------------------------------ */
+
+.realIsland{
+  z-index:4;
+
+  transform:
+    translate3d(
+      calc(var(--px)*.46),
+      calc(var(--py)*.34 + var(--scroll)*-16px),
+      0
+    )
+    scale(calc(1 + var(--scroll)*.026));
+
+  animation:
+    islandBreathing
+    16s
+    2.8s
+    ease-in-out
+    infinite;
+}
+
+.realIsland img{
+  filter:
+    saturate(.91)
+    contrast(.985)
+    brightness(1.01)
+
+    drop-shadow(
+      0 28px 22px
+      rgba(78,69,48,.12)
+    );
+}
+
+
+/* ------------------------------
+   03 · NIEBLA / CASCADAS
+   ------------------------------ */
+
+.realMist{
+  z-index:5;
+
+  opacity:.88;
+
+  transform:
+    translate3d(
+      calc(var(--px)*.66),
+      calc(var(--py)*.51 + var(--scroll)*-20px),
+      0
+    )
+    scale(1.015);
+
+  animation:
+    realMistDrift
+    21s
+    ease-in-out
+    infinite;
+}
+
+.realMist img{
+  filter:
+    brightness(1.06)
+    saturate(.72);
+}
+
+
+/* ------------------------------
+   04 · PAPELES / AVES
+   ------------------------------ */
+
+.realPapers{
+  z-index:6;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.05),
+      calc(var(--py)*.76 + var(--scroll)*-28px),
+      0
+    );
+
+  animation:
+    paperWorldDrift
+    18s
+    1.5s
+    ease-in-out
+    infinite;
+}
+
+.realPapers img{
+  filter:
+    saturate(.86)
+    contrast(.98);
+}
+
+
+/* ------------------------------
+   05 · PRIMER PLANO
+   ------------------------------ */
+
+.realForeground{
+  z-index:7;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.55),
+      calc(var(--py)*1.08 + var(--scroll)*-36px),
+      0
+    )
+    scale(calc(1.015 + var(--scroll)*.024));
+
+  animation:
+    foregroundBreathing
+    19s
+    ease-in-out
+    infinite;
+}
+
+.realForeground img{
+  filter:
+    saturate(.83)
+    contrast(.97)
+    brightness(1.015)
+
+    drop-shadow(
+      0 16px 16px
+      rgba(63,55,42,.08)
+    );
+}
+
+
+/* =========================================================
+   INTEGRACIÓN CON POEMA / UNIVERSAL
+   ========================================================= */
+
+.backTitle{
+  z-index:2;
+
+  top:9.7%;
+  left:11%;
+
+  font-size:
+    clamp(155px,26vw,490px);
+}
+
+.objectPosition{
+  z-index:3;
+}
+
+/*
+ UNIVERSAL está delante del mundo:
+ produce exactamente la intersección editorial
+ que buscamos.
+*/
+.frontTitle{
+  z-index:8;
+
+  bottom:7.5%;
+  left:-1.8%;
+
+  font-size:
+    clamp(130px,20.6vw,400px);
+}
+
+.common{
+  z-index:10;
+
+  right:3.6%;
+  top:35%;
+
+  width:180px;
+
+  text-align:right;
+}
+
+.manifesto{
+  z-index:10;
+}
+
+.header,
+.footer{
+  z-index:20;
+}
+
+
+/*
+ La cartela anterior ya no hace falta.
+ */
+.object figcaption{
+  display:none;
+}
+
+
+/*
+ Ocultamos los fragmentos geométricos artificiales
+ del prototipo inicial. Ahora los fragmentos
+ vienen de la capa real 04.
+ */
+.fragments{
+  display:none;
+}
+
+
+/* =========================================================
+   ANIMACIÓN AUTÓNOMA
+   ========================================================= */
+
+@keyframes realWorldArrival{
+  from{
+    opacity:0;
+
+    transform:
+      translateY(18px)
+      scale(.985);
+  }
+
+  to{
+    opacity:1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes realGlowBreath{
+  0%,100%{
+    opacity:.58;
+
+    transform:
+      translate(-50%,-50%)
+      scale(.96);
+  }
+
+  50%{
+    opacity:.92;
+
+    transform:
+      translate(-50%,-50%)
+      scale(1.055);
+  }
+}
+
+@keyframes skyBreathing{
+  0%,100%{
+    margin-top:0;
+  }
+
+  50%{
+    margin-top:-3px;
+  }
+}
+
+@keyframes islandBreathing{
+  0%,100%{
+    margin-top:0;
+  }
+
+  50%{
+    margin-top:-6px;
+  }
+}
+
+@keyframes realMistDrift{
+  0%,100%{
+    margin-left:0;
+    margin-top:0;
+  }
+
+  50%{
+    margin-left:7px;
+    margin-top:-4px;
+  }
+}
+
+@keyframes paperWorldDrift{
+  0%,100%{
+    margin-left:0;
+    margin-top:0;
+  }
+
+  50%{
+    margin-left:9px;
+    margin-top:-8px;
+  }
+}
+
+@keyframes foregroundBreathing{
+  0%,100%{
+    margin-top:0;
+  }
+
+  50%{
+    margin-top:-5px;
+  }
+}
+
+
+/* =========================================================
+   PANORÁMICO
+   ========================================================= */
+
+@media(min-aspect-ratio:2/1){
+
+  .objectPosition{
+    width:min(79vw,1360px);
+    top:44%;
+  }
+
+  .backTitle{
+    top:10%;
+  }
+
+  .frontTitle{
+    bottom:7%;
+  }
+}
+
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media(max-width:720px){
+
+  .objectPosition{
+    width:154vw;
+    top:47%;
+  }
+
+  .realSky{
+    opacity:.68;
+  }
+
+  .realDistant{
+    opacity:.80;
+  }
+
+  .realForeground{
+    opacity:.78;
+  }
+
+  .backTitle{
+    top:21%;
+    left:4%;
+    font-size:33vw;
+  }
+
+  .frontTitle{
+    bottom:21%;
+    left:-2%;
+    font-size:21vw;
+  }
+
+  .common{
+    top:16%;
+    right:6%;
+    width:120px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  .realWorld,
+  .realWorldGlow,
+  .realSky,
+  .realIsland,
+  .realMist,
+  .realPapers,
+  .realForeground{
+    animation:none !important;
+  }
+}
+
+
+/* =========================================================
+   POEMA UNIVERSAL · COMPOSITION V4
+   Más territorio · menos nube · isla protagonista
+   ========================================================= */
+
+
+/* MUNDO COMPLETO:
+   ligeramente más grande para ocupar el centro
+   sin convertirse en una fotografía rectangular.
+*/
+.objectPosition{
+  width:min(91vw,1420px);
+  top:43%;
+}
+
+
+/* ---------------------------------------------------------
+   CIELO
+   Más alto y más tenue.
+   --------------------------------------------------------- */
+
+.realSky{
+  opacity:.58;
+
+  transform:
+    translate3d(
+      calc(var(--px)*-.10),
+      calc(var(--py)*-.08 + var(--scroll)*-5px - 22px),
+      0
+    )
+    scale(1.02);
+}
+
+
+/* ---------------------------------------------------------
+   PAISAJE LEJANO
+   Queremos volver a ver montaña + valle + ciudad.
+   --------------------------------------------------------- */
+
+.realDistant{
+  opacity:1;
+
+  transform:
+    translate3d(
+      calc(var(--px)*-.24),
+      calc(var(--py)*-.18 + var(--scroll)*-9px - 4px),
+      0
+    )
+    scale(1.035);
+}
+
+.realDistant img{
+  filter:
+    saturate(.78)
+    contrast(.97)
+    brightness(1.015);
+}
+
+
+/* ---------------------------------------------------------
+   ISLA CENTRAL
+   Ésta tiene que ser la protagonista.
+   Árbol, ruinas y personas claramente visibles.
+   --------------------------------------------------------- */
+
+.realIsland{
+  z-index:5;
+
+  transform:
+    translate3d(
+      calc(var(--px)*.46),
+      calc(var(--py)*.34 + var(--scroll)*-16px + 24px),
+      0
+    )
+    scale(calc(1.145 + var(--scroll)*.032));
+}
+
+.realIsland img{
+  filter:
+    saturate(.92)
+    contrast(1.015)
+    brightness(1.005)
+    drop-shadow(
+      0 30px 25px
+      rgba(73,63,42,.13)
+    );
+}
+
+
+/* ---------------------------------------------------------
+   NIEBLA / CASCADAS
+
+   Ahora mismo esta capa está tapando demasiado.
+   La desplazamos abajo y reducimos densidad.
+   --------------------------------------------------------- */
+
+.realMist{
+  z-index:4;
+
+  opacity:.50;
+
+  transform:
+    translate3d(
+      calc(var(--px)*.66),
+      calc(var(--py)*.51 + var(--scroll)*-20px + 76px),
+      0
+    )
+    scale(1.04);
+}
+
+.realMist img{
+  filter:
+    brightness(1.035)
+    saturate(.70);
+}
+
+
+/* ---------------------------------------------------------
+   PAPELES / AVES
+
+   Conservamos el movimiento, pero algo más de aire.
+   --------------------------------------------------------- */
+
+.realPapers{
+  z-index:7;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.05),
+      calc(var(--py)*.76 + var(--scroll)*-28px - 5px),
+      0
+    )
+    scale(.96);
+}
+
+
+/* ---------------------------------------------------------
+   PRIMER PLANO
+
+   En V3 los grandes pergaminos inferiores dominan la imagen.
+   Los alejamos y reducimos muchísimo su presencia.
+   --------------------------------------------------------- */
+
+.realForeground{
+  z-index:8;
+
+  opacity:.48;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.42),
+      calc(var(--py)*1.02 + var(--scroll)*-34px + 92px),
+      0
+    )
+    scale(.90);
+}
+
+.realForeground img{
+  filter:
+    saturate(.76)
+    contrast(.95)
+    brightness(1.025)
+    drop-shadow(
+      0 18px 20px
+      rgba(62,54,40,.06)
+    );
+}
+
+
+/* ---------------------------------------------------------
+   POEMA
+
+   Conservamos la intersección, pero damos un poco más
+   de aire superior.
+   --------------------------------------------------------- */
+
+.backTitle{
+  top:9.2%;
+}
+
+
+/* ---------------------------------------------------------
+   UNIVERSAL
+
+   Lo dejamos monumental, ligeramente más abajo.
+   --------------------------------------------------------- */
+
+.frontTitle{
+  bottom:5.8%;
+}
+
+
+/* ---------------------------------------------------------
+   FRASE DERECHA
+
+   Un poco más alejada de la A.
+   --------------------------------------------------------- */
+
+.common{
+  right:2.7%;
+  top:36.5%;
+}
+
+
+/* ---------------------------------------------------------
+   EN PANTALLAS MUY PANORÁMICAS
+   --------------------------------------------------------- */
+
+@media(min-aspect-ratio:2/1){
+
+  .objectPosition{
+    width:min(82vw,1400px);
+    top:43%;
+  }
+
+  .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.46),
+        calc(var(--py)*.34 + var(--scroll)*-16px + 20px),
+        0
+      )
+      scale(calc(1.12 + var(--scroll)*.03));
+  }
+
+  .realMist{
+    transform:
+      translate3d(
+        calc(var(--px)*.66),
+        calc(var(--py)*.51 + var(--scroll)*-20px + 66px),
+        0
+      );
+  }
+}
+
+
+/* ---------------------------------------------------------
+   MÓVIL
+   --------------------------------------------------------- */
+
+@media(max-width:720px){
+
+  .objectPosition{
+    width:160vw;
+    top:47%;
+  }
+
+  .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.30),
+        calc(var(--py)*.24 + 20px),
+        0
+      )
+      scale(1.10);
+  }
+
+  .realMist{
+    opacity:.43;
+  }
+
+  .realForeground{
+    opacity:.30;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · BALANCE V5
+   La isla respira · paisaje visible · foreground mínimo
+   ========================================================= */
+
+.objectPosition{
+  width:min(88vw,1380px);
+  top:42.5%;
+}
+
+
+/* CIELO:
+   dejamos ver un poco más la atmósfera y las lunas.
+*/
+.realSky{
+  opacity:.70;
+
+  transform:
+    translate3d(
+      calc(var(--px)*-.10),
+      calc(var(--py)*-.08 + var(--scroll)*-5px - 30px),
+      0
+    )
+    scale(1.025);
+}
+
+
+/* PAISAJE LEJANO:
+   gana presencia para que exista mundo detrás de la isla.
+*/
+.realDistant{
+  opacity:1;
+
+  transform:
+    translate3d(
+      calc(var(--px)*-.26),
+      calc(var(--py)*-.18 + var(--scroll)*-9px - 10px),
+      0
+    )
+    scale(1.075);
+}
+
+.realDistant img{
+  filter:
+    saturate(.75)
+    contrast(.94)
+    brightness(1.04);
+}
+
+
+/* ISLA:
+   ligeramente más pequeña, algo más arriba y menos pesada.
+*/
+.realIsland{
+  transform:
+    translate3d(
+      calc(var(--px)*.48),
+      calc(var(--py)*.34 + var(--scroll)*-16px + 8px),
+      0
+    )
+    scale(calc(1.075 + var(--scroll)*.028));
+}
+
+.realIsland img{
+  filter:
+    saturate(.86)
+    contrast(.985)
+    brightness(1.025)
+    drop-shadow(
+      0 25px 24px
+      rgba(73,63,42,.10)
+    );
+}
+
+
+/* NIEBLA / CASCADAS:
+   vuelve a aparecer debajo de la isla,
+   no delante de las personas.
+*/
+.realMist{
+  opacity:.62;
+
+  transform:
+    translate3d(
+      calc(var(--px)*.68),
+      calc(var(--py)*.50 + var(--scroll)*-20px + 105px),
+      0
+    )
+    scale(1.055);
+}
+
+.realMist img{
+  filter:
+    brightness(1.07)
+    saturate(.63);
+}
+
+
+/* PAPELES:
+   algo más discretos.
+*/
+.realPapers{
+  opacity:.82;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.08),
+      calc(var(--py)*.78 + var(--scroll)*-28px - 2px),
+      0
+    )
+    scale(.91);
+}
+
+
+/* PRIMER PLANO:
+   queremos insinuarlo, no tapar la obra.
+*/
+.realForeground{
+  opacity:.20;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.55),
+      calc(var(--py)*1.08 + var(--scroll)*-36px + 155px),
+      0
+    )
+    scale(.76);
+}
+
+.realForeground img{
+  filter:
+    saturate(.72)
+    contrast(.94)
+    brightness(1.035)
+    drop-shadow(
+      0 16px 18px
+      rgba(60,53,41,.05)
+    );
+}
+
+
+/* UNIVERSAL recupera un pequeño margen respecto al mundo */
+.frontTitle{
+  bottom:6.2%;
+}
+
+
+/* POEMA un poco más alto */
+.backTitle{
+  top:8.8%;
+}
+
+
+/* frase derecha */
+.common{
+  top:35%;
+  right:2.8%;
+}
+
+
+/* panorámico */
+@media(min-aspect-ratio:2/1){
+
+  .objectPosition{
+    width:min(80vw,1360px);
+    top:42.5%;
+  }
+
+  .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.48),
+        calc(var(--py)*.34 + var(--scroll)*-16px + 5px),
+        0
+      )
+      scale(calc(1.06 + var(--scroll)*.026));
+  }
+
+  .realForeground{
+    opacity:.16;
+
+    transform:
+      translate3d(
+        calc(var(--px)*1.55),
+        calc(var(--py)*1.08 + var(--scroll)*-36px + 160px),
+        0
+      )
+      scale(.73);
+  }
+}
+
+
+/* móvil */
+@media(max-width:720px){
+
+  .objectPosition{
+    width:154vw;
+    top:46%;
+  }
+
+  .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.30),
+        calc(var(--py)*.24 + 8px),
+        0
+      )
+      scale(1.05);
+  }
+
+  .realForeground{
+    opacity:.12;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · POEMA TOP FIX
+   Mejor visibilidad de POEMA arriba
+   ========================================================= */
+
+/*
+  POEMA debe quedar:
+  - por encima del cielo y montañas
+  - por debajo de la isla central
+*/
+.backTitle{
+  z-index:4;
+  top:6.8%;
+  left:10.4%;
+  font-size:clamp(162px,26.8vw,510px);
+}
+
+/*
+  Cielo algo más tenue para no comerse el título.
+*/
+.realSky{
+  opacity:.56;
+}
+
+/*
+  Paisaje lejano también un poco menos invasivo.
+*/
+.realDistant{
+  opacity:.88;
+}
+
+/*
+  La isla sigue siendo protagonista,
+  pero la bajamos un pelo para liberar POEMA.
+*/
+.realIsland{
+  transform:
+    translate3d(
+      calc(var(--px)*.48),
+      calc(var(--py)*.34 + var(--scroll)*-16px + 18px),
+      0
+    )
+    scale(calc(1.07 + var(--scroll)*.028));
+}
+
+/*
+  En panorámico, mantenemos el ajuste.
+*/
+@media(min-aspect-ratio:2/1){
+  .backTitle{
+    top:7%;
+    left:10.2%;
+  }
+
+  .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.48),
+        calc(var(--py)*.34 + var(--scroll)*-16px + 14px),
+        0
+      )
+      scale(calc(1.055 + var(--scroll)*.026));
+  }
+}
+
+/*
+  En móvil, que no se rompa.
+*/
+@media(max-width:720px){
+  .backTitle{
+    top:18%;
+    left:4%;
+    font-size:34vw;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · TRUE DEPTH SANDWICH
+   cielo → POEMA → isla → UNIVERSAL
+   ========================================================= */
+
+.objectPositionBack{
+  z-index:2;
+}
+
+.backTitle{
+  z-index:3;
+
+  top:8.4%;
+  left:10.5%;
+
+  font-size:
+    clamp(155px,25.6vw,490px);
+}
+
+.objectPositionFront{
+  z-index:4;
+}
+
+.frontTitle{
+  z-index:8;
+}
+
+
+/*
+ * El paisaje trasero puede ser amplio y atmosférico.
+ */
+.objectPositionBack .realWorld{
+  opacity:.92;
+}
+
+
+/*
+ * El mundo frontal queda limpio: sin fondo ni halo duplicado.
+ */
+.objectPositionFront .realWorld{
+  opacity:1;
+}
+
+
+/*
+ * Isla ligeramente por debajo de POEMA:
+ * suficiente para cortar letras sin tapar todo el título.
+ */
+.objectPositionFront .realIsland{
+  transform:
+    translate3d(
+      calc(var(--px)*.48),
+      calc(var(--py)*.34 + var(--scroll)*-16px + 21px),
+      0
+    )
+    scale(calc(1.055 + var(--scroll)*.028));
+}
+
+
+/*
+ * La niebla queda por debajo del protagonismo de las figuras.
+ */
+.objectPositionFront .realMist{
+  opacity:.54;
+
+  transform:
+    translate3d(
+      calc(var(--px)*.68),
+      calc(var(--py)*.50 + var(--scroll)*-20px + 108px),
+      0
+    )
+    scale(1.045);
+}
+
+
+/*
+ * Primer plano mucho más sutil.
+ */
+.objectPositionFront .realForeground{
+  opacity:.15;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.55),
+      calc(var(--py)*1.08 + var(--scroll)*-36px + 165px),
+      0
+    )
+    scale(.72);
+}
+
+
+/*
+ * POEMA más limpio y menos descomunal.
+ */
+.backTitle span{
+  text-shadow:
+    0 0 1px rgba(25,31,23,.03);
+}
+
+
+/*
+ * UNIVERSAL sigue siendo el plano tipográfico frontal.
+ */
+.frontTitle{
+  bottom:6.2%;
+}
+
+
+/*
+ * En panorámico mantenemos la misma lógica.
+ */
+@media(min-aspect-ratio:2/1){
+
+  .backTitle{
+    top:8.6%;
+    left:10.4%;
+    font-size:24.8vw;
+  }
+
+  .objectPositionFront .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.48),
+        calc(var(--py)*.34 + var(--scroll)*-16px + 17px),
+        0
+      )
+      scale(calc(1.04 + var(--scroll)*.026));
+  }
+}
+
+
+/*
+ * Móvil
+ */
+@media(max-width:720px){
+
+  .backTitle{
+    z-index:3;
+    top:19%;
+    left:4%;
+    font-size:33vw;
+  }
+
+  .objectPositionFront{
+    z-index:4;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · OPTICAL PARALLAX V1
+   ========================================================= */
+
+/*
+   La tipografía también reacciona,
+   pero mucho menos que el mundo.
+*/
+
+.backTitle{
+  transform:
+    translate(
+      calc(var(--px)*-.10 + var(--scroll)*-25px),
+      calc(var(--py)*-.07)
+    );
+}
+
+.frontTitle{
+  transform:
+    translate(
+      calc(var(--px)*.12 + var(--scroll)*22px),
+      calc(var(--py)*.09)
+    );
+}
+
+
+/*
+   Fondo: casi quieto.
+*/
+
+.objectPositionBack .realSky{
+  transform:
+    translate3d(
+      calc(var(--px)*-.10),
+      calc(var(--py)*-.06 + var(--scroll)*-5px - 30px),
+      0
+    )
+    scale(1.025);
+}
+
+.objectPositionBack .realDistant{
+  transform:
+    translate3d(
+      calc(var(--px)*-.26),
+      calc(var(--py)*-.16 + var(--scroll)*-9px - 10px),
+      0
+    )
+    scale(1.075);
+}
+
+
+/*
+   Núcleo: movimiento medio.
+*/
+
+.objectPositionFront .realIsland{
+  transform:
+    translate3d(
+      calc(var(--px)*.50),
+      calc(var(--py)*.34 + var(--scroll)*-16px + 17px),
+      0
+    )
+    scale(calc(1.04 + var(--scroll)*.026));
+}
+
+
+/*
+   Niebla: responde algo más.
+*/
+
+.objectPositionFront .realMist{
+  transform:
+    translate3d(
+      calc(var(--px)*.74),
+      calc(var(--py)*.52 + var(--scroll)*-20px + 108px),
+      0
+    )
+    scale(1.045);
+}
+
+
+/*
+   Hojas y aves:
+   claramente más cercanas al espectador.
+*/
+
+.objectPositionFront .realPapers{
+  transform:
+    translate3d(
+      calc(var(--px)*1.18),
+      calc(var(--py)*.82 + var(--scroll)*-28px),
+      0
+    )
+    scale(.91);
+}
+
+
+/*
+   Primer plano:
+   máxima respuesta.
+*/
+
+.objectPositionFront .realForeground{
+  transform:
+    translate3d(
+      calc(var(--px)*1.70),
+      calc(var(--py)*1.18 + var(--scroll)*-36px + 165px),
+      0
+    )
+    scale(.72);
+}
+
+
+@media(prefers-reduced-motion:reduce){
+
+  .backTitle,
+  .frontTitle,
+  .objectPositionBack .realSky,
+  .objectPositionBack .realDistant,
+  .objectPositionFront .realIsland,
+  .objectPositionFront .realMist,
+  .objectPositionFront .realPapers,
+  .objectPositionFront .realForeground{
+    transform:none !important;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · LOWER FRONT WORLD
+   Libera POEMA bajando únicamente la figura principal
+   ========================================================= */
+
+.objectPositionFront{
+  top:45.5%;
+}
+
+/* En panorámico, un poco menos */
+@media(min-aspect-ratio:2/1){
+  .objectPositionFront{
+    top:45%;
+  }
+}
+
+/* Móvil */
+@media(max-width:720px){
+  .objectPositionFront{
+    top:48%;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · CLEAR POEMA V2
+   Más aire real entre POEMA y el mundo frontal
+   ========================================================= */
+
+/* Bajamos TODO el plano frontal unos 55–65 px */
+.objectPositionFront{
+  top:50%;
+}
+
+/* La isla además pierde un poco de escala */
+.objectPositionFront .realIsland{
+  transform:
+    translate3d(
+      calc(var(--px)*.50),
+      calc(var(--py)*.34 + var(--scroll)*-16px + 12px),
+      0
+    )
+    scale(calc(.985 + var(--scroll)*.022));
+}
+
+/* Niebla acompaña al mundo hacia abajo */
+.objectPositionFront .realMist{
+  transform:
+    translate3d(
+      calc(var(--px)*.74),
+      calc(var(--py)*.52 + var(--scroll)*-20px + 115px),
+      0
+    )
+    scale(1.025);
+}
+
+/* Papeles algo más bajos */
+.objectPositionFront .realPapers{
+  transform:
+    translate3d(
+      calc(var(--px)*1.18),
+      calc(var(--py)*.82 + var(--scroll)*-28px + 18px),
+      0
+    )
+    scale(.88);
+}
+
+/* Primer plano también baja */
+.objectPositionFront .realForeground{
+  transform:
+    translate3d(
+      calc(var(--px)*1.70),
+      calc(var(--py)*1.18 + var(--scroll)*-36px + 195px),
+      0
+    )
+    scale(.68);
+}
+
+/* POEMA sube apenas para recuperar todavía más aire */
+.backTitle{
+  top:6.2%;
+}
+
+@media(min-aspect-ratio:2/1){
+
+  .objectPositionFront{
+    top:49.5%;
+  }
+
+  .backTitle{
+    top:6.5%;
+  }
+
+  .objectPositionFront .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.50),
+        calc(var(--py)*.34 + var(--scroll)*-16px + 10px),
+        0
+      )
+      scale(calc(.975 + var(--scroll)*.021));
+  }
+}
+
+@media(max-width:720px){
+  .objectPositionFront{
+    top:51%;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · TRUE DEPTH SANDWICH
+   cielo → POEMA → isla → UNIVERSAL
+   ========================================================= */
+
+.objectPositionBack{
+  z-index:2;
+}
+
+.backTitle{
+  z-index:3;
+
+  top:8.4%;
+  left:10.5%;
+
+  font-size:
+    clamp(155px,25.6vw,490px);
+}
+
+.objectPositionFront{
+  z-index:4;
+}
+
+.frontTitle{
+  z-index:8;
+}
+
+
+/*
+ * El paisaje trasero puede ser amplio y atmosférico.
+ */
+.objectPositionBack .realWorld{
+  opacity:.92;
+}
+
+
+/*
+ * El mundo frontal queda limpio: sin fondo ni halo duplicado.
+ */
+.objectPositionFront .realWorld{
+  opacity:1;
+}
+
+
+/*
+ * Isla ligeramente por debajo de POEMA:
+ * suficiente para cortar letras sin tapar todo el título.
+ */
+.objectPositionFront .realIsland{
+  transform:
+    translate3d(
+      calc(var(--px)*.48),
+      calc(var(--py)*.34 + var(--scroll)*-16px + 21px),
+      0
+    )
+    scale(calc(1.055 + var(--scroll)*.028));
+}
+
+
+/*
+ * La niebla queda por debajo del protagonismo de las figuras.
+ */
+.objectPositionFront .realMist{
+  opacity:.54;
+
+  transform:
+    translate3d(
+      calc(var(--px)*.68),
+      calc(var(--py)*.50 + var(--scroll)*-20px + 108px),
+      0
+    )
+    scale(1.045);
+}
+
+
+/*
+ * Primer plano mucho más sutil.
+ */
+.objectPositionFront .realForeground{
+  opacity:.15;
+
+  transform:
+    translate3d(
+      calc(var(--px)*1.55),
+      calc(var(--py)*1.08 + var(--scroll)*-36px + 165px),
+      0
+    )
+    scale(.72);
+}
+
+
+/*
+ * POEMA más limpio y menos descomunal.
+ */
+.backTitle span{
+  text-shadow:
+    0 0 1px rgba(25,31,23,.03);
+}
+
+
+/*
+ * UNIVERSAL sigue siendo el plano tipográfico frontal.
+ */
+.frontTitle{
+  bottom:6.2%;
+}
+
+
+/*
+ * En panorámico mantenemos la misma lógica.
+ */
+@media(min-aspect-ratio:2/1){
+
+  .backTitle{
+    top:8.6%;
+    left:10.4%;
+    font-size:24.8vw;
+  }
+
+  .objectPositionFront .realIsland{
+    transform:
+      translate3d(
+        calc(var(--px)*.48),
+        calc(var(--py)*.34 + var(--scroll)*-16px + 17px),
+        0
+      )
+      scale(calc(1.04 + var(--scroll)*.026));
+  }
+}
+
+
+/*
+ * Móvil
+ */
+@media(max-width:720px){
+
+  .backTitle{
+    z-index:3;
+    top:19%;
+    left:4%;
+    font-size:33vw;
+  }
+
+  .objectPositionFront{
+    z-index:4;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · PUBLIC HOME INTEGRATION
+   ========================================================= */
+
+/*
+ * En /umbral-v2 conservamos el fondo propio.
+ * En la home pública dejamos ver el fondo original
+ * de la página que existe detrás.
+ */
+
+.publicHome{
+  background:transparent;
+  width:100vw;
+  max-width:none;
+}
+
+.publicHome .stage{
+  width:100vw;
+  max-width:none;
+  background:transparent;
+}
+
+/*
+ * Al desaparecer nav + ACTO I,
+ * la marca editorial permanece sola arriba a la izquierda.
+ */
+
+.publicHome .header{
+  right:auto;
+  width:auto;
+}
+
+
+
+/* =========================================================
+   PUBLIC HOME · CENTER COMPOSITION
+   Centrado fino entre los dos laterales
+   ========================================================= */
+
+@media (min-width: 721px){
+
+  .publicHome{
+    --public-center-x: 24px;
+  }
+
+  .publicHome .objectPositionBack,
+  .publicHome .objectPositionFront{
+    left:calc(50% + var(--public-center-x));
+  }
+
+  .publicHome .backTitle{
+    margin-left:var(--public-center-x);
+  }
+
+  .publicHome .frontTitle{
+    margin-left:var(--public-center-x);
+  }
+
+  .publicHome .manifesto{
+    transform:translateX(var(--public-center-x));
+  }
+
+  .publicHome .common{
+    transform:translateX(var(--public-center-x));
+  }
+
+}
+
+/* móvil permanece exactamente igual */
+@media (max-width:720px){
+  .publicHome{
+    --public-center-x:0px;
+  }
+}
+
+
+
+/* =========================================================
+   PUBLIC HOME · REMOVE EXTRA SCROLL GAP
+   La portada pública termina casi al acabar el primer viewport.
+   La experiencia independiente conserva su recorrido original.
+   ========================================================= */
+
+.experience.publicHome{
+  height:108svh;
+}
+
+@media (max-width:720px){
+  .experience.publicHome{
+    height:104svh;
+  }
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · ENTER THE WORLD
+   Solo afecta al Threshold independiente:
+   /poema-universal
+
+   La Home pública (.publicHome) queda intacta.
+   ========================================================= */
+
+
+/* Tres tiempos:
+   1. contemplación
+   2. aproximación
+   3. atravesar el arco
+*/
+.experience:not(.publicHome){
+  height:300svh;
+}
+
+
+/* La cámara permanece fija mientras hacemos el recorrido */
+.experience:not(.publicHome) .stage{
+  overflow:hidden;
+  isolation:isolate;
+}
+
+
+/* =========================================================
+   01 · TIPOGRAFÍA SE ABRE
+   ========================================================= */
+
+.experience:not(.publicHome) .backTitle{
+  translate:
+    calc(var(--scroll) * -38vw)
+    calc(var(--scroll) * -3vh);
+
+  opacity:
+    clamp(
+      0,
+      calc(1 - var(--scroll) * 1.65),
+      1
+    );
+
+  scale:
+    calc(1 + var(--scroll) * .12);
+}
+
+
+.experience:not(.publicHome) .frontTitle{
+  translate:
+    calc(var(--scroll) * 38vw)
+    calc(var(--scroll) * 5vh);
+
+  opacity:
+    clamp(
+      0,
+      calc(1 - var(--scroll) * 1.55),
+      1
+    );
+
+  scale:
+    calc(1 + var(--scroll) * .16);
+}
+
+
+/* =========================================================
+   02 · LA CÁMARA BUSCA EL ARCO CENTRAL
+   El punto de fuga está ligeramente a la derecha y arriba
+   del centro: hombre + árbol + arco.
+   ========================================================= */
+
+.experience:not(.publicHome) .objectPositionBack,
+.experience:not(.publicHome) .objectPositionFront{
+  transform-origin:55% 43%;
+
+  scale:
+    calc(1 + var(--scroll) * 2.35);
+
+  translate:
+    calc(var(--scroll) * -4vw)
+    calc(var(--scroll) * 5vh);
+
+  will-change:
+    scale,
+    translate;
+}
+
+
+/* cielo y mundo distante desaparecen lentamente */
+.experience:not(.publicHome)
+.objectPositionBack .realSky{
+  opacity:
+    clamp(
+      .18,
+      calc(1 - var(--scroll) * 1.15),
+      1
+    );
+}
+
+
+.experience:not(.publicHome)
+.objectPositionBack .realDistant{
+  opacity:
+    clamp(
+      .12,
+      calc(1 - var(--scroll) * 1.28),
+      1
+    );
+}
+
+
+/* =========================================================
+   03 · LA ISLA SE CONVIERTE EN EL MUNDO
+   ========================================================= */
+
+.experience:not(.publicHome)
+.objectPositionFront .realIsland{
+  filter:
+    brightness(
+      calc(1 + var(--scroll) * .13)
+    )
+    contrast(
+      calc(1 + var(--scroll) * .06)
+    );
+}
+
+
+/* la niebla nos envuelve al acercarnos */
+.experience:not(.publicHome)
+.objectPositionFront .realMist{
+  opacity:
+    clamp(
+      .55,
+      calc(.72 + var(--scroll) * .42),
+      1
+    );
+
+  scale:
+    calc(1 + var(--scroll) * .38);
+}
+
+
+/* los papeles pasan por delante de la cámara */
+.experience:not(.publicHome)
+.objectPositionFront .realPapers{
+  scale:
+    calc(1 + var(--scroll) * .92);
+
+  translate:
+    calc(var(--scroll) * -3vw)
+    calc(var(--scroll) * 7vh);
+
+  filter:
+    blur(
+      calc(var(--scroll) * 1.3px)
+    );
+}
+
+
+/* primer plano todavía más rápido */
+.experience:not(.publicHome)
+.objectPositionFront .realForeground{
+  scale:
+    calc(1 + var(--scroll) * 1.22);
+
+  translate:
+    calc(var(--scroll) * 4vw)
+    calc(var(--scroll) * 8vh);
+
+  opacity:
+    clamp(
+      .18,
+      calc(1 - var(--scroll) * .72),
+      1
+    );
+}
+
+
+/* =========================================================
+   04 · LOS ELEMENTOS EDITORIALES DESAPARECEN
+   ========================================================= */
+
+.experience:not(.publicHome) .header,
+.experience:not(.publicHome) .manifesto,
+.experience:not(.publicHome) .common,
+.experience:not(.publicHome) .scrollCue{
+  opacity:
+    clamp(
+      0,
+      calc(1 - var(--scroll) * 2.2),
+      1
+    );
+
+  transition:opacity .08s linear;
+}
+
+
+/* =========================================================
+   05 · ATRAVESAMOS EL UMBRAL
+   Aparece a partir del último cuarto del viaje.
+   ========================================================= */
+
+.experience:not(.publicHome) .stage::before{
+  content:"";
+
+  position:absolute;
+  inset:-2px;
+
+  z-index:80;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      circle at 55% 43%,
+      rgba(255,247,224,.98) 0%,
+      rgba(236,218,179,.92) 12%,
+      rgba(48,42,34,.88) 40%,
+      rgba(12,11,9,.98) 72%,
+      #090807 100%
+    );
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--scroll) - .72) * 4.1),
+      1
+    );
+
+  backdrop-filter:
+    blur(
+      calc(
+        clamp(
+          0,
+          calc((var(--scroll) - .72) * 4),
+          1
+        ) * 4px
+      )
+    );
+}
+
+
+/* =========================================================
+   06 · PRIMERA VISIÓN DEL INTERIOR
+   ========================================================= */
+
+.experience:not(.publicHome) .stage::after{
+  content:
+    "EL MUNDO\A EDICIÓN FUNDACIONAL · 2026\A\A SESENTA VOCES · UN AÑO · UNA OBRA";
+
+  white-space:pre;
+
+  position:absolute;
+
+  z-index:90;
+
+  left:50%;
+  top:50%;
+
+  width:min(760px,80vw);
+
+  translate:-50% -50%;
+
+  text-align:center;
+
+  color:#eee7da;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(38px,5.3vw,86px);
+
+  line-height:1.02;
+
+  letter-spacing:-.04em;
+
+  text-shadow:
+    0 4px 30px rgba(0,0,0,.45);
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--scroll) - .86) * 8),
+      1
+    );
+
+  scale:
+    calc(
+      .94 +
+      clamp(
+        0,
+        calc((var(--scroll) - .86) * 7),
+        1
+      ) * .06
+    );
+
+  pointer-events:none;
+}
+
+
+/* segunda y tercera línea mucho más discretas */
+@supports (text-wrap: balance){
+  .experience:not(.publicHome) .stage::after{
+    text-wrap:balance;
+  }
+}
+
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media(max-width:720px){
+
+  .experience:not(.publicHome){
+    height:260svh;
+  }
+
+  .experience:not(.publicHome)
+  .objectPositionBack,
+  .experience:not(.publicHome)
+  .objectPositionFront{
+    transform-origin:54% 42%;
+
+    scale:
+      calc(1 + var(--scroll) * 1.72);
+
+    translate:
+      calc(var(--scroll) * -2vw)
+      calc(var(--scroll) * 4vh);
+  }
+
+  .experience:not(.publicHome) .stage::after{
+    font-size:
+      clamp(30px,10vw,50px);
+  }
+
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  .experience:not(.publicHome){
+    height:150svh;
+  }
+
+  .experience:not(.publicHome)
+  .objectPositionBack,
+  .experience:not(.publicHome)
+  .objectPositionFront{
+    scale:1;
+    translate:0 0;
+  }
+
+}
+
+
+
+/* =========================================================
+   ENTER THE WORLD · CAMERA FIX
+   Punto de fuga: arco central + figura bajo el árbol
+   ========================================================= */
+
+.experience:not(.publicHome)
+.objectPositionBack,
+.experience:not(.publicHome)
+.objectPositionFront{
+  transform-origin:58% 39%;
+
+  scale:
+    calc(1 + var(--scroll) * 1.72);
+
+  translate:
+    calc(var(--scroll) * -1vw)
+    calc(var(--scroll) * 1.5vh);
+}
+
+
+/* La isla permanece legible más tiempo */
+.experience:not(.publicHome)
+.objectPositionFront .realIsland{
+  filter:
+    brightness(
+      calc(1 + var(--scroll) * .08)
+    )
+    contrast(
+      calc(1 + var(--scroll) * .04)
+    );
+}
+
+
+/* Los papeles siguen pasando cerca,
+   pero sin tapar tanto el punto de fuga */
+.experience:not(.publicHome)
+.objectPositionFront .realPapers{
+  scale:
+    calc(1 + var(--scroll) * .68);
+
+  translate:
+    calc(var(--scroll) * -1vw)
+    calc(var(--scroll) * 4vh);
+
+  filter:
+    blur(
+      calc(var(--scroll) * .8px)
+    );
+}
+
+
+/* Primer plano menos agresivo */
+.experience:not(.publicHome)
+.objectPositionFront .realForeground{
+  scale:
+    calc(1 + var(--scroll) * .82);
+
+  translate:
+    calc(var(--scroll) * 1vw)
+    calc(var(--scroll) * 4vh);
+}
+
+
+/* El fundido empieza MÁS TARDE:
+   primero atravesamos visualmente el arco */
+.experience:not(.publicHome) .stage::before{
+  background:
+    radial-gradient(
+      circle at 58% 39%,
+      rgba(255,248,224,.98) 0%,
+      rgba(234,214,174,.92) 9%,
+      rgba(40,35,29,.90) 32%,
+      rgba(10,9,8,.98) 64%,
+      #080706 100%
+    );
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--scroll) - .84) * 6.25),
+      1
+    );
+}
+
+
+/* El título interior aparece cuando ya hemos cruzado */
+.experience:not(.publicHome) .stage::after{
+  content:
+    "ANTOLOGÍA VIVA\A\A EDICIÓN FUNDACIONAL · 2026\A LOS POEMAS DEJAN DE SER PÁGINA";
+
+  top:50%;
+
+  width:min(760px,78vw);
+
+  font-size:
+    clamp(30px,4.1vw,64px);
+
+  line-height:1.08;
+
+  letter-spacing:-.025em;
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--scroll) - .94) * 16),
+      1
+    );
+
+  scale:
+    calc(
+      .97 +
+      clamp(
+        0,
+        calc((var(--scroll) - .94) * 16),
+        1
+      ) * .03
+    );
+}
+
+
+
+/* =========================================================
+   ENTER THE WORLD · CAMERA FIX
+   Punto de fuga: arco central + figura bajo el árbol
+   ========================================================= */
+
+.experience:not(.publicHome)
+.objectPositionBack,
+.experience:not(.publicHome)
+.objectPositionFront{
+  transform-origin:58% 39%;
+
+  scale:
+    calc(1 + var(--scroll) * 1.72);
+
+  translate:
+    calc(var(--scroll) * -1vw)
+    calc(var(--scroll) * 1.5vh);
+}
+
+
+/* La isla permanece legible más tiempo */
+.experience:not(.publicHome)
+.objectPositionFront .realIsland{
+  filter:
+    brightness(
+      calc(1 + var(--scroll) * .08)
+    )
+    contrast(
+      calc(1 + var(--scroll) * .04)
+    );
+}
+
+
+/* Los papeles siguen pasando cerca,
+   pero sin tapar tanto el punto de fuga */
+.experience:not(.publicHome)
+.objectPositionFront .realPapers{
+  scale:
+    calc(1 + var(--scroll) * .68);
+
+  translate:
+    calc(var(--scroll) * -1vw)
+    calc(var(--scroll) * 4vh);
+
+  filter:
+    blur(
+      calc(var(--scroll) * .8px)
+    );
+}
+
+
+/* Primer plano menos agresivo */
+.experience:not(.publicHome)
+.objectPositionFront .realForeground{
+  scale:
+    calc(1 + var(--scroll) * .82);
+
+  translate:
+    calc(var(--scroll) * 1vw)
+    calc(var(--scroll) * 4vh);
+}
+
+
+/* El fundido empieza MÁS TARDE:
+   primero atravesamos visualmente el arco */
+.experience:not(.publicHome) .stage::before{
+  background:
+    radial-gradient(
+      circle at 58% 39%,
+      rgba(255,248,224,.98) 0%,
+      rgba(234,214,174,.92) 9%,
+      rgba(40,35,29,.90) 32%,
+      rgba(10,9,8,.98) 64%,
+      #080706 100%
+    );
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--scroll) - .84) * 6.25),
+      1
+    );
+}
+
+
+/* El título interior aparece cuando ya hemos cruzado */
+.experience:not(.publicHome) .stage::after{
+  content:
+    "EL MUNDO\A\A EDICIÓN FUNDACIONAL · 2026\A SESENTA VOCES · UN AÑO · UNA OBRA";
+
+  top:50%;
+
+  width:min(760px,78vw);
+
+  font-size:
+    clamp(30px,4.1vw,64px);
+
+  line-height:1.08;
+
+  letter-spacing:-.025em;
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--scroll) - .94) * 16),
+      1
+    );
+
+  scale:
+    calc(
+      .97 +
+      clamp(
+        0,
+        calc((var(--scroll) - .94) * 16),
+        1
+      ) * .03
+    );
+}
+
+
+
+/* =========================================================
+   EL MUNDO · PORTAL REAL
+   Sustituye el cartel generado por CSS.
+   ========================================================= */
+
+.experience:not(.publicHome) .stage::after{
+  content:none !important;
+  display:none !important;
+}
+
+.worldPortal{
+  position:absolute;
+  z-index:100;
+
+  left:50%;
+  top:50%;
+
+  width:min(720px,82vw);
+
+  translate:-50% -50%;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  text-align:center;
+
+  color:#eee7da;
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--scroll) - .925) * 14),
+      1
+    );
+
+  scale:
+    calc(
+      .965 +
+      clamp(
+        0,
+        calc((var(--scroll) - .925) * 14),
+        1
+      ) * .035
+    );
+
+  pointer-events:none;
+}
+
+.worldPortal p{
+  margin:0 0 22px;
+
+  font-size:8px;
+  letter-spacing:.42em;
+
+  color:#c39a58;
+}
+
+.worldPortal h2{
+  margin:0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(58px,8vw,124px);
+
+  line-height:.82;
+
+  font-weight:400;
+  letter-spacing:-.065em;
+}
+
+.worldPortalLine{
+  margin-top:31px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(15px,1.7vw,24px);
+
+  font-style:italic;
+
+  color:rgba(238,231,218,.65);
+}
+
+.worldPortalButton{
+  margin-top:39px;
+
+  display:flex;
+  align-items:center;
+  gap:24px;
+
+  padding:15px 23px;
+
+  border:
+    1px solid rgba(195,154,88,.55);
+
+  color:#eee7da;
+  text-decoration:none;
+
+  font-size:8px;
+  letter-spacing:.32em;
+
+  background:
+    rgba(8,7,6,.42);
+
+  backdrop-filter:blur(7px);
+
+  pointer-events:auto;
+
+  transition:
+    background .35s ease,
+    border-color .35s ease,
+    transform .35s ease;
+}
+
+.worldPortalButton:hover{
+  background:
+    rgba(195,154,88,.12);
+
+  border-color:
+    rgba(211,174,108,.85);
+
+  transform:translateY(-2px);
+}
+
+
+
+/* =========================================================
+   ENTER THE WORLD · LONG CINEMATIC SCROLL
+   Más tiempo para contemplar la portada antes de entrar.
+   Solo /poema-universal. La Home queda intacta.
+   ========================================================= */
+
+.experience:not(.publicHome){
+
+  /*
+    0.00 → 0.30  contemplación
+    0.30 → 0.90  avance de cámara
+    0.90 → 0.96  cruce del umbral
+    0.96 → 1.00  portal El Mundo
+  */
+
+  --enter-progress:
+    clamp(
+      0,
+      calc((var(--scroll) - .30) * 1.6667),
+      1
+    );
+
+  --title-progress:
+    clamp(
+      0,
+      calc((var(--scroll) - .24) * 2.0),
+      1
+    );
+
+  --threshold-progress:
+    clamp(
+      0,
+      calc((var(--scroll) - .90) * 10),
+      1
+    );
+
+  --portal-progress:
+    clamp(
+      0,
+      calc((var(--scroll) - .96) * 25),
+      1
+    );
+
+  height:460svh;
+}
+
+
+/* =========================================================
+   01 · DURANTE EL PRIMER 30% NO PASA CASI NADA
+   ========================================================= */
+
+.experience:not(.publicHome)
+.objectPositionBack,
+.experience:not(.publicHome)
+.objectPositionFront{
+
+  transform-origin:57% 40%;
+
+  scale:
+    calc(
+      1 +
+      var(--enter-progress) * 1.38
+    );
+
+  translate:
+    calc(
+      var(--enter-progress) * -1vw
+    )
+    calc(
+      var(--enter-progress) * 1vh
+    );
+}
+
+
+/* =========================================================
+   02 · POEMA Y UNIVERSAL SALEN DESPUÉS
+   ========================================================= */
+
+.experience:not(.publicHome) .backTitle{
+
+  translate:
+    calc(
+      var(--title-progress) * -31vw
+    )
+    calc(
+      var(--title-progress) * -2vh
+    );
+
+  opacity:
+    calc(
+      1 - var(--title-progress) * .94
+    );
+
+  scale:
+    calc(
+      1 + var(--title-progress) * .08
+    );
+}
+
+
+.experience:not(.publicHome) .frontTitle{
+
+  translate:
+    calc(
+      var(--title-progress) * 31vw
+    )
+    calc(
+      var(--title-progress) * 3vh
+    );
+
+  opacity:
+    calc(
+      1 - var(--title-progress) * .94
+    );
+
+  scale:
+    calc(
+      1 + var(--title-progress) * .10
+    );
+}
+
+
+/* =========================================================
+   03 · LAS CAPAS GANAN PROFUNDIDAD POCO A POCO
+   ========================================================= */
+
+.experience:not(.publicHome)
+.objectPositionBack .realSky{
+
+  opacity:
+    calc(
+      1 - var(--enter-progress) * .58
+    );
+}
+
+
+.experience:not(.publicHome)
+.objectPositionBack .realDistant{
+
+  opacity:
+    calc(
+      1 - var(--enter-progress) * .66
+    );
+}
+
+
+.experience:not(.publicHome)
+.objectPositionFront .realIsland{
+
+  filter:
+    brightness(
+      calc(
+        1 +
+        var(--enter-progress) * .07
+      )
+    )
+    contrast(
+      calc(
+        1 +
+        var(--enter-progress) * .035
+      )
+    );
+}
+
+
+/* La niebla no invade demasiado pronto */
+
+.experience:not(.publicHome)
+.objectPositionFront .realMist{
+
+  opacity:
+    calc(
+      .72 +
+      var(--enter-progress) * .22
+    );
+
+  scale:
+    calc(
+      1 +
+      var(--enter-progress) * .22
+    );
+}
+
+
+/* Papeles: primero casi quietos, después pasan cerca */
+
+.experience:not(.publicHome)
+.objectPositionFront .realPapers{
+
+  scale:
+    calc(
+      1 +
+      var(--enter-progress) * .58
+    );
+
+  translate:
+    calc(
+      var(--enter-progress) * -1.2vw
+    )
+    calc(
+      var(--enter-progress) * 3vh
+    );
+
+  filter:
+    blur(
+      calc(
+        var(--enter-progress) * .65px
+      )
+    );
+}
+
+
+/* Primer plano con menos agresividad */
+
+.experience:not(.publicHome)
+.objectPositionFront .realForeground{
+
+  scale:
+    calc(
+      1 +
+      var(--enter-progress) * .70
+    );
+
+  translate:
+    calc(
+      var(--enter-progress) * 1.2vw
+    )
+    calc(
+      var(--enter-progress) * 3vh
+    );
+
+  opacity:
+    calc(
+      1 -
+      var(--enter-progress) * .38
+    );
+}
+
+
+/* =========================================================
+   04 · ELEMENTOS EDITORIALES
+   También permanecen visibles más tiempo.
+   ========================================================= */
+
+.experience:not(.publicHome) .header,
+.experience:not(.publicHome) .manifesto,
+.experience:not(.publicHome) .common,
+.experience:not(.publicHome) .scrollCue{
+
+  opacity:
+    clamp(
+      0,
+      calc(
+        1 -
+        var(--title-progress) * 1.18
+      ),
+      1
+    );
+}
+
+
+/* =========================================================
+   05 · CRUZAMOS EL ARCO SOLO AL FINAL
+   ========================================================= */
+
+.experience:not(.publicHome) .stage::before{
+
+  background:
+    radial-gradient(
+      circle at 57% 40%,
+      rgba(255,248,226,.99) 0%,
+      rgba(235,215,177,.94) 10%,
+      rgba(48,42,34,.89) 34%,
+      rgba(12,10,9,.98) 68%,
+      #080706 100%
+    );
+
+  opacity:
+    var(--threshold-progress);
+
+  backdrop-filter:
+    blur(
+      calc(
+        var(--threshold-progress) * 4px
+      )
+    );
+}
+
+
+/* =========================================================
+   06 · PORTAL REAL
+   Solo aparece cuando ya hemos atravesado la portada.
+   ========================================================= */
+
+.worldPortal{
+
+  opacity:
+    var(--portal-progress);
+
+  scale:
+    calc(
+      .96 +
+      var(--portal-progress) * .04
+    );
+
+  pointer-events:none;
+}
+
+
+.worldPortalButton{
+  pointer-events:
+    auto;
+}
+
+
+/* =========================================================
+   MÓVIL
+   ========================================================= */
+
+@media(max-width:720px){
+
+  .experience:not(.publicHome){
+    height:380svh;
+  }
+
+  .experience:not(.publicHome)
+  .objectPositionBack,
+  .experience:not(.publicHome)
+  .objectPositionFront{
+
+    scale:
+      calc(
+        1 +
+        var(--enter-progress) * 1.12
+      );
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  .experience:not(.publicHome){
+    height:180svh;
+  }
+
+}
+
+
+
+/* =========================================================
+   ENTER THE WORLD · FINAL CAMERA TARGET
+   Destino: reunión de los poetas bajo el árbol.
+   ========================================================= */
+
+/*
+   Ya no apuntamos al centro geométrico de la isla.
+   El objetivo está arriba, en la plaza donde están las voces.
+*/
+.experience:not(.publicHome)
+.objectPositionBack,
+.experience:not(.publicHome)
+.objectPositionFront{
+
+  transform-origin:55% 29%;
+
+  scale:
+    calc(
+      1 +
+      var(--enter-progress) * 1.75
+    );
+
+  translate:
+    calc(
+      var(--enter-progress) * -1.5vw
+    )
+    calc(
+      var(--enter-progress) * 8vh
+    );
+}
+
+
+/* La isla es la referencia principal de la entrada */
+.experience:not(.publicHome)
+.objectPositionFront .realIsland{
+
+  transform-origin:55% 29%;
+
+  filter:
+    brightness(
+      calc(
+        1 +
+        var(--enter-progress) * .055
+      )
+    )
+    contrast(
+      calc(
+        1 +
+        var(--enter-progress) * .025
+      )
+    );
+}
+
+
+/* La niebla se queda abajo y no tapa a los poetas */
+.experience:not(.publicHome)
+.objectPositionFront .realMist{
+
+  translate:
+    0
+    calc(
+      var(--enter-progress) * 12vh
+    );
+
+  opacity:
+    calc(
+      .70 +
+      var(--enter-progress) * .12
+    );
+}
+
+
+/* Papeles se abren hacia fuera al acercarnos */
+.experience:not(.publicHome)
+.objectPositionFront .realPapers{
+
+  scale:
+    calc(
+      1 +
+      var(--enter-progress) * .52
+    );
+
+  translate:
+    calc(
+      var(--enter-progress) * -2vw
+    )
+    calc(
+      var(--enter-progress) * 8vh
+    );
+}
+
+
+/* El primer plano cae hacia abajo.
+   Así despejamos la zona de los poetas. */
+.experience:not(.publicHome)
+.objectPositionFront .realForeground{
+
+  scale:
+    calc(
+      1 +
+      var(--enter-progress) * .62
+    );
+
+  translate:
+    calc(
+      var(--enter-progress) * 1vw
+    )
+    calc(
+      var(--enter-progress) * 15vh
+    );
+
+  opacity:
+    calc(
+      1 -
+      var(--enter-progress) * .52
+    );
+}
+
+
+/* También desplazamos el centro de luz final
+   al lugar exacto al que llega la cámara. */
+.experience:not(.publicHome) .stage::before{
+
+  background:
+    radial-gradient(
+      circle at 55% 29%,
+      rgba(255,249,229,.99) 0%,
+      rgba(239,218,178,.94) 9%,
+      rgba(49,42,33,.90) 34%,
+      rgba(12,10,9,.98) 69%,
+      #080706 100%
+    );
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · SINGLE CAMERA
+   Cámara estructural única.
+   La Home pública conserva exactamente su composición.
+   ========================================================= */
+
+
+/*
+ * En la Home el wrapper no genera caja:
+ * los cuatro planos mantienen su comportamiento original.
+ */
+.camera{
+  display:contents;
+}
+
+
+/*
+ * Solo /poema-universal convierte el wrapper
+ * en una cámara real.
+ */
+.experience:not(.publicHome) .camera{
+
+  display:block;
+
+  position:absolute;
+  inset:0;
+
+  /*
+   * CRÍTICO:
+   * congelamos todos los movimientos de scroll antiguos
+   * dentro de la cámara.
+   *
+   * Ya no compiten seis transformaciones diferentes.
+   */
+  --scroll:0;
+  --enter-progress:0;
+  --title-progress:0;
+
+  /*
+   * Punto objetivo provisional:
+   * reunión de los poetas bajo el árbol.
+   */
+  transform-origin:55% 29%;
+
+  transform:
+    scale(
+      calc(
+        1 +
+        var(--camera-progress, 0) * 2.8
+      )
+    );
+
+  will-change:transform;
+}
+
+
+/* =========================================================
+   TARGET DE DIAGNÓSTICO
+   TEMPORAL: lo quitaremos cuando confirmemos la coordenada.
+   ========================================================= */
+
+.cameraTarget{
+
+  position:absolute;
+
+  left:55%;
+  top:29%;
+
+  z-index:140;
+
+  width:16px;
+  height:16px;
+
+  transform:
+    translate(-50%,-50%);
+
+  border-radius:50%;
+
+  background:#e20000;
+
+  border:
+    3px solid rgba(255,255,255,.96);
+
+  box-shadow:
+    0 0 0 2px rgba(120,0,0,.65),
+    0 0 22px rgba(255,0,0,.75);
+
+  pointer-events:none;
+}
+
+
+.cameraTarget::after{
+
+  content:"POETAS";
+
+  position:absolute;
+
+  left:22px;
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  padding:
+    4px 7px;
+
+  background:
+    rgba(80,0,0,.82);
+
+  color:white;
+
+  font:
+    700 9px/1 Arial,
+    sans-serif;
+
+  letter-spacing:.12em;
+
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   Durante esta prueba:
+   apagamos los movimientos contradictorios añadidos después.
+   El zoom lo hace únicamente .camera.
+   ========================================================= */
+
+.experience:not(.publicHome)
+.camera .objectPositionBack,
+
+.experience:not(.publicHome)
+.camera .objectPositionFront{
+
+  transform-origin:center center;
+
+  scale:1;
+
+  translate:0 0;
+}
+
+
+/*
+ * Conservamos la composición original de las capas,
+ * pero eliminamos el movimiento cinematográfico añadido
+ * posteriormente.
+ */
+
+.experience:not(.publicHome)
+.camera .realIsland,
+
+.experience:not(.publicHome)
+.camera .realMist,
+
+.experience:not(.publicHome)
+.camera .realPapers,
+
+.experience:not(.publicHome)
+.camera .realForeground{
+
+  --enter-progress:0;
+}
+
+
+/* móvil: menor ampliación final */
+
+@media(max-width:720px){
+
+  .experience:not(.publicHome) .camera{
+
+    transform-origin:55% 29%;
+
+    transform:
+      scale(
+        calc(
+          1 +
+          var(--camera-progress, 0) * 2
+        )
+      );
+  }
+
+}
+
+
+/* movimiento reducido */
+
+@media(prefers-reduced-motion:reduce){
+
+  .experience:not(.publicHome) .camera{
+    transform:none;
+  }
+
+}
+
+
+
+/* =========================================================
+   SINGLE CAMERA · POETS FINAL TARGET
+   Objetivo real: figura central + reunión de voces.
+   ========================================================= */
+
+.experience:not(.publicHome) .camera{
+
+  /*
+   * En la composición original, la reunión está
+   * prácticamente en el centro de la imagen.
+   */
+  transform-origin:50% 50%;
+
+  /*
+   * Zoom deliberadamente progresivo.
+   * Todavía no entramos dentro de la cara del poeta:
+   * primero llegamos a la reunión completa.
+   */
+  transform:
+    scale(
+      calc(
+        1 +
+        var(--camera-progress, 0) * 2.15
+      )
+    );
+}
+
+
+/* Punto rojo TEMPORAL en el verdadero destino */
+.cameraTarget{
+
+  left:50%;
+  top:50%;
+}
+
+
+/*
+ * La luz final nace también desde la reunión,
+ * no desde la copa del árbol.
+ */
+.experience:not(.publicHome) .stage::before{
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255,249,229,.99) 0%,
+      rgba(239,218,178,.94) 9%,
+      rgba(49,42,33,.90) 35%,
+      rgba(12,10,9,.98) 70%,
+      #080706 100%
+    );
+}
+
+
+
+/* =========================================================
+   SINGLE CAMERA · POETS PAUSE FINAL
+   ========================================================= */
+
+
+/*
+ * Destino de la primera parte del viaje:
+ * el hombre central y la reunión de poetas.
+ */
+.experience:not(.publicHome) .camera{
+
+  transform-origin:50% 50%;
+
+  transform:
+    scale(
+      calc(
+        1 +
+        var(--camera-progress, 0) * 2.15
+      )
+    );
+}
+
+
+/*
+ * El punto rojo ya no hace falta.
+ */
+.cameraTarget{
+  display:none !important;
+}
+
+
+/*
+ * Evitamos que el antiguo sistema vuelva a desplazar
+ * las dos mitades principales de la escena.
+ */
+.experience:not(.publicHome)
+.camera .objectPositionBack,
+
+.experience:not(.publicHome)
+.camera .objectPositionFront{
+
+  scale:1 !important;
+  translate:0 0 !important;
+}
+
+
+/*
+ * Durante el acercamiento mantenemos los poetas
+ * más definidos que los elementos periféricos.
+ */
+.experience:not(.publicHome)
+.camera .realIsland{
+
+  filter:
+    brightness(
+      calc(
+        1 +
+        var(--camera-progress, 0) * .045
+      )
+    )
+    contrast(
+      calc(
+        1 +
+        var(--camera-progress, 0) * .025
+      )
+    );
+}
+
+
+/*
+ * Los papeles adquieren profundidad al acercarnos,
+ * pero sin bloquear la reunión.
+ */
+.experience:not(.publicHome)
+.camera .realPapers{
+
+  scale:
+    calc(
+      1 +
+      var(--camera-progress, 0) * .16
+    );
+
+  opacity:
+    calc(
+      1 -
+      var(--camera-progress, 0) * .10
+    );
+}
+
+
+/*
+ * El primer plano se despeja progresivamente.
+ */
+.experience:not(.publicHome)
+.camera .realForeground{
+
+  opacity:
+    calc(
+      1 -
+      var(--camera-progress, 0) * .46
+    );
+}
+
+
+/*
+ * La niebla gana presencia solo al final,
+ * cuando estamos a punto de cruzar.
+ */
+.experience:not(.publicHome)
+.camera .realMist{
+
+  opacity:
+    calc(
+      .72 +
+      var(--camera-progress, 0) * .20
+    );
+}
+
+
+/*
+ * Centro del paso final:
+ * hombre central / arcos / reunión.
+ */
+.experience:not(.publicHome) .stage::before{
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255,249,229,.99) 0%,
+      rgba(241,221,181,.95) 9%,
+      rgba(52,44,34,.91) 34%,
+      rgba(12,10,9,.98) 69%,
+      #080706 100%
+    );
+}
+
+
+
+/* =========================================================
+   THE LIVING PLAZA
+   Vida sutil durante la pausa delante de los poetas.
+   ========================================================= */
+
+
+/* Luz humana que nace justo detrás de la reunión */
+.experience:not(.publicHome) .camera::before{
+
+  content:"";
+
+  position:absolute;
+  z-index:20;
+
+  left:50%;
+  top:49%;
+
+  width:38vw;
+  height:25vw;
+
+  translate:-50% -50%;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(255,214,140,.22) 0%,
+      rgba(255,193,92,.10) 34%,
+      rgba(255,185,75,.035) 58%,
+      transparent 76%
+    );
+
+  filter:blur(18px);
+
+  opacity:
+    calc(
+      var(--poets-life,0) * .92
+    );
+
+  pointer-events:none;
+
+  animation:
+    poetsLightBreath
+    5.8s
+    ease-in-out
+    infinite;
+}
+
+
+/*
+ * Segundo halo:
+ * más concentrado en el hombre central y los arcos.
+ */
+.experience:not(.publicHome) .camera::after{
+
+  content:"";
+
+  position:absolute;
+  z-index:21;
+
+  left:50%;
+  top:47%;
+
+  width:19vw;
+  height:16vw;
+
+  translate:-50% -50%;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,245,211,.20),
+      rgba(255,206,125,.08) 42%,
+      transparent 70%
+    );
+
+  mix-blend-mode:screen;
+
+  opacity:
+    calc(
+      var(--poets-life,0) * .8
+    );
+
+  pointer-events:none;
+
+  animation:
+    poetsInnerPulse
+    4.2s
+    ease-in-out
+    infinite;
+}
+
+
+/* La propia isla respira apenas uno o dos píxeles */
+.experience:not(.publicHome)
+.camera .realIsland{
+
+  animation:
+    livingIsland
+    7s
+    ease-in-out
+    infinite;
+
+  animation-play-state:
+    running;
+}
+
+
+/* Papeles con vida real durante la pausa */
+.experience:not(.publicHome)
+.camera .realPapers{
+
+  animation:
+    livingPapers
+    6.5s
+    ease-in-out
+    infinite;
+}
+
+
+/* Niebla desplazándose muy lentamente */
+.experience:not(.publicHome)
+.camera .realMist{
+
+  animation:
+    livingMist
+    12s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   MOVIMIENTOS
+   ========================================================= */
+
+@keyframes poetsLightBreath{
+
+  0%,100%{
+    scale:1;
+    filter:blur(18px);
+  }
+
+  50%{
+    scale:1.06;
+    filter:blur(23px);
+  }
+
+}
+
+
+@keyframes poetsInnerPulse{
+
+  0%,100%{
+    scale:.98;
+  }
+
+  50%{
+    scale:1.045;
+  }
+
+}
+
+
+@keyframes livingIsland{
+
+  0%,100%{
+    translate:0 0;
+  }
+
+  50%{
+    translate:0 -1.5px;
+  }
+
+}
+
+
+@keyframes livingPapers{
+
+  0%,100%{
+    margin-left:0;
+    margin-top:0;
+  }
+
+  35%{
+    margin-left:-5px;
+    margin-top:-3px;
+  }
+
+  70%{
+    margin-left:4px;
+    margin-top:-6px;
+  }
+
+}
+
+
+@keyframes livingMist{
+
+  0%,100%{
+    margin-left:0;
+  }
+
+  50%{
+    margin-left:9px;
+  }
+
+}
+
+
+/* =========================================================
+   IMPORTANTE:
+   fuera de la pausa los efectos prácticamente desaparecen.
+   ========================================================= */
+
+.experience:not(.publicHome)
+.camera .realIsland,
+.experience:not(.publicHome)
+.camera .realPapers,
+.experience:not(.publicHome)
+.camera .realMist{
+
+  animation-duration:
+    calc(
+      20s -
+      var(--poets-life,0) * 12s
+    );
+}
+
+
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+
+  .experience:not(.publicHome) .camera::before,
+  .experience:not(.publicHome) .camera::after{
+
+    animation:none;
+  }
+
+  .experience:not(.publicHome)
+  .camera .realIsland,
+
+  .experience:not(.publicHome)
+  .camera .realPapers,
+
+  .experience:not(.publicHome)
+  .camera .realMist{
+
+    animation:none;
+  }
+
+}
+
+
+
+/* =========================================================
+   POEMA UNIVERSAL · LIVING POETS 2.5D
+   Microanimaciones humanas durante la pausa.
+   SOLO /poema-universal.
+   ========================================================= */
+
+
+/* En la Home no existe visualmente */
+.poetsLife{
+  display:none;
+}
+
+
+/* Dentro del umbral cinematográfico */
+.experience:not(.publicHome) .poetsLife{
+
+  display:block;
+
+  position:absolute;
+  inset:0;
+
+  z-index:3;
+
+  pointer-events:none;
+
+  opacity:
+    var(--poets-life, 0);
+
+  transition:
+    opacity .35s linear;
+}
+
+
+/*
+ * Cada parche es una copia exactamente alineada
+ * de la isla original.
+ * Solo vemos una pequeña elipse alrededor de cada figura.
+ */
+.experience:not(.publicHome) .poetPatch{
+
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+
+  user-select:none;
+  pointer-events:none;
+
+  will-change:transform;
+
+  filter:
+    brightness(1.012)
+    contrast(1.006);
+}
+
+
+/* ---------------------------------------------------------
+   01 · POETA CENTRAL
+   hombre de pie bajo los arcos
+   --------------------------------------------------------- */
+
+.poetSpeaker{
+
+  clip-path:
+    ellipse(
+      3.7% 8.8%
+      at 52.7% 51.7%
+    );
+
+  transform-origin:
+    52.7% 51.7%;
+
+  animation:
+    poetSpeakerBreath
+    4.8s
+    ease-in-out
+    infinite;
+}
+
+
+/* ---------------------------------------------------------
+   02 · GRUPO IZQUIERDO
+   --------------------------------------------------------- */
+
+.poetLeft{
+
+  clip-path:
+    ellipse(
+      7.1% 10.5%
+      at 45.5% 56.2%
+    );
+
+  transform-origin:
+    45.5% 56.2%;
+
+  animation:
+    poetLeftLife
+    6.4s
+    ease-in-out
+    infinite;
+}
+
+
+/* ---------------------------------------------------------
+   03 · GRUPO DERECHO SENTADO
+   --------------------------------------------------------- */
+
+.poetRight{
+
+  clip-path:
+    ellipse(
+      7.4% 10.7%
+      at 59.0% 56.2%
+    );
+
+  transform-origin:
+    59% 56.2%;
+
+  animation:
+    poetRightLife
+    7.1s
+    ease-in-out
+    infinite;
+}
+
+
+/* ---------------------------------------------------------
+   04 · FIGURA DERECHA DE PIE
+   --------------------------------------------------------- */
+
+.poetStandingRight{
+
+  clip-path:
+    ellipse(
+      3.6% 9%
+      at 68.1% 50.9%
+    );
+
+  transform-origin:
+    68.1% 50.9%;
+
+  animation:
+    poetStandingLife
+    5.9s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   HOJAS QUE PASAN ENTRE LAS VOCES
+   ========================================================= */
+
+.passingPaper{
+
+  position:absolute;
+
+  width:19px;
+  height:27px;
+
+  border-radius:1px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,248,221,.96),
+      rgba(215,190,142,.92)
+    );
+
+  box-shadow:
+    0 3px 9px rgba(63,39,16,.20);
+
+  opacity:
+    calc(
+      var(--poets-life,0) * .72
+    );
+
+  transform-origin:center;
+
+  will-change:transform;
+}
+
+
+.paperA{
+
+  left:48.2%;
+  top:54.4%;
+
+  animation:
+    passPaperA
+    5.6s
+    ease-in-out
+    infinite;
+}
+
+
+.paperB{
+
+  left:59.8%;
+  top:53.7%;
+
+  width:16px;
+  height:23px;
+
+  animation:
+    passPaperB
+    6.7s
+    ease-in-out
+    infinite;
+}
+
+
+/* =========================================================
+   MICROGESTOS
+   La amplitud es deliberadamente minúscula.
+   ========================================================= */
+
+@keyframes poetSpeakerBreath{
+
+  0%,100%{
+    transform:
+      translate3d(0,0,0)
+      rotate(0deg)
+      scale(1);
+  }
+
+  48%{
+    transform:
+      translate3d(.5px,-1.1px,0)
+      rotate(-.08deg)
+      scale(1.0015);
+  }
+
+}
+
+
+@keyframes poetLeftLife{
+
+  0%,100%{
+    transform:
+      translate3d(0,0,0)
+      rotate(0deg);
+  }
+
+  38%{
+    transform:
+      translate3d(-.7px,-.4px,0)
+      rotate(.07deg);
+  }
+
+  72%{
+    transform:
+      translate3d(.4px,-.8px,0)
+      rotate(-.05deg);
+  }
+
+}
+
+
+@keyframes poetRightLife{
+
+  0%,100%{
+    transform:
+      translate3d(0,0,0);
+  }
+
+  43%{
+    transform:
+      translate3d(.8px,-.5px,0)
+      scale(1.001);
+  }
+
+  76%{
+    transform:
+      translate3d(-.4px,-.8px,0);
+  }
+
+}
+
+
+@keyframes poetStandingLife{
+
+  0%,100%{
+    transform:
+      translate3d(0,0,0)
+      rotate(0deg);
+  }
+
+  52%{
+    transform:
+      translate3d(-.6px,-1px,0)
+      rotate(-.1deg);
+  }
+
+}
+
+
+/* hoja de izquierda hacia el centro */
+@keyframes passPaperA{
+
+  0%,18%,100%{
+    transform:
+      translate3d(-4px,3px,0)
+      rotate(-8deg);
+
+    opacity:0;
+  }
+
+  28%{
+    opacity:.75;
+  }
+
+  50%{
+    transform:
+      translate3d(5px,-4px,0)
+      rotate(3deg);
+
+    opacity:.86;
+  }
+
+  72%{
+    transform:
+      translate3d(12px,1px,0)
+      rotate(7deg);
+
+    opacity:.62;
+  }
+
+  82%{
+    opacity:0;
+  }
+
+}
+
+
+/* hoja del centro hacia la derecha */
+@keyframes passPaperB{
+
+  0%,25%,100%{
+    transform:
+      translate3d(-5px,2px,0)
+      rotate(6deg);
+
+    opacity:0;
+  }
+
+  35%{
+    opacity:.65;
+  }
+
+  57%{
+    transform:
+      translate3d(6px,-5px,0)
+      rotate(-3deg);
+
+    opacity:.82;
+  }
+
+  78%{
+    transform:
+      translate3d(13px,1px,0)
+      rotate(-7deg);
+
+    opacity:.52;
+  }
+
+  88%{
+    opacity:0;
+  }
+
+}
+
+
+/* =========================================================
+   ORDEN DE PROFUNDIDAD
+   ========================================================= */
+
+.experience:not(.publicHome)
+.camera .realIsland{
+  z-index:2;
+}
+
+.experience:not(.publicHome)
+.camera .poetsLife{
+  z-index:3;
+}
+
+.experience:not(.publicHome)
+.camera .realMist{
+  z-index:4;
+}
+
+.experience:not(.publicHome)
+.camera .realPapers{
+  z-index:5;
+}
+
+.experience:not(.publicHome)
+.camera .realForeground{
+  z-index:6;
+}
+
+
+/* =========================================================
+   ACCESIBILIDAD
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  .poetSpeaker,
+  .poetLeft,
+  .poetRight,
+  .poetStandingRight,
+  .paperA,
+  .paperB{
+    animation:none !important;
+  }
+
+}
+
+
+
+/* =========================================================
+   FINAL DEL VIAJE · PORTAL VISIBLE EN EL VIEWPORT
+   ========================================================= */
+
+.experience:not(.publicHome) .worldPortal{
+
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  z-index:160;
+
+  translate:-50% -50%;
+
+  /*
+   * Empieza a aparecer justo después
+   * de contemplar de cerca a los poetas.
+   */
+  opacity:
+    clamp(
+      0,
+      calc((var(--raw-scroll,0) - .88) * 8.333),
+      1
+    );
+
+  scale:
+    calc(
+      .94 +
+      clamp(
+        0,
+        calc((var(--raw-scroll,0) - .88) * 8.333),
+        1
+      ) * .06
+    );
+
+  pointer-events:none;
+}
+
+
+/* cuando ya es visible, el botón funciona */
+.experience:not(.publicHome)
+.worldPortalButton{
+
+  pointer-events:auto;
+}
+
+
+/*
+ * Oscurecemos / fundimos la reunión después de verla.
+ * No empieza hasta muy al final.
+ */
+.experience:not(.publicHome) .stage::before{
+
+  opacity:
+    clamp(
+      0,
+      calc((var(--raw-scroll,0) - .84) * 6.25),
+      1
+    );
+}
+
+
+/*
+ * Al llegar al último tramo,
+ * la escena física desaparece detrás del umbral.
+ */
+.experience:not(.publicHome) .camera{
+
+  opacity:
+    clamp(
+      .04,
+      calc(1 - (var(--raw-scroll,0) - .88) * 6.5),
+      1
+    );
+}
+
+
+
+/* =========================================================
+   EMERGENCY FINAL · SCROLL + ANTOLOGÍA INTERACTION FIX
+   Autoridad final para /poema-universal
+   ========================================================= */
+
+/* Recuperamos un recorrido largo real */
+.experience:not(.publicHome){
+  height:460svh !important;
+  min-height:460svh !important;
+  overflow:visible !important;
+}
+
+
+/* La escena permanece fija mientras recorremos los 460svh */
+.experience:not(.publicHome) .stage{
+  position:sticky !important;
+  top:0 !important;
+
+  width:100% !important;
+  height:100svh !important;
+  min-height:100svh !important;
+
+  overflow:hidden !important;
+}
+
+
+/* Ninguna capa visual puede secuestrar ratón / rueda */
+.experience:not(.publicHome) .camera{
+  pointer-events:none !important;
+}
+
+.experience:not(.publicHome) .stage::before,
+.experience:not(.publicHome) .stage::after{
+  pointer-events:none !important;
+}
+
+
+/* El portal es visual hasta el momento de pulsar */
+.experience:not(.publicHome) .worldPortal{
+  z-index:500 !important;
+  pointer-events:none !important;
+}
+
+
+/* PERO el botón sí recibe el clic */
+.experience:not(.publicHome) .worldPortalButton{
+  position:relative !important;
+  z-index:520 !important;
+
+  pointer-events:auto !important;
+  cursor:pointer !important;
+}
+
+
+/* Evitamos que otras capas queden encima del portal */
+.experience:not(.publicHome) .header{
+  z-index:40;
+}
+
+.experience:not(.publicHome) .camera{
+  z-index:10;
+}
+
+
+/* móvil */
+@media(max-width:720px){
+  .experience:not(.publicHome){
+    height:380svh !important;
+    min-height:380svh !important;
+  }
+}
+

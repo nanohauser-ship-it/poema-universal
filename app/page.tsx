@@ -1,3 +1,5 @@
+import PoemaUniversalToolGateway from './components/PoemaUniversalToolGateway';
+import Threshold from './poema-universal/components/umbral-v2/Threshold';
 import Link from "next/link";
 import PoemaUniversalThreshold from "./components/PoemaUniversalThreshold";
 import HomeObraComunGateway from "./components/HomeObraComunGateway";
@@ -77,7 +79,7 @@ export default function HomePage() {
 
         <div className="absolute left-0 top-0 hidden h-full w-[22vw] min-w-[230px] max-w-[360px] overflow-hidden md:block">
           <video
-            src="/flores.mp4"
+            src="/poema-universal/media/laterals/poema-left.mp4"
             autoPlay
             muted
             loop
@@ -98,7 +100,7 @@ export default function HomePage() {
 
         <div className="absolute right-0 top-0 hidden h-full w-[22vw] min-w-[230px] max-w-[360px] overflow-hidden md:block">
           <video
-            src="/flores.mp4"
+            src="/poema-universal/media/laterals/poema-right.mp4"
             autoPlay
             muted
             loop
@@ -140,6 +142,8 @@ export default function HomePage() {
             NAVEGACIÓN
         ========================================================= */}
 
+        
+
         <nav className="mb-16 flex flex-wrap items-center justify-between gap-4 rounded-full border border-stone-200/80 bg-white/68 px-5 py-3 shadow-sm backdrop-blur-xl">
           <Link href="/" className="text-sm font-semibold tracking-wide">
             Poema Universal
@@ -155,7 +159,7 @@ export default function HomePage() {
             </Link>
 
             <Link
-              href="/poema-universal"
+              href="/poema-universal/edicion-2026"
               className="transition hover:text-black"
             >
               Edición 2026
@@ -196,222 +200,27 @@ export default function HomePage() {
             HERO
         ========================================================= */}
 
-        <header className="relative mx-auto max-w-6xl text-center">
-          <p className="relative z-20 mb-7 text-[11px] uppercase tracking-[0.58em] text-stone-400">
-            Una casa para lo que merece ser cuidado
-          </p>
+        <div
+          className="relative w-screen max-w-none"
+          style={{
+            marginLeft: "calc(50% - 50vw)",
+            marginRight: "calc(50% - 50vw)",
+          }}
+        >
+          <Threshold
+            enterHref="#casa-poema-universal"
+            publicHome
+          />
+        </div>
 
-          <h1 className="relative z-20 font-serif text-[4.3rem] font-semibold leading-[0.9] tracking-tight text-stone-950 sm:text-[7.4rem] md:text-[9.2rem]">
-            Poema
-            <br />
-            Universal
-          </h1>
+        <div
+          id="casa-poema-universal"
+          className="scroll-mt-10"
+          aria-hidden="true"
+        />
 
-          {/* =======================================================
-              ÍCARO · ELIPSE CINEMATOGRÁFICA
-          ======================================================= */}
+        <PoemaUniversalToolGateway />
 
-          <section className="relative mx-auto mt-9 max-w-5xl">
-            {/* HALO PRINCIPAL */}
-
-            <div
-              className="pointer-events-none absolute left-1/2 top-[43%] -translate-x-1/2 -translate-y-1/2"
-              style={{
-                width: "760px",
-                height: "430px",
-                borderRadius: "50%",
-                background:
-                  "radial-gradient(ellipse, rgba(255,255,255,0.62) 0%, rgba(255,248,238,0.30) 36%, rgba(205,171,119,0.09) 60%, transparent 78%)",
-                filter: "blur(30px)",
-              }}
-            />
-
-            {/* HALO CÁLIDO */}
-
-            <div
-              className="pointer-events-none absolute left-1/2 top-[54%] -translate-x-1/2 -translate-y-1/2"
-              style={{
-                width: "620px",
-                height: "290px",
-                borderRadius: "50%",
-                background:
-                  "radial-gradient(ellipse, rgba(179,133,72,0.10), transparent 68%)",
-                filter: "blur(26px)",
-              }}
-            />
-
-            {/* PIEZA CENTRAL */}
-
-            <div className="relative mx-auto flex justify-center py-3">
-              {/* SOMBRA INFERIOR */}
-
-              <div
-                className="pointer-events-none absolute bottom-[-14px] left-1/2 -translate-x-1/2"
-                style={{
-                  width: "500px",
-                  height: "66px",
-                  borderRadius: "50%",
-                  background: "rgba(72,48,27,0.11)",
-                  filter: "blur(34px)",
-                }}
-              />
-
-              {/* ELIPSE EXTERIOR DE LUZ */}
-
-              <div
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  width: "730px",
-                  maxWidth: "90vw",
-                  height: "355px",
-                  borderRadius: "50%",
-                  border: "1px solid rgba(255,255,255,0.26)",
-                  boxShadow:
-                    "0 0 60px rgba(255,255,255,0.16), inset 0 0 42px rgba(255,255,255,0.05)",
-                }}
-              />
-
-              {/* MARCO ELÍPTICO */}
-
-              <div
-                className="relative z-10 w-full max-w-[700px]"
-                style={{
-                  padding: "4px",
-                  borderRadius: "50%",
-                  background:
-                    "linear-gradient(145deg, rgba(255,253,248,0.92), rgba(232,220,204,0.72))",
-                  boxShadow:
-                    "0 28px 70px rgba(71,47,28,0.14), 0 8px 18px rgba(71,47,28,0.06), inset 0 1px 0 rgba(255,255,255,0.72)",
-                }}
-              >
-                {/* REFLEJO SUPERIOR */}
-
-                <div
-                  className="pointer-events-none absolute inset-x-24 top-0 z-30 h-px"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, transparent, rgba(255,255,255,0.82), transparent)",
-                  }}
-                />
-
-                {/* VÍDEO */}
-
-                <div
-                  className="relative w-full overflow-hidden"
-                  style={{
-                    height: "315px",
-                    borderRadius: "50%",
-                    background: "#d4c4b1",
-                  }}
-                >
-                  <video
-                    src="/icaro.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
-                    aria-label="Ícaro, presencia de Poema Universal"
-                    className="absolute inset-0 h-full w-full object-cover"
-                    style={{
-                      objectPosition: "center 44%",
-                    }}
-                  />
-
-                  {/* CRISTAL */}
-
-                  <div
-                    className="pointer-events-none absolute inset-0 z-10"
-                    style={{
-                      borderRadius: "50%",
-                      boxShadow:
-                        "inset 0 1px 0 rgba(255,255,255,0.24), inset 0 0 38px rgba(255,255,255,0.018), inset 0 -26px 48px rgba(41,28,18,0.05)",
-                    }}
-                  />
-
-                  {/* VELO CINEMATOGRÁFICO */}
-
-                  <div
-                    className="pointer-events-none absolute inset-0 z-10"
-                    style={{
-                      borderRadius: "50%",
-                      background:
-                        "linear-gradient(180deg, rgba(255,247,235,0.01) 0%, transparent 46%, rgba(39,26,17,0.03) 100%)",
-                    }}
-                  />
-
-                  {/* BRILLO SUPERIOR */}
-
-                  <div
-                    className="pointer-events-none absolute left-[18%] top-[5%] z-20"
-                    style={{
-                      width: "30%",
-                      height: "20%",
-                      borderRadius: "50%",
-                      background:
-                        "radial-gradient(ellipse, rgba(255,255,255,0.07), transparent 70%)",
-                      filter: "blur(8px)",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* DETALLE EDITORIAL */}
-
-            <div className="mx-auto mt-7 flex items-center justify-center gap-4">
-              <span
-                style={{
-                  width: "54px",
-                  height: "1px",
-                  background:
-                    "linear-gradient(90deg, transparent, rgba(130,100,65,0.34))",
-                }}
-              />
-
-              <span className="text-[9px] uppercase tracking-[0.38em] text-stone-400">
-                Ícaro · Edición fundacional · 2026
-              </span>
-
-              <span
-                style={{
-                  width: "54px",
-                  height: "1px",
-                  background:
-                    "linear-gradient(90deg, rgba(130,100,65,0.34), transparent)",
-                }}
-              />
-            </div>
-
-            {/* FRASE */}
-
-            <p className="mx-auto mt-7 max-w-2xl font-serif text-2xl leading-[1.45] text-stone-800 sm:text-3xl">
-              Quien cae también puede dejar una luz en el aire.
-            </p>
-          </section>
-
-          <p className="mx-auto mt-7 max-w-2xl text-[15px] leading-9 text-stone-600">
-            Un lugar para escribir, recordar, despedirse, encender una luz y
-            reunir las presencias que nos enseñaron a mirar el mundo de otra
-            manera.
-          </p>
-
-          <div className="mt-11 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/poema-universal"
-              className="rounded-full bg-stone-950 px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-white shadow-[0_18px_45px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5 hover:bg-stone-800"
-            >
-              Entrar en la edición
-            </Link>
-
-            <Link
-              href="#tres-puertas"
-              className="rounded-full border border-stone-300 bg-white/75 px-8 py-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-stone-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-white hover:text-black"
-            >
-              Recorrer la casa
-            </Link>
-          </div>
-        </header>
 
         {/* =========================================================
             MANIFIESTO
