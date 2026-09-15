@@ -264,29 +264,15 @@ export default function Threshold({
           </span>
 
           {!publicHome && (
-            <>
-              <nav aria-label="Recorrido de Poema Universal">
-                <Link href="/poema-universal/antologia-viva">
-                  VOCES
-                </Link>
-
-                <Link href="/poema-universal">
-                  OBRA
-                </Link>
-
-                <Link href="/poema-universal/sala-corazon-vivo">
-                  CORAZÓN
-                </Link>
-
-                <Link href="/poema-universal/atlas-interior">
-                  ATLAS
-                </Link>
-              </nav>
-
-              <span className={styles.act}>
-                ACTO I / EL UMBRAL
-              </span>
-            </>
+            <Link
+              href="/#inicio"
+              scroll={true}
+              className={styles.backHome}
+              aria-label="Volver a la página principal de Poema Universal"
+            >
+              <span aria-hidden="true">←</span>
+              VOLVER AL INICIO
+            </Link>
           )}
         </header>
 

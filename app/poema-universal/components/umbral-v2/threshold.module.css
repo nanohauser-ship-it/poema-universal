@@ -4951,3 +4951,222 @@
   }
 }
 
+
+
+/* =========================================================
+   EMERGENCY FINAL · SCROLL + ANTOLOGÍA INTERACTION FIX
+   Autoridad final para /poema-universal
+   ========================================================= */
+
+/* Recuperamos un recorrido largo real */
+.experience:not(.publicHome){
+  height:460svh !important;
+  min-height:460svh !important;
+  overflow:visible !important;
+}
+
+
+/* La escena permanece fija mientras recorremos los 460svh */
+.experience:not(.publicHome) .stage{
+  position:sticky !important;
+  top:0 !important;
+
+  width:100% !important;
+  height:100svh !important;
+  min-height:100svh !important;
+
+  overflow:hidden !important;
+}
+
+
+/* Ninguna capa visual puede secuestrar ratón / rueda */
+.experience:not(.publicHome) .camera{
+  pointer-events:none !important;
+}
+
+.experience:not(.publicHome) .stage::before,
+.experience:not(.publicHome) .stage::after{
+  pointer-events:none !important;
+}
+
+
+/* El portal es visual hasta el momento de pulsar */
+.experience:not(.publicHome) .worldPortal{
+  z-index:500 !important;
+  pointer-events:none !important;
+}
+
+
+/* PERO el botón sí recibe el clic */
+.experience:not(.publicHome) .worldPortalButton{
+  position:relative !important;
+  z-index:520 !important;
+
+  pointer-events:auto !important;
+  cursor:pointer !important;
+}
+
+
+/* Evitamos que otras capas queden encima del portal */
+.experience:not(.publicHome) .header{
+  z-index:40;
+}
+
+.experience:not(.publicHome) .camera{
+  z-index:10;
+}
+
+
+/* móvil */
+@media(max-width:720px){
+  .experience:not(.publicHome){
+    height:380svh !important;
+    min-height:380svh !important;
+  }
+}
+
+
+
+/* =========================================================
+   UMBRAL · CABECERA DEFINITIVA LIMPIA
+   /poema-universal solamente
+   ========================================================= */
+
+/* La cabecera deja de comportarse como barra de navegación */
+.experience:not(.publicHome) .header{
+  position:absolute !important;
+  inset:0 !important;
+
+  width:100% !important;
+  height:0 !important;
+
+  padding:0 !important;
+  margin:0 !important;
+
+  border:0 !important;
+  background:none !important;
+
+  pointer-events:none !important;
+
+  z-index:600 !important;
+}
+
+
+/* Identidad editorial: discreta, arriba a la derecha */
+.experience:not(.publicHome) .edition{
+  position:fixed !important;
+
+  top:28px !important;
+  right:34px !important;
+  left:auto !important;
+
+  z-index:610 !important;
+
+  margin:0 !important;
+
+  text-align:right !important;
+
+  font-size:7px !important;
+  line-height:1.55 !important;
+  letter-spacing:.28em !important;
+
+  color:rgba(28,34,26,.72) !important;
+
+  pointer-events:none !important;
+}
+
+
+/* Única navegación visible */
+.experience:not(.publicHome) .backHome{
+  position:fixed !important;
+
+  top:26px !important;
+  left:30px !important;
+
+  z-index:620 !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:11px !important;
+
+  padding:10px 16px !important;
+
+  border:
+    1px solid rgba(28,34,26,.30) !important;
+
+  border-radius:999px !important;
+
+  background:
+    rgba(244,239,226,.70) !important;
+
+  backdrop-filter:
+    blur(12px) !important;
+
+  -webkit-backdrop-filter:
+    blur(12px) !important;
+
+  color:#1c221a !important;
+
+  text-decoration:none !important;
+
+  font-size:8px !important;
+  line-height:1 !important;
+  letter-spacing:.16em !important;
+
+  pointer-events:auto !important;
+  cursor:pointer !important;
+
+  transition:
+    background .3s ease,
+    border-color .3s ease,
+    transform .3s ease !important;
+}
+
+
+.experience:not(.publicHome) .backHome span{
+  font-size:14px !important;
+  line-height:1 !important;
+  letter-spacing:0 !important;
+}
+
+
+.experience:not(.publicHome) .backHome:hover{
+  transform:
+    translateX(-3px) !important;
+
+  background:
+    rgba(250,247,238,.94) !important;
+
+  border-color:
+    rgba(28,34,26,.55) !important;
+}
+
+
+/* Seguridad: restos del menú antiguo nunca aparecen */
+.experience:not(.publicHome) .header nav,
+.experience:not(.publicHome) .act{
+  display:none !important;
+}
+
+
+/* móvil */
+@media(max-width:720px){
+
+  .experience:not(.publicHome) .backHome{
+    top:18px !important;
+    left:16px !important;
+
+    padding:9px 12px !important;
+
+    font-size:7px !important;
+  }
+
+  .experience:not(.publicHome) .edition{
+    top:19px !important;
+    right:16px !important;
+
+    font-size:6px !important;
+  }
+
+}
+
